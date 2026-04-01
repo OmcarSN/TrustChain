@@ -1,0 +1,13 @@
+[workspace]
+
+members = [
+    "contracts/credential",
+    "contracts/reputation",
+]
+
+[profile.release]
+opt-level = "z"
+overflow-checks = true
+debug = false
+panic = "abort"
+codegen-units = 1

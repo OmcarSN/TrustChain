@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: #0a0a0f;
+  --color-accent: #7c3aed;
+  --color-accent-hover: #6d28d9;
+  --font-inter: "Inter", system-ui, sans-serif;
+}
+
+/* Custom Reset and Global Styles */
+@layer base {
+  body {
+    @apply bg-background text-white font-inter antialiased;
+    margin: 0;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-white/5 backdrop-blur-lg border border-white/10;
+  }
+  
+  .glow-purple {
+    box-shadow: 0 0 20px rgba(124, 58, 237, 0.3);
+  }
+}
