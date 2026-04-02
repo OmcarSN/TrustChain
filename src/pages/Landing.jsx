@@ -95,14 +95,14 @@ const Landing = () => {
         >
           <Link 
             to="/worker"
-            className="group w-full sm:w-auto px-10 py-4.5 bg-gradient-to-r from-accent to-purple-700 hover:from-accent-hover hover:to-purple-800 text-white rounded-2xl font-black uppercase tracking-[0.2em] text-[10px] transition-all shadow-xl shadow-accent/25 hover:shadow-2xl hover:shadow-accent/35 active:scale-95 flex items-center justify-center gap-2.5"
+            className="group w-full sm:w-auto px-10 py-[18px] bg-gradient-to-r from-accent to-purple-700 hover:from-accent-hover hover:to-purple-800 text-white rounded-2xl font-black uppercase tracking-[0.2em] text-[10px] transition-all shadow-xl shadow-accent/25 hover:shadow-2xl hover:shadow-accent/35 active:scale-95 flex items-center justify-center gap-2.5"
           >
             <ShieldCheck className="w-4 h-4 group-hover:rotate-12 transition-transform" />
             I'm a Worker
           </Link>
           <Link 
             to="/endorse"
-            className="group w-full sm:w-auto px-10 py-4.5 bg-white/[0.04] hover:bg-white/[0.06] border border-white/[0.06] text-white rounded-2xl font-black uppercase tracking-[0.2em] text-[10px] transition-all active:scale-95 flex items-center justify-center gap-2.5"
+            className="group w-full sm:w-auto px-10 py-[18px] bg-white/[0.04] hover:bg-white/[0.06] border border-white/[0.06] text-white rounded-2xl font-black uppercase tracking-[0.2em] text-[10px] transition-all active:scale-95 flex items-center justify-center gap-2.5"
           >
             <Award className="w-4 h-4 text-accent group-hover:scale-110 transition-transform" />
             I'm an Employer
