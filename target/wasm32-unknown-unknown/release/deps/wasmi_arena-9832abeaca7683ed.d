@@ -1,0 +1,10 @@
+C:\Users\Devyani\.gemini\antigravity\scratch\TrustChain\target\wasm32-unknown-unknown\release\deps\wasmi_arena-9832abeaca7683ed.d: C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\wasmi_arena-0.4.1\src\lib.rs C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\wasmi_arena-0.4.1\src\component_vec.rs C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\wasmi_arena-0.4.1\src\dedup.rs C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\wasmi_arena-0.4.1\src\guarded.rs
+
+C:\Users\Devyani\.gemini\antigravity\scratch\TrustChain\target\wasm32-unknown-unknown\release\deps\libwasmi_arena-9832abeaca7683ed.rlib: C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\wasmi_arena-0.4.1\src\lib.rs C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\wasmi_arena-0.4.1\src\component_vec.rs C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\wasmi_arena-0.4.1\src\dedup.rs C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\wasmi_arena-0.4.1\src\guarded.rs
+
+C:\Users\Devyani\.gemini\antigravity\scratch\TrustChain\target\wasm32-unknown-unknown\release\deps\libwasmi_arena-9832abeaca7683ed.rmeta: C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\wasmi_arena-0.4.1\src\lib.rs C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\wasmi_arena-0.4.1\src\component_vec.rs C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\wasmi_arena-0.4.1\src\dedup.rs C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\wasmi_arena-0.4.1\src\guarded.rs
+
+C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\wasmi_arena-0.4.1\src\lib.rs:
+C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\wasmi_arena-0.4.1\src\component_vec.rs:
+C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\wasmi_arena-0.4.1\src\dedup.rs:
+C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\wasmi_arena-0.4.1\src\guarded.rs:

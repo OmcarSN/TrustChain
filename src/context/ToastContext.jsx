@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, AlertCircle, X, ShieldCheck, Wallet } from 'lucide-react';
+import { registerToastInstance } from '../lib/toast';
 
 const ToastContext = createContext();
 
@@ -30,6 +31,10 @@ export const ToastProvider = ({ children }) => {
   const success = (msg) => showToast(msg, 'success');
   const error = (msg) => showToast(msg, 'error');
   const info = (msg) => showToast(msg, 'info');
+
+  useEffect(() => {
+    registerToastInstance({ success, error, info });
+  }, []);
 
   return (
     <ToastContext.Provider value={{ success, error, info }}>

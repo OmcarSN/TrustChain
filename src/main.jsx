@@ -4,6 +4,9 @@ import { BrowserRouter } from 'react-router-dom'
 import { Buffer } from 'buffer'
 import './index.css'
 import App from './App.jsx'
+import { WalletProvider } from './context/WalletContext'
+import { ToastProvider } from './context/ToastContext'
+import ErrorBoundary from './components/ErrorBoundary'
 
 if (typeof window !== 'undefined') {
   window.Buffer = Buffer
@@ -12,8 +15,14 @@ if (typeof window !== 'undefined') {
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <ErrorBoundary>
+      <ToastProvider>
+        <WalletProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </WalletProvider>
+      </ToastProvider>
+    </ErrorBoundary>
   </StrictMode>,
 )

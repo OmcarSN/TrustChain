@@ -8,6 +8,9 @@ import Landing from './pages/Landing';
 import WorkerRegistration from './pages/WorkerRegistration';
 import Endorse from './pages/Endorse';
 import Verify from './pages/Verify';
+import Dashboard from './pages/Dashboard';
+import WorkerProfile from './pages/WorkerProfile';
+import NotFound from './pages/NotFound';
 
 // Page Transition Wrapper
 const PageWrapper = ({ children }) => (
@@ -25,22 +28,23 @@ const App = () => {
   const location = useLocation();
 
   return (
-    <ToastProvider>
-      <div className="flex flex-col min-h-screen">
-        <Navbar />
-        <main className="flex-grow">
-          <AnimatePresence mode="wait">
-            <Routes location={location} key={location.pathname}>
-              <Route path="/" element={<PageWrapper><Landing /></PageWrapper>} />
-              <Route path="/worker" element={<PageWrapper><WorkerRegistration /></PageWrapper>} />
-              <Route path="/endorse" element={<PageWrapper><Endorse /></PageWrapper>} />
-              <Route path="/verify" element={<PageWrapper><Verify /></PageWrapper>} />
-            </Routes>
-          </AnimatePresence>
-        </main>
-        <Footer />
-      </div>
-    </ToastProvider>
+    <div className="flex flex-col min-h-screen">
+      <Navbar />
+      <main className="flex-grow">
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
+            <Route path="/" element={<PageWrapper><Landing /></PageWrapper>} />
+            <Route path="/worker" element={<PageWrapper><WorkerRegistration /></PageWrapper>} />
+            <Route path="/endorse" element={<PageWrapper><Endorse /></PageWrapper>} />
+            <Route path="/verify" element={<PageWrapper><Verify /></PageWrapper>} />
+            <Route path="/dashboard" element={<PageWrapper><Dashboard /></PageWrapper>} />
+            <Route path="/profile/:address" element={<PageWrapper><WorkerProfile /></PageWrapper>} />
+            <Route path="*" element={<PageWrapper><NotFound /></PageWrapper>} />
+          </Routes>
+        </AnimatePresence>
+      </main>
+      <Footer />
+    </div>
   );
 };
 

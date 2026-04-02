@@ -1,0 +1,11 @@
+C:\Users\Devyani\.gemini\antigravity\scratch\TrustChain\target\wasm32-unknown-unknown\release\deps\spin-925467becc651b6c.d: C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\spin-0.9.8\src\lib.rs C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\spin-0.9.8\src\mutex.rs C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\spin-0.9.8\src\mutex\spin.rs C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\spin-0.9.8\src\relax.rs C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\spin-0.9.8\src\rwlock.rs
+
+C:\Users\Devyani\.gemini\antigravity\scratch\TrustChain\target\wasm32-unknown-unknown\release\deps\libspin-925467becc651b6c.rlib: C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\spin-0.9.8\src\lib.rs C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\spin-0.9.8\src\mutex.rs C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\spin-0.9.8\src\mutex\spin.rs C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\spin-0.9.8\src\relax.rs C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\spin-0.9.8\src\rwlock.rs
+
+C:\Users\Devyani\.gemini\antigravity\scratch\TrustChain\target\wasm32-unknown-unknown\release\deps\libspin-925467becc651b6c.rmeta: C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\spin-0.9.8\src\lib.rs C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\spin-0.9.8\src\mutex.rs C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\spin-0.9.8\src\mutex\spin.rs C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\spin-0.9.8\src\relax.rs C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\spin-0.9.8\src\rwlock.rs
+
+C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\spin-0.9.8\src\lib.rs:
+C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\spin-0.9.8\src\mutex.rs:
+C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\spin-0.9.8\src\mutex\spin.rs:
+C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\spin-0.9.8\src\relax.rs:
+C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\spin-0.9.8\src\rwlock.rs:

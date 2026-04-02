@@ -1,283 +1,559 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Search, 
-  Star, 
-  MapPin, 
-  Briefcase, 
-  ShieldCheck, 
-  ExternalLink, 
-  Clock, 
-  Share2, 
-  ShieldAlert, 
-  Award, 
-  ChevronRight,
-  User,
-  History,
-  CheckCircle2,
-  Calendar,
-  Loader2
+  Search, Star, MapPin, Briefcase, ShieldCheck, ExternalLink, 
+  Share2, Award, User, History, CheckCircle2, Calendar, 
+  Loader2, AlertCircle, Fingerprint, Globe, ArrowRight, Sparkles,
+  Clock, Target, Zap, Copy, Check
 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { getReputation, getEndorsements } from '../lib/stellar';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { fetchWorkerCredential } from '../lib/stellar';
+import { calculateScore } from '../lib/reputation';
 import { useToast } from '../context/ToastContext';
+
+/* ── Floating Orb ─────────────────────────────────────────────── */
+const FloatingOrb = ({ className, delay = 0 }) => (
+  <motion.div
+    className={`absolute rounded-full pointer-events-none -z-10 ${className}`}
+    animate={{ y: [0, -15, 0], scale: [1, 1.05, 1], opacity: [0.5, 0.8, 0.5] }}
+    transition={{ duration: 8, delay, repeat: Infinity, ease: 'easeInOut' }}
+  />
+);
 
 const Verify = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const toast = useToast();
-  const [workerSearch, setWorkerSearch] = useState('');
+  
+  const [workerSearch, setWorkerSearch] = useState(searchParams.get('address') || '');
   const [isSearching, setIsSearching] = useState(false);
   const [profile, setProfile] = useState(null);
+  const [error, setError] = useState(null);
+  const [copied, setCopied] = useState(false);
 
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    if (!workerSearch) return;
+  useEffect(() => {
+    if (searchParams.get('address')) {
+      performSearch(searchParams.get('address'));
+    }
+  }, []);
+
+  const performSearch = async (address) => {
+    if (!address) return;
     setIsSearching(true);
+    setError(null);
     try {
-      // In a real app, we'd fetch the WorkerCredential metadata from the contract too
-      const score = await getReputation(workerSearch);
-      const endorsements = await getEndorsements(workerSearch);
+      const credential = await fetchWorkerCredential(address);
+      const localKey = `endorsements_${address}`;
+      const endorsements = JSON.parse(localStorage.getItem(localKey) || '[]');
+      const reputation = calculateScore(endorsements);
       
-      setProfile({
-        name: "Verified Worker", // Placeholder as WorkerCredential name fetch is a separate call
-        address: workerSearch,
-        skill: "Technical Specialist",
-        city: "Global Protocol",
-        bio: "Identity and reputation verified via the TrustChain Soroban protocol. This worker has been endorsed by verified employers on the Stellar network.",
-        score: score.average_rating / 100, // Normalized from scaled u32
-        totalJobs: score.total_endorsements,
-        memberSince: "March 2025",
-        endorsements: endorsements
-      });
-      
-      toast.success('Reputation Data Synchronized');
-    } catch (error) {
-      console.error(error);
-      toast.error('Failed to retrieve on-chain data');
+      setProfile({ ...credential, address, reputation, endorsements });
+      toast.success('Reputation Profile Verified');
+    } catch (err) {
+      console.error(err);
+      setError(err.message || 'Worker not found on-chain');
+      toast.error('Verification failed');
+      setProfile(null);
     } finally {
       setIsSearching(false);
     }
   };
 
-  const handleShare = () => {
-    navigator.clipboard.writeText(window.location.href);
-    toast.success('Profile Link Copied to Clipboard');
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    performSearch(workerSearch);
   };
 
+  const handleShare = () => {
+    const url = `${window.location.origin}/verify?address=${profile.address}`;
+    navigator.clipboard.writeText(url);
+    setCopied(true);
+    toast.success('Profile link copied!');
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const truncateAddress = (addr) => addr ? `${addr.slice(0, 6)}...${addr.slice(-6)}` : "";
+
   return (
-    <div className="min-h-screen bg-background pt-32 pb-20 px-6 relative overflow-hidden">
-      {/* Background Decor */}
-      <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-accent/5 rounded-full blur-[120px] pointer-events-none" />
+    <div className="min-h-screen bg-background pt-28 pb-20 px-4 sm:px-6 relative overflow-hidden text-white">
+      {/* ── Background ──────────────────────────────────────── */}
+      <FloatingOrb className="w-[800px] h-[500px] bg-accent/5 blur-[160px] top-10 left-1/2 -translate-x-1/2" />
+      <FloatingOrb className="w-[400px] h-[400px] bg-purple-800/5 blur-[120px] bottom-40 right-10" delay={3} />
+      <FloatingOrb className="w-[300px] h-[300px] bg-indigo-900/5 blur-[100px] top-80 left-10" delay={5} />
+      <div className="absolute inset-0 -z-10 opacity-[0.015]"
+        style={{
+          backgroundImage: `linear-gradient(rgba(124,58,237,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(124,58,237,0.5) 1px, transparent 1px)`,
+          backgroundSize: '70px 70px',
+        }}
+      />
       
-      <div className="max-w-5xl mx-auto">
-        {/* Search Header */}
-        <section className="mb-20 text-center">
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-6xl font-black mb-10 tracking-tighter"
+      <div className="max-w-6xl mx-auto">
+        {/* ── Hero Search ───────────────────────────────────── */}
+        <motion.section
+          initial={{ opacity: 0, y: 25 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="mb-14 text-center"
+        >
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.05 }}
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-accent/8 border border-accent/12 mb-7"
           >
-            Verify a <span className="text-accent underline decoration-4 decoration-accent/20 underline-offset-8">Worker's Reputation</span>
-          </motion.h1>
-          
-          <motion.form 
-            initial={{ opacity: 0, y: 20 }}
+            <Fingerprint className="w-3.5 h-3.5 text-accent" />
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-accent">On-Chain Verification</span>
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            onSubmit={handleSearch}
-            className="relative max-w-3xl mx-auto group"
+            className="text-4xl sm:text-5xl md:text-6xl font-black mb-4 tracking-tighter leading-[0.95]"
           >
-            <div className="absolute left-7 top-1/2 -translate-y-1/2 text-white/20">
-              <Search className="w-6 h-6" />
-            </div>
-            <input 
-              type="text" 
-              placeholder="Enter Soroban Identity (G...)" 
-              value={workerSearch}
-              onChange={(e) => setWorkerSearch(e.target.value)}
-              className="w-full bg-white/5 border border-white/10 rounded-[2.5rem] py-7 pl-16 pr-36 text-white font-black tracking-tight transition-all focus:border-accent/40 focus:outline-none focus:bg-white-[0.08] shadow-2xl text-lg placeholder:text-white/20"
-            />
-            <button 
-              type="submit"
-              disabled={isSearching || !workerSearch}
-              className="absolute right-4 top-1/2 -translate-y-1/2 px-8 py-4 bg-accent text-white rounded-[1.5rem] font-black uppercase tracking-[0.2em] text-[10px] hover:scale-105 active:scale-95 transition-all shadow-xl shadow-accent/20 disabled:opacity-50"
-            >
-              {isSearching ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Audit Profile'}
-            </button>
-          </motion.form>
-        </section>
-
-        <AnimatePresence mode="wait">
-          {profile && (
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="grid grid-cols-1 lg:grid-cols-3 gap-10"
-            >
-              {/* Left Side: Reputation Metrics */}
-              <div className="lg:col-span-1 space-y-10">
-                {/* Reputation Badge Card */}
-                <div className="p-10 rounded-[3rem] bg-white/5 border border-white/10 backdrop-blur-xl relative overflow-hidden group">
-                   <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-accent to-transparent" />
-                   
-                   <div className="text-center mb-10">
-                      <div className="w-40 h-40 rounded-full border-[10px] border-accent/10 border-t-accent mx-auto flex items-center justify-center relative mb-8 shadow-[0_0_40px_rgba(124,58,237,0.1)]">
-                         <div className="text-center">
-                            <div className="text-5xl font-black tracking-tighter">{profile.score > 0 ? profile.score.toFixed(1) : '0.0'}</div>
-                            <div className="text-[10px] font-black uppercase tracking-[0.4em] text-white/30 mt-1">Status</div>
-                         </div>
-                      </div>
-                      <div className="flex justify-center gap-1.5 mb-3">
-                        {[1, 2, 3, 4, 5].map((s) => (
-                           <Star key={s} className={`w-5 h-5 ${s <= Math.floor(profile.score) ? 'text-amber-400 fill-amber-400 drop-shadow-sm' : 'text-white/5'}`} />
-                        ))}
-                      </div>
-                      <p className="text-[10px] font-black text-white/40 uppercase tracking-[0.4em]">Global Trust Level</p>
-                   </div>
-
-                   {/* Stats Grid Snapshot */}
-                   <div className="space-y-4 pt-10 border-t border-white/5">
-                      <div className="flex justify-between items-center px-4 py-3 bg-white/5 rounded-2xl border border-white/5">
-                         <span className="text-[9px] font-black uppercase tracking-widest text-white/30">Total Endorsements</span>
-                         <span className="text-sm font-black text-accent">{profile.totalJobs}</span>
-                      </div>
-                      <div className="flex justify-between items-center px-4 py-3 bg-white/5 rounded-2xl border border-white/5">
-                         <span className="text-[9px] font-black uppercase tracking-widest text-white/30">Active Since</span>
-                         <span className="text-xs font-bold">{profile.memberSince}</span>
-                      </div>
-                   </div>
-                </div>
-
-                {/* Network Verification Badge */}
-                <div className="p-8 rounded-[2.5rem] bg-green-500/5 border border-green-500/10">
-                   <div className="flex items-center gap-4 mb-4">
-                      <div className="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center">
-                         <ShieldCheck className="w-6 h-6 text-green-500" />
-                      </div>
-                      <div>
-                         <h4 className="text-xs font-black uppercase tracking-widest text-white/80">Secured by Soroban</h4>
-                         <p className="text-[9px] font-bold text-green-500/60 tracking-widest uppercase">Immutable Ledger Verified</p>
-                      </div>
-                   </div>
-                   <p className="text-xs text-white/40 font-medium leading-relaxed mb-6">
-                      Reputation data is permanently stored on the Stellar Network as a persistent NFT-like state.
-                   </p>
-                   <a href={`https://stellar.expert/explorer/testnet/address/${profile.address}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 py-3 bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 transition-all group">
-                      <span className="text-[9px] font-black uppercase tracking-widest text-white/60">Audit Ledger</span>
-                      <ExternalLink className="w-3.5 h-3.5 text-white/20 group-hover:text-white transition-all" />
-                   </a>
-                </div>
+            Verify Worker<br/>
+            <span className="bg-gradient-to-r from-accent via-purple-400 to-accent bg-clip-text text-transparent">Reputation</span>
+          </motion.h1>
+          
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.15 }}
+            className="text-white/25 font-medium text-base sm:text-lg mb-10 max-w-xl mx-auto"
+          >
+            Search any Stellar address to audit on-chain credentials and reputation
+          </motion.p>
+          
+          {/* Search Bar */}
+          <motion.form 
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            onSubmit={handleSearchSubmit}
+            className="relative max-w-2xl mx-auto"
+          >
+            <div className="relative">
+              <div className="absolute left-5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-lg bg-white/[0.04] flex items-center justify-center">
+                <Search className="w-4 h-4 text-white/25" />
               </div>
+              <input 
+                type="text" 
+                placeholder="Enter Stellar Address (G...)" 
+                value={workerSearch}
+                onChange={(e) => setWorkerSearch(e.target.value)}
+                className="w-full bg-white/[0.03] border border-white/[0.06] rounded-2xl py-5 pl-18 pr-36 text-white font-medium tracking-tight transition-all focus:border-accent/25 focus:outline-none focus:bg-white/[0.05] focus:shadow-[0_0_50px_rgba(124,58,237,0.06)] text-sm placeholder:text-white/12"
+                style={{ paddingLeft: '4.2rem' }}
+              />
+              <button 
+                type="submit"
+                disabled={isSearching || !workerSearch}
+                className="absolute right-3 top-1/2 -translate-y-1/2 px-6 py-2.5 bg-gradient-to-r from-accent to-purple-700 text-white rounded-xl font-black uppercase tracking-[0.15em] text-[10px] hover:from-accent-hover hover:to-purple-800 active:scale-95 transition-all shadow-lg shadow-accent/15 disabled:opacity-30 flex items-center gap-2"
+              >
+                {isSearching ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <><Globe className="w-3.5 h-3.5" /> Search</>}
+              </button>
+            </div>
+          </motion.form>
 
-              {/* Right Side: Professional Summary & Timeline */}
-              <div className="lg:col-span-2 space-y-10">
-                {/* Profile Summary Card */}
-                <div className="p-12 rounded-[3.5rem] bg-white/5 border border-white/10 backdrop-blur-xl relative overflow-hidden">
-                   <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none">
-                      <Award className="w-32 h-32 text-accent" />
-                   </div>
-                   <div className="flex flex-col md:flex-row md:items-center gap-8 mb-10 pb-10 border-b border-white/10">
-                      <div className="w-24 h-24 rounded-[2rem] bg-accent/20 flex items-center justify-center border border-accent/20 shadow-2xl shadow-accent/20">
-                         <User className="w-12 h-12 text-accent" />
-                      </div>
-                      <div>
-                         <h2 className="text-4xl font-black mb-2 tracking-tight">{profile.name}</h2>
-                         <div className="flex flex-wrap gap-6 items-center">
-                            <div className="flex items-center gap-2 text-white/60 text-xs font-black uppercase tracking-widest">
-                               <Briefcase className="w-4 h-4 text-accent" /> {profile.skill}
-                            </div>
-                            <div className="flex items-center gap-2 text-white/60 text-xs font-black uppercase tracking-widest">
-                               <MapPin className="w-4 h-4 text-accent" /> {profile.city}
-                            </div>
-                         </div>
-                      </div>
-                   </div>
-                   
-                   <p className="text-xl text-white/70 leading-relaxed font-medium mb-12 max-w-2xl italic">
-                      "{profile.bio}"
-                   </p>
+          <AnimatePresence>
+            {error && (
+              <motion.p 
+                initial={{ opacity: 0, y: 8 }} 
+                animate={{ opacity: 1, y: 0 }} 
+                exit={{ opacity: 0 }}
+                className="mt-5 text-red-400/80 font-semibold text-xs flex items-center justify-center gap-2 bg-red-500/5 border border-red-500/10 px-4 py-2.5 rounded-xl w-fit mx-auto"
+              >
+                <AlertCircle className="w-3.5 h-3.5" /> {error}
+              </motion.p>
+            )}
+          </AnimatePresence>
+        </motion.section>
 
-                   <div className="flex flex-wrap gap-5">
+        {/* ── Results ────────────────────────────────────────── */}
+        <AnimatePresence mode="wait">
+          {(isSearching || profile) && (
+            <motion.div
+              key={isSearching ? 'loading' : profile?.address}
+              initial={{ opacity: 0, y: 35 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.5 }}
+            >
+              {/* Verified Banner */}
+              {!isSearching && profile && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 }}
+                  className="mb-8 p-4 rounded-xl flex items-center justify-between"
+                  style={{
+                    background: 'linear-gradient(145deg, rgba(34,197,94,0.06) 0%, rgba(255,255,255,0.02) 100%)',
+                    border: '1px solid rgba(34,197,94,0.1)',
+                  }}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-lg bg-green-500/12 flex items-center justify-center">
+                      <ShieldCheck className="w-4.5 h-4.5 text-green-400" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-black text-green-400">Ledger Verified</p>
+                      <p className="text-[10px] font-medium text-green-400/35">Credential confirmed on Stellar Testnet</p>
+                    </div>
+                  </div>
+                  <a 
+                    href={`https://stellar.expert/explorer/testnet/account/${profile.address}`} 
+                    target="_blank" rel="noopener noreferrer" 
+                    className="hidden md:flex items-center gap-2 px-4 py-2 bg-white/[0.04] hover:bg-white/[0.06] rounded-lg border border-white/[0.06] transition-all text-[9px] font-bold uppercase tracking-wider text-white/40 group"
+                  >
+                    Explorer <ExternalLink className="w-3 h-3 group-hover:scale-110 transition-transform" />
+                  </a>
+                </motion.div>
+              )}
+
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                {/* ── Left: Profile Card ──────────────────── */}
+                <div className="lg:col-span-4 space-y-5">
+                  <motion.div
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.15 }}
+                    className="rounded-2xl relative overflow-hidden"
+                    style={{
+                      background: 'linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 100%)',
+                      border: '1px solid rgba(255,255,255,0.06)',
+                    }}
+                  >
+                    <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-accent/25 to-transparent" />
+                    
+                    {isSearching ? (
+                      <div className="p-8 animate-pulse space-y-5">
+                        <div className="w-16 h-16 rounded-2xl bg-white/[0.04] mx-auto" />
+                        <div className="h-5 bg-white/[0.04] rounded-lg w-2/3 mx-auto" />
+                        <div className="h-3 bg-white/[0.04] rounded-lg w-1/2 mx-auto" />
+                        <div className="space-y-2.5 pt-5 border-t border-white/[0.03]">
+                          {[1,2,3].map(i => <div key={i} className="h-3 bg-white/[0.04] rounded" />)}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="p-6">
+                        {/* Avatar */}
+                        <div className="text-center mb-5">
+                          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-accent/20 to-purple-800/20 flex items-center justify-center border border-accent/15 mx-auto mb-3 shadow-[0_6px_24px_rgba(124,58,237,0.12)]">
+                            <User className="w-8 h-8 text-accent" />
+                          </div>
+                          <h2 className="text-xl font-black tracking-tight mb-1">{profile.name}</h2>
+                          <div className="inline-flex items-center gap-1.5">
+                            <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                            <span className="text-[8px] font-black uppercase tracking-[0.2em] text-green-400/80">Verified</span>
+                          </div>
+                        </div>
+
+                        {/* Details */}
+                        <div className="space-y-2 mb-5">
+                          <div className="flex items-center gap-3 px-3.5 py-2.5 bg-white/[0.03] rounded-lg border border-white/[0.03]">
+                            <Briefcase className="w-3.5 h-3.5 text-accent/60" />
+                            <span className="text-xs font-semibold text-white/50">{profile.skill}</span>
+                          </div>
+                          <div className="flex items-center gap-3 px-3.5 py-2.5 bg-white/[0.03] rounded-lg border border-white/[0.03]">
+                            <MapPin className="w-3.5 h-3.5 text-accent/60" />
+                            <span className="text-xs font-semibold text-white/50">{profile.city}</span>
+                          </div>
+                          {profile.experience && (
+                            <div className="flex items-center gap-3 px-3.5 py-2.5 bg-white/[0.03] rounded-lg border border-white/[0.03]">
+                              <Calendar className="w-3.5 h-3.5 text-accent/60" />
+                              <span className="text-xs font-semibold text-white/50">{profile.experience} Years Exp</span>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Bio */}
+                        {profile.bio && (
+                          <div className="pt-4 border-t border-white/[0.04]">
+                            <p className="text-[11px] text-white/30 leading-relaxed italic">"{profile.bio}"</p>
+                          </div>
+                        )}
+
+                        {/* Address */}
+                        <div className="mt-4 pt-4 border-t border-white/[0.04]">
+                          <p className="text-[8px] font-bold uppercase tracking-[0.2em] text-white/12 mb-1.5">Stellar Address</p>
+                          <p className="text-[10px] font-mono text-white/20 truncate">{profile.address}</p>
+                        </div>
+                      </div>
+                    )}
+                  </motion.div>
+
+                  {/* Action Buttons */}
+                  {!isSearching && profile && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.25 }}
+                      className="space-y-2.5"
+                    >
+                      <button 
+                        onClick={() => navigate(`/endorse?address=${profile.address}`)}
+                        className="group w-full py-3.5 bg-gradient-to-r from-accent to-purple-700 hover:from-accent-hover hover:to-purple-800 text-white rounded-xl font-black uppercase tracking-[0.15em] text-[10px] transition-all flex items-center justify-center gap-2.5 shadow-lg shadow-accent/15 active:scale-[0.98]"
+                      >
+                        <Award className="w-4 h-4 group-hover:scale-110 transition-transform" /> Endorse Worker
+                      </button>
                       <button 
                         onClick={handleShare}
-                        className="flex-1 py-5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl font-black uppercase tracking-widest text-[11px] transition-all flex items-center justify-center gap-3 active:scale-95 group"
+                        className="group w-full py-3.5 bg-white/[0.04] hover:bg-white/[0.06] border border-white/[0.06] text-white rounded-xl font-black uppercase tracking-[0.15em] text-[10px] transition-all flex items-center justify-center gap-2.5 active:scale-[0.98]"
                       >
-                         <Share2 className="w-4 h-4 text-accent group-hover:rotate-12 transition-transform" /> Share Profile
+                        {copied 
+                          ? <><Check className="w-4 h-4 text-green-400" /> Copied!</>
+                          : <><Share2 className="w-4 h-4 text-accent group-hover:rotate-12 transition-transform" /> Share Profile</>
+                        }
                       </button>
-                      <button 
-                        onClick={() => navigate('/endorse')}
-                        className="flex-1 py-5 bg-accent hover:bg-primary-hover text-white rounded-2xl font-black uppercase tracking-widest text-[11px] transition-all flex items-center justify-center gap-3 shadow-2xl shadow-accent/20 border border-accent active:scale-95 hover:bg-accent-hover group"
-                      >
-                         <CheckCircle2 className="w-4 h-4 group-hover:scale-110 transition-transform" /> Subside Endorsement
-                      </button>
-                   </div>
+                    </motion.div>
+                  )}
                 </div>
 
-                {/* Endorsement History Timeline */}
-                <div className="space-y-8">
-                   <h3 className="text-2xl font-black flex items-center gap-4 ml-4 tracking-tighter">
-                       <div className="w-2 h-8 bg-accent rounded-full" /> Verified History
-                   </h3>
-                   
-                   <div className="space-y-6">
-                      {profile.endorsements.length > 0 ? profile.endorsements.map((endorsement, idx) => (
-                        <motion.div 
-                          key={idx}
-                          initial={{ opacity: 0, x: 20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: idx * 0.1 }}
-                          className="p-8 rounded-[2.5rem] bg-white/5 border border-white/10 relative group overflow-hidden"
-                        >
-                           <div className="absolute top-0 right-0 w-24 h-24 bg-accent/5 rounded-full blur-3xl -z-10" />
-                           
-                           <div className="flex items-start justify-between mb-6">
-                              <div className="flex items-center gap-4">
-                                 <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center border border-white/10">
-                                    <ShieldCheck className="w-5 h-5 text-accent" />
-                                 </div>
-                                 <div className="flex flex-col">
-                                    <span className="text-[10px] font-black uppercase tracking-widest text-white/30 mb-0.5">Employer Identity</span>
-                                    <span className="text-sm font-mono font-bold text-white/70">{endorsement.endorser}</span>
-                                 </div>
+                {/* ── Right: Reputation + Endorsements ──────── */}
+                <div className="lg:col-span-8 space-y-5">
+                  {/* Reputation Score */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="rounded-2xl relative overflow-hidden"
+                    style={{
+                      background: 'linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 100%)',
+                      border: '1px solid rgba(255,255,255,0.06)',
+                    }}
+                  >
+                    <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-accent/20 to-transparent" />
+                    
+                    {isSearching ? (
+                      <div className="p-8 animate-pulse flex items-center gap-8">
+                        <div className="w-28 h-28 rounded-full bg-white/[0.04] shrink-0" />
+                        <div className="flex-1 space-y-3">
+                          <div className="h-5 bg-white/[0.04] rounded w-1/3" />
+                          {[1,2,3,4,5].map(i => <div key={i} className="h-2 bg-white/[0.04] rounded-full" />)}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="p-6 sm:p-8">
+                        <div className="flex flex-col md:flex-row items-center gap-8">
+                          {/* Score Ring */}
+                          <div className="shrink-0 relative">
+                            <div className="w-28 h-28 rounded-full relative flex items-center justify-center">
+                              <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 112 112">
+                                <circle cx="56" cy="56" r="50" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="5" />
+                                <circle 
+                                  cx="56" cy="56" r="50" fill="none" 
+                                  stroke="url(#verifyScoreGrad)" 
+                                  strokeWidth="5" 
+                                  strokeLinecap="round"
+                                  strokeDasharray={`${(profile.reputation.average / 5) * 314} 314`}
+                                />
+                                <defs>
+                                  <linearGradient id="verifyScoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stopColor="#7c3aed" />
+                                    <stop offset="100%" stopColor="#a78bfa" />
+                                  </linearGradient>
+                                </defs>
+                              </svg>
+                              <div className="text-center z-10">
+                                <div className="text-3xl font-black tracking-tighter">{profile.reputation.average || '0.0'}</div>
+                                <div className="text-[7px] font-bold uppercase tracking-[0.25em] text-white/18 mt-0.5">Score</div>
                               </div>
-                              <div className="flex gap-1.5 p-2 bg-white/5 rounded-xl">
-                                 {[1, 2, 3, 4, 5].map((s) => (
-                                   <Star key={s} className={`w-3.5 h-3.5 ${s <= endorsement.rating ? 'text-amber-400 fill-amber-400' : 'text-white/5'}`} />
-                                 ))}
-                              </div>
-                           </div>
+                            </div>
+                          </div>
 
-                           <div className="mb-8">
-                              <div className="inline-block px-4 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-[9px] font-black uppercase tracking-widest text-accent mb-4">
-                                 {endorsement.jobType}
+                          {/* Breakdown */}
+                          <div className="flex-1 w-full">
+                            <div className="flex items-center justify-between mb-4">
+                              <h3 className="text-xs font-black uppercase tracking-wider text-white/35">Rating Breakdown</h3>
+                              <span className="text-[9px] font-bold text-accent/50">
+                                {profile.reputation.total} {profile.reputation.total === 1 ? 'Review' : 'Reviews'}
+                              </span>
+                            </div>
+                            <div className="space-y-2">
+                              {[5,4,3,2,1].map(star => (
+                                <div key={star} className="flex items-center gap-2.5">
+                                  <div className="flex items-center gap-1 w-10">
+                                    <span className="text-[10px] font-bold text-white/20">{star}</span>
+                                    <Star className="w-3 h-3 text-amber-400/30 fill-amber-400/30" />
+                                  </div>
+                                  <div className="flex-1 h-1.5 bg-white/[0.03] rounded-full overflow-hidden">
+                                    <motion.div 
+                                      initial={{ width: 0 }}
+                                      animate={{ width: `${profile.reputation.breakdown[star] || 0}%` }}
+                                      transition={{ duration: 1, delay: 0.5 + star * 0.08 }}
+                                      className="h-full rounded-full bg-gradient-to-r from-accent to-purple-400" 
+                                    />
+                                  </div>
+                                  <span className="text-[9px] font-bold text-white/15 w-7 text-right">{profile.reputation.breakdown[star] || 0}%</span>
+                                </div>
+                              ))}
+                            </div>
+                            <div className="flex items-center gap-2 pt-4 mt-4 border-t border-white/[0.04]">
+                              <div className="flex gap-0.5">
+                                {[1,2,3,4,5].map(s => (
+                                  <Star key={s} className={`w-3.5 h-3.5 ${s <= Math.floor(profile.reputation.average) ? 'text-amber-400 fill-amber-400' : 'text-white/[0.05]'}`} />
+                                ))}
                               </div>
-                              <p className="text-lg text-white/60 leading-relaxed font-medium italic">
-                                 "{endorsement.feedback}"
-                              </p>
-                           </div>
+                              <span className="text-[10px] font-semibold text-white/18">{profile.reputation.average || '0.0'} out of 5</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </motion.div>
 
-                           <div className="flex items-center justify-between pt-6 border-t border-white/5">
-                              <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-white/20">
-                                 <Calendar className="w-3.5 h-3.5" /> {endorsement.date}
+                  {/* Stats Row */}
+                  {!isSearching && profile && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.25 }}
+                      className="grid grid-cols-3 gap-3"
+                    >
+                      {[
+                        { value: profile.reputation.total, label: 'Total Jobs', color: 'text-accent' },
+                        { value: profile.experience ? `${profile.experience}yr` : '—', label: 'Experience' },
+                        { value: profile.timestamp ? new Date(profile.timestamp).toLocaleDateString(undefined, { month: 'short', year: '2-digit' }) : '—', label: 'Member Since' },
+                      ].map((stat, i) => (
+                        <div key={i} className="p-4 rounded-xl text-center" style={{
+                          background: 'rgba(255,255,255,0.025)',
+                          border: '1px solid rgba(255,255,255,0.04)',
+                        }}>
+                          <p className={`text-xl font-black tracking-tight mb-0.5 ${stat.color || ''}`}>{stat.value}</p>
+                          <p className="text-[8px] font-bold uppercase tracking-[0.2em] text-white/18">{stat.label}</p>
+                        </div>
+                      ))}
+                    </motion.div>
+                  )}
+
+                  {/* Endorsement History */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                  >
+                    <div className="flex items-center gap-3 mb-5">
+                      <div className="w-1.5 h-6 bg-gradient-to-b from-accent to-purple-600 rounded-full" />
+                      <h3 className="text-lg font-black tracking-tight">Endorsement History</h3>
+                      {!isSearching && profile && (
+                        <span className="ml-auto text-[9px] font-bold text-white/12 bg-white/[0.03] px-2 py-0.5 rounded-md">
+                          {profile.endorsements.length}
+                        </span>
+                      )}
+                    </div>
+                    
+                    <div className="space-y-3">
+                      {isSearching ? (
+                        [1,2].map(i => (
+                          <div key={i} className="p-5 rounded-xl bg-white/[0.02] border border-white/[0.04] animate-pulse h-28" />
+                        ))
+                      ) : profile.endorsements.length > 0 ? (
+                        profile.endorsements
+                          .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+                          .map((endorsement, idx) => (
+                          <motion.div 
+                            key={idx}
+                            initial={{ opacity: 0, x: 12 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.4 + idx * 0.06 }}
+                            className="p-5 rounded-xl group transition-all"
+                            style={{
+                              background: 'rgba(255,255,255,0.02)',
+                              border: '1px solid rgba(255,255,255,0.04)',
+                            }}
+                          >
+                            <div className="flex items-start justify-between mb-3">
+                              <div className="flex items-center gap-3">
+                                <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center border border-accent/12">
+                                  <ShieldCheck className="w-4 h-4 text-accent" />
+                                </div>
+                                <div>
+                                  <span className="text-[8px] font-bold uppercase tracking-[0.15em] text-white/18 block">Endorser</span>
+                                  <span className="text-xs font-mono font-semibold text-white/40">{truncateAddress(endorsement.endorser)}</span>
+                                </div>
                               </div>
-                              <a href="#" className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/20 hover:text-white transition-colors group/link bg-white/5 px-5 py-2 rounded-xl">
-                                 Ledger Receipt <ChevronRight className="w-3.5 h-3.5 group-hover/link:translate-x-1 transition-all" />
-                              </a>
-                           </div>
-                        </motion.div>
-                      )) : (
-                        <div className="p-10 text-center rounded-[2.5rem] border border-dashed border-white/10 bg-white/5">
-                           <History className="w-12 h-12 text-white/10 mx-auto mb-4" />
-                           <p className="text-xs font-black uppercase tracking-widest text-white/20">Protocol History Empty</p>
+                              <div className="flex gap-0.5 p-1.5 bg-white/[0.02] rounded-md">
+                                {[1,2,3,4,5].map(s => (
+                                  <Star key={s} className={`w-3 h-3 ${s <= endorsement.rating ? 'text-amber-400 fill-amber-400' : 'text-white/[0.05]'}`} />
+                                ))}
+                              </div>
+                            </div>
+
+                            <div className="mb-3">
+                              <span className="inline-block px-2 py-0.5 rounded-md bg-accent/8 border border-accent/12 text-[8px] font-bold uppercase tracking-wider text-accent/70 mb-2">
+                                {endorsement.jobType}
+                              </span>
+                              <p className="text-[11px] text-white/30 leading-relaxed italic">"{endorsement.feedback}"</p>
+                            </div>
+
+                            <div className="flex items-center justify-between pt-3 border-t border-white/[0.03]">
+                              <span className="text-[9px] font-semibold text-white/12 flex items-center gap-1.5">
+                                <Calendar className="w-2.5 h-2.5" />
+                                {new Date(endorsement.timestamp).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
+                              </span>
+                              {endorsement.txHash && (
+                                <a
+                                  href={`https://stellar.expert/explorer/testnet/tx/${endorsement.txHash}`}
+                                  target="_blank" rel="noopener noreferrer"
+                                  className="flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-wider text-white/12 hover:text-accent transition-colors"
+                                >
+                                  View TX <ExternalLink className="w-2.5 h-2.5" />
+                                </a>
+                              )}
+                            </div>
+                          </motion.div>
+                        ))
+                      ) : (
+                        <div className="p-10 text-center rounded-xl border border-dashed border-white/[0.05]">
+                          <div className="w-14 h-14 rounded-2xl bg-white/[0.02] flex items-center justify-center mx-auto mb-4">
+                            <History className="w-6 h-6 text-white/[0.06]" />
+                          </div>
+                          <p className="text-[10px] font-bold uppercase tracking-wider text-white/15 mb-1">No Endorsements Yet</p>
+                          <p className="text-[10px] text-white/8 font-medium">Be the first to endorse this worker</p>
                         </div>
                       )}
-                   </div>
+                    </div>
+                  </motion.div>
                 </div>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* Empty State */}
+        {!isSearching && !profile && !error && (
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="text-center max-w-sm mx-auto"
+          >
+            <div className="w-16 h-16 rounded-2xl bg-white/[0.02] border border-white/[0.04] flex items-center justify-center mx-auto mb-5">
+              <Sparkles className="w-7 h-7 text-white/[0.06]" />
+            </div>
+            <p className="text-white/12 text-xs font-bold mb-1">Paste a Stellar address above to get started</p>
+            <p className="text-white/[0.06] text-[10px] font-medium">Credentials are pulled directly from the blockchain</p>
+          </motion.div>
+        )}
+
+        {/* Footer */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="mt-10 flex items-center justify-center gap-5 text-white/10"
+        >
+          <div className="flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-wider">
+            <Fingerprint className="w-3 h-3" /> Immutable Data
+          </div>
+          <div className="w-1 h-1 rounded-full bg-white/5" />
+          <div className="flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-wider">
+            <ShieldCheck className="w-3 h-3" /> Tamper-Proof
+          </div>
+          <div className="w-1 h-1 rounded-full bg-white/5" />
+          <div className="flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-wider">
+            <Target className="w-3 h-3" /> Stellar Network
+          </div>
+        </motion.div>
       </div>
     </div>
   );
