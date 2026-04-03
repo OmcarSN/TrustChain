@@ -25,7 +25,7 @@ const Footer = () => {
           <div className="space-y-3">
             <h4 className="text-[9px] font-black uppercase tracking-[0.25em] text-white/25">Connect & Explore</h4>
             <div className="flex flex-col gap-2">
-              <a href="https://github.com/Omcar/trustchain" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-white/35 hover:text-white transition-colors font-bold text-[11px] group">
+              <a href="https://github.com/OmcarSN/TrustChain" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-white/35 hover:text-white transition-colors font-bold text-[11px] group">
                 <Github className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform" /> GitHub Repository
               </a>
               <a href="https://stellar.org" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-white/35 hover:text-white transition-colors font-bold text-[11px] group">
