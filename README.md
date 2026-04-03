@@ -96,7 +96,7 @@ Traditional credential systems (LinkedIn, certificates) are inaccessible to this
 | 💻 **GitHub Repo** | [https://github.com/OmcarSN/TrustChain](https://github.com/OmcarSN/TrustChain) |
 | 🔭 **Credential Contract** | [View on Stellar Expert](https://stellar.expert/explorer/testnet/contract/CCQG7ZFOQX4H7OSUXDU2FE2J73XCUQLXP2FONFUMKXXDUP253J3JP6HZ) |
 | 🔭 **Reputation Contract** | [View on Stellar Expert](https://stellar.expert/explorer/testnet/contract/CAHH72L2C7XN32IKOIBLNODWQF4MLUJTJRZWFCU4JIUQEXLEEX3E52GI) |
-| 📝 **Feedback Form** | [Google Form](https://forms.gle/YOUR_FORM_LINK_HERE) |
+| 📝 **Feedback Form** | [Google Form](https://docs.google.com/forms/d/e/1FAIpQLSdCP50NOzA3ppCr9hLYw_ZbJRXzGiJzKT7aPVDLxz365czW_Q/viewform?usp=publish-editor) |
 
 > **Note:** The app requires the [Freighter Wallet](https://www.freighter.app/) browser extension set to **Testnet** mode.
 
@@ -219,7 +219,7 @@ npm run build
 | Sarthak Kharat | ⭐⭐⭐⭐⭐ | Intuitive interface + robust verification | Add analytics and notifications |
 
 📊 **Exported Feedback:** [user-feedback.xlsx](./user-feedback.xlsx)
-📝 **Google Form:** [TrustChain Feedback Form](https://forms.gle/YOUR_FORM_LINK_HERE)
+📝 **Google Form:** [TrustChain Feedback Form](https://docs.google.com/forms/d/e/1FAIpQLSdCP50NOzA3ppCr9hLYw_ZbJRXzGiJzKT7aPVDLxz365czW_Q/viewform?usp=publish-editor)
 
 ---
 
