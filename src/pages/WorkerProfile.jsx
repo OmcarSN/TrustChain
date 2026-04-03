@@ -70,7 +70,7 @@ const WorkerProfile = () => {
   /* ── Loading skeleton ──────────────────────────────────────── */
   if (loading) {
     return (
-      <div className="min-h-screen bg-background pt-28 pb-20 px-4 sm:px-6 relative overflow-hidden">
+      <div className="min-h-screen bg-background pt-20 pb-8 px-4 sm:px-6 relative overflow-hidden">
         <FloatingOrb className="w-[600px] h-[400px] bg-accent/5 blur-[150px] top-20 left-1/3" />
         <div className="max-w-5xl mx-auto">
           <div className="mb-6">
@@ -104,7 +104,7 @@ const WorkerProfile = () => {
   /* ── Error state ───────────────────────────────────────────── */
   if (error) {
     return (
-      <div className="min-h-screen bg-background pt-32 flex items-center justify-center px-6 relative overflow-hidden">
+      <div className="min-h-screen bg-background pt-20 flex items-center justify-center px-6 relative overflow-hidden">
         <FloatingOrb className="w-[500px] h-[500px] bg-red-900/5 blur-[120px] top-1/4 left-1/2 -translate-x-1/2" />
         <motion.div
           initial={{ opacity: 0, y: 25, scale: 0.97 }}
@@ -137,7 +137,7 @@ const WorkerProfile = () => {
 
   /* ── Profile View ──────────────────────────────────────────── */
   return (
-    <div className="min-h-screen bg-background pt-28 pb-20 px-4 sm:px-6 relative overflow-hidden text-white">
+    <div className="min-h-screen bg-background pt-20 pb-8 px-4 sm:px-6 relative overflow-hidden text-white">
       {/* Background */}
       <FloatingOrb className="w-[700px] h-[500px] bg-accent/5 blur-[160px] top-10 right-1/4" />
       <FloatingOrb className="w-[400px] h-[400px] bg-purple-800/5 blur-[120px] bottom-20 left-10" delay={3} />
@@ -265,6 +265,12 @@ const WorkerProfile = () => {
                   >
                     Explorer <ExternalLink className="w-2.5 h-2.5 group-hover:scale-110 transition-transform" />
                   </a>
+                  <Link
+                    to="/endorse"
+                    className="mt-2 flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-accent to-purple-700 hover:from-accent-hover hover:to-purple-800 text-white rounded-lg font-black uppercase tracking-[0.15em] text-[9px] transition-all shadow-lg shadow-accent/20 active:scale-[0.97]"
+                  >
+                    <Award className="w-3.5 h-3.5" /> Endorse This Worker
+                  </Link>
                 </div>
               </div>
             </motion.div>

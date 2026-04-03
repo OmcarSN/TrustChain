@@ -11,6 +11,7 @@ import Verify from './pages/Verify';
 import Dashboard from './pages/Dashboard';
 import WorkerProfile from './pages/WorkerProfile';
 import NotFound from './pages/NotFound';
+import DiscoverWorkers from './pages/DiscoverWorkers';
 
 // Page Transition Wrapper
 const PageWrapper = ({ children }) => (
@@ -38,6 +39,7 @@ const App = () => {
             <Route path="/endorse" element={<PageWrapper><Endorse /></PageWrapper>} />
             <Route path="/verify" element={<PageWrapper><Verify /></PageWrapper>} />
             <Route path="/dashboard" element={<PageWrapper><Dashboard /></PageWrapper>} />
+            <Route path="/discover" element={<PageWrapper><DiscoverWorkers /></PageWrapper>} />
             <Route path="/profile/:address" element={<PageWrapper><WorkerProfile /></PageWrapper>} />
             <Route path="*" element={<PageWrapper><NotFound /></PageWrapper>} />
           </Routes>

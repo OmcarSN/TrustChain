@@ -75,7 +75,7 @@ const Verify = () => {
   const truncateAddress = (addr) => addr ? `${addr.slice(0, 6)}...${addr.slice(-6)}` : "";
 
   return (
-    <div className="min-h-screen bg-background pt-28 pb-20 px-4 sm:px-6 relative overflow-hidden text-white">
+    <div className="min-h-screen bg-background pt-20 pb-6 px-4 sm:px-6 relative overflow-hidden text-white">
       {/* ── Background ──────────────────────────────────────── */}
       <FloatingOrb className="w-[800px] h-[500px] bg-accent/5 blur-[160px] top-10 left-1/2 -translate-x-1/2" />
       <FloatingOrb className="w-[400px] h-[400px] bg-purple-800/5 blur-[120px] bottom-40 right-10" delay={3} />
@@ -93,13 +93,13 @@ const Verify = () => {
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="mb-14 text-center"
+          className="mb-8 text-center"
         >
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.05 }}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-accent/8 border border-accent/12 mb-7"
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-accent/8 border border-accent/12 mb-5"
           >
             <Fingerprint className="w-3.5 h-3.5 text-accent" />
             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-accent">On-Chain Verification</span>
@@ -109,7 +109,7 @@ const Verify = () => {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-4xl sm:text-5xl md:text-6xl font-black mb-4 tracking-tighter leading-[0.95]"
+            className="text-3xl sm:text-4xl font-black mb-3 tracking-tighter leading-[0.95]"
           >
             Verify Worker<br/>
             <span className="bg-gradient-to-r from-accent via-purple-400 to-accent bg-clip-text text-transparent">Reputation</span>
@@ -119,7 +119,7 @@ const Verify = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.15 }}
-            className="text-white/25 font-medium text-base sm:text-lg mb-10 max-w-xl mx-auto"
+            className="text-white/25 font-medium text-sm mb-6 max-w-xl mx-auto"
           >
             Search any Stellar address to audit on-chain credentials and reputation
           </motion.p>

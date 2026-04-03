@@ -127,6 +127,13 @@ const WorkerRegistration = () => {
       const response = await mintWorkerCredential(walletAddress, data);
       localStorage.setItem(`trustchain_worker_${walletAddress}`, JSON.stringify(data));
       
+      // Add to global worker registry for discovery
+      const registry = JSON.parse(localStorage.getItem('trustchain_worker_registry') || '[]');
+      if (!registry.includes(walletAddress)) {
+        registry.push(walletAddress);
+        localStorage.setItem('trustchain_worker_registry', JSON.stringify(registry));
+      }
+      
       setTxResult(response);
       setExistingCredential(data);
       toast.success('Credential minted successfully!');
@@ -140,7 +147,7 @@ const WorkerRegistration = () => {
 
   const truncateAddress = (addr) => addr ? `${addr.slice(0, 6)}...${addr.slice(-6)}` : "";
 
-  const filledCount = [formData.fullName, formData.skillCategory, formData.experience, formData.city, formData.bio.length >= 10].filter(Boolean).length;
+  const filledCount = [formData.fullName, formData.skillCategory, formData.experience, formData.city, (formData.bio || '').length >= 10].filter(Boolean).length;
   const currentStep = txResult ? 3 : isMinting ? 2 : 1;
 
   const inputClass = (field) => `w-full bg-white/[0.03] border ${errors[field] ? 'border-red-500/30' : 'border-white/[0.06]'} rounded-xl py-3.5 pl-4 pr-4 text-white text-sm focus:outline-none focus:border-accent/30 focus:bg-white/[0.05] transition-all font-medium placeholder:text-white/12`;
@@ -148,7 +155,7 @@ const WorkerRegistration = () => {
   /* ── Not connected ─────────────────────────────────────────── */
   if (!isConnected) {
     return (
-      <div className="min-h-screen bg-background pt-32 flex items-center justify-center px-6 relative overflow-hidden">
+      <div className="min-h-screen bg-background pt-20 flex items-center justify-center px-6 relative overflow-hidden">
         <FloatingOrb className="w-[600px] h-[600px] bg-accent/5 blur-[150px] top-20 left-1/2 -translate-x-1/2" />
         <motion.div
           initial={{ opacity: 0, y: 25, scale: 0.97 }}
@@ -185,7 +192,7 @@ const WorkerRegistration = () => {
   /* ── Existing credential view ──────────────────────────────── */
   if (existingCredential && !isMinting && !txResult) {
     return (
-      <div className="min-h-screen bg-background pt-28 pb-20 px-4 sm:px-6 relative overflow-hidden">
+      <div className="min-h-screen bg-background pt-20 pb-8 px-4 sm:px-6 relative overflow-hidden">
         <FloatingOrb className="w-[600px] h-[400px] bg-accent/5 blur-[150px] top-20 left-1/3" />
         <div className="max-w-xl mx-auto">
           <motion.div initial={{ opacity: 0, x: -15 }} animate={{ opacity: 1, x: 0 }} className="mb-6">
@@ -255,7 +262,13 @@ const WorkerRegistration = () => {
 
               <button 
                 onClick={() => {
-                  setFormData(existingCredential);
+                  setFormData({
+                    fullName: existingCredential.name || existingCredential.fullName || '',
+                    skillCategory: existingCredential.skill || existingCredential.skillCategory || '',
+                    experience: existingCredential.experience || '',
+                    city: existingCredential.city || '',
+                    bio: existingCredential.bio || '',
+                  });
                   setExistingCredential(null);
                 }}
                 className="mt-6 w-full py-3.5 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.06] text-white rounded-xl font-bold uppercase tracking-[0.15em] text-[10px] transition-all flex items-center justify-center gap-2"
@@ -271,7 +284,7 @@ const WorkerRegistration = () => {
 
   /* ── Main Registration Form ────────────────────────────────── */
   return (
-    <div className="min-h-screen bg-background pt-28 pb-20 px-4 sm:px-6 relative overflow-hidden">
+    <div className="min-h-screen bg-background pt-20 pb-8 px-4 sm:px-6 relative overflow-hidden">
       {/* Background */}
       <FloatingOrb className="w-[700px] h-[500px] bg-accent/5 blur-[160px] top-10 left-1/3" />
       <FloatingOrb className="w-[400px] h-[400px] bg-purple-800/5 blur-[120px] bottom-20 right-10" delay={3} />
@@ -393,7 +406,7 @@ const WorkerRegistration = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
               {/* Name */}
-              <FormField icon={User} label="Full Name" error={errors.fullName} completed={formData.fullName.length >= 2}>
+              <FormField icon={User} label="Full Name" error={errors.fullName} completed={(formData.fullName || '').length >= 2}>
                 <input
                   name="fullName"
                   value={formData.fullName}
@@ -446,7 +459,7 @@ const WorkerRegistration = () => {
             </div>
 
             {/* Bio */}
-            <FormField icon={FileText} label="Short Bio" error={errors.bio} completed={formData.bio.length >= 10}>
+            <FormField icon={FileText} label="Short Bio" error={errors.bio} completed={(formData.bio || '').length >= 10}>
               <div className="relative">
                 <textarea
                   name="bio"
@@ -458,9 +471,9 @@ const WorkerRegistration = () => {
                   className={`${inputClass('bio')} resize-none min-h-[90px]`}
                 />
                 <span className={`absolute right-3 bottom-2.5 text-[9px] font-bold ${
-                  formData.bio.length > 55 ? 'text-amber-400/50' : 'text-white/12'
+                  (formData.bio || '').length > 55 ? 'text-amber-400/50' : 'text-white/12'
                 }`}>
-                  {formData.bio.length}/64
+                  {(formData.bio || '').length}/64
                 </span>
               </div>
             </FormField>

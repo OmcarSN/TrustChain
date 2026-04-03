@@ -45,6 +45,7 @@ const Navbar = () => {
 
   const navLinks = [
     { name: 'Home', path: '/' },
+    { name: 'Find Workers', path: '/discover' },
     { name: 'Dashboard', path: '/dashboard' },
     { name: 'Worker Portal', path: '/worker' },
     { name: 'Endorse', path: '/endorse' },
@@ -54,7 +55,7 @@ const Navbar = () => {
   return (
     <>
       <nav className="fixed top-0 left-0 w-full z-50 border-b border-white/5 bg-background/80 backdrop-blur-2xl">
-        <div className="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 group">
             <div className="w-10 h-10 bg-accent rounded-2xl flex items-center justify-center shadow-2xl shadow-accent/40 group-hover:scale-110 transition-transform duration-500">
@@ -184,7 +185,7 @@ const Navbar = () => {
               className="fixed top-0 right-0 h-full w-[85%] max-w-sm bg-[#0f0f18] border-l border-white/10 z-[55] flex flex-col"
             >
               {/* Mobile Menu Header */}
-              <div className="px-8 pt-28 pb-6 border-b border-white/5">
+              <div className="px-8 pt-20 pb-6 border-b border-white/5">
                 <div className="flex items-center gap-3 mb-2">
                   <div className="w-8 h-8 bg-accent rounded-xl flex items-center justify-center">
                     <Shield className="w-5 h-5 text-white" />
