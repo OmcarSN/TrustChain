@@ -17,7 +17,7 @@
 - [Solution](#-solution)
 - [Key Features](#-key-features)
 - [Live Demo & Links](#-live-demo--links)
-- [Demo Video](#-demo-video)
+- [Demo Video](https://youtu.be/BbL7pydFVwg)
 - [Architecture](#️-architecture)
 - [Tech Stack](#-tech-stack)
 - [Smart Contracts](#-smart-contracts)
