@@ -47,7 +47,21 @@ const WorkerProfile = () => {
       const endorse = JSON.parse(localStorage.getItem(localKey) || '[]');
       const rep = calculateScore(endorse);
 
-      setProfile({ ...credential, address });
+      // Merge on-chain data with local storage metadata to get real names, city, etc.
+      const localDataStr = localStorage.getItem(`trustchain_worker_${address}`);
+      const localData = localDataStr ? JSON.parse(localDataStr) : {};
+
+      const mergedProfile = {
+        ...credential,
+        address,
+        name: localData.name || localData.fullName || credential.name || 'Worker',
+        city: localData.city || credential.city || 'Unknown',
+        experience: localData.experience || credential.experience || 0,
+        bio: localData.bio || credential.bio || '',
+        skill: localData.skill || localData.skillCategory || credential.skill || 'General'
+      };
+
+      setProfile(mergedProfile);
       setEndorsements(endorse);
       setReputation(rep);
     } catch (err) {
@@ -121,7 +135,7 @@ const WorkerProfile = () => {
           className="text-center max-w-md p-10 rounded-2xl relative overflow-hidden"
           style={{
             background: 'linear-gradient(145deg, rgba(239,68,68,0.05) 0%, rgba(255,255,255,0.03) 100%)',
-            border: '1px solid rgba(239,68,68,0.1)',
+             border: '1px solid rgba(239,68,68,0.1)',
           }}
         >
           <div className="w-16 h-16 rounded-2xl bg-red-500/10 border border-red-500/15 flex items-center justify-center mx-auto mb-6">
@@ -307,7 +321,7 @@ const WorkerProfile = () => {
                     <span className="flex items-center gap-1.5 text-white/40 text-[11px] font-bold uppercase tracking-wider">
                       <MapPin className="w-3.5 h-3.5 text-accent" /> {profile.city}
                     </span>
-                    {profile.experience && (
+                    {profile.experience > 0 && (
                       <span className="flex items-center gap-1.5 text-white/40 text-[11px] font-bold uppercase tracking-wider">
                         <Calendar className="w-3.5 h-3.5 text-accent" /> {profile.experience} Yrs
                       </span>
