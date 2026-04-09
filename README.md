@@ -17,7 +17,7 @@
 - [Solution](#-solution)
 - [Key Features](#-key-features)
 - [Live Demo & Links](#-live-demo--links)
-- [Demo Video](#-demo-video)
+- [Demo Video](https://youtu.be/BbL7pydFVwg)
 - [Architecture](#️-architecture)
 - [Tech Stack](#-tech-stack)
 - [Smart Contracts](#-smart-contracts)
@@ -104,7 +104,7 @@ Traditional credential systems (LinkedIn, certificates) are inaccessible to this
 
 ## 📹 Demo Video
 
-> 🎬 **Full MVP Demo Video:** [Watch Here](YOUR_DEMO_VIDEO_LINK_HERE)
+> 🎬 **Full MVP Demo Video:** [Watch Here](https://youtu.be/BbL7pydFVwg)
 >
 > The demo covers:
 > 1. Connecting Freighter wallet
