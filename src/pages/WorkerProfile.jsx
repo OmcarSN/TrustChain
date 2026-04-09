@@ -31,6 +31,7 @@ const WorkerProfile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [copied, setCopied] = useState(false);
+  const [copiedAddr, setCopiedAddr] = useState(false);
 
   useEffect(() => {
     if (!address) return;
@@ -63,6 +64,13 @@ const WorkerProfile = () => {
     setCopied(true);
     toast.success('Profile link copied to clipboard!');
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const copyAddress = () => {
+    navigator.clipboard.writeText(address);
+    setCopiedAddr(true);
+    toast.success('Wallet address copied!');
+    setTimeout(() => setCopiedAddr(false), 2000);
   };
 
   const truncateAddress = (addr) => addr ? `${addr.slice(0, 6)}...${addr.slice(-6)}` : '';
@@ -254,8 +262,8 @@ const WorkerProfile = () => {
                   <p className="text-[8px] font-bold uppercase tracking-[0.2em] text-white/12 mb-2">Stellar Address</p>
                   <div className="flex items-center gap-2 p-2.5 bg-white/[0.03] rounded-lg border border-white/[0.03]">
                     <span className="text-[9px] font-mono text-white/20 truncate flex-1">{address}</span>
-                    <button onClick={handleShare} className="shrink-0">
-                      {copied ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5 text-white/15 hover:text-accent transition-colors" />}
+                    <button onClick={copyAddress} className="shrink-0">
+                      {copiedAddr ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5 text-white/15 hover:text-accent transition-colors" />}
                     </button>
                   </div>
                   <a 

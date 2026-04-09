@@ -157,6 +157,7 @@ export async function signTransaction(transactionXDR, networkPassphrase = "Test 
     try {
       // Try new-style API first (Freighter v6+): positional args (xdr, opts)
       response = await api.signTransaction(transactionXDR, {
+        network: "TESTNET", // Use 'TESTNET' instead of networkPassphrase for v6+
         networkPassphrase: networkPassphrase,
       });
     } catch (e1) {
@@ -165,7 +166,7 @@ export async function signTransaction(transactionXDR, networkPassphrase = "Test 
         // Fallback: object-style API
         response = await api.signTransaction({
           xdr: transactionXDR,
-          network: networkPassphrase,
+          network: "TESTNET",
           networkPassphrase: networkPassphrase,
         });
       } catch (e2) {
@@ -175,7 +176,12 @@ export async function signTransaction(transactionXDR, networkPassphrase = "Test 
       }
     }
 
-    console.log("[TrustChain] Freighter signTransaction response:", JSON.stringify(response));
+    console.log("[TrustChain] Freighter signTransaction raw response:", typeof response === 'object' ? JSON.stringify(response) : response);
+
+    // If it literally returned a public key instead of an XDR, something is deeply wrong with Freighter plugin
+    if (typeof response === 'string' && response.startsWith('G') && response.length === 56) {
+      throw new Error(`Freighter unexpectedly returned your Public Key instead of a signed transaction! Please check your Freighter extension version.`);
+    }
 
     // Handle all known Freighter response formats
     if (typeof response === 'string' && response.length > 0) {

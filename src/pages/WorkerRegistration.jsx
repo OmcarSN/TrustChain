@@ -4,13 +4,13 @@ import {
   User, MapPin, Briefcase, Calendar, FileText, 
   Wallet, Loader2, CheckCircle2, ShieldCheck, 
   ArrowLeft, ChevronDown, ExternalLink, AlertCircle,
-  Sparkles, Zap, PenLine, Hash, Award, Clock
+  Sparkles, Zap, PenLine, Clock, Award
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import * as StellarSdk from '@stellar/stellar-sdk';
 import { useWallet } from '../context/WalletContext';
 import { mintWorkerCredential } from '../lib/stellar';
 import { useToast } from '../context/ToastContext';
+import { validateWalletAddress, validateCredentialInput, sanitizeString } from '../utils/validation';
 
 /* ── Floating Orb ─────────────────────────────────────────────── */
 const FloatingOrb = ({ className, delay = 0 }) => (
@@ -85,6 +85,12 @@ const WorkerRegistration = () => {
 
   const validateForm = () => {
     const newErrors = {};
+
+    // Validate the connected wallet first
+    if (!validateWalletAddress(walletAddress)) {
+      newErrors._submit = 'Invalid connected wallet address.';
+    }
+
     if (!formData.fullName || formData.fullName.length < 2) 
       newErrors.fullName = 'Name must be at least 2 characters';
     if (!formData.skillCategory) 
@@ -97,7 +103,23 @@ const WorkerRegistration = () => {
       newErrors.bio = 'Bio must be at least 10 characters';
     if (new TextEncoder().encode(formData.bio).length > 64) 
       newErrors.bio = 'Bio is too long (max 64 bytes for on-chain storage)';
-    
+
+    // General Validation Check against XSS/Script Injections from validation.js
+    const securityCheck = validateCredentialInput({
+      fullName: formData.fullName,
+      skillCategory: formData.skillCategory,
+      experience: String(formData.experience),
+      city: formData.city,
+      bio: formData.bio
+    });
+
+    if (!securityCheck.isValid) {
+      // Merge security errors if any strings are tainted
+      Object.keys(securityCheck.errors).forEach(key => {
+        newErrors[key] = securityCheck.errors[key];
+      });
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -116,11 +138,11 @@ const WorkerRegistration = () => {
     setIsMinting(true);
     try {
       const data = {
-        name: formData.fullName,
-        skill: formData.skillCategory,
-        city: formData.city,
-        experience: formData.experience,
-        bio: formData.bio,
+        name: sanitizeString(formData.fullName),
+        skill: sanitizeString(formData.skillCategory),
+        city: sanitizeString(formData.city),
+        experience: sanitizeString(String(formData.experience)),
+        bio: sanitizeString(formData.bio),
         timestamp: new Date().toISOString()
       };
       
@@ -136,7 +158,9 @@ const WorkerRegistration = () => {
       
       setTxResult(response);
       setExistingCredential(data);
-      toast.success('Credential minted successfully!');
+      
+      const shortHash = response?.hash ? response.hash.slice(0, 8) : 'unknown';
+      toast.success(`Credential issued! Tx: ${shortHash}...`);
     } catch (err) {
       console.error(err);
       toast.error(err.message || 'Failed to mint credential');
@@ -210,7 +234,6 @@ const WorkerRegistration = () => {
               border: '1px solid rgba(124,58,237,0.12)',
             }}
           >
-            {/* Top accent */}
             <div className="h-1 bg-gradient-to-r from-accent via-purple-500 to-accent/30" />
             <motion.div
               className="absolute top-0 left-0 right-0 h-[1px]"
@@ -395,7 +418,6 @@ const WorkerRegistration = () => {
           </div>
 
           <div className="p-6 sm:p-8">
-            {/* Form header */}
             <div className="flex items-center justify-between mb-6 pb-5 border-b border-white/[0.04]">
               <div className="flex items-center gap-2">
                 <PenLine className="w-4 h-4 text-accent/60" />
@@ -509,39 +531,53 @@ const WorkerRegistration = () => {
                     </div>
                   </motion.div>
                 ) : (
-                  <motion.button
+                  <motion.div
                     key="submit"
-                    onClick={handleMint}
-                    disabled={isMinting}
-                    className="group w-full relative overflow-hidden py-5 text-white rounded-2xl font-black uppercase tracking-[0.2em] text-[11px] transition-all flex items-center justify-center gap-3 active:scale-[0.98] disabled:cursor-not-allowed"
-                    style={{
-                      background: filledCount === 5
-                        ? 'linear-gradient(135deg, #7c3aed 0%, #6d28d9 50%, #5b21b6 100%)'
-                        : 'rgba(255,255,255,0.04)',
-                      border: filledCount === 5 ? '1px solid rgba(124,58,237,0.3)' : '1px solid rgba(255,255,255,0.06)',
-                      boxShadow: filledCount === 5 ? '0 8px 32px rgba(124,58,237,0.25)' : 'none',
-                    }}
-                    whileHover={filledCount === 5 ? { scale: 1.01 } : {}}
-                    whileTap={filledCount === 5 ? { scale: 0.98 } : {}}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
                   >
-                    {filledCount === 5 && (
-                      <motion.div
-                        className="absolute inset-0 opacity-30"
-                        style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)' }}
-                        animate={{ x: ['-100%', '200%'] }}
-                        transition={{ duration: 2.5, repeat: Infinity, ease: 'linear' }}
-                      />
-                    )}
-                    <span className="relative z-10 flex items-center gap-3">
-                      {isMinting ? (
-                        <><Loader2 className="w-4.5 h-4.5 animate-spin" /> Preparing Transaction...</>
-                      ) : filledCount === 5 ? (
-                        <><ShieldCheck className="w-4.5 h-4.5 group-hover:rotate-[10deg] transition-transform" /> Mint My Credential</>
-                      ) : (
-                        <span className="text-white/25">Complete All Fields to Mint</span>
+                    {/* Gasless Transaction Info */}
+                    <div className="flex flex-col items-center justify-center mb-4 text-center">
+                      <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-500/10 border border-amber-500/20 rounded-full mb-2">
+                        <Zap className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                        <span className="text-[10px] font-black uppercase tracking-wider text-amber-400">Gasless Transaction</span>
+                      </div>
+                      <p className="text-[11px] text-white/40 font-medium">
+                        Your transaction fee is sponsored by TrustChain — you pay nothing
+                      </p>
+                    </div>
+                    
+                    <button
+                      onClick={handleMint}
+                      disabled={isMinting || filledCount !== 5}
+                      className="group w-full relative overflow-hidden py-5 text-white rounded-2xl font-black uppercase tracking-[0.2em] text-[11px] transition-all flex items-center justify-center gap-3 active:scale-[0.98] disabled:cursor-not-allowed"
+                      style={{
+                        background: filledCount === 5
+                          ? 'linear-gradient(135deg, #7c3aed 0%, #6d28d9 50%, #5b21b6 100%)'
+                          : 'rgba(255,255,255,0.04)',
+                        border: filledCount === 5 ? '1px solid rgba(124,58,237,0.3)' : '1px solid rgba(255,255,255,0.06)',
+                        boxShadow: filledCount === 5 ? '0 8px 32px rgba(124,58,237,0.25)' : 'none',
+                      }}
+                    >
+                      {filledCount === 5 && (
+                        <motion.div
+                          className="absolute inset-0 opacity-30"
+                          style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)' }}
+                          animate={{ x: ['-100%', '200%'] }}
+                          transition={{ duration: 2.5, repeat: Infinity, ease: 'linear' }}
+                        />
                       )}
-                    </span>
-                  </motion.button>
+                      <span className="relative z-10 flex items-center gap-3">
+                        {isMinting ? (
+                          <><Loader2 className="w-4.5 h-4.5 animate-spin" /> Preparing Transaction...</>
+                        ) : filledCount === 5 ? (
+                          <><ShieldCheck className="w-4.5 h-4.5 group-hover:rotate-[10deg] transition-transform" /> Mint My Credential</>
+                        ) : (
+                          <span className="text-white/25">Complete All Fields to Mint</span>
+                        )}
+                      </span>
+                    </button>
+                  </motion.div>
                 )}
               </AnimatePresence>
               {errors._submit && (

@@ -48,11 +48,35 @@ const Endorse = () => {
     setIsSearching(true); setError(null); setFoundWorker(null);
     try {
       const credential = await fetchWorkerCredential(workerSearch);
+      // Merge with localStorage to get real registered info
+      const localData = JSON.parse(localStorage.getItem(`trustchain_worker_${workerSearch}`) || 'null');
+      if (localData) {
+        credential.name = localData.name || localData.fullName || credential.name;
+        credential.city = localData.city || credential.city;
+        credential.bio = localData.bio || credential.bio;
+        credential.skill = localData.skill || localData.skillCategory || credential.skill;
+        credential.experience = localData.experience || credential.experience;
+        credential.phone = localData.phone || '';
+      }
       setFoundWorker({ ...credential, address: workerSearch });
       toast.success('Worker found');
     } catch (err) {
-      setError(err.message || 'Worker not found');
-      toast.error(err.message || 'Search failed');
+      // Even if on-chain fetch fails, check localStorage
+      const localData = JSON.parse(localStorage.getItem(`trustchain_worker_${workerSearch}`) || 'null');
+      if (localData) {
+        setFoundWorker({
+          name: localData.name || localData.fullName || 'Worker',
+          skill: localData.skill || localData.skillCategory || '—',
+          city: localData.city || 'Unknown',
+          bio: localData.bio || '',
+          experience: localData.experience || '—',
+          address: workerSearch,
+        });
+        toast.success('Worker found');
+      } else {
+        setError(err.message || 'Worker not found');
+        toast.error(err.message || 'Search failed');
+      }
     } finally { setIsSearching(false); }
   };
 
@@ -272,6 +296,12 @@ const Endorse = () => {
                         <span className="text-[8px] font-black uppercase tracking-wider text-white/20">Skill</span>
                         <span className="text-[11px] font-bold text-accent">{foundWorker.skill}</span>
                       </div>
+                      {foundWorker.experience && foundWorker.experience !== '—' && (
+                        <div className="flex justify-between items-center p-2.5 bg-white/[0.03] rounded-lg border border-white/[0.03]">
+                          <span className="text-[8px] font-black uppercase tracking-wider text-white/20">Experience</span>
+                          <span className="text-[11px] font-bold text-emerald-400">{foundWorker.experience}</span>
+                        </div>
+                      )}
                       {foundWorker.bio && (
                         <div className="p-2.5 bg-white/[0.03] rounded-lg border border-white/[0.03]">
                           <p className="text-[8px] font-black uppercase tracking-wider text-white/20 mb-1">Bio</p>

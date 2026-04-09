@@ -55,13 +55,35 @@ const Dashboard = () => {
       setLoading(true);
       try {
         const cred = await fetchWorkerCredential(walletAddress);
+        // Merge with localStorage data to get the real registered name
+        const localWorkerData = JSON.parse(localStorage.getItem(`trustchain_worker_${walletAddress}`) || 'null');
+        if (localWorkerData) {
+          cred.name = localWorkerData.name || localWorkerData.fullName || cred.name;
+          cred.city = localWorkerData.city || cred.city;
+          cred.bio = localWorkerData.bio || cred.bio;
+          cred.experience = localWorkerData.experience || cred.experience;
+        }
         setCredential(cred);
         const localKey = `endorsements_${walletAddress}`;
         const received = JSON.parse(localStorage.getItem(localKey) || '[]');
         setEndorsementsReceived(received);
         const rep = calculateScore(received);
         setReputation(rep);
-      } catch { setCredential(null); }
+      } catch {
+        // Even if on-chain fetch fails, try localStorage for credential data
+        const localWorkerData = JSON.parse(localStorage.getItem(`trustchain_worker_${walletAddress}`) || 'null');
+        if (localWorkerData) {
+          setCredential({
+            name: localWorkerData.name || localWorkerData.fullName || 'Worker',
+            skill: localWorkerData.skill || localWorkerData.skillCategory || '—',
+            city: localWorkerData.city || 'Unknown',
+            experience: localWorkerData.experience || '—',
+            bio: localWorkerData.bio || '',
+          });
+        } else {
+          setCredential(null);
+        }
+      }
       const given = [];
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
@@ -151,7 +173,7 @@ const Dashboard = () => {
               </div>
               <div>
                 <h1 className="text-lg sm:text-xl font-black tracking-tight leading-tight">
-                  Welcome Back{credential ? <span className="bg-gradient-to-r from-accent to-purple-400 bg-clip-text text-transparent">, {credential.name.split(' ')[0]}</span> : ''}
+                  Welcome Back{credential && credential.name && credential.name !== 'Worker' ? <span className="bg-gradient-to-r from-accent to-purple-400 bg-clip-text text-transparent">, {credential.name.split(' ')[0]}</span> : ''}
                 </h1>
                 <p className="text-white/25 text-[10px] font-semibold hidden sm:block">Your on-chain identity hub</p>
               </div>

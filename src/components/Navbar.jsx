@@ -46,16 +46,16 @@ const Navbar = () => {
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'Find Workers', path: '/discover' },
+    { name: 'Explorer', path: '/explorer' },
+    { name: 'Analytics', path: '/analytics' },
     { name: 'Dashboard', path: '/dashboard' },
     { name: 'Worker Portal', path: '/worker' },
-    { name: 'Endorse', path: '/endorse' },
-    { name: 'Verify', path: '/verify' },
   ];
 
   return (
     <>
       <nav className="fixed top-0 left-0 w-full z-50 border-b border-white/5 bg-background/80 backdrop-blur-2xl">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+        <div className="max-w-[1400px] mx-auto px-6 h-16 flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 group">
             <div className="w-10 h-10 bg-accent rounded-2xl flex items-center justify-center shadow-2xl shadow-accent/40 group-hover:scale-110 transition-transform duration-500">
@@ -68,12 +68,12 @@ const Navbar = () => {
           </Link>
 
           {/* Center Nav Links (Desktop) */}
-          <div className="hidden lg:flex items-center gap-1.5 p-1.5 bg-white/5 rounded-2xl border border-white/5 backdrop-blur-md">
+          <div className="hidden lg:flex items-center gap-1.5 p-1.5 bg-white/5 rounded-2xl border border-white/5 backdrop-blur-md overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
-                className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${
+                className={`px-4 py-2.5 rounded-xl text-[10px] whitespace-nowrap font-black uppercase tracking-widest transition-all duration-300 ${
                   location.pathname === link.path 
                     ? 'bg-accent text-white shadow-lg shadow-accent/20' 
                     : 'text-white/40 hover:text-white hover:bg-white/5'
@@ -184,7 +184,6 @@ const Navbar = () => {
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
               className="fixed top-0 right-0 h-full w-[85%] max-w-sm bg-[#0f0f18] border-l border-white/10 z-[55] flex flex-col"
             >
-              {/* Mobile Menu Header */}
               <div className="px-8 pt-20 pb-6 border-b border-white/5">
                 <div className="flex items-center gap-3 mb-2">
                   <div className="w-8 h-8 bg-accent rounded-xl flex items-center justify-center">
@@ -196,7 +195,7 @@ const Navbar = () => {
               </div>
 
               {/* Nav Links */}
-              <div className="flex-1 overflow-y-auto px-6 py-6">
+              <div className="flex-1 overflow-y-auto px-6 py-6" style={{ scrollbarWidth: 'none' }}>
                 <div className="space-y-2">
                   {navLinks.map((link, idx) => (
                     <motion.div

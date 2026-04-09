@@ -1,0 +1,2 @@
+core::slice::Iter<'a, T>
+core::slice::Iter<'_, u8>

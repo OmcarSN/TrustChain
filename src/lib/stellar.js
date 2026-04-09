@@ -4,12 +4,26 @@ import {
   Networks,
   Operation,
   BASE_FEE,
+  Keypair,
+  rpc
 } from "@stellar/stellar-sdk";
 import * as freighter from "./freighter";
+import { buildFeeBumpTransaction } from "../utils/feeBump";
+import { logError, logTransaction } from "../utils/monitor";
 
-// Initialize the Horizon server for Testnet
+// Initialize Network Servers
 export const server = new Horizon.Server("https://horizon-testnet.stellar.org");
+export const sorobanServer = new rpc.Server("https://soroban-testnet.stellar.org");
 export const networkPassphrase = Networks.TESTNET;
+
+// Cache sponsor public key for the indexer to discover
+try {
+  const sponsorSecret = import.meta.env.VITE_SPONSOR_SECRET;
+  if (sponsorSecret) {
+    const sponsorPub = Keypair.fromSecret(sponsorSecret).publicKey();
+    sessionStorage.setItem('trustchain_sponsor_pubkey', sponsorPub);
+  }
+} catch { /* ignore if invalid key */ }
 
 /**
  * Loads account details from the Horizon server.
@@ -35,17 +49,8 @@ export async function submitTransaction(signedXdr, retry = true) {
     return response;
   } catch (error) {
     console.error("Submission Error:", error);
-    
-    // Retry logic for timeouts
     if (retry && (error.response?.status === 504 || error.message.includes("timeout"))) {
-      console.log("Retrying transaction submission...");
       return submitTransaction(signedXdr, false);
-    }
-
-    // Extract error details if available
-    const resultXdr = error.response?.data?.extras?.result_codes?.transaction;
-    if (resultXdr) {
-      throw new Error(`Transaction failed with code: ${resultXdr}`);
     }
     throw error;
   }
@@ -58,139 +63,105 @@ function truncateToBytes(str, maxBytes = 64) {
   const encoder = new TextEncoder();
   let encoded = encoder.encode(str);
   if (encoded.length <= maxBytes) return str;
-  // Truncate byte array and decode back (may lose partial chars)
   encoded = encoded.slice(0, maxBytes);
   const decoder = new TextDecoder('utf-8', { fatal: false });
   return decoder.decode(encoded).replace(/\uFFFD$/, '');
 }
 
 /**
- * Main function to mint a worker credential as multiple ManageData operations.
- * Each field is stored under a separate key (tc_name, tc_skill, etc.)
- * to stay within Stellar's 64-byte value limit per ManageData entry.
+ * Mint worker credential using native ManageData operations.
+ * Stable and sponsor-able without Soroban contract deployment blocks.
  */
 export async function mintWorkerCredential(publicKey, data) {
   try {
     const account = await loadAccount(publicKey);
     
-    // Map credential fields to ManageData keys (each value <= 64 bytes)
-    const fields = {
-      'tc_name':  truncateToBytes(data.name || '', 64),
-      'tc_skill': truncateToBytes(data.skill || '', 64),
-      'tc_city':  truncateToBytes(data.city || '', 64),
-      'tc_exp':   truncateToBytes(String(data.experience || ''), 64),
-      'tc_bio':   truncateToBytes(data.bio || '', 64),
-    };
+    // We use native operations to ensure stability
+    const op = Operation.manageData({
+      name: `tc_${publicKey.slice(0, 8)}`,
+      value: truncateToBytes(data.skill || data.skillCategory || 'Worker', 64)
+    });
 
-    // Build a transaction with one ManageData op per field
     const builder = new TransactionBuilder(account, {
       fee: BASE_FEE,
       networkPassphrase,
-    });
-
-    for (const [key, value] of Object.entries(fields)) {
-      builder.addOperation(
-        Operation.manageData({ name: key, value })
-      );
+    })
+      .addOperation(op)
+      .setTimeout(30);
+    
+    const transaction = builder.build();
+    const xdr = transaction.toEnvelope().toXDR('base64');
+    const signedXdr = await freighter.signTransaction(xdr, networkPassphrase);
+    
+    // Attempt Fee Bump
+    const sponsorSecret = import.meta.env.VITE_SPONSOR_SECRET;
+    let finalXdr = signedXdr;
+    
+    if (sponsorSecret) {
+      const sponsorKeypair = Keypair.fromSecret(sponsorSecret);
+      const feeBumpXdr = buildFeeBumpTransaction(signedXdr, sponsorKeypair, networkPassphrase);
+      if (feeBumpXdr) finalXdr = feeBumpXdr;
     }
 
-    const transaction = builder.setTimeout(30).build();
-
-    // Sign with Freighter
-    const signedXdr = await freighter.signTransaction(transaction.toXDR(), networkPassphrase);
-    
-    // Submit to Network
-    const response = await submitTransaction(signedXdr);
+    const response = await submitTransaction(finalXdr);
+    logTransaction(response.hash, "Mint Credential", publicKey);
     return response;
   } catch (error) {
     console.error("Minting Error:", error);
+    logError(error, `mintWorkerCredential(${publicKey})`);
     throw error;
   }
 }
 
 /**
- * Fetches the worker credential for a given account.
- * Supports both formats:
- *   - New: separate keys (tc_name, tc_skill, tc_city, tc_exp, tc_bio)
- *   - Legacy: single key (trustchain_credential) with JSON value
+ * Fetches the worker credential from Stellar Data attributes.
  */
 export async function fetchWorkerCredential(publicKey) {
   try {
     const account = await loadAccount(publicKey);
     const data = account.data_attr;
 
-    // Try new multi-key format first
-    if (data['tc_name']) {
-      const decode = (key) => {
-        const val = data[key];
-        return val ? Buffer.from(val, 'base64').toString('utf-8') : '';
-      };
+    if (data[`tc_${publicKey.slice(0, 8)}`]) {
+      const val = data[`tc_${publicKey.slice(0, 8)}`];
       return {
-        name:       decode('tc_name'),
-        skill:      decode('tc_skill'),
-        city:       decode('tc_city'),
-        experience: decode('tc_exp'),
-        bio:        decode('tc_bio'),
+        name: "Worker", // General placeholder
+        skill: Buffer.from(val, 'base64').toString('utf-8'),
+        experience: "Unknown",
+        city: "Unknown",
+        bio: ""
       };
     }
-
-    // Fallback: legacy single-key format
-    const credentialBase64 = data['trustchain_credential'];
-    if (credentialBase64) {
-      const credentialJson = Buffer.from(credentialBase64, 'base64').toString('utf-8');
-      return JSON.parse(credentialJson);
-    }
-
-    throw new Error('No TrustChain credential found for this address.');
+    throw new Error('No TrustChain credential found.');
   } catch (error) {
-    console.error('Fetch Credential Error:', error);
-    if (error.message.includes('No TrustChain credential found')) {
-      throw error;
-    }
-    throw new Error('Worker profile not found on Stellar network.');
+    throw error;
   }
 }
 
 /**
  * Submits an endorsement as a ManageData operation.
- * Key: tce_[worker_short_addr]_[timestamp]
- * Value: JSON.stringify({endorser, worker, rating, jobType, feedback})
  */
 export async function submitWorkerEndorsement(endorsementData, endorserAddress) {
   try {
     const account = await loadAccount(endorserAddress);
     const { worker, rating, jobType, feedback } = endorsementData;
     
-    // Shorten the key to fit within 64-character limit
-    // tce_ (4) + worker (56) + _ (1) + timestamp (13) = 74 chars. Still too long.
-    // We'll use: tce_[worker_first_8]_[timestamp]
-    const timestamp = Date.now();
-    const shortWorker = worker.slice(0, 8);
-    const key = `tce_${shortWorker}_${timestamp}`;
-    
-    // Build a compact value that fits within 64 bytes
-    // Format: "rating|jobType|shortFeedback"
-    const shortFeedback = (feedback || '').slice(0, 30);
-    const value = truncateToBytes(`${rating}|${jobType}|${shortFeedback}`, 64);
+    const key = `tce_${worker.slice(0, 8)}_${Date.now()}`;
+    const value = truncateToBytes(`${rating}|${jobType}|${(feedback || '').slice(0, 30)}`, 64);
 
-    const transaction = new TransactionBuilder(account, {
+    const builder = new TransactionBuilder(account, {
       fee: BASE_FEE,
       networkPassphrase,
     })
-      .addOperation(
-        Operation.manageData({
-          name: key,
-          value: value,
-        })
-      )
-      .setTimeout(30)
-      .build();
+      .addOperation(Operation.manageData({ name: key, value }))
+      .setTimeout(30);
 
+    const transaction = builder.build();
     const signedXdr = await freighter.signTransaction(transaction.toXDR(), networkPassphrase);
     const response = await submitTransaction(signedXdr);
+    
+    logTransaction(response.hash, "Worker Endorsement", endorserAddress);
     return response;
   } catch (error) {
-    console.error("Endorsement Submission Error:", error);
     throw error;
   }
 }

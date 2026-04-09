@@ -9,9 +9,12 @@ import WorkerRegistration from './pages/WorkerRegistration';
 import Endorse from './pages/Endorse';
 import Verify from './pages/Verify';
 import Dashboard from './pages/Dashboard';
+import Analytics from './pages/Analytics';
+import Explorer from './pages/Explorer';
 import WorkerProfile from './pages/WorkerProfile';
 import NotFound from './pages/NotFound';
 import DiscoverWorkers from './pages/DiscoverWorkers';
+import AdminLogs from './pages/AdminLogs';
 
 // Page Transition Wrapper
 const PageWrapper = ({ children }) => (
@@ -39,8 +42,14 @@ const App = () => {
             <Route path="/endorse" element={<PageWrapper><Endorse /></PageWrapper>} />
             <Route path="/verify" element={<PageWrapper><Verify /></PageWrapper>} />
             <Route path="/dashboard" element={<PageWrapper><Dashboard /></PageWrapper>} />
+            <Route path="/analytics" element={<PageWrapper><Analytics /></PageWrapper>} />
+            <Route path="/explorer" element={<PageWrapper><Explorer /></PageWrapper>} />
             <Route path="/discover" element={<PageWrapper><DiscoverWorkers /></PageWrapper>} />
             <Route path="/profile/:address" element={<PageWrapper><WorkerProfile /></PageWrapper>} />
+            
+            {/* Hidden Admin Route */}
+            <Route path="/admin/logs" element={<PageWrapper><AdminLogs /></PageWrapper>} />
+            
             <Route path="*" element={<PageWrapper><NotFound /></PageWrapper>} />
           </Routes>
         </AnimatePresence>
