@@ -7,7 +7,7 @@ import {
   Target, Globe, Fingerprint
 } from 'lucide-react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { fetchWorkerCredential } from '../lib/stellar';
+import { fetchCredentialsByWallet } from '../services/indexer';
 import { calculateScore } from '../lib/reputation';
 import { useToast } from '../context/ToastContext';
 
@@ -27,6 +27,7 @@ const WorkerProfile = () => {
 
   const [profile, setProfile] = useState(null);
   const [endorsements, setEndorsements] = useState([]);
+  const [credentialHistory, setCredentialHistory] = useState([]);
   const [reputation, setReputation] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -42,23 +43,33 @@ const WorkerProfile = () => {
     setLoading(true);
     setError(null);
     try {
-      const credential = await fetchWorkerCredential(address);
+      // 1. Fetch credentials from Horizon instead of direct Soroban contract call
+      const credentials = await fetchCredentialsByWallet(address);
+      
+      if (!credentials || credentials.length === 0) {
+        throw new Error('Worker profile not found on-chain. No active credentials detected.');
+      }
+
+      setCredentialHistory(credentials);
+      const firstResult = credentials[0]; // Most recent credential action
+
+      // 2. Fetch local endorsement history for reputation scores
       const localKey = `endorsements_${address}`;
       const endorse = JSON.parse(localStorage.getItem(localKey) || '[]');
       const rep = calculateScore(endorse);
 
-      // Merge on-chain data with local storage metadata to get real names, city, etc.
+      // 3. Merge on-chain data with local metadata to ensure rich UI profile
       const localDataStr = localStorage.getItem(`trustchain_worker_${address}`);
       const localData = localDataStr ? JSON.parse(localDataStr) : {};
 
       const mergedProfile = {
-        ...credential,
+        ...firstResult, // Pulls timestamp, txHash, credentialType, etc.
         address,
-        name: localData.name || localData.fullName || credential.name || 'Worker',
-        city: localData.city || credential.city || 'Unknown',
-        experience: localData.experience || credential.experience || 0,
-        bio: localData.bio || credential.bio || '',
-        skill: localData.skill || localData.skillCategory || credential.skill || 'General'
+        name: localData.name || localData.fullName || firstResult.name || 'Worker',
+        city: localData.city || firstResult.city || 'Unknown',
+        experience: localData.experience || firstResult.yearsExperience || 0,
+        bio: localData.bio || firstResult.bio || '',
+        skill: localData.skill || localData.skillCategory || firstResult.credentialType || 'General'
       };
 
       setProfile(mergedProfile);
@@ -298,7 +309,7 @@ const WorkerProfile = () => {
             </motion.div>
           </div>
 
-          {/* ── Right Column: Bio, Actions, Endorsements ─────── */}
+          {/* ── Right Column: Bio, Actions, Endorsements & Credentials ─────── */}
           <div className="lg:col-span-2 space-y-5">
             {/* Identity Card */}
             <motion.div 
@@ -353,7 +364,7 @@ const WorkerProfile = () => {
               </div>
             </motion.div>
 
-            {/* Endorsement History */}
+            {/* On-Chain Credential History */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -361,14 +372,14 @@ const WorkerProfile = () => {
             >
               <div className="flex items-center gap-3 ml-1 mb-5">
                 <div className="w-1.5 h-6 bg-gradient-to-b from-accent to-purple-600 rounded-full" />
-                <h3 className="text-lg font-black tracking-tight">Endorsement History</h3>
-                <span className="ml-auto text-[9px] font-bold text-white/12 bg-white/[0.03] px-2 py-0.5 rounded-md">{endorsements.length}</span>
+                <h3 className="text-lg font-black tracking-tight">On-Chain Credentials</h3>
+                <span className="ml-auto text-[9px] font-bold text-white/12 bg-white/[0.03] px-2 py-0.5 rounded-md">{credentialHistory.length}</span>
               </div>
 
               <div className="space-y-3">
-                {endorsements.length > 0 ? endorsements
+                {credentialHistory.length > 0 ? credentialHistory
                   .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-                  .map((endorsement, idx) => (
+                  .map((cred, idx) => (
                     <motion.div
                       key={idx}
                       initial={{ opacity: 0, x: 12 }}
@@ -386,36 +397,30 @@ const WorkerProfile = () => {
                             <ShieldCheck className="w-4 h-4 text-accent" />
                           </div>
                           <div>
-                            <span className="text-[8px] font-bold uppercase tracking-[0.15em] text-white/18 block">Endorser</span>
-                            <span className="text-xs font-mono font-semibold text-white/40">{truncateAddress(endorsement.endorser)}</span>
+                            <span className="text-[8px] font-bold uppercase tracking-[0.15em] text-white/18 block">Soroban Contract Event</span>
+                            <span className="text-xs font-mono font-semibold text-white/40">{cred.credentialType || cred.type || 'Verified Interaction'}</span>
                           </div>
                         </div>
-                        <div className="flex gap-0.5 p-1.5 bg-white/[0.02] rounded-md">
-                          {[1,2,3,4,5].map(s => (
-                            <Star key={s} className={`w-3 h-3 ${s <= endorsement.rating ? 'text-amber-400 fill-amber-400' : 'text-white/5'}`} />
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="mb-3">
-                        <span className="inline-block px-2 py-0.5 rounded-md bg-accent/8 border border-accent/12 text-[8px] font-bold uppercase tracking-wider text-accent/70 mb-2">
-                          {endorsement.jobType}
-                        </span>
-                        <p className="text-[11px] text-white/30 leading-relaxed italic">"{endorsement.feedback}"</p>
+                        {cred.successful !== false && (
+                          <div className="flex items-center gap-1 p-1.5 bg-green-500/10 border border-green-500/20 rounded-md">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-green-400" />
+                            <span className="text-[9px] font-bold text-green-400 uppercase tracking-wider pr-1">Minted</span>
+                          </div>
+                        )}
                       </div>
 
                       <div className="flex items-center justify-between pt-3 border-t border-white/[0.03]">
                         <span className="text-[9px] font-semibold text-white/12 flex items-center gap-1.5">
                           <Calendar className="w-2.5 h-2.5" />
-                          {new Date(endorsement.timestamp).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
+                          {new Date(cred.timestamp).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                         </span>
-                        {endorsement.txHash && (
+                        {cred.txHash && (
                           <a
-                            href={`https://stellar.expert/explorer/testnet/tx/${endorsement.txHash}`}
+                            href={`https://stellar.expert/explorer/testnet/tx/${cred.txHash}`}
                             target="_blank" rel="noopener noreferrer"
                             className="flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-wider text-white/12 hover:text-accent transition-colors"
                           >
-                            View TX <ExternalLink className="w-2.5 h-2.5" />
+                            View Explorer <ExternalLink className="w-2.5 h-2.5" />
                           </a>
                         )}
                       </div>
@@ -425,12 +430,70 @@ const WorkerProfile = () => {
                     <div className="w-14 h-14 rounded-2xl bg-white/[0.02] flex items-center justify-center mx-auto mb-4">
                       <Award className="w-6 h-6 text-white/[0.06]" />
                     </div>
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-white/15 mb-1">No Endorsements Yet</p>
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-white/15 mb-1">No Credentials Yet</p>
                     <p className="text-[10px] text-white/8 font-medium">Be the first to endorse this worker</p>
                   </div>
                 )}
               </div>
             </motion.div>
+
+            {/* Endorsement Feedback History */}
+            {endorsements.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="mt-8"
+              >
+                <div className="flex items-center gap-3 ml-1 mb-5">
+                  <div className="w-1.5 h-6 bg-gradient-to-b from-purple-600 to-indigo-600 rounded-full" />
+                  <h3 className="text-lg font-black tracking-tight">Endorsement Feedback</h3>
+                  <span className="ml-auto text-[9px] font-bold text-white/12 bg-white/[0.03] px-2 py-0.5 rounded-md">{endorsements.length}</span>
+                </div>
+
+                <div className="space-y-3">
+                  {endorsements
+                    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+                    .map((endorsement, idx) => (
+                      <motion.div
+                        key={idx}
+                        initial={{ opacity: 0, x: 12 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.3 + idx * 0.06 }}
+                        className="p-5 rounded-xl transition-all group"
+                        style={{
+                          background: 'rgba(255,255,255,0.015)',
+                          border: '1px solid rgba(255,255,255,0.03)',
+                        }}
+                      >
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-lg bg-white/[0.03] flex items-center justify-center border border-white/[0.05]">
+                              <User className="w-4 h-4 text-white/30" />
+                            </div>
+                            <div>
+                              <span className="text-[8px] font-bold uppercase tracking-[0.15em] text-white/18 block">Endorser Wallet</span>
+                              <span className="text-xs font-mono font-semibold text-white/40">{truncateAddress(endorsement.endorser)}</span>
+                            </div>
+                          </div>
+                          <div className="flex gap-0.5 p-1.5 bg-white/[0.02] rounded-md">
+                            {[1,2,3,4,5].map(s => (
+                              <Star key={s} className={`w-3 h-3 ${s <= endorsement.rating ? 'text-amber-400 fill-amber-400' : 'text-white/5'}`} />
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="mb-3">
+                          <span className="inline-block px-2 py-0.5 rounded-md bg-white/[0.03] border border-white/[0.05] text-[8px] font-bold uppercase tracking-wider text-white/40 mb-2">
+                            {endorsement.jobType}
+                          </span>
+                          <p className="text-[11px] text-white/30 leading-relaxed italic">"{endorsement.feedback}"</p>
+                        </div>
+                      </motion.div>
+                    ))}
+                </div>
+              </motion.div>
+            )}
           </div>
         </div>
 
