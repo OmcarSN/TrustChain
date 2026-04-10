@@ -120,7 +120,7 @@ const Explorer = () => {
         </motion.div>
 
         {/* Results Section */}
-        <AnimatePresence mode="waits">
+        <AnimatePresence mode="wait">
           {hasSearched && (
             <motion.div 
               initial={{ opacity: 0, y: 20 }}

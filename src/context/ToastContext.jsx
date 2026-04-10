@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, AlertCircle, X, ShieldCheck, Wallet } from 'lucide-react';
 import { registerToastInstance } from '../lib/toast';
@@ -32,8 +32,16 @@ export const ToastProvider = ({ children }) => {
   const error = (msg) => showToast(msg, 'error');
   const info = (msg) => showToast(msg, 'info');
 
+  // Use ref to avoid stale closure: the bridge always calls the latest functions
+  const toastRef = useRef({ success, error, info });
+  toastRef.current = { success, error, info };
+
   useEffect(() => {
-    registerToastInstance({ success, error, info });
+    registerToastInstance({
+      success: (msg) => toastRef.current.success(msg),
+      error: (msg) => toastRef.current.error(msg),
+      info: (msg) => toastRef.current.info(msg),
+    });
   }, []);
 
   return (

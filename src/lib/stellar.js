@@ -93,23 +93,29 @@ export async function mintWorkerCredential(publicKey, data) {
     const xdr = transaction.toEnvelope().toXDR('base64');
     const signedXdr = await freighter.signTransaction(xdr, networkPassphrase);
     
-    // Attempt Fee Bump
-    const sponsorSecret = import.meta.env.VITE_SPONSOR_SECRET;
+    // Attempt Fee Bump — isolated try/catch to prevent sponsor secret leaks
     let finalXdr = signedXdr;
-    
-    if (sponsorSecret) {
-      const sponsorKeypair = Keypair.fromSecret(sponsorSecret);
-      const feeBumpXdr = buildFeeBumpTransaction(signedXdr, sponsorKeypair, networkPassphrase);
-      if (feeBumpXdr) finalXdr = feeBumpXdr;
+    try {
+      const sponsorSecret = import.meta.env.VITE_SPONSOR_SECRET;
+      if (sponsorSecret) {
+        const sponsorKeypair = Keypair.fromSecret(sponsorSecret);
+        const feeBumpXdr = buildFeeBumpTransaction(signedXdr, sponsorKeypair, networkPassphrase);
+        if (feeBumpXdr) finalXdr = feeBumpXdr;
+      }
+    } catch (feeErr) {
+      // Log sanitized error — never expose sponsor key material
+      logError({ message: 'Fee bump failed, submitting without sponsorship.' }, 'feeBumpAttempt');
     }
 
     const response = await submitTransaction(finalXdr);
     logTransaction(response.hash, "Mint Credential", publicKey);
     return response;
   } catch (error) {
-    console.error("Minting Error:", error);
-    logError(error, `mintWorkerCredential(${publicKey})`);
-    throw error;
+    // Sanitize error output — strip any potential secret key references
+    const safeMessage = (error.message || String(error)).replace(/S[A-Z0-9]{55}/g, '[REDACTED_SECRET]');
+    console.error('Minting Error:', safeMessage);
+    logError({ message: safeMessage, stack: error.stack }, `mintWorkerCredential(${publicKey})`);
+    throw new Error(safeMessage);
   }
 }
 

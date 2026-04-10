@@ -101,8 +101,8 @@ const WorkerRegistration = () => {
       newErrors.city = 'City is required';
     if (!formData.bio || formData.bio.length < 10) 
       newErrors.bio = 'Bio must be at least 10 characters';
-    if (new TextEncoder().encode(formData.bio).length > 64) 
-      newErrors.bio = 'Bio is too long (max 64 bytes for on-chain storage)';
+    if (new TextEncoder().encode(formData.bio).length > 128) 
+      newErrors.bio = 'Bio is too long (max 128 bytes for on-chain storage)';
 
     // General Validation Check against XSS/Script Injections from validation.js
     const securityCheck = validateCredentialInput({
@@ -488,14 +488,14 @@ const WorkerRegistration = () => {
                   value={formData.bio}
                   onChange={handleInputChange}
                   rows="3"
-                  maxLength={64}
-                  placeholder="Briefly describe your expertise (max 64 chars)..."
+                  maxLength={128}
+                  placeholder="Briefly describe your expertise (max 128 chars)..."
                   className={`${inputClass('bio')} resize-none min-h-[90px]`}
                 />
                 <span className={`absolute right-3 bottom-2.5 text-[9px] font-bold ${
-                  (formData.bio || '').length > 55 ? 'text-amber-400/50' : 'text-white/12'
+                  (formData.bio || '').length > 110 ? 'text-amber-400/50' : 'text-white/12'
                 }`}>
-                  {(formData.bio || '').length}/64
+                  {(formData.bio || '').length}/128
                 </span>
               </div>
             </FormField>

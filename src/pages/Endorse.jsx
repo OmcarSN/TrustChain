@@ -84,7 +84,12 @@ const Endorse = () => {
     if (!canSubmit) return;
     const localKey = `endorsements_${foundWorker.address}`;
     const prev = JSON.parse(localStorage.getItem(localKey) || '[]');
-    if (prev.some(e => e.endorser === walletAddress)) { toast.error("Already endorsed this worker."); return; }
+    // Duplicate check: same endorser can only endorse the same worker once per day (not forever)
+    const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+    if (prev.some(e => e.endorser === walletAddress && e.timestamp && e.timestamp.slice(0, 10) === today)) {
+      toast.error("You've already endorsed this worker today. Try again tomorrow.");
+      return;
+    }
     setIsSigning(true); setError(null);
     try {
       const response = await submitWorkerEndorsement({ worker: foundWorker.address, rating, jobType, feedback }, walletAddress);

@@ -36,52 +36,53 @@ const WorkerProfile = () => {
 
   useEffect(() => {
     if (!address) return;
-    loadProfile();
-  }, [address]);
 
-  const loadProfile = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      // 1. Fetch credentials from Horizon instead of direct Soroban contract call
-      const credentials = await fetchCredentialsByWallet(address);
-      
-      if (!credentials || credentials.length === 0) {
-        throw new Error('Worker profile not found on-chain. No active credentials detected.');
+    const loadProfileData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        // 1. Fetch credentials from Horizon instead of direct Soroban contract call
+        const credentials = await fetchCredentialsByWallet(address);
+        
+        if (!credentials || credentials.length === 0) {
+          throw new Error('Worker profile not found on-chain. No active credentials detected.');
+        }
+
+        setCredentialHistory(credentials);
+        const firstResult = credentials[0]; // Most recent credential action
+
+        // 2. Fetch local endorsement history for reputation scores
+        const localKey = `endorsements_${address}`;
+        const endorse = JSON.parse(localStorage.getItem(localKey) || '[]');
+        const rep = calculateScore(endorse);
+
+        // 3. Merge on-chain data with local metadata to ensure rich UI profile
+        const localDataStr = localStorage.getItem(`trustchain_worker_${address}`);
+        const localData = localDataStr ? JSON.parse(localDataStr) : {};
+
+        const mergedProfile = {
+          ...firstResult, // Pulls timestamp, txHash, credentialType, etc.
+          address,
+          name: localData.name || localData.fullName || firstResult.name || 'Worker',
+          city: localData.city || firstResult.city || 'Unknown',
+          experience: localData.experience || firstResult.yearsExperience || 0,
+          bio: localData.bio || firstResult.bio || '',
+          skill: localData.skill || localData.skillCategory || firstResult.credentialType || 'General'
+        };
+
+        setProfile(mergedProfile);
+        setEndorsements(endorse);
+        setReputation(rep);
+      } catch (err) {
+        setError(err.message || 'Worker profile not found on-chain.');
+        setProfile(null);
+      } finally {
+        setLoading(false);
       }
+    };
 
-      setCredentialHistory(credentials);
-      const firstResult = credentials[0]; // Most recent credential action
-
-      // 2. Fetch local endorsement history for reputation scores
-      const localKey = `endorsements_${address}`;
-      const endorse = JSON.parse(localStorage.getItem(localKey) || '[]');
-      const rep = calculateScore(endorse);
-
-      // 3. Merge on-chain data with local metadata to ensure rich UI profile
-      const localDataStr = localStorage.getItem(`trustchain_worker_${address}`);
-      const localData = localDataStr ? JSON.parse(localDataStr) : {};
-
-      const mergedProfile = {
-        ...firstResult, // Pulls timestamp, txHash, credentialType, etc.
-        address,
-        name: localData.name || localData.fullName || firstResult.name || 'Worker',
-        city: localData.city || firstResult.city || 'Unknown',
-        experience: localData.experience || firstResult.yearsExperience || 0,
-        bio: localData.bio || firstResult.bio || '',
-        skill: localData.skill || localData.skillCategory || firstResult.credentialType || 'General'
-      };
-
-      setProfile(mergedProfile);
-      setEndorsements(endorse);
-      setReputation(rep);
-    } catch (err) {
-      setError(err.message || 'Worker profile not found on-chain.');
-      setProfile(null);
-    } finally {
-      setLoading(false);
-    }
-  };
+    loadProfileData();
+  }, [address]);
 
   const handleShare = () => {
     const url = `${window.location.origin}/profile/${address}`;
