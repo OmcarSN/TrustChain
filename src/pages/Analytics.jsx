@@ -183,7 +183,7 @@ const Analytics = () => {
         }}
       />
 
-      <div className="max-w-7xl mx-auto relative z-10 flex flex-col h-full min-h-0">
+      <div className="max-w-[1600px] mx-auto relative z-10 flex flex-col h-full min-h-0">
         
         {/* ── Header ──────────────────────────────── */}
         <div className="mb-3 flex flex-col md:flex-row md:items-end justify-between gap-3 shrink-0">
