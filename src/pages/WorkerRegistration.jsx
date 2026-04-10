@@ -68,8 +68,10 @@ const WorkerRegistration = () => {
   const [existingCredential, setExistingCredential] = useState(null);
 
   const skillCategories = [
-    'Construction', 'Domestic Work', 'Transport', 
-    'Agriculture', 'Cleaning', 'Maintenance', 'Other'
+    'Construction', 'Electrician', 'Plumbing', 'Carpenter', 'Painter',
+    'Domestic Work', 'Cooking', 'Cleaning', 'Babysitting', 'Beautician',
+    'Gardening', 'Tailoring', 'Driver', 'Transport', 'Security Guard',
+    'Agriculture', 'Maintenance', 'Other'
   ];
 
   useEffect(() => {

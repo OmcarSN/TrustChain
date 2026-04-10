@@ -40,7 +40,7 @@ const getAllWorkers = () => {
 };
 
 /* ── Skill filter options ─────────────────────────────────────── */
-const SKILL_OPTIONS = ['All', 'Construction', 'Domestic Work', 'Transport', 'Agriculture', 'Cleaning', 'Maintenance', 'Other'];
+const SKILL_OPTIONS = ['All', 'Construction', 'Electrician', 'Plumbing', 'Carpenter', 'Painter', 'Domestic Work', 'Cooking', 'Cleaning', 'Babysitting', 'Beautician', 'Gardening', 'Tailoring', 'Driver', 'Transport', 'Security Guard', 'Agriculture', 'Maintenance', 'Other'];
 const RATING_OPTIONS = [
   { label: 'Any Rating', value: 0 },
   { label: '3+ Stars', value: 3 },
