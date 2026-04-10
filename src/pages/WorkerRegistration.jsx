@@ -309,7 +309,7 @@ const WorkerRegistration = () => {
 
   /* ── Main Registration Form ────────────────────────────────── */
   return (
-    <div className="min-h-screen bg-background pt-20 pb-8 px-4 sm:px-6 relative overflow-hidden">
+    <div className="min-h-screen bg-background pt-24 pb-8 px-4 sm:px-6 relative overflow-hidden">
       {/* Background */}
       <FloatingOrb className="w-[700px] h-[500px] bg-accent/5 blur-[160px] top-10 left-1/3" />
       <FloatingOrb className="w-[400px] h-[400px] bg-purple-800/5 blur-[120px] bottom-20 right-10" delay={3} />
