@@ -369,7 +369,7 @@ const Analytics = () => {
             </div>
             
             {/* Chart body */}
-            <div style={{ width: '100%', minWidth: 200, height: 320 }} className="p-5 pt-3">
+            <div style={{ width: '100%', minWidth: 200, height: 240 }} className="p-5 pt-3">
               {metrics.loading && !metrics.trendData.length ? (
                 <div className="w-full h-full flex flex-col items-center justify-center text-white/30 text-sm font-medium">
                   <RefreshCw className="w-6 h-6 animate-spin mb-4 text-accent/50" />
