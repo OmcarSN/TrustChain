@@ -32,7 +32,7 @@ const ActivityFeed = ({ activities, loading }) => {
 
   return (
     <div
-      className="rounded-2xl p-5 h-full flex flex-col"
+      className="rounded-2xl p-4 h-full flex flex-col min-h-0"
       style={{
         background: 'linear-gradient(160deg, rgba(124,58,237,0.06) 0%, rgba(15,15,24,0.6) 40%, rgba(15,15,24,0.4) 100%)',
         border: '1px solid rgba(124,58,237,0.06)',
@@ -40,7 +40,7 @@ const ActivityFeed = ({ activities, loading }) => {
       }}
     >
       {/* Header */}
-      <div className="flex items-center justify-between mb-5 pb-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+      <div className="flex items-center justify-between mb-3 pb-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-lg bg-accent/10 border border-accent/10 flex items-center justify-center">
             <Zap className="w-4 h-4 text-accent" />
@@ -61,7 +61,7 @@ const ActivityFeed = ({ activities, loading }) => {
 
       {/* Activity list */}
       <div
-        className="space-y-2 overflow-y-auto flex-1 pr-1"
+        className="space-y-2 overflow-y-auto flex-1 min-h-0 pr-1"
         style={{
           scrollbarWidth: 'thin',
           scrollbarColor: 'rgba(124,58,237,0.15) transparent',

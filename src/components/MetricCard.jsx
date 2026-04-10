@@ -188,9 +188,9 @@ const MetricCard = ({ title, value, subtitle, icon: Icon, color = 'purple', tren
         />
       )}
 
-      <div className="relative z-10 p-5 pb-4">
+      <div className="relative z-10 p-4 pb-3">
         {/* Top row: title + icon */}
-        <div className="flex items-start justify-between mb-3">
+        <div className="flex items-start justify-between mb-2">
           <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-white/40 leading-tight max-w-[60%]">
             {title}
           </p>
@@ -206,7 +206,7 @@ const MetricCard = ({ title, value, subtitle, icon: Icon, color = 'purple', tren
         </div>
 
         {/* Value */}
-        <div className="flex items-end gap-3 mb-1.5">
+        <div className="flex items-end gap-3 mb-1">
           <h2 className="text-3xl font-black text-white tracking-tight leading-none">
             {isStringValue ? value : displayValue.toLocaleString()}
           </h2>
