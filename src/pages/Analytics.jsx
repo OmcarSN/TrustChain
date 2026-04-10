@@ -169,7 +169,7 @@ const Analytics = () => {
 
   /* ── Connected view ────────────────────────────────────────── */
   return (
-    <div className="h-screen bg-[#0a0a0f] pt-[68px] pb-4 px-6 relative overflow-hidden flex flex-col">
+    <div className="min-h-screen bg-[#0a0a0f] pt-24 pb-10 px-6 relative overflow-hidden">
       {/* Ambient background glows */}
       <div className="absolute top-0 right-1/4 w-[700px] h-[500px] bg-purple-600/[0.04] blur-[200px] rounded-full pointer-events-none" />
       <div className="absolute bottom-1/4 left-0 w-[500px] h-[500px] bg-cyan-500/[0.03] blur-[180px] rounded-full pointer-events-none" />
@@ -183,10 +183,10 @@ const Analytics = () => {
         }}
       />
 
-      <div className="max-w-[1600px] mx-auto relative z-10 flex flex-col h-full min-h-0">
+      <div className="max-w-[1600px] mx-auto relative z-10">
         
         {/* ── Header ──────────────────────────────── */}
-        <div className="mb-3 flex flex-col md:flex-row md:items-end justify-between gap-3 shrink-0">
+        <div className="mb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -201,7 +201,7 @@ const Analytics = () => {
                 <span className="text-[9px] font-bold uppercase tracking-wider text-accent/80">Testnet</span>
               </div>
             </div>
-            <h1 className="text-2xl md:text-3xl font-black tracking-tight mb-1 bg-gradient-to-r from-white via-purple-200 to-purple-400 bg-clip-text text-transparent">
+            <h1 className="text-3xl md:text-4xl font-black tracking-tight mb-1.5 bg-gradient-to-r from-white via-purple-200 to-purple-400 bg-clip-text text-transparent">
               Network Analytics
             </h1>
             <p className="text-white/30 text-sm font-medium flex items-center gap-2">
@@ -257,7 +257,7 @@ const Analytics = () => {
         </div>
 
         {/* ── 4-Col Metric Cards ──────────────────── */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-3 shrink-0">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 mb-6">
           <MetricCard 
             title="Total Interactions" 
             value={metrics.totalCredentials} 
@@ -295,14 +295,14 @@ const Analytics = () => {
         </div>
 
         {/* ── Chart + Activity Feed ───────────────── */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 flex-1 min-h-0">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           
           {/* Main Chart Area */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="lg:col-span-2 rounded-2xl overflow-hidden flex flex-col"
+            className="lg:col-span-2 rounded-2xl overflow-hidden"
             style={{
               background: 'linear-gradient(160deg, rgba(124,58,237,0.06) 0%, rgba(15,15,24,0.6) 40%, rgba(15,15,24,0.4) 100%)',
               border: '1px solid rgba(124,58,237,0.06)',
@@ -369,7 +369,7 @@ const Analytics = () => {
             </div>
             
             {/* Chart body */}
-            <div className="p-4 pt-2 flex-1 min-h-0" style={{ width: '100%', minWidth: 200 }}>
+            <div style={{ width: '100%', minWidth: 200, height: 320 }} className="p-5 pt-3">
               {metrics.loading && !metrics.trendData.length ? (
                 <div className="w-full h-full flex flex-col items-center justify-center text-white/30 text-sm font-medium">
                   <RefreshCw className="w-6 h-6 animate-spin mb-4 text-accent/50" />
@@ -489,7 +489,7 @@ const Analytics = () => {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="min-h-0 overflow-hidden flex flex-col"
+            className="min-h-[420px]"
           >
             <ActivityFeed activities={metrics.recentActivity} loading={metrics.loading} />
           </motion.div>
