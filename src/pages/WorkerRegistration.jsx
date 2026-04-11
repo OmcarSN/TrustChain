@@ -218,9 +218,16 @@ const WorkerRegistration = () => {
   /* ── Existing credential view ──────────────────────────────── */
   if (existingCredential && !isMinting && !txResult) {
     return (
-      <div className="min-h-screen bg-background pt-20 pb-8 px-4 sm:px-6 relative overflow-hidden">
+      <div className="min-h-screen bg-background pt-20 pb-8 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         <FloatingOrb className="w-[600px] h-[400px] bg-accent/5 blur-[150px] top-20 left-1/3" />
-        <div className="max-w-xl mx-auto">
+        <FloatingOrb className="w-[400px] h-[300px] bg-purple-800/5 blur-[120px] bottom-20 right-1/4" delay={2} />
+        <div className="absolute inset-0 -z-10 opacity-[0.012]"
+          style={{
+            backgroundImage: `linear-gradient(rgba(124,58,237,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(124,58,237,0.5) 1px, transparent 1px)`,
+            backgroundSize: '70px 70px',
+          }}
+        />
+        <div className="max-w-5xl mx-auto">
           <motion.div initial={{ opacity: 0, x: -15 }} animate={{ opacity: 1, x: 0 }} className="mb-6">
             <Link to="/" className="inline-flex items-center gap-2 text-white/30 hover:text-accent transition-colors font-bold text-xs group">
               <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" /> Back to Home
@@ -244,44 +251,62 @@ const WorkerRegistration = () => {
               transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
             />
 
-            <div className="p-6 sm:p-8">
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-accent/10 border border-accent/10 flex items-center justify-center">
-                    <Award className="w-5 h-5 text-accent" />
+            <div className="p-6 sm:p-8 lg:p-10">
+              <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-accent/10 border border-accent/10 flex items-center justify-center">
+                    <Award className="w-6 h-6 text-accent" />
                   </div>
-                  <h2 className="text-xl font-black tracking-tight">Your Credential</h2>
+                  <div>
+                    <h2 className="text-2xl font-black tracking-tight">Your Credential</h2>
+                    <p className="text-white/25 text-xs font-medium mt-0.5">Verified on-chain identity</p>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1.5 px-2.5 py-1 bg-green-500/10 border border-green-500/15 rounded-lg">
-                  <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                  <span className="text-[8px] font-black uppercase text-green-400">On-Chain</span>
+                <div className="flex items-center gap-3">
+                  <div className="hidden sm:flex items-center gap-2 bg-white/[0.04] border border-white/[0.06] px-3.5 py-2 rounded-xl">
+                    <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.5)]" />
+                    <span className="font-mono text-[11px] text-white/40">{truncateAddress(walletAddress)}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 px-3 py-2 bg-green-500/10 border border-green-500/15 rounded-xl">
+                    <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                    <span className="text-[9px] font-black uppercase text-green-400">On-Chain</span>
+                  </div>
                 </div>
               </div>
 
-              <div className="space-y-3">
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="p-3.5 bg-white/[0.03] rounded-xl border border-white/[0.04]">
-                    <p className="text-[9px] uppercase text-white/25 font-bold tracking-wider mb-1">Name</p>
-                    <p className="font-bold text-sm">{existingCredential.name || existingCredential.fullName}</p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="md:col-span-2 space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="p-4 bg-white/[0.03] rounded-xl border border-white/[0.04] hover:bg-white/[0.05] transition-colors">
+                      <p className="text-[9px] uppercase text-white/25 font-bold tracking-wider mb-1.5">Name</p>
+                      <p className="font-bold text-base">{existingCredential.name || existingCredential.fullName}</p>
+                    </div>
+                    <div className="p-4 bg-white/[0.03] rounded-xl border border-white/[0.04] hover:bg-white/[0.05] transition-colors">
+                      <p className="text-[9px] uppercase text-white/25 font-bold tracking-wider mb-1.5">Skill</p>
+                      <p className="font-bold text-base text-accent">{existingCredential.skill || existingCredential.skillCategory}</p>
+                    </div>
                   </div>
-                  <div className="p-3.5 bg-white/[0.03] rounded-xl border border-white/[0.04]">
-                    <p className="text-[9px] uppercase text-white/25 font-bold tracking-wider mb-1">Skill</p>
-                    <p className="font-bold text-sm text-accent">{existingCredential.skill || existingCredential.skillCategory}</p>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="p-4 bg-white/[0.03] rounded-xl border border-white/[0.04] hover:bg-white/[0.05] transition-colors">
+                      <p className="text-[9px] uppercase text-white/25 font-bold tracking-wider mb-1.5">Experience</p>
+                      <p className="font-bold text-base">{existingCredential.experience} Years</p>
+                    </div>
+                    <div className="p-4 bg-white/[0.03] rounded-xl border border-white/[0.04] hover:bg-white/[0.05] transition-colors">
+                      <p className="text-[9px] uppercase text-white/25 font-bold tracking-wider mb-1.5">City</p>
+                      <p className="font-bold text-base">{existingCredential.city}</p>
+                    </div>
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="p-3.5 bg-white/[0.03] rounded-xl border border-white/[0.04]">
-                    <p className="text-[9px] uppercase text-white/25 font-bold tracking-wider mb-1">Experience</p>
-                    <p className="font-bold text-sm">{existingCredential.experience} Years</p>
+                <div className="p-4 bg-white/[0.03] rounded-xl border border-white/[0.04] flex flex-col justify-between hover:bg-white/[0.05] transition-colors">
+                  <div>
+                    <p className="text-[9px] uppercase text-white/25 font-bold tracking-wider mb-1.5">Bio</p>
+                    <p className="text-sm text-white/50 italic leading-relaxed">"{existingCredential.bio}"</p>
                   </div>
-                  <div className="p-3.5 bg-white/[0.03] rounded-xl border border-white/[0.04]">
-                    <p className="text-[9px] uppercase text-white/25 font-bold tracking-wider mb-1">City</p>
-                    <p className="font-bold text-sm">{existingCredential.city}</p>
+                  <div className="mt-4 pt-3 border-t border-white/[0.04]">
+                    <div className="flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-wider text-white/15">
+                      <ShieldCheck className="w-3 h-3" /> Soulbound · Non-Transferable
+                    </div>
                   </div>
-                </div>
-                <div className="p-3.5 bg-white/[0.03] rounded-xl border border-white/[0.04]">
-                  <p className="text-[9px] uppercase text-white/25 font-bold tracking-wider mb-1">Bio</p>
-                  <p className="text-xs text-white/50 italic leading-relaxed">"{existingCredential.bio}"</p>
                 </div>
               </div>
 
@@ -296,10 +321,30 @@ const WorkerRegistration = () => {
                   });
                   setExistingCredential(null);
                 }}
-                className="mt-6 w-full py-3.5 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.06] text-white rounded-xl font-bold uppercase tracking-[0.15em] text-[10px] transition-all flex items-center justify-center gap-2"
+                className="mt-8 w-full py-4 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.06] text-white rounded-xl font-bold uppercase tracking-[0.15em] text-[10px] transition-all flex items-center justify-center gap-2"
               >
                 <PenLine className="w-3.5 h-3.5 text-accent" /> Update Credential
               </button>
+            </div>
+          </motion.div>
+
+          {/* Trust footer */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            className="mt-8 flex items-center justify-center gap-5 text-white/10"
+          >
+            <div className="flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-wider">
+              <ShieldCheck className="w-3 h-3" /> Soulbound Token
+            </div>
+            <div className="w-1 h-1 rounded-full bg-white/5" />
+            <div className="flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-wider">
+              <Clock className="w-3 h-3" /> Permanent Record
+            </div>
+            <div className="w-1 h-1 rounded-full bg-white/5" />
+            <div className="flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-wider">
+              <Sparkles className="w-3 h-3" /> Stellar Testnet
             </div>
           </motion.div>
         </div>
@@ -309,10 +354,11 @@ const WorkerRegistration = () => {
 
   /* ── Main Registration Form ────────────────────────────────── */
   return (
-    <div className="min-h-screen bg-background pt-24 pb-8 px-4 sm:px-6 relative overflow-hidden">
+    <div className="min-h-screen bg-background pt-24 pb-8 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Background */}
       <FloatingOrb className="w-[700px] h-[500px] bg-accent/5 blur-[160px] top-10 left-1/3" />
       <FloatingOrb className="w-[400px] h-[400px] bg-purple-800/5 blur-[120px] bottom-20 right-10" delay={3} />
+      <FloatingOrb className="w-[300px] h-[300px] bg-purple-600/4 blur-[100px] top-1/2 left-10" delay={5} />
       <div className="absolute inset-0 -z-10 opacity-[0.015]"
         style={{
           backgroundImage: `linear-gradient(rgba(124,58,237,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(124,58,237,0.5) 1px, transparent 1px)`,
@@ -320,7 +366,7 @@ const WorkerRegistration = () => {
         }}
       />
 
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-5xl mx-auto">
         {/* Back link */}
         <motion.div initial={{ opacity: 0, x: -15 }} animate={{ opacity: 1, x: 0 }} className="mb-6">
           <Link to="/" className="inline-flex items-center gap-2 text-white/30 hover:text-accent transition-colors font-bold text-xs group">
@@ -333,20 +379,21 @@ const WorkerRegistration = () => {
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="mb-6 p-6 sm:p-8 rounded-2xl relative overflow-hidden"
+          className="mb-6 p-6 sm:p-8 lg:p-10 rounded-2xl relative overflow-hidden"
           style={{
             background: 'linear-gradient(135deg, rgba(124,58,237,0.12) 0%, rgba(15,15,25,0.8) 50%, rgba(99,40,210,0.08) 100%)',
             border: '1px solid rgba(124,58,237,0.15)',
           }}
         >
           <div className="absolute -top-20 -right-20 w-60 h-60 bg-accent/15 rounded-full blur-[80px]" />
+          <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-purple-700/10 rounded-full blur-[60px]" />
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 relative z-10">
-            <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-accent to-purple-800 flex items-center justify-center shadow-lg shadow-accent/20">
-                <ShieldCheck className="w-5 h-5 text-white" />
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-accent to-purple-800 flex items-center justify-center shadow-lg shadow-accent/20">
+                <ShieldCheck className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-black tracking-tight">Worker Registration</h1>
+                <h1 className="text-2xl sm:text-3xl font-black tracking-tight">Worker Registration</h1>
                 <p className="text-white/30 text-xs font-medium">Mint your on-chain credential</p>
               </div>
             </div>
@@ -419,7 +466,7 @@ const WorkerRegistration = () => {
             />
           </div>
 
-          <div className="p-6 sm:p-8">
+          <div className="p-6 sm:p-8 lg:p-10">
             <div className="flex items-center justify-between mb-6 pb-5 border-b border-white/[0.04]">
               <div className="flex items-center gap-2">
                 <PenLine className="w-4 h-4 text-accent/60" />
