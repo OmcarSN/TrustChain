@@ -30,7 +30,7 @@ const STEPS = [
 
 /* ── Form Field Component ─────────────────────────────────────── */
 const FormField = ({ icon: Icon, label, error, children, completed }) => (
-  <div className="space-y-2">
+  <div className="space-y-1.5">
     <div className="flex items-center justify-between">
       <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/30 flex items-center gap-1.5 ml-1">
         <Icon className="w-3 h-3" /> {label}
@@ -176,7 +176,7 @@ const WorkerRegistration = () => {
   const filledCount = [formData.fullName, formData.skillCategory, formData.experience, formData.city, (formData.bio || '').length >= 10].filter(Boolean).length;
   const currentStep = txResult ? 3 : isMinting ? 2 : 1;
 
-  const inputClass = (field) => `w-full bg-white/[0.03] border ${errors[field] ? 'border-red-500/30' : 'border-white/[0.06]'} rounded-xl py-3.5 pl-4 pr-4 text-white text-sm focus:outline-none focus:border-accent/30 focus:bg-white/[0.05] transition-all font-medium placeholder:text-white/12`;
+  const inputClass = (field) => `w-full bg-white/[0.03] border ${errors[field] ? 'border-red-500/30' : 'border-white/[0.06]'} rounded-xl py-3 pl-4 pr-4 text-white text-sm focus:outline-none focus:border-accent/30 focus:bg-white/[0.05] transition-all font-medium placeholder:text-white/12`;
 
   /* ── Not connected ─────────────────────────────────────────── */
   if (!isConnected) {
@@ -354,7 +354,7 @@ const WorkerRegistration = () => {
 
   /* ── Main Registration Form ────────────────────────────────── */
   return (
-    <div className="min-h-screen bg-background pt-24 pb-8 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div className="min-h-screen bg-background pt-20 pb-6 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Background */}
       <FloatingOrb className="w-[700px] h-[500px] bg-accent/5 blur-[160px] top-10 left-1/3" />
       <FloatingOrb className="w-[400px] h-[400px] bg-purple-800/5 blur-[120px] bottom-20 right-10" delay={3} />
@@ -367,19 +367,12 @@ const WorkerRegistration = () => {
       />
 
       <div className="max-w-5xl mx-auto">
-        {/* Back link */}
-        <motion.div initial={{ opacity: 0, x: -15 }} animate={{ opacity: 1, x: 0 }} className="mb-6">
-          <Link to="/" className="inline-flex items-center gap-2 text-white/30 hover:text-accent transition-colors font-bold text-xs group">
-            <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" /> Back
-          </Link>
-        </motion.div>
-
-        {/* Hero Header */}
+        {/* Compact Hero Header — merged with stepper & back link */}
         <motion.div
-          initial={{ opacity: 0, y: 25 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-6 p-6 sm:p-8 lg:p-10 rounded-2xl relative overflow-hidden"
+          transition={{ duration: 0.5 }}
+          className="mb-5 p-5 sm:p-6 rounded-2xl relative overflow-hidden"
           style={{
             background: 'linear-gradient(135deg, rgba(124,58,237,0.12) 0%, rgba(15,15,25,0.8) 50%, rgba(99,40,210,0.08) 100%)',
             border: '1px solid rgba(124,58,237,0.15)',
@@ -387,70 +380,74 @@ const WorkerRegistration = () => {
         >
           <div className="absolute -top-20 -right-20 w-60 h-60 bg-accent/15 rounded-full blur-[80px]" />
           <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-purple-700/10 rounded-full blur-[60px]" />
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 relative z-10">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-accent to-purple-800 flex items-center justify-center shadow-lg shadow-accent/20">
-                <ShieldCheck className="w-6 h-6 text-white" />
+          
+          {/* Top row: Back + Wallet */}
+          <div className="flex items-center justify-between mb-4 relative z-10">
+            <Link to="/" className="inline-flex items-center gap-1.5 text-white/30 hover:text-accent transition-colors font-bold text-[11px] group">
+              <ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" /> Back
+            </Link>
+            <div className="flex items-center gap-2 bg-white/[0.04] border border-white/[0.06] px-3 py-1.5 rounded-lg">
+              <div className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.5)]" />
+              <span className="font-mono text-[10px] text-white/40">{truncateAddress(walletAddress)}</span>
+            </div>
+          </div>
+
+          {/* Bottom row: Title + Step Progress */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 relative z-10">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-accent to-purple-800 flex items-center justify-center shadow-lg shadow-accent/20">
+                <ShieldCheck className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl sm:text-3xl font-black tracking-tight">Worker Registration</h1>
-                <p className="text-white/30 text-xs font-medium">Mint your on-chain credential</p>
+                <h1 className="text-xl sm:text-2xl font-black tracking-tight">Worker Registration</h1>
+                <p className="text-white/30 text-[11px] font-medium">Mint your on-chain credential</p>
               </div>
             </div>
-            <div className="flex items-center gap-2 bg-white/[0.04] border border-white/[0.06] px-3.5 py-2 rounded-xl">
-              <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.5)]" />
-              <span className="font-mono text-[11px] text-white/40">{truncateAddress(walletAddress)}</span>
+
+            {/* Inline Stepper */}
+            <div className="flex items-center">
+              {STEPS.map((step, i) => {
+                const stepNum = i + 1;
+                const isActive = currentStep >= stepNum;
+                const isCurrent = currentStep === stepNum;
+                const Icon = step.icon;
+                return (
+                  <React.Fragment key={i}>
+                    {i > 0 && (
+                      <div className="w-8 sm:w-12 h-[2px] relative mx-0.5">
+                        <div className="absolute inset-0 bg-white/5 rounded-full" />
+                        <motion.div
+                          className="absolute inset-y-0 left-0 bg-gradient-to-r from-accent to-purple-500 rounded-full"
+                          initial={{ width: '0%' }}
+                          animate={{ width: isActive ? '100%' : '0%' }}
+                          transition={{ duration: 0.5, delay: 0.2 }}
+                        />
+                      </div>
+                    )}
+                    <div className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg transition-all ${
+                      isCurrent ? 'bg-accent/15 border border-accent/25' : isActive ? 'bg-white/[0.03] border border-white/[0.06]' : 'border border-transparent'
+                    }`}>
+                      <div className={`w-5 h-5 rounded-md flex items-center justify-center ${
+                        isCurrent ? 'bg-accent text-white' : isActive ? 'bg-accent/20 text-accent' : 'bg-white/[0.04] text-white/15'
+                      }`}>
+                        {isActive && !isCurrent ? <CheckCircle2 className="w-2.5 h-2.5" /> : <Icon className="w-2.5 h-2.5" />}
+                      </div>
+                      <span className={`text-[8px] font-bold uppercase tracking-wider hidden sm:block ${
+                        isCurrent ? 'text-white' : isActive ? 'text-white/40' : 'text-white/15'
+                      }`}>{step.label}</span>
+                    </div>
+                  </React.Fragment>
+                );
+              })}
             </div>
           </div>
         </motion.div>
 
-        {/* Step Progress */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="mb-8 flex items-center justify-center"
-        >
-          {STEPS.map((step, i) => {
-            const stepNum = i + 1;
-            const isActive = currentStep >= stepNum;
-            const isCurrent = currentStep === stepNum;
-            const Icon = step.icon;
-            return (
-              <React.Fragment key={i}>
-                {i > 0 && (
-                  <div className="w-10 sm:w-16 h-[2px] relative mx-1">
-                    <div className="absolute inset-0 bg-white/5 rounded-full" />
-                    <motion.div
-                      className="absolute inset-y-0 left-0 bg-gradient-to-r from-accent to-purple-500 rounded-full"
-                      initial={{ width: '0%' }}
-                      animate={{ width: isActive ? '100%' : '0%' }}
-                      transition={{ duration: 0.5, delay: 0.2 }}
-                    />
-                  </div>
-                )}
-                <div className={`flex items-center gap-1.5 px-3 py-2 rounded-lg transition-all ${
-                  isCurrent ? 'bg-accent/15 border border-accent/25' : isActive ? 'bg-white/[0.03] border border-white/[0.06]' : 'border border-transparent'
-                }`}>
-                  <div className={`w-6 h-6 rounded-md flex items-center justify-center ${
-                    isCurrent ? 'bg-accent text-white' : isActive ? 'bg-accent/20 text-accent' : 'bg-white/[0.04] text-white/15'
-                  }`}>
-                    {isActive && !isCurrent ? <CheckCircle2 className="w-3 h-3" /> : <Icon className="w-3 h-3" />}
-                  </div>
-                  <span className={`text-[9px] font-bold uppercase tracking-wider hidden sm:block ${
-                    isCurrent ? 'text-white' : isActive ? 'text-white/40' : 'text-white/15'
-                  }`}>{step.label}</span>
-                </div>
-              </React.Fragment>
-            );
-          })}
-        </motion.div>
-
         {/* Form Card */}
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+          transition={{ delay: 0.15 }}
           className="rounded-2xl relative overflow-hidden"
           style={{
             background: 'linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 100%)',
@@ -458,7 +455,7 @@ const WorkerRegistration = () => {
           }}
         >
           {/* Progress bar */}
-          <div className="h-1 bg-white/[0.02]">
+          <div className="h-[3px] bg-white/[0.02]">
             <motion.div
               className="h-full bg-gradient-to-r from-accent to-purple-500"
               animate={{ width: `${(filledCount / 5) * 100}%` }}
@@ -466,91 +463,93 @@ const WorkerRegistration = () => {
             />
           </div>
 
-          <div className="p-6 sm:p-8 lg:p-10">
-            <div className="flex items-center justify-between mb-6 pb-5 border-b border-white/[0.04]">
+          <div className="p-5 sm:p-7 lg:p-8">
+            <div className="flex items-center justify-between mb-5 pb-4 border-b border-white/[0.04]">
               <div className="flex items-center gap-2">
-                <PenLine className="w-4 h-4 text-accent/60" />
+                <PenLine className="w-3.5 h-3.5 text-accent/60" />
                 <span className="text-xs font-bold text-white/40">Professional Details</span>
               </div>
               <span className="text-[9px] font-bold text-white/15">{filledCount}/5 completed</span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
-              {/* Name */}
-              <FormField icon={User} label="Full Name" error={errors.fullName} completed={(formData.fullName || '').length >= 2}>
-                <input
-                  name="fullName"
-                  value={formData.fullName}
-                  onChange={handleInputChange}
-                  placeholder="e.g. Raj Kumar"
-                  className={inputClass('fullName')}
-                />
-              </FormField>
-
-              {/* Category */}
-              <FormField icon={Briefcase} label="Skill Category" error={errors.skillCategory} completed={!!formData.skillCategory}>
-                <div className="relative">
-                  <select
-                    name="skillCategory"
-                    value={formData.skillCategory}
+            {/* 3-column layout: 4 fields left (2x2) + Bio right */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+              {/* Left: 2x2 grid of fields */}
+              <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormField icon={User} label="Full Name" error={errors.fullName} completed={(formData.fullName || '').length >= 2}>
+                  <input
+                    name="fullName"
+                    value={formData.fullName}
                     onChange={handleInputChange}
-                    className={`${inputClass('skillCategory')} appearance-none pr-10 cursor-pointer`}
-                  >
-                    <option value="">Select Category</option>
-                    {skillCategories.map(c => <option key={c} value={c} className="bg-[#0f1016]">{c}</option>)}
-                  </select>
-                  <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/15 pointer-events-none" />
-                </div>
-              </FormField>
+                    placeholder="e.g. Raj Kumar"
+                    className={inputClass('fullName')}
+                  />
+                </FormField>
 
-              {/* Experience */}
-              <FormField icon={Calendar} label="Years Experience" error={errors.experience} completed={formData.experience > 0}>
-                <input
-                  type="number"
-                  name="experience"
-                  value={formData.experience}
-                  onChange={handleInputChange}
-                  placeholder="0"
-                  min="0"
-                  max="50"
-                  className={inputClass('experience')}
-                />
-              </FormField>
+                <FormField icon={Briefcase} label="Skill Category" error={errors.skillCategory} completed={!!formData.skillCategory}>
+                  <div className="relative">
+                    <select
+                      name="skillCategory"
+                      value={formData.skillCategory}
+                      onChange={handleInputChange}
+                      className={`${inputClass('skillCategory')} appearance-none pr-10 cursor-pointer`}
+                    >
+                      <option value="">Select Category</option>
+                      {skillCategories.map(c => <option key={c} value={c} className="bg-[#0f1016]">{c}</option>)}
+                    </select>
+                    <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/15 pointer-events-none" />
+                  </div>
+                </FormField>
 
-              {/* City */}
-              <FormField icon={MapPin} label="City" error={errors.city} completed={!!formData.city}>
-                <input
-                  name="city"
-                  value={formData.city}
-                  onChange={handleInputChange}
-                  placeholder="e.g. Mumbai"
-                  className={inputClass('city')}
-                />
-              </FormField>
+                <FormField icon={Calendar} label="Years Experience" error={errors.experience} completed={formData.experience > 0}>
+                  <input
+                    type="number"
+                    name="experience"
+                    value={formData.experience}
+                    onChange={handleInputChange}
+                    placeholder="0"
+                    min="0"
+                    max="50"
+                    className={inputClass('experience')}
+                  />
+                </FormField>
+
+                <FormField icon={MapPin} label="City" error={errors.city} completed={!!formData.city}>
+                  <input
+                    name="city"
+                    value={formData.city}
+                    onChange={handleInputChange}
+                    placeholder="e.g. Mumbai"
+                    className={inputClass('city')}
+                  />
+                </FormField>
+              </div>
+
+              {/* Right: Bio (stretches to fill height) */}
+              <div className="lg:col-span-1">
+                <FormField icon={FileText} label="Short Bio" error={errors.bio} completed={(formData.bio || '').length >= 10}>
+                  <div className="relative">
+                    <textarea
+                      name="bio"
+                      value={formData.bio}
+                      onChange={handleInputChange}
+                      rows="4"
+                      maxLength={128}
+                      placeholder="Briefly describe your expertise (max 128 chars)..."
+                      className={`${inputClass('bio')} resize-none lg:h-[calc(100%-0px)] lg:min-h-[140px]`}
+                    />
+                    <span className={`absolute right-3 bottom-2.5 text-[9px] font-bold ${
+                      (formData.bio || '').length > 110 ? 'text-amber-400/50' : 'text-white/12'
+                    }`}>
+                      {(formData.bio || '').length}/128
+                    </span>
+                  </div>
+                </FormField>
+              </div>
             </div>
 
-            {/* Bio */}
-            <FormField icon={FileText} label="Short Bio" error={errors.bio} completed={(formData.bio || '').length >= 10}>
-              <div className="relative">
-                <textarea
-                  name="bio"
-                  value={formData.bio}
-                  onChange={handleInputChange}
-                  rows="3"
-                  maxLength={128}
-                  placeholder="Briefly describe your expertise (max 128 chars)..."
-                  className={`${inputClass('bio')} resize-none min-h-[90px]`}
-                />
-                <span className={`absolute right-3 bottom-2.5 text-[9px] font-bold ${
-                  (formData.bio || '').length > 110 ? 'text-amber-400/50' : 'text-white/12'
-                }`}>
-                  {(formData.bio || '').length}/128
-                </span>
-              </div>
-            </FormField>
-
             {/* Submit / Result */}
-            <div className="mt-8">
+            <div className="mt-6">
               <AnimatePresence mode="wait">
                 {txResult ? (
                   <motion.div 
@@ -563,12 +562,12 @@ const WorkerRegistration = () => {
                       border: '1px solid rgba(34,197,94,0.15)',
                     }}
                   >
-                    <div className="p-6 text-center">
-                      <div className="w-14 h-14 rounded-2xl bg-green-500/15 flex items-center justify-center mx-auto mb-4">
-                        <CheckCircle2 className="w-7 h-7 text-green-400" />
+                    <div className="p-5 text-center">
+                      <div className="w-12 h-12 rounded-2xl bg-green-500/15 flex items-center justify-center mx-auto mb-3">
+                        <CheckCircle2 className="w-6 h-6 text-green-400" />
                       </div>
                       <h3 className="text-lg font-black mb-1">Credential Minted!</h3>
-                      <p className="text-[10px] text-green-400/50 font-semibold mb-4">Permanently sealed on Stellar</p>
+                      <p className="text-[10px] text-green-400/50 font-semibold mb-3">Permanently sealed on Stellar</p>
                       <a 
                         href={`https://stellar.expert/explorer/testnet/tx/${txResult.hash}`}
                         target="_blank"
@@ -584,22 +583,23 @@ const WorkerRegistration = () => {
                     key="submit"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
+                    className="flex flex-col sm:flex-row items-center gap-4"
                   >
-                    {/* Gasless Transaction Info */}
-                    <div className="flex flex-col items-center justify-center mb-4 text-center">
-                      <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-500/10 border border-amber-500/20 rounded-full mb-2">
-                        <Zap className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                        <span className="text-[10px] font-black uppercase tracking-wider text-amber-400">Gasless Transaction</span>
+                    {/* Gasless badge — compact inline */}
+                    <div className="flex items-center gap-2 shrink-0">
+                      <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-500/10 border border-amber-500/20 rounded-full">
+                        <Zap className="w-3 h-3 text-amber-400 shrink-0" />
+                        <span className="text-[9px] font-black uppercase tracking-wider text-amber-400">Gasless</span>
                       </div>
-                      <p className="text-[11px] text-white/40 font-medium">
-                        Your transaction fee is sponsored by TrustChain — you pay nothing
+                      <p className="text-[10px] text-white/30 font-medium hidden sm:block">
+                        Fee sponsored by TrustChain
                       </p>
                     </div>
                     
                     <button
                       onClick={handleMint}
                       disabled={isMinting || filledCount !== 5}
-                      className="group w-full relative overflow-hidden py-5 text-white rounded-2xl font-black uppercase tracking-[0.2em] text-[11px] transition-all flex items-center justify-center gap-3 active:scale-[0.98] disabled:cursor-not-allowed"
+                      className="group w-full relative overflow-hidden py-4 text-white rounded-xl font-black uppercase tracking-[0.2em] text-[11px] transition-all flex items-center justify-center gap-3 active:scale-[0.98] disabled:cursor-not-allowed"
                       style={{
                         background: filledCount === 5
                           ? 'linear-gradient(135deg, #7c3aed 0%, #6d28d9 50%, #5b21b6 100%)'
@@ -618,9 +618,9 @@ const WorkerRegistration = () => {
                       )}
                       <span className="relative z-10 flex items-center gap-3">
                         {isMinting ? (
-                          <><Loader2 className="w-4.5 h-4.5 animate-spin" /> Preparing Transaction...</>
+                          <><Loader2 className="w-4 h-4 animate-spin" /> Preparing Transaction...</>
                         ) : filledCount === 5 ? (
-                          <><ShieldCheck className="w-4.5 h-4.5 group-hover:rotate-[10deg] transition-transform" /> Mint My Credential</>
+                          <><ShieldCheck className="w-4 h-4 group-hover:rotate-[10deg] transition-transform" /> Mint My Credential</>
                         ) : (
                           <span className="text-white/25">Complete All Fields to Mint</span>
                         )}
@@ -642,8 +642,8 @@ const WorkerRegistration = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="mt-8 flex items-center justify-center gap-5 text-white/10"
+          transition={{ delay: 0.4 }}
+          className="mt-5 flex items-center justify-center gap-5 text-white/10"
         >
           <div className="flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-wider">
             <ShieldCheck className="w-3 h-3" /> Soulbound Token
