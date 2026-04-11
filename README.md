@@ -458,10 +458,10 @@ The analytics dashboard provides real-time network metrics by querying the Stell
 
 ### Screenshots
 
-![Analytics Dashboard](<img width="1920" height="1080" alt="Screenshot 2026-04-11 190606" src="https://github.com/user-attachments/assets/5cfe2383-ac36-4fe1-be87-4857f2cef702" />
-)
-![System Logs Monitoring](<img width="1920" height="1080" alt="Screenshot 2026-04-11 192222" src="https://github.com/user-attachments/assets/deec2889-4e12-4723-a3dd-f563871cb497" />
-)
+![Analytics Dashboard]<img width="1920" height="1080" alt="Screenshot 2026-04-11 190606" src="https://github.com/user-attachments/assets/5cfe2383-ac36-4fe1-be87-4857f2cef702" />
+
+![System Logs Monitoring]<img width="1920" height="1080" alt="Screenshot 2026-04-11 192222" src="https://github.com/user-attachments/assets/deec2889-4e12-4723-a3dd-f563871cb497" />
+
 
 ---
 
