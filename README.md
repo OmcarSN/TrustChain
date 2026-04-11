@@ -299,7 +299,7 @@ TrustChain has been upgraded to **Level 6 Black Belt** with production-grade fea
 ### 🌍 Community Contribution
 
 <!-- TODO: Replace with your actual Twitter/X post link after posting -->
-> 📢 **Twitter/X Post:** [PLACEHOLDER — Add your tweet link here](https://twitter.com/YOUR_HANDLE/status/YOUR_POST_ID)
+> 📢 **Twitter/X Post:** (https://x.com/i/status/2042962447297057275)
 >
 > Posted about TrustChain's mission with screenshots of Analytics dashboard + homepage to empower 2B+ informal economy workers with decentralized, verifiable credentials on Stellar.
 
@@ -458,8 +458,10 @@ The analytics dashboard provides real-time network metrics by querying the Stell
 
 ### Screenshots
 
-![Analytics Dashboard](./screenshots/analytics.png)
-![System Logs Monitoring](./screenshots/admin-logs.png)
+![Analytics Dashboard](<img width="1920" height="1080" alt="Screenshot 2026-04-11 190606" src="https://github.com/user-attachments/assets/5cfe2383-ac36-4fe1-be87-4857f2cef702" />
+)
+![System Logs Monitoring](<img width="1920" height="1080" alt="Screenshot 2026-04-11 192222" src="https://github.com/user-attachments/assets/deec2889-4e12-4723-a3dd-f563871cb497" />
+)
 
 ---
 
