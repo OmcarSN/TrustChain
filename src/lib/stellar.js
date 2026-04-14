@@ -48,8 +48,19 @@ export async function submitTransaction(signedXdr, retry = true) {
     const response = await server.submitTransaction(transaction);
     return response;
   } catch (error) {
+    // Extract detailed Horizon error information for debugging
+    if (error.response?.data?.extras?.result_codes) {
+      const codes = error.response.data.extras.result_codes;
+      console.error("Horizon result codes:", JSON.stringify(codes));
+      const opErrors = codes.operations?.join(', ') || '';
+      const txError = codes.transaction || '';
+      const detail = [txError, opErrors].filter(Boolean).join(' — ');
+      if (detail) {
+        throw new Error(`Transaction failed: ${detail}`);
+      }
+    }
     console.error("Submission Error:", error);
-    if (retry && (error.response?.status === 504 || error.message.includes("timeout"))) {
+    if (retry && (error.response?.status === 504 || error.message?.includes("timeout"))) {
       return submitTransaction(signedXdr, false);
     }
     throw error;

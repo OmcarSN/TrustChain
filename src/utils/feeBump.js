@@ -18,7 +18,9 @@ export function buildFeeBumpTransaction(innerTxXDR, sponsorKeypair, networkPassp
     );
 
     feeBumpTx.sign(sponsorKeypair);
-    return feeBumpTx.toXDR();
+    // IMPORTANT: Must specify 'base64' encoding — without it, toXDR() returns
+    // a raw Buffer which Horizon rejects with HTTP 400.
+    return feeBumpTx.toXDR('base64');
   } catch (error) {
     logError(error, "buildFeeBumpTransaction");
     // Fallback: Return null to trigger direct submission in stellar.js
