@@ -1,7 +1,48 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Shield, ShieldCheck, Award, Wallet, ArrowRight, UserPlus, Star, Search, Sparkles, Globe, Target, Zap, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
+
+/* ── Particle Constellation Background ───────────────────────── */
+const ParticleField = () => {
+  const particles = useMemo(() => 
+    Array.from({ length: 35 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 2.5 + 0.5,
+      delay: Math.random() * 5,
+      duration: Math.random() * 4 + 3,
+    })), []
+  );
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
+      {particles.map(p => (
+        <motion.div
+          key={p.id}
+          className="absolute rounded-full bg-accent/40"
+          style={{
+            left: `${p.x}%`,
+            top: `${p.y}%`,
+            width: p.size,
+            height: p.size,
+          }}
+          animate={{
+            opacity: [0.1, 0.6, 0.1],
+            scale: [1, 1.5, 1],
+          }}
+          transition={{
+            duration: p.duration,
+            delay: p.delay,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+        />
+      ))}
+    </div>
+  );
+};
 
 const Landing = () => {
   const steps = [
@@ -35,6 +76,7 @@ const Landing = () => {
     <div className="relative min-h-screen bg-background overflow-hidden selection:bg-accent/30 text-white">
       {/* ── Background ──────────────────────────────────────── */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
+        <ParticleField />
         <motion.div
           className="absolute w-[700px] h-[500px] bg-accent/6 rounded-full blur-[160px] top-[-5%] left-[-5%]"
           animate={{ y: [0, -15, 0], opacity: [0.5, 0.8, 0.5] }}
@@ -44,6 +86,11 @@ const Landing = () => {
           className="absolute w-[400px] h-[400px] bg-purple-800/6 rounded-full blur-[130px] bottom-[10%] right-[-5%]"
           animate={{ y: [0, -15, 0], opacity: [0.5, 0.7, 0.5] }}
           transition={{ duration: 10, delay: 3, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute w-[300px] h-[300px] bg-indigo-900/5 rounded-full blur-[100px] top-[60%] left-[50%]"
+          animate={{ x: [0, 20, 0], opacity: [0.3, 0.6, 0.3] }}
+          transition={{ duration: 12, delay: 5, repeat: Infinity, ease: 'easeInOut' }}
         />
         <div className="absolute inset-0 opacity-[0.012]"
           style={{

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Loader2, Database, Hash, Clock, ExternalLink } from 'lucide-react';
+import { Search, Loader2, Database, Hash, Clock, ExternalLink, Sparkles, ShieldCheck } from 'lucide-react';
 import { fetchCredentialsByWallet } from '../services/indexer';
 import { validateWalletAddress } from '../utils/validation';
 
@@ -43,70 +43,74 @@ const Explorer = () => {
   const truncate = (addr) => (addr ? `${addr.slice(0, 8)}...${addr.slice(-6)}` : '');
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] pt-28 pb-12 px-6 relative overflow-hidden">
-      {/* Background Orbs */}
-      <div className="absolute top-0 right-0 w-[800px] h-[600px] bg-accent/5 blur-[200px] rounded-full mix-blend-screen pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-cyan-500/5 blur-[150px] rounded-full mix-blend-screen pointer-events-none" />
-      <div className="absolute inset-0 opacity-[0.015] pointer-events-none"
-        style={{
-          backgroundImage: 'linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)',
-          backgroundSize: '80px 80px',
-        }}
-      />
+    <div className="min-h-screen bg-background pt-20 pb-8 px-4 sm:px-6 relative overflow-hidden text-white">
+      {/* Background — consistent with other pages */}
+      <div className="absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute top-10 right-0 w-[700px] h-[500px] bg-accent/5 rounded-full blur-[160px]" />
+        <div className="absolute bottom-20 left-0 w-[400px] h-[400px] bg-cyan-500/5 rounded-full blur-[120px]" />
+        <div className="absolute inset-0 opacity-[0.012]"
+          style={{
+            backgroundImage: 'linear-gradient(rgba(124,58,237,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(124,58,237,0.5) 1px, transparent 1px)',
+            backgroundSize: '70px 70px',
+          }}
+        />
+      </div>
 
       <div className="max-w-5xl mx-auto relative z-10">
         
-        {/* Header Section */}
-        <div className="mb-10 text-center">
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="w-16 h-16 bg-accent/10 border border-accent/20 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-[0_0_40px_rgba(124,58,237,0.2)]"
-          >
-            <Database className="w-8 h-8 text-accent" />
-          </motion.div>
-          <motion.h1 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-3xl md:text-5xl font-black tracking-tight mb-4 bg-gradient-to-r from-purple-400 via-accent to-cyan-400 bg-clip-text text-transparent"
-          >
-            Credential Explorer
-          </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.1 }}
-            className="text-white/40 text-sm md:text-base max-w-xl mx-auto font-medium"
-          >
-            Search the decentralized index for on-chain TrustChain events and verifiable credentials.
-          </motion.p>
-        </div>
+        {/* Header — consistent compact style */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-5 p-5 rounded-2xl relative overflow-hidden"
+          style={{
+            background: 'linear-gradient(135deg, rgba(124,58,237,0.1) 0%, rgba(15,15,25,0.7) 50%, rgba(99,40,210,0.06) 100%)',
+            border: '1px solid rgba(124,58,237,0.12)',
+          }}
+        >
+          <div className="absolute -top-16 -right-16 w-40 h-40 bg-accent/12 rounded-full blur-[60px]" />
+          
+          <div className="flex items-center justify-between relative z-10">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-accent to-purple-800 flex items-center justify-center shadow-lg shadow-accent/20">
+                <Database className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <h1 className="text-xl font-black tracking-tight">Credential Explorer</h1>
+                <p className="text-white/30 text-[10px] font-semibold hidden sm:block">Search on-chain TrustChain events</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-accent/8 border border-accent/12 rounded-lg">
+              <Sparkles className="w-3 h-3 text-accent" />
+              <span className="text-[9px] font-black uppercase tracking-wider text-accent">Horizon Indexer</span>
+            </div>
+          </div>
+        </motion.div>
 
         {/* Search Bar */}
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="mb-12 max-w-2xl mx-auto flex flex-col"
+          transition={{ delay: 0.1 }}
+          className="mb-6"
         >
-          <form onSubmit={handleSearch} className="relative group">
-            <div className="absolute inset-0 bg-accent/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300 opacity-50" />
-            <div className={`relative flex items-center bg-white/5 backdrop-blur-xl border ${!isValidAddress && searchQuery.trim().length > 0 ? 'border-red-500/50' : 'border-white/10'} rounded-2xl overflow-hidden focus-within:border-accent/50 transition-colors`}>
-              <div className="pl-6 pr-2">
-                <Search className={`w-5 h-5 ${!isValidAddress && searchQuery.trim().length > 0 ? 'text-red-400/50' : 'text-white/50'}`} />
+          <form onSubmit={handleSearch} className="relative">
+            <div className={`flex items-center bg-white/[0.03] border ${!isValidAddress && searchQuery.trim().length > 0 ? 'border-red-500/30' : 'border-white/[0.06]'} rounded-2xl overflow-hidden focus-within:border-accent/25 transition-all`}>
+              <div className="pl-5 pr-2">
+                <Search className={`w-4 h-4 ${!isValidAddress && searchQuery.trim().length > 0 ? 'text-red-400/50' : 'text-white/20'}`} />
               </div>
               <input
                 type="text"
                 placeholder="Enter Stellar Wallet Address (e.g., G...)"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-transparent py-5 px-2 text-sm font-mono text-white placeholder-white/30 outline-none"
+                className="w-full bg-transparent py-4 px-2 text-sm font-mono text-white placeholder-white/15 outline-none"
               />
               <div className="pr-3">
                 <button 
                   type="submit"
                   disabled={loading || !searchQuery.trim() || !isValidAddress}
-                  className="bg-accent hover:bg-accent-hover text-white px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  className="px-5 py-2.5 bg-gradient-to-r from-accent to-purple-700 hover:from-accent-hover hover:to-purple-800 text-white rounded-xl font-black uppercase tracking-[0.15em] text-[10px] transition-all disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-2 shadow-lg shadow-accent/15 active:scale-95"
                 >
                   {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Search'}
                 </button>
@@ -115,7 +119,10 @@ const Explorer = () => {
           </form>
           {/* Validation error text */}
           {!isValidAddress && searchQuery.trim().length > 0 && (
-            <p className="text-red-400 text-sm mt-1 ml-2">Please enter a valid Stellar wallet address (Starts with G, 56 characters).</p>
+            <p className="text-red-400/80 text-[10px] font-bold mt-2 ml-2 flex items-center gap-1.5">
+              <span className="w-1 h-1 rounded-full bg-red-400" />
+              Please enter a valid Stellar wallet address (starts with G, 56 characters)
+            </p>
           )}
         </motion.div>
 
@@ -210,6 +217,27 @@ const Explorer = () => {
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* Footer Badges */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+          className="mt-8 flex items-center justify-center gap-4 text-white/10"
+        >
+          {[
+            { icon: Database, text: 'Horizon Indexer' },
+            { icon: ShieldCheck, text: 'On-Chain Data' },
+            { icon: Sparkles, text: 'Stellar Testnet' },
+          ].map((badge, i) => (
+            <React.Fragment key={i}>
+              {i > 0 && <div className="w-0.5 h-0.5 rounded-full bg-white/6" />}
+              <div className="flex items-center gap-1 text-[8px] font-bold uppercase tracking-wider">
+                <badge.icon className="w-2.5 h-2.5" /> {badge.text}
+              </div>
+            </React.Fragment>
+          ))}
+        </motion.div>
       </div>
     </div>
   );
