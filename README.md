@@ -248,6 +248,14 @@ Verifier searches → Indexer queries Horizon → Parses ManageData → Displays
 
 TrustChain has been upgraded to **Level 6 Black Belt** with production-grade features including gasless transactions, real-time analytics, on-chain credential exploration, comprehensive security hardening, and production monitoring.
 
+### ⚡ Advanced Smart Contracts
+- **Credential Contract:** Added expiry functionality, verification tiers (Bronze to Platinum), batch operations, and dispute resolution logic. Protected by 14 comprehensive unit tests.
+- **Reputation Contract:** Rewritten with robust duplicate endorsement prevention, time-decay weighted scores (newer reviews weigh more), and total trust tiers. Protected by 13 comprehensive unit tests.
+
+### 🔄 Production CI/CD Pipeline
+- **Automated Workflow (`.github/workflows/ci.yml`)**: 6-stage professional pipeline triggering on push to main.
+- **Stages**: Frontend linting, Frontend bundling, `cargo test` for smart contracts, WASM artifact builds, NPM security auditing, and automated Vercel preview/production deployments.
+
 ### ⚡ Gasless Transactions (Fee Bump)
 - **File:** `src/utils/feeBump.js`
 - **Function:** `buildFeeBumpTransaction(innerTxXDR, sponsorKeypair, networkPassphrase)`
@@ -321,6 +329,9 @@ TrustChain has been upgraded to **Level 6 Black Belt** with production-grade fea
 | `vercel.json` | Security headers + SPA rewrites |
 | `SECURITY.md` | Comprehensive security checklist |
 | `user-feedback.xlsx` | 30 user feedback responses |
+| `.github/workflows/ci.yml` | Production 6-job CI/CD Pipeline |
+| `contracts/credential/src/lib.rs` | Upgraded to Level 6 Advanced (14 tests) |
+| `contracts/reputation/src/lib.rs` | Upgraded to Level 6 Advanced (13 tests) |
 
 ### 🗺️ Improvement Roadmap — Based on Level 6 User Feedback
 
