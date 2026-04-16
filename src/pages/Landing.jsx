@@ -61,61 +61,64 @@ const Tooltip = ({ term, explanation, children }) => {
   );
 };
 
-/* ── Metrics Ticker ──────────────────────────────────────────── */
+/* ── Live Network Ticker ─────────────────────────────────────── */
 const MetricsTicker = ({ stats }) => {
   const avgScore = stats.workers > 0 
     ? Math.min(4.8, (3.5 + (stats.endorsements / Math.max(stats.workers, 1)) * 0.3)).toFixed(1) 
     : '—';
 
-  // Each item represents a real, meaningful platform metric
   const baseItems = [
-    { label: 'Verified Workers', value: String(stats.workers || 0), color: '#EA580C' },
-    { label: 'On-Chain Endorsements', value: String(stats.endorsements || 0), color: '#1E3A8A' },
-    { label: 'Avg. Trust Score', value: `${avgScore} / 5.0`, color: '#10B981' },
-    { label: 'Blockchain', value: 'Stellar Testnet', color: '#1E3A8A' },
-    { label: 'Smart Contracts', value: 'Soroban', color: '#EA580C' },
-    { label: 'Wallet', value: 'Freighter', color: '#10B981' },
-    { label: 'Credential Type', value: 'Soulbound (Non-Transferable)', color: '#6366F1' },
-    { label: 'Minting Fee', value: 'Sponsored (Free)', color: '#10B981' },
+    { icon: Users,      label: 'Workers Verified',    value: String(stats.workers || 0), color: '#EA580C' },
+    { icon: Award,      label: 'Endorsements',        value: String(stats.endorsements || 0), color: '#1E3A8A' },
+    { icon: Star,       label: 'Trust Score',          value: `${avgScore} / 5.0`, color: '#10B981' },
+    { icon: Globe,      label: 'Network',              value: 'Stellar Testnet', color: '#6366F1' },
+    { icon: Blocks,     label: 'Smart Contracts',      value: 'Soroban', color: '#EA580C' },
+    { icon: Wallet,     label: 'Wallet',               value: 'Freighter', color: '#10B981' },
+    { icon: ShieldCheck,label: 'Credential',           value: 'Soulbound', color: '#1E3A8A' },
+    { icon: Zap,        label: 'Minting Fee',          value: 'Sponsored', color: '#10B981' },
   ];
 
-  // Duplicate for seamless infinite scroll
-  const items = [...baseItems, ...baseItems];
+  const items = [...baseItems, ...baseItems, ...baseItems];
 
   return (
     <div
-      className="w-full overflow-hidden relative"
+      className="w-full relative z-10 overflow-hidden mb-8"
       style={{
-        height: '52px',
-        background: 'rgba(255,255,255,0.85)',
-        backdropFilter: 'blur(8px)',
+        height: '50px',
+        background: 'linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 100%)',
         borderTop: '1px solid #E5E7EB',
         borderBottom: '1px solid #E5E7EB',
       }}
     >
+      {/* Fade masks on left and right edges */}
+      <div className="absolute left-0 top-0 bottom-0 w-24 z-10 pointer-events-none"
+        style={{ background: 'linear-gradient(to right, #FFFFFF, transparent)' }} />
+      <div className="absolute right-0 top-0 bottom-0 w-24 z-10 pointer-events-none"
+        style={{ background: 'linear-gradient(to left, #FFFFFF, transparent)' }} />
+
       <div
-        className="flex items-center h-full whitespace-nowrap"
-        style={{ animation: 'ticker-scroll 50s linear infinite' }}
+        className="flex items-center h-full whitespace-nowrap w-max"
+        style={{ animation: 'ticker-scroll 60s linear infinite' }}
       >
-        {items.map((item, i) => (
+        {items.map((m, i) => (
           <React.Fragment key={i}>
-            {i > 0 && (
-              <span className="mx-6 w-1 h-1 rounded-full shrink-0" style={{ background: '#D1D5DB' }} />
-            )}
-            <div className="flex items-center gap-2.5 shrink-0">
+            <div className="flex items-center gap-2 shrink-0 mx-5">
+              <m.icon className="w-3.5 h-3.5 shrink-0" style={{ color: m.color, opacity: 0.7 }} />
               <span
-                className="text-[9px] uppercase tracking-[0.2em] font-semibold"
-                style={{ fontFamily: 'monospace', color: '#9CA3AF' }}
+                className="text-[10px] uppercase tracking-[0.15em] font-semibold"
+                style={{ color: '#9CA3AF' }}
               >
-                {item.label}
+                {m.label}
               </span>
               <span
-                className="text-sm font-bold"
-                style={{ fontFamily: 'monospace', color: item.color }}
+                className="text-[13px] font-bold"
+                style={{ color: m.color, fontFamily: '"Inter", sans-serif' }}
               >
-                {item.value}
+                {m.value}
               </span>
             </div>
+            {/* Diamond separator */}
+            <span className="shrink-0 text-[6px]" style={{ color: '#D1D5DB' }}>◆</span>
           </React.Fragment>
         ))}
       </div>
@@ -319,7 +322,7 @@ const Landing = () => {
         </motion.div>
       </main>
 
-      {/* ── Metrics Ticker ───────────────────────────────────── */}
+      {/* ── Network Metrics Grid ───────────────────────────────────── */}
       <FadeUp>
         <MetricsTicker stats={liveStats} />
       </FadeUp>
@@ -428,12 +431,12 @@ const Landing = () => {
                     }}
                   >
                     {/* Step watermark */}
-                    <div className="absolute top-4 right-4">
+                    <div className="absolute top-4 right-5">
                       <span
-                        className="text-3xl"
+                        className="text-4xl font-bold"
                         style={{
                           fontFamily: '"Playfair Display", serif',
-                          color: 'rgba(17,24,39,0.05)',
+                          color: 'rgba(30, 58, 138, 0.15)',
                         }}
                       >
                         {step.step}

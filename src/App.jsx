@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ToastProvider } from './context/ToastContext';
@@ -17,13 +17,35 @@ import NotFound from './pages/NotFound';
 import DiscoverWorkers from './pages/DiscoverWorkers';
 import AdminLogs from './pages/AdminLogs';
 
-// Page Transition Wrapper
+/* ── Scroll-to-top on route change ──────────────────────────── */
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [pathname]);
+  return null;
+};
+
+/* ── Page Transition Wrapper ────────────────────────────────── */
+const pageVariants = {
+  initial: { opacity: 0, y: 12, filter: 'blur(4px)' },
+  animate: { opacity: 1, y: 0, filter: 'blur(0px)' },
+  exit:    { opacity: 0, y: -8, filter: 'blur(2px)' },
+};
+
+const pageTransition = {
+  duration: 0.35,
+  ease: [0.25, 0.46, 0.45, 0.94],
+};
+
 const PageWrapper = ({ children }) => (
   <motion.div
-    initial={{ opacity: 0, y: 10 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -10 }}
-    transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+    variants={pageVariants}
+    initial="initial"
+    animate="animate"
+    exit="exit"
+    transition={pageTransition}
+    style={{ willChange: 'opacity, transform, filter' }}
   >
     {children}
   </motion.div>
@@ -35,6 +57,7 @@ const App = () => {
   return (
     <div className="flex flex-col min-h-screen relative">
       <GlobalBackground />
+      <ScrollToTop />
 
       <Navbar />
       <main className="flex-grow relative z-10">
