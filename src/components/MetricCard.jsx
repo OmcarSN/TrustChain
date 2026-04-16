@@ -67,11 +67,11 @@ const MetricCard = ({ title, value, subtitle, icon: Icon, color = 'purple', tren
     // Gradient fill
     const grad = ctx.createLinearGradient(0, 0, 0, h);
     const cMap = {
-      purple: ['rgba(124,58,237,0.3)', 'rgba(124,58,237,0)'],
-      blue:   ['rgba(96,165,250,0.3)', 'rgba(96,165,250,0)'],
-      amber:  ['rgba(251,191,36,0.3)', 'rgba(251,191,36,0)'],
-      green:  ['rgba(52,211,153,0.3)', 'rgba(52,211,153,0)'],
-      cyan:   ['rgba(34,211,238,0.3)', 'rgba(34,211,238,0)'],
+      purple: ['rgba(30,58,138,0.1)', 'rgba(30,58,138,0)'],
+      blue:   ['rgba(2,132,199,0.1)', 'rgba(2,132,199,0)'],
+      amber:  ['rgba(234,88,12,0.1)', 'rgba(234,88,12,0)'],
+      green:  ['rgba(16,185,129,0.1)', 'rgba(16,185,129,0)'],
+      cyan:   ['rgba(2,132,199,0.1)', 'rgba(2,132,199,0)'],
     };
     const [c1, c2] = cMap[color] || cMap.purple;
     grad.addColorStop(0, c1);
@@ -93,7 +93,7 @@ const MetricCard = ({ title, value, subtitle, icon: Icon, color = 'purple', tren
 
     // Line
     const strokeMap = {
-      purple: '#a855f7', blue: '#60a5fa', amber: '#fbbf24', green: '#34d399', cyan: '#22d3ee',
+      purple: '#1E3A8A', blue: '#0284C7', amber: '#EA580C', green: '#10B981', cyan: '#0284C7',
     };
     ctx.beginPath();
     ctx.moveTo(points[0].x, points[0].y);
@@ -103,99 +103,78 @@ const MetricCard = ({ title, value, subtitle, icon: Icon, color = 'purple', tren
     }
     ctx.quadraticCurveTo(points[points.length - 2].x, points[points.length - 2].y, points[points.length - 1].x, points[points.length - 1].y);
     ctx.strokeStyle = strokeMap[color] || strokeMap.purple;
-    ctx.lineWidth = 1.5;
+    ctx.lineWidth = 2;
     ctx.stroke();
   }, [sparkData, color]);
 
   const colorMap = {
     purple: {
-      glow: 'rgba(124,58,237,0.08)',
-      accent: '#a855f7',
-      iconBg: 'rgba(124,58,237,0.12)',
-      iconBorder: 'rgba(124,58,237,0.15)',
-      text: 'text-purple-400',
-      border: 'rgba(124,58,237,0.06)',
-      ring: 'rgba(124,58,237,0.25)',
+      glow: 'rgba(30,58,138,0.06)',
+      iconBg: '#EFF6FF',
+      iconBorder: '#DBEAFE',
+      text: 'text-[#1E3A8A]',
     },
     cyan: {
-      glow: 'rgba(34,211,238,0.08)',
-      accent: '#22d3ee',
-      iconBg: 'rgba(34,211,238,0.12)',
-      iconBorder: 'rgba(34,211,238,0.15)',
-      text: 'text-cyan-400',
-      border: 'rgba(34,211,238,0.06)',
-      ring: 'rgba(34,211,238,0.25)',
+      glow: 'rgba(2,132,199,0.06)',
+      iconBg: '#F0F9FF',
+      iconBorder: '#E0F2FE',
+      text: 'text-[#0284C7]',
     },
     green: {
-      glow: 'rgba(52,211,153,0.08)',
-      accent: '#34d399',
-      iconBg: 'rgba(52,211,153,0.12)',
-      iconBorder: 'rgba(52,211,153,0.15)',
-      text: 'text-emerald-400',
-      border: 'rgba(52,211,153,0.06)',
-      ring: 'rgba(52,211,153,0.25)',
+      glow: 'rgba(16,185,129,0.06)',
+      iconBg: '#ECFDF5',
+      iconBorder: '#D1FAE5',
+      text: 'text-[#10B981]',
     },
     amber: {
-      glow: 'rgba(251,191,36,0.08)',
-      accent: '#fbbf24',
-      iconBg: 'rgba(251,191,36,0.12)',
-      iconBorder: 'rgba(251,191,36,0.15)',
-      text: 'text-amber-400',
-      border: 'rgba(251,191,36,0.06)',
-      ring: 'rgba(251,191,36,0.25)',
+      glow: 'rgba(234,88,12,0.06)',
+      iconBg: '#FFF7ED',
+      iconBorder: '#FFEDD5',
+      text: 'text-[#EA580C]',
     },
     blue: {
-      glow: 'rgba(96,165,250,0.08)',
-      accent: '#60a5fa',
-      iconBg: 'rgba(96,165,250,0.12)',
-      iconBorder: 'rgba(96,165,250,0.15)',
-      text: 'text-blue-400',
-      border: 'rgba(96,165,250,0.06)',
-      ring: 'rgba(96,165,250,0.25)',
+      glow: 'rgba(2,132,199,0.06)',
+      iconBg: '#F0F9FF',
+      iconBorder: '#E0F2FE',
+      text: 'text-[#0284C7]',
     },
   };
 
   const c = colorMap[color] || colorMap.purple;
 
   const TrendIcon = trend > 0 ? TrendingUp : trend < 0 ? TrendingDown : Minus;
-  const trendColor = trend > 0 ? 'text-emerald-400' : trend < 0 ? 'text-red-400' : 'text-white/30';
-  const trendBg = trend > 0 ? 'bg-emerald-400/10' : trend < 0 ? 'bg-red-400/10' : 'bg-white/5';
+  const trendColor = trend > 0 ? 'text-[#10B981]' : trend < 0 ? 'text-red-500' : 'text-gray-400';
+  const trendBg = trend > 0 ? '#ECFDF5' : trend < 0 ? '#FEF2F2' : '#F9FAFB';
+  const trendBorder = trend > 0 ? '#D1FAE5' : trend < 0 ? '#FEE2E2' : '#E5E7EB';
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20, scale: 0.97 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ delay: delay * 0.08, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-      className="rounded-2xl relative overflow-hidden group cursor-default"
+      transition={{ delay: delay * 0.08, duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
+      className="rounded-[20px] relative overflow-hidden group cursor-default shadow-sm hover-lift"
       style={{
-        background: `linear-gradient(160deg, ${c.glow} 0%, rgba(15,15,24,0.6) 40%, rgba(15,15,24,0.4) 100%)`,
-        border: `1px solid ${c.border}`,
-        backdropFilter: 'blur(16px)',
+        background: '#FFFFFF',
+        border: '1px solid #E5E7EB',
       }}
     >
-      {/* Hover glow ring */}
-      <div 
-        className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-        style={{ boxShadow: `inset 0 0 0 1px ${c.ring}, 0 0 30px ${c.glow}` }}
-      />
-
       {/* Background sparkline */}
       {sparkData && sparkData.length > 1 && (
         <canvas
           ref={canvasRef}
           className="absolute bottom-0 left-0 w-full pointer-events-none"
-          style={{ height: '48%', opacity: 0.6 }}
+          style={{ height: '48%', opacity: 0.5 }}
         />
       )}
 
-      <div className="relative z-10 p-4 pb-3">
+      <div className="relative z-10 p-4 sm:p-5">
         {/* Top row: title + icon */}
         <div className="flex items-start justify-between mb-2">
-          <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-white/40 leading-tight max-w-[60%]">
+          <p className="label-mono font-bold text-gray-500 leading-tight max-w-[60%]">
             {title}
           </p>
           <div
-            className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 group-hover:scale-110"
+            className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-500 shadow-sm"
             style={{
               background: c.iconBg,
               border: `1px solid ${c.iconBorder}`,
@@ -207,14 +186,14 @@ const MetricCard = ({ title, value, subtitle, icon: Icon, color = 'purple', tren
 
         {/* Value */}
         <div className="flex items-end gap-3 mb-1">
-          <h2 className="text-3xl font-black text-white tracking-tight leading-none">
+          <h2 className="text-3xl sm:text-4xl font-semibold text-gray-900 tracking-tight leading-none" style={{ fontFamily: '"Inter", sans-serif' }}>
             {isStringValue ? value : displayValue.toLocaleString()}
           </h2>
           {trend !== undefined && trend !== null && (
-            <div className={`flex items-center gap-1 px-2 py-0.5 rounded-md ${trendBg} mb-1`}>
+            <div className="flex items-center gap-1 px-2.5 py-1 rounded-full mb-1.5 shadow-sm" style={{ background: trendBg, border: `1px solid ${trendBorder}` }}>
               <TrendIcon className={`w-3 h-3 ${trendColor}`} />
               <span className={`text-[10px] font-bold ${trendColor}`}>
-                {Math.abs(trend)}%
+                +{Math.abs(trend)}%
               </span>
             </div>
           )}
@@ -222,7 +201,7 @@ const MetricCard = ({ title, value, subtitle, icon: Icon, color = 'purple', tren
 
         {/* Subtitle */}
         {subtitle && (
-          <p className="text-[10px] font-medium text-white/25 tracking-wide">{subtitle}</p>
+          <p className="text-xs font-bold text-gray-400">{subtitle}</p>
         )}
       </div>
     </motion.div>

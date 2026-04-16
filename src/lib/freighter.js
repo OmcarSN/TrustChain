@@ -97,6 +97,8 @@ export async function connectWallet() {
 
 /**
  * 2. getWalletAddress()
+ * Uses getAddress() (silent) instead of requestAccess() (opens popup).
+ * This avoids triggering the Freighter unlock dialog on page load.
  */
 export async function getWalletAddress() {
   try {
@@ -105,9 +107,22 @@ export async function getWalletAddress() {
 
     const rawConnected = await withTimeout(api.isConnected(), 2000);
     if (!extractIsConnected(rawConnected)) return null;
-    
-    const result = await withTimeout(api.requestAccess(), 5000);
-    return extractAddress(result);
+
+    // Try silent address retrieval methods (no popup)
+    if (api.getAddress) {
+      const result = await withTimeout(api.getAddress(), 3000);
+      const addr = extractAddress(result);
+      if (addr) return addr;
+    }
+    // Fallback: try getPublicKey (older Freighter versions)
+    if (api.getPublicKey) {
+      const result = await withTimeout(api.getPublicKey(), 3000);
+      const addr = extractAddress(result);
+      if (addr) return addr;
+    }
+    // If neither silent method worked, wallet is likely locked — return null
+    // Do NOT call requestAccess() here to avoid opening a popup
+    return null;
   } catch (error) {
     return null;
   }

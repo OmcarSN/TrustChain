@@ -49,7 +49,7 @@ export const WalletProvider = ({ children }) => {
     localStorage.removeItem('trustchain_wallet_connected');
   };
 
-  // Auto-reconnect and periodic network check
+  // Auto-reconnect on mount (silent — no popup)
   useEffect(() => {
     const initWallet = async () => {
       const wasConnected = localStorage.getItem('trustchain_wallet_connected') === 'true';
@@ -58,16 +58,25 @@ export const WalletProvider = ({ children }) => {
         if (address) {
           setWalletAddress(address);
           setIsConnected(true);
+          // Only check network if we actually reconnected
+          await checkNetwork();
+        } else {
+          // Wallet is locked or user revoked access — clear stale flag
+          // so we don't keep trying (and potentially popup) on every page load
+          localStorage.removeItem('trustchain_wallet_connected');
         }
       }
-      await checkNetwork();
     };
 
     initWallet();
+  }, [checkNetwork]);
 
+  // Periodic network check — only when connected
+  useEffect(() => {
+    if (!isConnected) return;
     const interval = setInterval(checkNetwork, 5000);
     return () => clearInterval(interval);
-  }, [checkNetwork]);
+  }, [isConnected, checkNetwork]);
 
   return (
     <WalletContext.Provider value={{ walletAddress, isConnected, connect, disconnect, network, isWrongNetwork }}>

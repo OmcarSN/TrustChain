@@ -8,22 +8,21 @@ const ActivityFeed = ({ activities, loading }) => {
   if (loading && (!activities || activities.length === 0)) {
     return (
       <div
-        className="rounded-2xl p-6 h-full flex flex-col"
+        className="rounded-2xl p-4 h-full flex flex-col shadow-sm"
         style={{
-          background: 'linear-gradient(160deg, rgba(124,58,237,0.06) 0%, rgba(15,15,24,0.6) 40%, rgba(15,15,24,0.4) 100%)',
-          border: '1px solid rgba(124,58,237,0.06)',
-          backdropFilter: 'blur(16px)',
+          background: '#FFFFFF',
+          border: '1px solid #E5E7EB',
         }}
       >
-        <div className="flex items-center gap-2.5 mb-6">
-          <div className="w-8 h-8 rounded-lg bg-accent/10 border border-accent/10 flex items-center justify-center">
-            <Zap className="w-4 h-4 text-accent" />
+        <div className="flex items-center gap-2.5 mb-4">
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-[#EFF6FF] border border-[#DBEAFE]">
+            <Zap className="w-4 h-4 text-[#1E3A8A]" />
           </div>
-          <h3 className="text-sm font-bold text-white tracking-tight">Live Activity Feed</h3>
+          <h3 className="text-gray-900" style={{ fontFamily: '"Playfair Display", serif', fontWeight: 500, fontSize: '16px' }}>Live Activity Feed</h3>
         </div>
         <div className="space-y-2.5 flex-1">
           {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="h-[60px] bg-white/[0.03] rounded-xl animate-pulse" style={{ animationDelay: `${i * 120}ms` }} />
+            <div key={i} className="h-[50px] rounded-xl animate-pulse bg-[#F9FAFB] border border-[#E5E7EB]" style={{ animationDelay: `${i * 120}ms` }} />
           ))}
         </div>
       </div>
@@ -32,30 +31,29 @@ const ActivityFeed = ({ activities, loading }) => {
 
   return (
     <div
-      className="rounded-2xl p-4 h-full flex flex-col min-h-0"
+      className="rounded-2xl p-4 h-full flex flex-col min-h-0 shadow-sm"
       style={{
-        background: 'linear-gradient(160deg, rgba(124,58,237,0.06) 0%, rgba(15,15,24,0.6) 40%, rgba(15,15,24,0.4) 100%)',
-        border: '1px solid rgba(124,58,237,0.06)',
-        backdropFilter: 'blur(16px)',
+        background: '#FFFFFF',
+        border: '1px solid #E5E7EB',
       }}
     >
       {/* Header */}
-      <div className="flex items-center justify-between mb-3 pb-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+      <div className="flex items-center justify-between mb-3 pb-2" style={{ borderBottom: '1px solid #E5E7EB' }}>
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-accent/10 border border-accent/10 flex items-center justify-center">
-            <Zap className="w-4 h-4 text-accent" />
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-[#EFF6FF] border border-[#DBEAFE]">
+            <Zap className="w-4 h-4 text-[#1E3A8A]" />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-white tracking-tight leading-none mb-0.5">Live Activity Feed</h3>
-            <p className="text-[9px] font-medium text-white/25 uppercase tracking-wider">Real-time contract events</p>
+            <h3 className="leading-none mb-0.5 text-gray-900" style={{ fontFamily: '"Playfair Display", serif', fontWeight: 500, fontSize: '16px' }}>Live Activity Feed</h3>
+            <p className="label-mono font-bold text-gray-500">Real-time contract events</p>
           </div>
         </div>
-        <div className="flex items-center gap-2 px-2.5 py-1.5 bg-emerald-400/10 border border-emerald-400/10 rounded-lg">
+        <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-full" style={{ background: '#ECFDF5', border: '1px solid #D1FAE5' }}>
           <div className="relative flex items-center justify-center">
-            <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            <div className="absolute w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+            <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#10B981' }} />
+            <div className="absolute w-1.5 h-1.5 rounded-full animate-ping" style={{ background: '#10B981' }} />
           </div>
-          <span className="text-[9px] uppercase font-bold text-emerald-400/80 tracking-wider">Live</span>
+          <span className="text-[9px] uppercase font-bold tracking-wider" style={{ color: '#10B981' }}>Live</span>
         </div>
       </div>
 
@@ -64,16 +62,16 @@ const ActivityFeed = ({ activities, loading }) => {
         className="space-y-2 overflow-y-auto flex-1 min-h-0 pr-1"
         style={{
           scrollbarWidth: 'thin',
-          scrollbarColor: 'rgba(124,58,237,0.15) transparent',
+          scrollbarColor: '#E5E7EB transparent',
         }}
       >
         {activities.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center mb-4">
-              <Activity className="w-5 h-5 text-white/20" />
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4 bg-gray-50 border border-gray-200">
+              <Activity className="w-5 h-5 text-gray-400" />
             </div>
-            <p className="text-xs font-bold text-white/30 mb-1">No Activity Yet</p>
-            <p className="text-[10px] text-white/15 max-w-[180px]">Waiting for contract interactions on the Stellar Testnet...</p>
+            <p className="text-xs font-bold mb-1 text-gray-600">No Activity Yet</p>
+            <p className="text-[10px] max-w-[180px] font-medium text-gray-500">Waiting for contract interactions on Stellar Testnet...</p>
           </div>
         ) : (
           <AnimatePresence>
@@ -83,71 +81,50 @@ const ActivityFeed = ({ activities, loading }) => {
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
-                transition={{ delay: idx * 0.04, duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                className="flex items-center justify-between p-3 rounded-xl transition-all duration-200 group"
-                style={{
-                  background: 'rgba(255,255,255,0.015)',
-                  border: '1px solid rgba(255,255,255,0.03)',
-                }}
+                transition={{ delay: idx * 0.04, duration: 0.35, ease: [0.23, 1, 0.32, 1] }}
+                className="flex items-center justify-between p-3 rounded-xl transition-all duration-300 group shadow-sm bg-[#FFFFFF] border border-[#E5E7EB]"
                 onMouseEnter={e => {
-                  e.currentTarget.style.background = 'rgba(124,58,237,0.06)';
-                  e.currentTarget.style.borderColor = 'rgba(124,58,237,0.12)';
+                  e.currentTarget.style.background = '#F9FAFB';
+                  e.currentTarget.style.borderColor = '#1E3A8A';
                 }}
                 onMouseLeave={e => {
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.015)';
-                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.03)';
+                  e.currentTarget.style.background = '#FFFFFF';
+                  e.currentTarget.style.borderColor = '#E5E7EB';
                 }}
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  {/* Status indicator */}
                   <div
                     className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
                     style={{
-                      background: activity.successful ? 'rgba(52,211,153,0.08)' : 'rgba(248,113,113,0.08)',
-                      border: `1px solid ${activity.successful ? 'rgba(52,211,153,0.12)' : 'rgba(248,113,113,0.12)'}`,
+                      background: activity.successful ? '#ECFDF5' : '#FEF2F2',
+                      border: `1px solid ${activity.successful ? '#D1FAE5' : '#FEE2E2'}`,
                     }}
                   >
                     {activity.successful ? (
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981]" />
                     ) : (
-                      <XCircle className="w-3.5 h-3.5 text-red-400" />
+                      <XCircle className="w-3.5 h-3.5 text-red-500" />
                     )}
                   </div>
                   
-                  {/* Info */}
                   <div className="min-w-0">
-                    <span className="block text-xs font-bold font-mono text-white/75 tracking-tight truncate">
+                    <span className="block text-xs font-bold tracking-tight truncate transition-colors group-hover:text-[#1E3A8A]" style={{ fontFamily: 'monospace', color: '#1E3A8A' }}>
                       {truncate(activity.walletAddress)}
                     </span>
                     <div className="flex items-center gap-1.5 mt-0.5">
-                      <Clock className="w-2.5 h-2.5 text-white/20 shrink-0" />
-                      <span className="text-[10px] text-white/30 font-medium">{activity.timeAgo}</span>
-                      <span className="text-white/10 text-[10px]">•</span>
-                      <span className="text-[10px] text-accent/60 font-semibold truncate">{activity.operationType}</span>
+                      <Clock className="w-2.5 h-2.5 shrink-0 text-gray-400" />
+                      <span className="text-[10px] font-bold text-gray-500">{activity.timeAgo}</span>
+                      <span className="text-gray-300">•</span>
+                      <span className="text-[10px] font-bold truncate text-[#0284C7]">{activity.operationType}</span>
                     </div>
                   </div>
                 </div>
                 
-                {/* External link */}
                 <a
                   href={`https://stellar.expert/explorer/testnet/tx/${activity.hash}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 rounded-lg text-white/20 transition-all duration-200 shrink-0 ml-2"
-                  style={{
-                    background: 'rgba(255,255,255,0.03)',
-                    border: '1px solid rgba(255,255,255,0.04)',
-                  }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.background = 'rgba(124,58,237,0.2)';
-                    e.currentTarget.style.borderColor = 'rgba(124,58,237,0.3)';
-                    e.currentTarget.style.color = '#a855f7';
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.background = 'rgba(255,255,255,0.03)';
-                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.04)';
-                    e.currentTarget.style.color = 'rgba(255,255,255,0.2)';
-                  }}
+                  className="p-2 rounded-lg transition-all duration-300 shrink-0 ml-2 bg-[#F9FAFB] border border-[#E5E7EB] text-gray-500 hover:bg-[#EFF6FF] hover:border-[#1E3A8A] hover:text-[#EA580C]"
                   title="View on Stellar Expert"
                 >
                   <ExternalLink className="w-3.5 h-3.5" />

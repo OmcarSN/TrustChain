@@ -55,34 +55,29 @@ export const ToastProvider = ({ children }) => {
               initial={{ opacity: 0, x: 20, scale: 0.95 }}
               animate={{ opacity: 1, x: 0, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.2 } }}
-              className={`p-5 rounded-3xl border backdrop-blur-2xl flex items-center gap-4 shadow-2xl pointer-events-auto group relative overflow-hidden ${
+              className={`p-4 rounded-xl border flex items-center gap-3 shadow-[0_8px_30px_rgb(0,0,0,0.08)] pointer-events-auto group relative overflow-hidden bg-white ${
                 toast.type === 'success' 
-                  ? 'bg-green-500/10 border-green-500/20 text-white' 
+                  ? 'border-green-200' 
                   : toast.type === 'error'
-                  ? 'bg-red-500/10 border-red-500/20 text-white'
-                  : 'bg-accent/10 border-accent/20 text-white'
+                  ? 'border-red-200'
+                  : 'border-[#E5E7EB]'
               }`}
             >
-              {/* Background Glow */}
-              <div className={`absolute inset-0 opacity-10 blur-xl -z-10 ${
-                toast.type === 'success' ? 'bg-green-500' : toast.type === 'error' ? 'bg-red-500' : 'bg-accent'
-              }`} />
-
-              <div className={`w-10 h-10 rounded-2xl flex items-center justify-center border shrink-0 ${
-                toast.type === 'success' ? 'bg-green-500/10 border-green-500/20' : toast.type === 'error' ? 'bg-red-500/10 border-red-500/20' : 'bg-accent/10 border-accent/20'
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
+                toast.type === 'success' ? 'bg-green-50' : toast.type === 'error' ? 'bg-red-50' : 'bg-orange-50'
               }`}>
-                {toast.type === 'success' && <CheckCircle2 className="w-5 h-5 text-green-400" />}
-                {toast.type === 'error' && <AlertCircle className="w-5 h-5 text-red-400" />}
-                {toast.type === 'info' && <ShieldCheck className="w-5 h-5 text-accent" />}
+                {toast.type === 'success' && <CheckCircle2 className="w-5 h-5 text-green-500" />}
+                {toast.type === 'error' && <AlertCircle className="w-5 h-5 text-red-500" />}
+                {toast.type === 'info' && <ShieldCheck className="w-5 h-5 text-orange-500" />}
               </div>
 
               <div className="flex-1">
-                 <p className="text-sm font-bold leading-tight">{toast.message}</p>
+                 <p className="text-[13px] font-bold leading-tight text-gray-900">{toast.message}</p>
               </div>
 
               <button 
                 onClick={() => removeToast(toast.id)}
-                className="p-1 hover:bg-white/5 rounded-lg transition-colors text-white/20 hover:text-white"
+                className="p-1.5 hover:bg-gray-100 rounded-md transition-colors text-gray-400 hover:text-gray-900"
               >
                 <X className="w-4 h-4" />
               </button>
