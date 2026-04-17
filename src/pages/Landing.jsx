@@ -131,13 +131,36 @@ const Landing = () => {
   const [liveStats, setLiveStats] = useState({ workers: 0, endorsements: 0 });
 
   useEffect(() => {
-    const registry = JSON.parse(localStorage.getItem('trustchain_worker_registry') || '[]');
-    let totalEndorsements = 0;
-    registry.forEach(addr => {
-      const endorsements = JSON.parse(localStorage.getItem(`endorsements_${addr}`) || '[]');
-      totalEndorsements += endorsements.length;
-    });
-    setLiveStats({ workers: registry.length, endorsements: totalEndorsements });
+    const fetchStats = () => {
+      const registry = JSON.parse(localStorage.getItem('trustchain_worker_registry') || '[]');
+      let totalEndorsements = 0;
+      registry.forEach(addr => {
+        const endorsements = JSON.parse(localStorage.getItem(`endorsements_${addr}`) || '[]');
+        totalEndorsements += endorsements.length;
+      });
+      
+      // Update state only if changed to avoid unnecessary re-renders
+      setLiveStats(prev => {
+        if (prev.workers === registry.length && prev.endorsements === totalEndorsements) {
+          return prev;
+        }
+        return { workers: registry.length, endorsements: totalEndorsements };
+      });
+    };
+
+    // Initial fetch
+    fetchStats();
+
+    // Listen to storage events (catches updates from other tabs)
+    window.addEventListener('storage', fetchStats);
+
+    // Poll every 2 seconds (catches updates from the current tab / background events)
+    const interval = setInterval(fetchStats, 2000);
+
+    return () => {
+      window.removeEventListener('storage', fetchStats);
+      clearInterval(interval);
+    };
   }, []);
 
   const steps = [

@@ -140,12 +140,23 @@ export async function fetchWorkerCredential(publicKey) {
 
     if (data[`tc_${publicKey.slice(0, 8)}`]) {
       const val = data[`tc_${publicKey.slice(0, 8)}`];
+      const onChainSkill = Buffer.from(val, 'base64').toString('utf-8');
+
+      let localData = {};
+      try {
+        const stored = localStorage.getItem(`trustchain_worker_${publicKey}`);
+        if (stored) {
+          localData = JSON.parse(stored);
+        }
+      } catch (e) {}
+
       return {
-        name: "Worker", // General placeholder
-        skill: Buffer.from(val, 'base64').toString('utf-8'),
-        experience: "Unknown",
-        city: "Unknown",
-        bio: ""
+        name: localData.name || "Worker",
+        skill: localData.skill || onChainSkill || "Unknown",
+        experience: localData.experience || "Unknown",
+        city: localData.city || "Unknown",
+        bio: localData.bio || "",
+        timestamp: localData.timestamp || null
       };
     }
     throw new Error('No TrustChain credential found.');

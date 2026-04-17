@@ -232,7 +232,7 @@ const Verify = () => {
                           {[
                             { icon: Briefcase, text: profile.skill },
                             { icon: MapPin, text: profile.city },
-                            ...(profile.experience ? [{ icon: Calendar, text: `${profile.experience} Years Exp` }] : []),
+                            ...(profile.experience && profile.experience !== "Unknown" ? [{ icon: Calendar, text: `${profile.experience} Years Exp` }] : []),
                           ].map((item, i) => (
                             <div key={i} className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl" style={{ background: '#F9FAFB', border: '1px solid #E5E7EB' }}>
                               <item.icon className="w-3.5 h-3.5" style={{ color: '#EA580C', opacity: 0.8 }} />
@@ -361,7 +361,7 @@ const Verify = () => {
                     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="grid grid-cols-3 gap-3">
                       {[
                         { value: profile.reputation.total, label: 'Total Jobs', color: '#1E3A8A' },
-                        { value: profile.experience ? `${profile.experience}yr` : '—', label: 'Experience', color: '#1E3A8A' },
+                        { value: profile.experience && profile.experience !== "Unknown" ? `${profile.experience}yr` : '—', label: 'Experience', color: '#1E3A8A' },
                         { value: profile.timestamp ? new Date(profile.timestamp).toLocaleDateString(undefined, { month: 'short', year: '2-digit' }) : '—', label: 'Member Since', color: '#1E3A8A' },
                       ].map((stat, i) => (
                         <div key={i} className="p-4 rounded-[14px] text-center shadow-sm" style={{ background: '#FFFFFF', border: '1px solid #E5E7EB' }}>
