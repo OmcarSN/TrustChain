@@ -1,37 +1,41 @@
-import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect } from 'react';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 
 const GlobalBackground = () => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });
+  const mouseX = useMotionValue(typeof window !== 'undefined' ? window.innerWidth / 2 : 0);
+  const mouseY = useMotionValue(typeof window !== 'undefined' ? window.innerHeight / 2 : 0);
+
+  // Smooth springs for cursor following and parallax
+  const springConfig = { damping: 50, stiffness: 200, bounce: 0 };
+  const smoothX = useSpring(mouseX, springConfig);
+  const smoothY = useSpring(mouseY, springConfig);
+
+  // Transforms to keep the 600px glow circle centered
+  const orbX = useTransform(smoothX, (v) => v - 300);
+  const orbY = useTransform(smoothY, (v) => v - 300);
+
+  // Transforms for subtle parallax opposite to mouse movement
+  const parallaxX = useTransform(smoothX, (v) => 
+    ((v / (typeof window !== 'undefined' ? window.innerWidth : 1920)) - 0.5) * -50
+  );
+  const parallaxY = useTransform(smoothY, (v) => 
+    ((v / (typeof window !== 'undefined' ? window.innerHeight : 1080)) - 0.5) * -50
+  );
 
   useEffect(() => {
+    // We only update the MotionValues, NOT React state.
+    // This completely eliminates React re-renders on mousemove, fixing the lag.
     const handleMouseMove = (e) => {
-      setMousePosition({
-        x: e.clientX,
-        y: e.clientY,
-      });
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
     };
 
-    const handleResize = () => {
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('resize', handleResize);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('resize', handleResize);
     };
-  }, []);
-
-  // Calculate mouse offset for parallax (very subtle)
-  const xOffset = (mousePosition.x / windowSize.width - 0.5) * 50;
-  const yOffset = (mousePosition.y / windowSize.height - 0.5) * 50;
+  }, [mouseX, mouseY]);
 
   return (
     <div className="fixed inset-0 z-[-10] w-full h-full overflow-hidden bg-[#F1F5F9] pointer-events-none">
@@ -47,26 +51,21 @@ const GlobalBackground = () => {
           ease: "linear",
           repeat: Infinity,
         }}
-        className="absolute top-1/2 left-1/2 -ml-[50vw] -mt-[50vh] w-[100vw] h-[100vh]"
+        className="absolute top-1/2 left-1/2 -ml-[50vw] -mt-[50vh] w-[100vw] h-[100vh] will-change-transform"
         style={{
-          background: 'radial-gradient(circle at 50% 50%, rgba(234, 88, 12, 0.05) 0%, rgba(30, 58, 138, 0.04) 50%, transparent 100%)',
-          filter: 'blur(100px)',
+          background: 'radial-gradient(circle at 50% 50%, rgba(234, 88, 12, 0.05) 0%, rgba(30, 58, 138, 0.04) 60%, transparent 100%)',
           transformOrigin: 'center center',
           opacity: 0.8
         }}
       />
 
-      {/* 2. Interactive Following Glow */}
+      {/* 2. Interactive Following Glow (Driven by CSS Transform & MotionValues) */}
       <motion.div
-        className="absolute w-[600px] h-[600px] rounded-full"
-        animate={{
-          x: mousePosition.x - 300,
-          y: mousePosition.y - 300,
-        }}
-        transition={{ type: 'tween', ease: 'easeOut', duration: 3 }}
+        className="absolute w-[600px] h-[600px] rounded-full will-change-transform"
         style={{
+          x: orbX,
+          y: orbY,
           background: 'radial-gradient(circle, rgba(30, 58, 138, 0.04) 0%, transparent 70%)',
-          filter: 'blur(60px)',
         }}
       />
 
@@ -80,23 +79,22 @@ const GlobalBackground = () => {
         }}
       />
 
-      {/* 4. Fine Grain Noise Layer */}
+      {/* 4. Fine Grain Noise Layer (Removed feTurbulence for high-performance zoom) */}
       <div 
-        className="absolute inset-0 opacity-[0.02]"
+        className="absolute inset-0 opacity-[0.01]"
         style={{
-          backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 400 400\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.8\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\'/%3E%3C/svg%3E")',
-          backgroundRepeat: 'repeat'
+          backgroundImage: 'linear-gradient(45deg, rgba(30,58,138,0.05) 25%, transparent 25%, transparent 50%, rgba(30,58,138,0.05) 50%, rgba(30,58,138,0.05) 75%, transparent 75%, transparent)',
+          backgroundSize: '4px 4px'
         }}
       />
 
-      {/* 5. Parallax Floating Tech Accents (Circuit nodes/stars) */}
+      {/* 5. Parallax Floating Tech Accents (Driven by MotionValues) */}
       <motion.div 
-        className="absolute inset-0 opacity-60"
-        animate={{
-          x: xOffset * -1,
-          y: yOffset * -1,
+        className="absolute inset-0 opacity-60 will-change-transform"
+        style={{
+          x: parallaxX,
+          y: parallaxY,
         }}
-        transition={{ type: 'spring', damping: 50, stiffness: 100 }}
       >
         {/* Floating elements distributed across view */}
         <div className="absolute top-[15%] left-[20%] w-[2px] h-[2px] bg-[#1E3A8A] shadow-[0_0_10px_2px_rgba(30,58,138,0.5)] rounded-full animate-pulse" />
