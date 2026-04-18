@@ -1,16 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Shield, Wallet, Menu, X, Check, LogOut, ChevronDown, LayoutDashboard } from 'lucide-react';
+import { Shield, Wallet, Menu, X, Check, LogOut, ChevronDown, LayoutDashboard, Languages } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { useWallet } from '../context/WalletContext';
-import TrustChainLogo from './TrustChainLogo';
 
 const Navbar = () => {
   const location = useLocation();
   const { walletAddress, isConnected, connect, disconnect } = useWallet();
+  const { t, i18n } = useTranslation();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
+
+  const toggleLanguage = () => {
+    i18n.changeLanguage(i18n.language === 'en' ? 'hi' : 'en');
+  };
 
   // Close mobile menu on route change
   useEffect(() => {
@@ -45,154 +50,127 @@ const Navbar = () => {
     addr ? `${addr.slice(0, 4)}...${addr.slice(-4)}` : "";
 
   const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'Find Workers', path: '/discover' },
-    { name: 'Explorer', path: '/explorer' },
-    { name: 'Analytics', path: '/analytics' },
-    { name: 'Dashboard', path: '/dashboard' },
-    { name: 'Worker Portal', path: '/worker' },
+    { name: t('nav.home', 'Home'), path: '/' },
+    { name: t('nav.discover', 'Find Workers'), path: '/discover' },
+    { name: t('nav.explorer', 'Explorer'), path: '/explorer' },
+    { name: t('nav.analytics', 'Analytics'), path: '/analytics' },
+    { name: t('nav.dashboard', 'Dashboard'), path: '/dashboard' },
+    { name: t('nav.workerPortal', 'Worker Portal'), path: '/worker' },
   ];
 
   return (
     <>
-      {/* ── Floating Glass Pill Navbar ─────────────────────────── */}
-      <nav
-        className="fixed z-50"
-        style={{
-          top: '24px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '95%',
-          maxWidth: '850px',
-        }}
-      >
-        <div
-          className="flex items-center justify-between px-3 py-2 rounded-full"
-          style={{
-            background: 'rgba(255, 255, 255, 0.9)',
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            border: '1px solid #E5E7EB',
-            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
-          }}
-        >
-          {/* Left — Logo */}
-          <Link to="/" className="shrink-0 pl-1 group transition-transform hover:scale-105">
-            <TrustChainLogo size={140} />
+      <nav className="fixed top-0 left-0 w-full z-50 border-b border-white/5 bg-background/80 backdrop-blur-2xl">
+        <div className="max-w-[1400px] mx-auto px-6 h-16 flex items-center justify-between">
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-3 group">
+            <div className="w-10 h-10 bg-accent rounded-2xl flex items-center justify-center shadow-2xl shadow-accent/40 group-hover:scale-110 transition-transform duration-500">
+              <Shield className="w-6 h-6 text-white" />
+            </div>
+            <div className="flex flex-col leading-none">
+              <span className="text-xl font-black tracking-tight uppercase italic underline-offset-4 decoration-accent">Trust<span className="text-accent underline decoration-2">Chain</span></span>
+              <span className="text-[8px] font-black uppercase tracking-[0.4em] text-white/40 mt-1">{t('nav.verifiedEconomy', 'Verified Economy')}</span>
+            </div>
           </Link>
 
-          {/* Center — Nav Links (Desktop) */}
-          <div className="hidden lg:flex items-center gap-0.5 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
-            {navLinks.map((link) => {
-              const isActive = location.pathname === link.path;
-              return (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  className="relative px-3 py-1.5 rounded-full text-[10px] whitespace-nowrap font-semibold uppercase tracking-wider transition-all duration-300 hover:bg-gray-100/50"
-                  style={{
-                    fontFamily: '"Inter", sans-serif',
-                    color: isActive ? '#ffffff' : '#4B5563', /* gray-600 */
-                    background: isActive ? '#1E3A8A' : 'transparent',
-                  }}
-                >
-                  {link.name}
-                </Link>
-              );
-            })}
+          {/* Center Nav Links (Desktop) */}
+          <div className="hidden lg:flex items-center gap-1.5 p-1.5 bg-white/5 rounded-2xl border border-white/5 backdrop-blur-md overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                className={`px-4 py-2.5 rounded-xl text-[10px] whitespace-nowrap font-black uppercase tracking-widest transition-all duration-300 ${
+                  location.pathname === link.path 
+                    ? 'bg-accent text-white shadow-lg shadow-accent/20' 
+                    : 'text-white/40 hover:text-white hover:bg-white/5'
+                }`}
+              >
+                {link.name}
+              </Link>
+            ))}
           </div>
 
-          {/* Right — Wallet / Connect + Mobile Menu */}
-          <div className="flex items-center gap-2">
-            {/* Desktop wallet */}
-            <AnimatePresence mode="wait">
-              {isConnected ? (
-                <motion.div
-                  key="connected"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
-                  className="relative hidden sm:block"
-                  ref={dropdownRef}
+          {/* Action Buttons */}
+          <div className="flex items-center gap-3 relative">
+            <button 
+              onClick={toggleLanguage}
+              title="Toggle Language"
+              className="p-3 bg-white/5 rounded-xl border border-white/5 hover:bg-white/10 transition-all relative group flex items-center justify-center shrink-0"
+            >
+              <Languages className="w-4 h-4 text-white/70 group-hover:text-white transition-colors" />
+              <div className="absolute -bottom-1.5 -right-1.5 w-4 h-4 bg-accent/90 rounded-full border border-[#0a0a0f] flex items-center justify-center text-[7px] font-black tracking-wider shadow">
+                {i18n.language === 'en' ? 'EN' : 'HI'}
+              </div>
+            </button>
+
+            {/* Desktop wallet button */}
+            {isConnected ? (
+              <div className="relative" ref={dropdownRef}>
+                <button 
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  className="hidden sm:flex px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all items-center gap-3 group"
                 >
-                    <button
-                      onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                      className="flex items-center gap-2 px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all bg-[#ECFDF5] border border-[#D1FAE5] text-[#10B981] hover:bg-[#D1FAE5] hover-lift btn-press"
+                  <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
+                  <span>{truncate(walletAddress)}</span>
+                  <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                <AnimatePresence>
+                  {isDropdownOpen && (
+                    <motion.div 
+                      initial={{ opacity: 0, y: -8, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -8, scale: 0.95 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute right-0 mt-2 w-52 bg-[#1a1a24] border border-white/10 rounded-xl overflow-hidden shadow-2xl z-[60]"
                     >
-                      <div className="w-1.5 h-1.5 rounded-full bg-[#10B981]" style={{ animation: 'pulse-dot 2s infinite' }} />
-                      {truncate(walletAddress)}
-                    </button>
-
-                  <AnimatePresence>
-                    {isDropdownOpen && (
-                      <motion.div
-                        initial={{ opacity: 0, y: -8, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -8, scale: 0.95 }}
-                        transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
-                        className="absolute right-0 mt-3 w-52 rounded-2xl overflow-hidden shadow-xl z-[60]"
-                        style={{
-                          background: '#FFFFFF',
-                          border: '1px solid #E5E7EB',
-                        }}
+                      <Link
+                        to="/dashboard"
+                        onClick={() => setIsDropdownOpen(false)}
+                        className="w-full px-4 py-3 text-left text-[10px] font-black uppercase tracking-widest text-white/60 hover:bg-white/5 transition-colors flex items-center gap-2"
                       >
-                        <Link
-                          to="/dashboard"
-                          onClick={() => setIsDropdownOpen(false)}
-                          className="w-full px-4 py-3 text-left text-[10px] font-semibold uppercase tracking-widest text-gray-600 hover:text-navy-900 hover:bg-gray-50 transition-colors flex items-center gap-2"
-                        >
-                          <LayoutDashboard className="w-4 h-4" />
-                          Dashboard
-                        </Link>
-                        <div className="border-t border-gray-100" />
-                        <button
-                          onClick={() => {
-                            disconnect();
-                            setIsDropdownOpen(false);
-                          }}
-                          className="w-full px-4 py-3 text-left text-[10px] font-semibold uppercase tracking-widest text-[#EA580C] hover:bg-orange-50 transition-colors flex items-center gap-2"
-                        >
-                          <LogOut className="w-4 h-4" />
-                          Disconnect
-                        </button>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-              ) : (
-                <motion.button
-                  key="disconnected"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
-                  onClick={connect}
-                  className="hidden sm:flex items-center gap-2 px-4 py-1.5 rounded-full text-[10px] font-semibold uppercase tracking-wider transition-all hover:bg-blue-900 hover-lift btn-press"
-                  style={{
-                    background: '#1E3A8A', /* Navy Base */
-                    color: '#ffffff',
-                  }}
-                >
-                  <Wallet className="w-3.5 h-3.5" />
-                  Connect
-                </motion.button>
-              )}
-            </AnimatePresence>
-
-            {/* Hamburger (mobile) */}
-            <button
+                        <LayoutDashboard className="w-4 h-4" />
+                        {t('nav.dashboardBtn', 'Dashboard')}
+                      </Link>
+                      <div className="border-t border-white/5" />
+                      <button 
+                        onClick={() => {
+                          disconnect();
+                          setIsDropdownOpen(false);
+                        }}
+                        className="w-full px-4 py-3 text-left text-[10px] font-black uppercase tracking-widest text-red-400 hover:bg-red-400/10 transition-colors flex items-center gap-2"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        {t('nav.disconnect', 'Disconnect')}
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ) : (
+              <button 
+                onClick={connect}
+                className="hidden sm:flex px-8 py-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all items-center gap-2 group relative overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-accent/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
+                <Wallet className="w-4 h-4 text-accent relative z-10" />
+                <span className="relative z-10">{t('nav.connectWallet', 'Connect Wallet')}</span>
+              </button>
+            )}
+            
+            {/* Hamburger menu button */}
+            <button 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 rounded-full transition-all text-gray-900 hover:bg-gray-100"
+              className="lg:hidden p-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all text-white relative z-[60]"
             >
               <AnimatePresence mode="wait">
                 {isMobileMenuOpen ? (
                   <motion.div key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.2 }}>
-                    <X className="w-5 h-5 text-gray-900" />
+                    <X className="w-5 h-5" />
                   </motion.div>
                 ) : (
                   <motion.div key="open" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.2 }}>
-                    <Menu className="w-5 h-5 text-gray-900" />
+                    <Menu className="w-5 h-5" />
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -201,7 +179,7 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* ── Mobile Menu Overlay ────────────────────────────────── */}
+      {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <>
@@ -211,7 +189,7 @@ const Navbar = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-[45]"
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[45]"
               onClick={() => setIsMobileMenuOpen(false)}
             />
 
@@ -221,17 +199,16 @@ const Navbar = () => {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-              className="fixed top-0 right-0 h-full w-[85%] max-w-sm z-[55] flex flex-col"
-              style={{
-                background: '#FFFFFF',
-                borderLeft: '1px solid #E5E7EB',
-              }}
+              className="fixed top-0 right-0 h-full w-[85%] max-w-sm bg-[#0f0f18] border-l border-white/10 z-[55] flex flex-col"
             >
-              <div className="px-8 pt-20 pb-6 border-b border-gray-100">
-                <div className="mb-2 transition-transform hover:scale-105">
-                  <TrustChainLogo size={150} />
+              <div className="px-8 pt-20 pb-6 border-b border-white/5">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-8 h-8 bg-accent rounded-xl flex items-center justify-center">
+                    <Shield className="w-5 h-5 text-white" />
+                  </div>
+                  <span className="text-lg font-black uppercase italic tracking-tight">Trust<span className="text-accent">Chain</span></span>
                 </div>
-                <p className="label-mono text-gray-500 mt-2">Navigation Menu</p>
+                <p className="text-[9px] font-black uppercase tracking-[0.4em] text-white/20">{t('nav.navigationMenu', 'Navigation Menu')}</p>
               </div>
 
               {/* Nav Links */}
@@ -242,16 +219,15 @@ const Navbar = () => {
                       key={link.path}
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: idx * 0.06, ease: [0.23, 1, 0.32, 1] }}
+                      transition={{ delay: idx * 0.06 }}
                     >
                       <Link
                         to={link.path}
-                        className="flex items-center gap-4 px-5 py-4 rounded-2xl font-semibold uppercase tracking-widest text-[11px] transition-all hover:bg-gray-50"
-                        style={{
-                          fontFamily: '"Inter", sans-serif',
-                          color: location.pathname === link.path ? '#ffffff' : '#4B5563',
-                          background: location.pathname === link.path ? '#1E3A8A' : 'transparent',
-                        }}
+                        className={`flex items-center gap-4 px-5 py-4 rounded-2xl font-black uppercase tracking-widest text-[11px] transition-all ${
+                          location.pathname === link.path
+                            ? 'bg-accent text-white shadow-lg shadow-accent/20'
+                            : 'text-white/40 hover:text-white hover:bg-white/5'
+                        }`}
                       >
                         {link.name}
                         {location.pathname === link.path && (
@@ -264,51 +240,29 @@ const Navbar = () => {
               </div>
 
               {/* Mobile Wallet Section */}
-              <div className="px-6 py-6 border-t border-gray-100">
+              <div className="px-6 py-6 border-t border-white/5">
                 {isConnected ? (
                   <div className="space-y-3">
-                    <div
-                      className="flex items-center gap-3 px-5 py-4 rounded-2xl"
-                      style={{
-                        background: '#F9FAFB',
-                        border: '1px solid #E5E7EB',
-                      }}
-                    >
-                      <div
-                        className="w-2.5 h-2.5 rounded-full"
-                        style={{
-                          background: '#10B981',
-                          animation: 'pulse-dot 2s ease-in-out infinite',
-                        }}
-                      />
-                      <span className="font-mono text-xs text-gray-700">{truncate(walletAddress)}</span>
+                    <div className="flex items-center gap-3 px-5 py-4 bg-white/5 border border-white/10 rounded-2xl">
+                      <div className="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
+                      <span className="font-mono text-xs text-white/60">{truncate(walletAddress)}</span>
                     </div>
                     <Link
                       to="/dashboard"
-                      className="w-full py-4 rounded-2xl font-semibold uppercase tracking-widest text-[10px] transition-all flex items-center justify-center gap-2 hover:bg-blue-50"
-                      style={{
-                        background: '#FFFFFF',
-                        border: '1px solid #E5E7EB',
-                        color: '#1E3A8A',
-                      }}
+                      className="w-full py-4 bg-accent/10 border border-accent/20 text-accent rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all flex items-center justify-center gap-2"
                     >
                       <LayoutDashboard className="w-4 h-4" />
-                      Dashboard
+                      {t('nav.dashboardBtn', 'Dashboard')}
                     </Link>
                     <button
                       onClick={() => {
                         disconnect();
                         setIsMobileMenuOpen(false);
                       }}
-                      className="w-full py-4 rounded-2xl font-semibold uppercase tracking-widest text-[10px] transition-all flex items-center justify-center gap-2 hover:bg-orange-50"
-                      style={{
-                        background: '#FFFFFF',
-                        border: '1px solid #E5E7EB',
-                        color: '#EA580C',
-                      }}
+                      className="w-full py-4 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all flex items-center justify-center gap-2"
                     >
                       <LogOut className="w-4 h-4" />
-                      Disconnect Wallet
+                      {t('nav.disconnectWallet', 'Disconnect Wallet')}
                     </button>
                   </div>
                 ) : (
@@ -317,15 +271,10 @@ const Navbar = () => {
                       connect();
                       setIsMobileMenuOpen(false);
                     }}
-                    className="w-full py-4 rounded-2xl font-semibold uppercase tracking-widest text-[10px] transition-all flex items-center justify-center gap-2 hover:bg-blue-900"
-                    style={{
-                      background: '#1E3A8A',
-                      color: '#ffffff',
-                      boxShadow: '0 4px 14px 0 rgba(30, 58, 138, 0.2)',
-                    }}
+                    className="w-full py-5 bg-accent hover:bg-accent-hover text-white rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all flex items-center justify-center gap-2 shadow-2xl shadow-accent/30"
                   >
                     <Wallet className="w-4 h-4" />
-                    Connect Freighter
+                    {t('nav.connectFreighter', 'Connect Freighter')}
                   </button>
                 )}
               </div>

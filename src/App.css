@@ -1,23 +1,23 @@
-/* TrustChain — Synapse Design System — App-level Styles */
+/* TrustChain Global Styles — design tokens are in index.css via @theme */
 
 /* Custom scrollbar for dark theme */
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 6px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(139, 92, 246, 0.2);
+  background: rgba(124, 58, 237, 0.3);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(139, 92, 246, 0.4);
+  background: rgba(124, 58, 237, 0.5);
 }
 
-/* Selection color — violet accent */
+/* Selection color */
 ::selection {
-  background: rgba(139, 92, 246, 0.3);
+  background: rgba(124, 58, 237, 0.3);
   color: #fff;
 }
 
@@ -26,37 +26,8 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Focus visible ring override */
+/* Focus visible ring override for accessibility */
 *:focus-visible {
-  outline: 2px solid rgba(139, 92, 246, 0.5);
+  outline: 2px solid rgba(124, 58, 237, 0.5);
   outline-offset: 2px;
-}
-
-/* Ambient floating orbs — always visible */
-.ambient-orb-violet {
-  position: fixed;
-  top: 20%;
-  left: 15%;
-  width: 400px;
-  height: 400px;
-  border-radius: 50%;
-  background: rgba(139, 92, 246, 0.15);
-  filter: blur(120px);
-  pointer-events: none;
-  z-index: 0;
-  animation: float-slow 10s ease-in-out infinite;
-}
-
-.ambient-orb-cyan {
-  position: fixed;
-  bottom: 15%;
-  right: 10%;
-  width: 350px;
-  height: 350px;
-  border-radius: 50%;
-  background: rgba(6, 182, 212, 0.08);
-  filter: blur(120px);
-  pointer-events: none;
-  z-index: 0;
-  animation: float-slow-alt 12s ease-in-out infinite;
 }

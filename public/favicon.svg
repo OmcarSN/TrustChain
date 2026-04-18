@@ -1,15 +1,27 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
   <defs>
-    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#7c3aed"/>
-      <stop offset="100%" stop-color="#5b21b6"/>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E3A8A"/>
+      <stop offset="100%" stop-color="#1E40AF"/>
     </linearGradient>
-    <linearGradient id="s" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#a78bfa"/>
-      <stop offset="100%" stop-color="#7c3aed"/>
+    <linearGradient id="chain" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#EA580C"/>
+      <stop offset="100%" stop-color="#F97316"/>
+    </linearGradient>
+    <linearGradient id="chk" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#34D399"/>
     </linearGradient>
   </defs>
-  <rect width="32" height="32" rx="8" fill="url(#g)"/>
-  <path d="M16 5L8 9.5V15.5C8 20.2 11.3 24.6 16 26C20.7 24.6 24 20.2 24 15.5V9.5L16 5Z" stroke="url(#s)" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M12 16L14.5 18.5L20 13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Rounded square background -->
+  <rect width="64" height="64" rx="14" fill="url(#bg)"/>
+  <!-- Shield outline -->
+  <path d="M32 10L14 18V30C14 42 22 50 32 54C42 50 50 42 50 30V18L32 10Z" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Chain links -->
+  <ellipse cx="26" cy="28" rx="7" ry="4.5" fill="none" stroke="url(#chain)" stroke-width="2.2" stroke-linecap="round"/>
+  <ellipse cx="38" cy="28" rx="7" ry="4.5" fill="none" stroke="url(#chain)" stroke-width="2.2" stroke-linecap="round"/>
+  <!-- Checkmark -->
+  <path d="M24 36L29 41L42 30" fill="none" stroke="url(#chk)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Accent dots -->
+  <circle cx="32" cy="14" r="1.5" fill="#F97316" opacity="0.8"/>
 </svg>

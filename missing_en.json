@@ -1,0 +1,23 @@
+[
+  " ",
+  "2d",
+  "@stellar/freighter-api",
+  "\\n",
+  "address",
+  "adminLogs.clearBtn",
+  "adminLogs.errorLogsTab",
+  "adminLogs.headerSubtitle",
+  "adminLogs.headerTitle",
+  "adminLogs.refreshBtn",
+  "adminLogs.txLogsTab",
+  "dashboard.searchPlaceholder",
+  "endorse.btnSubmit",
+  "endorse.formTitle",
+  "endorse.headerSubtitle",
+  "endorse.headerTitle",
+  "endorse.placeholderFeedback",
+  "endorse.selectJobType",
+  "verify.headerSubtitle",
+  "verify.headerTitle",
+  "verify.headerTitleHighlight"
+]

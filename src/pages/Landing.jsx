@@ -1,310 +1,114 @@
-import React, { useMemo, useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Shield, ShieldCheck, Award, Wallet, ArrowRight, UserPlus, Star, Search, Sparkles, Globe, Target, Zap, Users, TrendingUp, HelpCircle, ExternalLink, Blocks, Lock, HandshakeIcon } from 'lucide-react';
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Shield, ShieldCheck, Award, Wallet, ArrowRight, UserPlus, Star, Search, Sparkles, Globe, Target, Zap, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
-/* ── Fade-up scroll-reveal wrapper ───────────────────────────── */
-const FadeUp = ({ children, delay = 0, className = '' }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, margin: '-60px' }}
-    transition={{ duration: 0.5, delay, ease: [0.23, 1, 0.32, 1] }}
-    className={className}
-  >
-    {children}
-  </motion.div>
-);
-
-/* ── Inline Tooltip for blockchain terms ──────────────────────── */
-const Tooltip = ({ term, explanation, children }) => {
-  const [show, setShow] = useState(false);
-  return (
-    <span
-      className="relative inline-flex items-center gap-0.5 cursor-help"
-      onMouseEnter={() => setShow(true)}
-      onMouseLeave={() => setShow(false)}
-      onTouchStart={() => setShow(s => !s)}
-    >
-      <span
-        className="border-b border-dotted border-gray-400 font-medium"
-        style={{ color: '#1E3A8A' }}
-      >
-        {term}
-      </span>
-      <HelpCircle className="w-3 h-3 text-gray-400 shrink-0" />
-      <AnimatePresence>
-        {show && (
-          <motion.div
-            initial={{ opacity: 0, y: 6, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 6, scale: 0.95 }}
-            transition={{ duration: 0.15 }}
-            className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-50 w-56 p-3 rounded-xl text-left"
-            style={{
-              background: '#FFFFFF',
-              border: '1px solid #E5E7EB',
-              boxShadow: '0 8px 30px -8px rgba(0,0,0,0.12)',
-            }}
-          >
-            <p className="text-[11px] leading-relaxed text-gray-600" style={{ fontFamily: '"Inter", sans-serif' }}>
-              {explanation}
-            </p>
-            <div
-              className="absolute top-full left-1/2 -translate-x-1/2 w-2 h-2 rotate-45 -mt-1"
-              style={{ background: '#FFFFFF', border: '1px solid #E5E7EB', borderTop: 'none', borderLeft: 'none' }}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </span>
-  );
-};
-
-/* ── Live Network Ticker ─────────────────────────────────────── */
-const MetricsTicker = ({ stats }) => {
-  const avgScore = stats.workers > 0 
-    ? Math.min(4.8, (3.5 + (stats.endorsements / Math.max(stats.workers, 1)) * 0.3)).toFixed(1) 
-    : '—';
-
-  const baseItems = [
-    { icon: Users,      label: 'Workers Verified',    value: String(stats.workers || 0), color: '#EA580C' },
-    { icon: Award,      label: 'Endorsements',        value: String(stats.endorsements || 0), color: '#1E3A8A' },
-    { icon: Star,       label: 'Trust Score',          value: `${avgScore} / 5.0`, color: '#10B981' },
-    { icon: Globe,      label: 'Network',              value: 'Stellar Testnet', color: '#6366F1' },
-    { icon: Blocks,     label: 'Smart Contracts',      value: 'Soroban', color: '#EA580C' },
-    { icon: Wallet,     label: 'Wallet',               value: 'Freighter', color: '#10B981' },
-    { icon: ShieldCheck,label: 'Credential',           value: 'Soulbound', color: '#1E3A8A' },
-    { icon: Zap,        label: 'Minting Fee',          value: 'Sponsored', color: '#10B981' },
-  ];
-
-  const items = [...baseItems, ...baseItems, ...baseItems];
-
-  return (
-    <div
-      className="w-full relative z-10 overflow-hidden mb-8"
-      style={{
-        height: '50px',
-        background: 'linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 100%)',
-        borderTop: '1px solid #E5E7EB',
-        borderBottom: '1px solid #E5E7EB',
-      }}
-    >
-      {/* Fade masks on left and right edges */}
-      <div className="absolute left-0 top-0 bottom-0 w-24 z-10 pointer-events-none"
-        style={{ background: 'linear-gradient(to right, #FFFFFF, transparent)' }} />
-      <div className="absolute right-0 top-0 bottom-0 w-24 z-10 pointer-events-none"
-        style={{ background: 'linear-gradient(to left, #FFFFFF, transparent)' }} />
-
-      <div
-        className="flex items-center h-full whitespace-nowrap w-max"
-        style={{ animation: 'ticker-scroll 60s linear infinite' }}
-      >
-        {items.map((m, i) => (
-          <React.Fragment key={i}>
-            <div className="flex items-center gap-2 shrink-0 mx-5">
-              <m.icon className="w-3.5 h-3.5 shrink-0" style={{ color: m.color, opacity: 0.7 }} />
-              <span
-                className="text-[10px] uppercase tracking-[0.15em] font-semibold"
-                style={{ color: '#9CA3AF' }}
-              >
-                {m.label}
-              </span>
-              <span
-                className="text-[13px] font-bold"
-                style={{ color: m.color, fontFamily: '"Inter", sans-serif' }}
-              >
-                {m.value}
-              </span>
-            </div>
-            {/* Diamond separator */}
-            <span className="shrink-0 text-[6px]" style={{ color: '#D1D5DB' }}>◆</span>
-          </React.Fragment>
-        ))}
-      </div>
-    </div>
-  );
-};
+import { useTranslation } from 'react-i18next';
 
 const Landing = () => {
-  /* ── Live stats from localStorage ───────────────────────────── */
-  const [liveStats, setLiveStats] = useState({ workers: 0, endorsements: 0 });
-
-  useEffect(() => {
-    const fetchStats = () => {
-      const registry = JSON.parse(localStorage.getItem('trustchain_worker_registry') || '[]');
-      let totalEndorsements = 0;
-      registry.forEach(addr => {
-        const endorsements = JSON.parse(localStorage.getItem(`endorsements_${addr}`) || '[]');
-        totalEndorsements += endorsements.length;
-      });
-      
-      // Update state only if changed to avoid unnecessary re-renders
-      setLiveStats(prev => {
-        if (prev.workers === registry.length && prev.endorsements === totalEndorsements) {
-          return prev;
-        }
-        return { workers: registry.length, endorsements: totalEndorsements };
-      });
-    };
-
-    // Initial fetch
-    fetchStats();
-
-    // Listen to storage events (catches updates from other tabs)
-    window.addEventListener('storage', fetchStats);
-
-    // Poll every 2 seconds (catches updates from the current tab / background events)
-    const interval = setInterval(fetchStats, 2000);
-
-    return () => {
-      window.removeEventListener('storage', fetchStats);
-      clearInterval(interval);
-    };
-  }, []);
-
+  const { t } = useTranslation();
   const steps = [
     {
       icon: <UserPlus className="w-5 h-5" />,
       step: '01',
-      title: 'Register & Mint',
-      description: (
-        <span>
-          Connect your{' '}
-          <Tooltip term="Freighter wallet" explanation="Freighter is a free browser extension by the Stellar Foundation. Think of it as your digital ID and wallet — it holds your keys and signs actions." />
-          , fill your details, and mint a{' '}
-          <Tooltip term="soulbound credential" explanation="A soulbound token is a digital certificate permanently tied to you. It cannot be sold or transferred — proving it's genuinely yours." />
-          {' '}to Stellar.
-        </span>
-      ),
+      title: t('landing.step1Title'),
+      description: t('landing.step1Desc'),
       link: '/worker',
+      color: { bg: 'bg-accent/10', border: 'border-accent/20', text: 'text-accent', gradient: 'from-accent to-purple-500', shadow: 'group-hover:shadow-accent/15' },
     },
     {
       icon: <Star className="w-5 h-5" />,
       step: '02',
-      title: 'Get Endorsed',
-      description: (
-        <span>
-          Employers submit{' '}
-          <Tooltip term="on-chain endorsements" explanation="'On-chain' means the data is written directly to the Stellar blockchain — a public, tamper-proof ledger that anyone can verify." />
-          {' '}with ratings and feedback — building your reputation.
-        </span>
-      ),
+      title: t('landing.step2Title'),
+      description: t('landing.step2Desc'),
       link: '/endorse',
+      color: { bg: 'bg-amber-400/10', border: 'border-amber-400/20', text: 'text-amber-400', gradient: 'from-amber-400 to-orange-500', shadow: 'group-hover:shadow-amber-400/15' },
     },
     {
       icon: <Search className="w-5 h-5" />,
       step: '03',
-      title: 'Verify & Share',
-      description: (
-        <span>
-          Anyone can audit a worker's score and endorsement history through a{' '}
-          <Tooltip term="tamper-proof profile" explanation="Since all data lives on the blockchain, no one — not even us — can edit or delete it. What you see is guaranteed authentic." />
-          .
-        </span>
-      ),
+      title: t('landing.step3Title'),
+      description: t('landing.step3Desc'),
       link: '/verify',
+      color: { bg: 'bg-emerald-400/10', border: 'border-emerald-400/20', text: 'text-emerald-400', gradient: 'from-emerald-400 to-teal-500', shadow: 'group-hover:shadow-emerald-400/15' },
     },
   ];
 
-  const featureCards = [
-    { value: '2B+', title: 'Unbanked Workers', body: 'Serving the world\'s informal economy with verifiable, portable credentials.', icon: Globe, accent: '#1E3A8A' },
-    { value: 'Zero-Cost', title: 'Credentials', body: 'Fee-sponsored minting ensures zero barriers to entry for workers.', icon: Zap, accent: '#EA580C' },
-    { value: 'Freighter', title: 'Powered', body: 'Seamless wallet integration with Stellar\'s premier browser extension.', icon: Wallet, accent: '#10B981' },
-  ];
-
   return (
-    <div className="relative min-h-screen bg-background overflow-hidden text-gray-900">
+    <div className="relative min-h-screen bg-background overflow-hidden selection:bg-accent/30 text-white">
+      {/* ── Background ──────────────────────────────────────── */}
+      <div className="absolute inset-0 -z-10 overflow-hidden">
+        <motion.div
+          className="absolute w-[700px] h-[500px] bg-accent/6 rounded-full blur-[160px] top-[-5%] left-[-5%]"
+          animate={{ y: [0, -15, 0], opacity: [0.5, 0.8, 0.5] }}
+          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute w-[400px] h-[400px] bg-purple-800/6 rounded-full blur-[130px] bottom-[10%] right-[-5%]"
+          animate={{ y: [0, -15, 0], opacity: [0.5, 0.7, 0.5] }}
+          transition={{ duration: 10, delay: 3, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <div className="absolute inset-0 opacity-[0.012]"
+          style={{
+            backgroundImage: 'linear-gradient(rgba(124,58,237,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(124,58,237,0.5) 1px, transparent 1px)',
+            backgroundSize: '70px 70px',
+          }}
+        />
+      </div>
 
       {/* ── Hero Section ─────────────────────────────────────── */}
-      <main className="relative pt-[120px] sm:pt-[140px] pb-12 px-5 sm:px-6 max-w-5xl mx-auto flex flex-col items-center text-center">
+      <main className="relative pt-22 pb-8 px-4 sm:px-6 max-w-6xl mx-auto flex flex-col items-center text-center">
         {/* Badge */}
-        <motion.div
+        <motion.div 
           initial={{ opacity: 0, y: 15, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-6"
-          style={{
-            background: '#FFFFFF',
-            border: '1px solid #E5E7EB',
-            boxShadow: '0 4px 14px 0 rgba(234, 88, 12, 0.1)',
-          }}
+          transition={{ duration: 0.4 }}
+          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-accent/8 border border-accent/12 mb-5"
         >
-          <Sparkles className="w-3.5 h-3.5 text-[#EA580C]" />
-          <span
-            className="text-[10px] uppercase tracking-[0.2em]"
-            style={{ fontFamily: 'monospace', color: '#6B7280' }}
-          >
-            The New Standard for Trust
-          </span>
+          <Sparkles className="w-3 h-3 text-accent" />
+          <span className="text-[9px] font-black uppercase tracking-[0.18em] text-accent">{t('landing.badge')}</span>
         </motion.div>
-
-        {/* Headline */}
-        <motion.h1
+        
+        {/* Headline — compact */}
+        <motion.h1 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.08, ease: [0.23, 1, 0.32, 1] }}
-          className="mb-5"
-          style={{
-            fontFamily: '"Playfair Display", serif',
-            fontSize: 'clamp(3.5rem, 9vw, 7rem)',
-            lineHeight: 1.05,
-            fontWeight: 500,
-            letterSpacing: '-0.04em',
-            color: '#111827',
-          }}
+          transition={{ duration: 0.5, delay: 0.08 }}
+          className="text-4xl sm:text-5xl md:text-6xl font-black mb-4 tracking-tighter leading-[1.3] sm:leading-[1.25]"
         >
-          Your Work. Your Reputation.<br />
-          <span className="text-shimmer">On-Chain Forever.</span>
+          {t('landing.titleP1')} <br className="hidden sm:block" />
+          <span className="bg-gradient-to-r from-accent via-purple-400 to-accent/50 bg-clip-text text-transparent inline-block mt-2 sm:mt-1">{t('landing.titleP2')}</span>
         </motion.h1>
-
+        
         {/* Subtitle */}
-        <motion.p
+        <motion.p 
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.15, ease: [0.23, 1, 0.32, 1] }}
-          className="mb-8 text-base leading-relaxed"
-          style={{
-            fontFamily: '"Inter", sans-serif',
-            color: '#4B5563',
-            maxWidth: '42ch',
-            fontWeight: 400,
-          }}
+          transition={{ duration: 0.5, delay: 0.15 }}
+          className="text-white/25 text-sm sm:text-base max-w-2xl mb-7 leading-relaxed font-medium"
         >
-          A sovereign, portable credential system for informal economy workers — built on Stellar.
+          {t('landing.desc')}
         </motion.p>
-
+        
         {/* CTA Buttons */}
-        <motion.div
+        <motion.div 
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.22, ease: [0.23, 1, 0.32, 1] }}
-          className="flex flex-col sm:flex-row gap-3 justify-center items-center mb-6 w-full sm:w-auto"
+          transition={{ duration: 0.5, delay: 0.22 }}
+          className="flex flex-col sm:flex-row gap-3 justify-center items-center mb-10 w-full sm:w-auto"
         >
-          {/* Shiny Border Button — I'm a Worker */}
-          <Link to="/worker" className="w-full sm:w-auto">
-            <div className="shiny-border">
-              <div
-                className="shiny-border-inner px-9 py-4 sm:py-3.5 font-semibold uppercase tracking-[0.18em] text-[12px] sm:text-[11px] text-white flex items-center justify-center gap-2.5 min-h-[48px]"
-              >
-                <ShieldCheck className="w-4 h-4" />
-                I'm a Worker
-              </div>
-            </div>
-          </Link>
-
-          {/* Glass Button — Find Workers */}
-          <Link
-            to="/discover"
-            className="w-full sm:w-auto px-9 py-4 sm:py-3.5 rounded-full font-semibold uppercase tracking-[0.18em] text-[12px] sm:text-[11px] flex items-center justify-center gap-2.5 transition-all hover:bg-gray-50 min-h-[48px]"
-            style={{
-              background: '#FFFFFF',
-              border: '1px solid #E5E7EB',
-              color: '#1E3A8A',
-            }}
+          <Link 
+            to="/worker"
+            className="group w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-accent to-purple-700 hover:from-accent-hover hover:to-purple-800 text-white rounded-xl font-black uppercase tracking-[0.18em] text-[10px] transition-all shadow-lg shadow-accent/20 hover:shadow-xl hover:shadow-accent/30 active:scale-[0.97] flex items-center justify-center gap-2"
           >
-            <Users className="w-4 h-4 text-[#EA580C]" />
-            Find Workers
+            <ShieldCheck className="w-4 h-4 group-hover:rotate-12 transition-transform" />
+            {t('landing.btnWorker')}
+          </Link>
+          <Link 
+            to="/discover"
+            className="group w-full sm:w-auto px-8 py-3.5 bg-white/[0.04] hover:bg-white/[0.06] border border-white/[0.06] text-white rounded-xl font-black uppercase tracking-[0.18em] text-[10px] transition-all active:scale-[0.97] flex items-center justify-center gap-2"
+          >
+            <Users className="w-4 h-4 text-accent group-hover:scale-110 transition-transform" />
+            {t('landing.btnFind')}
           </Link>
         </motion.div>
 
@@ -312,325 +116,125 @@ const Landing = () => {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3, ease: [0.23, 1, 0.32, 1] }}
-          className="flex items-center gap-3 sm:gap-4 px-5 py-2.5 rounded-full mb-4"
-          style={{
-            background: '#FFFFFF',
-            border: '1px solid #E5E7EB',
-          }}
+          transition={{ duration: 0.5, delay: 0.25 }}
+          className="text-xs text-gray-400 text-center py-3 mb-4 w-full"
         >
-          <div className="flex items-center gap-1.5">
-            <div
-              className="w-1.5 h-1.5 rounded-full"
-              style={{ background: '#10B981', animation: 'pulse-dot 2s ease-in-out infinite' }}
-            />
-            <span className="text-[10px] font-bold" style={{ fontFamily: 'monospace', color: '#6B7280' }}>
-              <span style={{ color: '#EA580C' }}>{liveStats.workers}</span> Workers Verified
-            </span>
-          </div>
-          <div className="w-px h-3" style={{ background: '#E5E7EB' }} />
-          <div className="flex items-center gap-1.5">
-            <TrendingUp className="w-3 h-3" style={{ color: '#1E3A8A', opacity: 0.8 }} />
-            <span className="text-[10px] font-bold" style={{ fontFamily: 'monospace', color: '#6B7280' }}>
-              <span style={{ color: '#1E3A8A' }}>{liveStats.endorsements}</span> Endorsements
-            </span>
-          </div>
-          <div className="w-px h-3" style={{ background: '#E5E7EB' }} />
-          <div className="flex items-center gap-1.5">
-            <Globe className="w-3 h-3" style={{ color: '#10B981', opacity: 0.8 }} />
-            <span className="text-[10px] font-bold" style={{ fontFamily: 'monospace', color: '#6B7280' }}>
-              Built on <span style={{ color: '#10B981' }}>Stellar</span>
-            </span>
-          </div>
+          {t('landing.statsBar')}
+        </motion.div>
+
+        {/* Stats Strip — inline */}
+        <motion.div 
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="grid grid-cols-3 gap-3 w-full max-w-3xl"
+        >
+          {[
+            { value: t('landing.stat1Value'), label: t('landing.stat1Label'), icon: Globe },
+            { value: t('landing.stat2Value'), label: t('landing.stat2Label'), icon: Zap },
+            { value: t('landing.stat3Value'), label: t('landing.stat3Label'), icon: Wallet },
+          ].map((stat, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.35 + i * 0.08 }}
+              className="flex flex-col items-center p-3.5 rounded-xl bg-white/8 border border-white/20"
+            >
+              <stat.icon className="w-3.5 h-3.5 text-accent/35 mb-1.5" />
+              <span className="text-lg sm:text-xl font-black mb-0.5 tracking-tight">{stat.value}</span>
+              <span className="text-[7px] font-bold uppercase tracking-[0.2em] text-white/15">{stat.label}</span>
+            </motion.div>
+          ))}
         </motion.div>
       </main>
 
-      {/* ── Network Metrics Grid ───────────────────────────────────── */}
-      <FadeUp>
-        <MetricsTicker stats={liveStats} />
-      </FadeUp>
-
-      {/* ── Feature Cards ────────────────────────────────────── */}
-      <section className="relative py-12 sm:py-16 px-5 sm:px-6">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-5">
-          {featureCards.map((card, idx) => (
-            <FadeUp key={idx} delay={idx * 0.1}>
-              <div
-                className="group p-10 rounded-3xl transition-all duration-500 cursor-default relative overflow-hidden"
-                style={{
-                  background: '#F9FAFB',
-                  border: '1px solid #E5E7EB',
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.transform = 'translateY(-12px)';
-                  e.currentTarget.style.borderColor = 'rgba(30,58,138,0.2)';
-                  e.currentTarget.style.boxShadow = '0 12px 40px -15px rgba(30,58,138,0.15)';
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.borderColor = '#E5E7EB';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
-              >
-                {/* Icon */}
-                <div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center mb-6"
-                  style={{ background: `${card.accent}15`, color: card.accent }}
-                >
-                  <card.icon className="w-6 h-6" />
-                </div>
-
-                <h3
-                  className="text-[28px] mb-2"
-                  style={{
-                    fontFamily: '"Playfair Display", serif',
-                    fontWeight: 500,
-                    letterSpacing: '-0.02em',
-                    color: '#111827',
-                  }}
-                >
-                  {card.title}
-                </h3>
-                <p
-                  className="text-sm leading-relaxed"
-                  style={{ fontFamily: '"Inter", sans-serif', color: '#4B5563', fontWeight: 400 }}
-                >
-                  {card.body}
-                </p>
-              </div>
-            </FadeUp>
-          ))}
-        </div>
-      </section>
-
       {/* ── How It Works ────────────────────────────────────── */}
-      <section className="relative py-12 px-5 sm:px-6">
+      <section className="relative py-12 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto">
-          <FadeUp>
-            <div className="text-center mb-10">
-              <div
-                className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-4"
-                style={{
-                  background: '#FFFFFF',
-                  border: '1px solid #E5E7EB',
-                }}
-              >
-                <ArrowRight className="w-2.5 h-2.5 text-[#EA580C]" />
-                <span className="label-mono text-gray-600">How It Works</span>
-              </div>
-              <h2
-                className="text-3xl sm:text-4xl mb-3 text-gray-900"
-                style={{
-                  fontFamily: '"Playfair Display", serif',
-                  fontWeight: 500,
-                  letterSpacing: '-0.03em',
-                }}
-              >
-                Three Steps to <span className="text-[#1E3A8A]">Verified Trust</span>
-              </h2>
-              <p className="max-w-lg mx-auto text-sm" style={{ color: '#4B5563', fontWeight: 400 }}>
-                From registration to reputation — your journey on the decentralized trust layer.
-              </p>
+          {/* Section Header — compact */}
+          <motion.div 
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-50px' }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-8"
+          >
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/[0.04] border border-white/[0.05] mb-3">
+              <ArrowRight className="w-2.5 h-2.5 text-accent" />
+              <span className="text-[9px] font-black uppercase tracking-[0.18em] text-white/35">{t('landing.howItWorks')}</span>
             </div>
-          </FadeUp>
+            <h2 className="text-2xl sm:text-3xl font-black tracking-tighter mb-2">
+              {t('landing.stepsTitleP1')}{' '}
+              <span className="bg-gradient-to-r from-accent via-purple-400 to-accent/50 bg-clip-text text-transparent">{t('landing.stepsTitleP2')}</span>
+            </h2>
+            <p className="text-white/18 max-w-lg mx-auto font-medium text-xs sm:text-sm">
+              {t('landing.stepsDesc')}
+            </p>
+          </motion.div>
 
+          {/* Step Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {steps.map((step, idx) => (
-              <FadeUp key={idx} delay={idx * 0.1}>
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-50px' }}
+                transition={{ duration: 0.4, delay: idx * 0.1 }}
+              >
                 <Link to={step.link} className="block group h-full">
-                  <div
-                    className="p-6 rounded-2xl relative overflow-hidden h-full transition-all duration-500"
-                    style={{
-                      background: '#FFFFFF',
-                      border: '1px solid #E5E7EB',
-                    }}
-                    onMouseEnter={e => {
-                      e.currentTarget.style.transform = 'translateY(-4px)';
-                      e.currentTarget.style.borderColor = 'rgba(30,58,138,0.3)';
-                    }}
-                    onMouseLeave={e => {
-                      e.currentTarget.style.transform = 'translateY(0)';
-                      e.currentTarget.style.borderColor = '#E5E7EB';
-                    }}
+                  <div 
+                    className="p-5 rounded-xl relative overflow-hidden h-full transition-all duration-300 hover:translate-y-[-2px] bg-white/8 border border-white/20"
                   >
+                    {/* Top accent line */}
+                    <div className={`absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r ${step.color.gradient} opacity-0 group-hover:opacity-100 transition-opacity`} />
+                    
                     {/* Step watermark */}
-                    <div className="absolute top-4 right-5">
-                      <span
-                        className="text-4xl font-bold"
-                        style={{
-                          fontFamily: '"Playfair Display", serif',
-                          color: 'rgba(30, 58, 138, 0.15)',
-                        }}
-                      >
-                        {step.step}
-                      </span>
+                    <div className="absolute top-4 right-4">
+                      <span className="text-3xl font-black text-white/[0.02] group-hover:text-accent/5 transition-colors">{step.step}</span>
                     </div>
 
-                    <div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center mb-4"
-                      style={{
-                        background: '#EFF6FF',
-                        border: '1px solid #DBEAFE',
-                        color: '#1E3A8A',
-                      }}
-                    >
+                    {/* Icon */}
+                    <div className={`w-10 h-10 rounded-lg ${step.color.bg} ${step.color.border} border ${step.color.text} flex items-center justify-center mb-4 transition-all group-hover:scale-110 group-hover:shadow-lg ${step.color.shadow}`}>
                       {step.icon}
                     </div>
 
-                    <h3
-                      className="text-lg mb-2 text-gray-900 group-hover:text-[#1E3A8A] transition-colors"
-                      style={{
-                        fontFamily: '"Playfair Display", serif',
-                        fontWeight: 500,
-                        letterSpacing: '-0.01em',
-                      }}
-                    >
-                      {step.title}
-                    </h3>
-                    <p className="text-xs leading-relaxed mb-4" style={{ color: '#6B7280', fontWeight: 400 }}>
-                      {step.description}
-                    </p>
+                    <h3 className="text-sm font-black mb-1.5 tracking-tight group-hover:text-accent transition-colors">{step.title}</h3>
+                    <p className="text-white/18 text-[11px] leading-relaxed font-medium mb-4">{step.description}</p>
 
-                    <div
-                      className="flex items-center gap-1.5 text-[9px] uppercase tracking-[0.15em] font-bold transition-colors text-gray-400 group-hover:text-[#1E3A8A]"
-                    >
-                      Get Started <ArrowRight className="w-2.5 h-2.5 group-hover:translate-x-1 transition-transform" />
+                    <div className="flex items-center gap-1.5 text-[8px] font-black uppercase tracking-[0.18em] text-white/8 group-hover:text-accent transition-colors">
+                      {t('landing.getStarted')} <ArrowRight className="w-2.5 h-2.5 group-hover:translate-x-0.5 transition-transform" />
                     </div>
                   </div>
                 </Link>
-              </FadeUp>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── Trust Signals / Built With ─────────────────────────── */}
-      <section className="relative py-12 sm:py-16 px-5 sm:px-6">
-        <div className="max-w-4xl mx-auto">
-          <FadeUp>
-            <div className="text-center mb-8">
-              <div
-                className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-4"
-                style={{
-                  background: '#FFFFFF',
-                  border: '1px solid #E5E7EB',
-                }}
-              >
-                <HandshakeIcon className="w-2.5 h-2.5 text-[#EA580C]" />
-                <span className="label-mono text-gray-600">Built With</span>
-              </div>
-              <h2
-                className="text-2xl sm:text-3xl mb-3 text-gray-900"
-                style={{
-                  fontFamily: '"Playfair Display", serif',
-                  fontWeight: 500,
-                  letterSpacing: '-0.03em',
-                }}
-              >
-                Powered by <span className="text-[#1E3A8A]">Trusted Infrastructure</span>
-              </h2>
-              <p className="max-w-md mx-auto text-sm" style={{ color: '#4B5563', fontWeight: 400 }}>
-                TrustChain is built on industry-leading Web3 infrastructure trusted by millions.
-              </p>
+      {/* ── Footer Trust Badges ──────────────────────────────── */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.2 }}
+        className="pb-8 flex items-center justify-center gap-4 text-white/10"
+      >
+        {[
+          { icon: Globe, text: t('landing.badge1') },
+          { icon: ShieldCheck, text: t('landing.badge2') },
+          { icon: Target, text: t('landing.badge3') },
+        ].map((badge, i) => (
+          <React.Fragment key={i}>
+            {i > 0 && <div className="w-0.5 h-0.5 rounded-full bg-white/6" />}
+            <div className="flex items-center gap-1 text-[8px] font-bold uppercase tracking-wider">
+              <badge.icon className="w-2.5 h-2.5" /> {badge.text}
             </div>
-          </FadeUp>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-            {[
-              {
-                name: 'Stellar',
-                desc: 'Blockchain Network',
-                icon: Globe,
-                accent: '#1E3A8A',
-                url: 'https://stellar.org',
-              },
-              {
-                name: 'Soroban',
-                desc: 'Smart Contracts',
-                icon: Blocks,
-                accent: '#EA580C',
-                url: 'https://soroban.stellar.org',
-              },
-              {
-                name: 'Freighter',
-                desc: 'Wallet Extension',
-                icon: Wallet,
-                accent: '#10B981',
-                url: 'https://freighter.app',
-              },
-              {
-                name: 'Horizon',
-                desc: 'API Gateway',
-                icon: Zap,
-                accent: '#6366F1',
-                url: 'https://developers.stellar.org/docs/data/horizon',
-              },
-            ].map((partner, idx) => (
-              <FadeUp key={idx} delay={idx * 0.08}>
-                <a
-                  href={partner.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group block p-5 sm:p-6 rounded-2xl text-center transition-all duration-500"
-                  style={{
-                    background: '#FFFFFF',
-                    border: '1px solid #E5E7EB',
-                  }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.transform = 'translateY(-4px)';
-                    e.currentTarget.style.borderColor = `${partner.accent}40`;
-                    e.currentTarget.style.boxShadow = `0 8px 25px -8px ${partner.accent}25`;
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.borderColor = '#E5E7EB';
-                    e.currentTarget.style.boxShadow = 'none';
-                  }}
-                >
-                  <div
-                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center mx-auto mb-3"
-                    style={{ background: `${partner.accent}10`, color: partner.accent }}
-                  >
-                    <partner.icon className="w-5 h-5 sm:w-6 sm:h-6" />
-                  </div>
-                  <h4
-                    className="text-sm font-semibold mb-0.5 text-gray-900 group-hover:text-[#1E3A8A] transition-colors flex items-center justify-center gap-1"
-                  >
-                    {partner.name}
-                    <ExternalLink className="w-2.5 h-2.5 opacity-0 group-hover:opacity-60 transition-opacity" />
-                  </h4>
-                  <p className="text-[10px] text-gray-500" style={{ fontFamily: 'monospace' }}>
-                    {partner.desc}
-                  </p>
-                </a>
-              </FadeUp>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Security & Trust Footer Bar ────────────────────────── */}
-      <FadeUp delay={0.1}>
-        <div
-          className="py-6 sm:py-8 mx-5 sm:mx-8 mb-8 rounded-2xl flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8"
-          style={{
-            background: '#F9FAFB',
-            border: '1px solid #E5E7EB',
-          }}
-        >
-          {[
-            { icon: Globe, text: 'Stellar Network', color: '#1E3A8A' },
-            { icon: Lock, text: 'Soulbound & Non-Transferable', color: '#EA580C' },
-            { icon: ShieldCheck, text: 'Zero-Fee Sponsored', color: '#10B981' },
-            { icon: Target, text: 'Testnet Live', color: '#6366F1' },
-          ].map((badge, i) => (
-            <div key={i} className="flex items-center gap-2 text-[10px] uppercase tracking-[0.15em] font-bold" style={{ color: '#6B7280' }}>
-              <badge.icon className="w-3.5 h-3.5" style={{ color: badge.color }} />
-              {badge.text}
-            </div>
-          ))}
-        </div>
-      </FadeUp>
+          </React.Fragment>
+        ))}
+      </motion.div>
     </div>
   );
 };

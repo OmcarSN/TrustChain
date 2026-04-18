@@ -6,9 +6,10 @@ import {
   Briefcase, MapPin, Hash, TrendingUp, Activity,
   ChevronRight, Zap, Users, Copy, Check, 
   Sparkles, ArrowUpRight, BarChart3, Target,
-  FileCheck, PenLine, Eye, Globe, Link2
+  FileCheck, PenLine, Eye, Globe, Link2, Inbox
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useWallet } from '../context/WalletContext';
 import { fetchWorkerCredential } from '../lib/stellar';
 import { calculateScore } from '../lib/reputation';
@@ -16,28 +17,25 @@ import { calculateScore } from '../lib/reputation';
 /* ── Quick Action Link ────────────────────────────────────────── */
 const QuickAction = ({ to, icon: Icon, label, sublabel, color }) => {
   const colorMap = {
-    accent:  { bg: '#EFF6FF', border: '#DBEAFE', iconColor: '#1E3A8A' },
-    amber:   { bg: '#FFF7ED', border: '#FFEDD5', iconColor: '#EA580C' },
-    blue:    { bg: '#F0F9FF', border: '#E0F2FE', iconColor: '#0284C7' },
-    emerald: { bg: '#ECFDF5', border: '#D1FAE5', iconColor: '#10B981' },
+    accent:  { bg: 'rgba(124,58,237,0.1)',  border: 'rgba(124,58,237,0.15)', text: 'text-accent' },
+    amber:   { bg: 'rgba(251,191,36,0.1)',   border: 'rgba(251,191,36,0.15)',  text: 'text-amber-400' },
+    blue:    { bg: 'rgba(96,165,250,0.1)',    border: 'rgba(96,165,250,0.15)',  text: 'text-blue-400' },
+    emerald: { bg: 'rgba(52,211,153,0.1)',    border: 'rgba(52,211,153,0.15)', text: 'text-emerald-400' },
   };
   const c = colorMap[color] || colorMap.accent;
   return (
-    <Link
-      to={to}
-      className="flex items-center gap-3 p-4 rounded-[14px] transition-all duration-300 group shadow-sm"
-      style={{ background: '#FFFFFF', border: '1px solid #E5E7EB' }}
-      onMouseEnter={e => { e.currentTarget.style.borderColor = '#1E3A8A'; e.currentTarget.style.background = '#F9FAFB'; }}
-      onMouseLeave={e => { e.currentTarget.style.borderColor = '#E5E7EB'; e.currentTarget.style.background = '#FFFFFF'; }}
-    >
-      <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{ background: c.bg, border: `1px solid ${c.border}` }}>
-        <Icon className="w-4 h-4" style={{ color: c.iconColor }} />
+    <Link to={to} className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.04] hover:border-white/10 hover:bg-white/[0.05] transition-all group">
+      <div 
+        className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+        style={{ background: c.bg, border: `1px solid ${c.border}` }}
+      >
+        <Icon className={`w-3.5 h-3.5 ${c.text}`} />
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-xs font-bold text-gray-900 transition-colors group-hover:text-[#1E3A8A]">{label}</p>
-        <p className="text-[10px] font-medium" style={{ color: '#6B7280' }}>{sublabel}</p>
+        <p className="text-xs font-bold text-white/80 group-hover:text-white transition-colors">{label}</p>
+        <p className="text-[9px] text-white/15 font-medium">{sublabel}</p>
       </div>
-      <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" style={{ color: '#1E3A8A', opacity: 0 }} />
+      <ArrowUpRight className="w-3.5 h-3.5 text-white/8 group-hover:text-accent group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
     </Link>
   );
 };
@@ -51,6 +49,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const [activeTab, setActiveTab] = useState('all');
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!walletAddress) { setLoading(false); return; }
@@ -58,6 +57,7 @@ const Dashboard = () => {
       setLoading(true);
       try {
         const cred = await fetchWorkerCredential(walletAddress);
+        // Merge with localStorage data to get the real registered name
         const localWorkerData = JSON.parse(localStorage.getItem(`trustchain_worker_${walletAddress}`) || 'null');
         if (localWorkerData) {
           cred.name = localWorkerData.name || localWorkerData.fullName || cred.name;
@@ -72,10 +72,19 @@ const Dashboard = () => {
         const rep = calculateScore(received);
         setReputation(rep);
       } catch {
+        // Even if on-chain fetch fails, try localStorage for credential data
         const localWorkerData = JSON.parse(localStorage.getItem(`trustchain_worker_${walletAddress}`) || 'null');
         if (localWorkerData) {
-          setCredential({ name: localWorkerData.name || localWorkerData.fullName || 'Worker', skill: localWorkerData.skill || localWorkerData.skillCategory || '—', city: localWorkerData.city || 'Unknown', experience: localWorkerData.experience || '—', bio: localWorkerData.bio || '' });
-        } else { setCredential(null); }
+          setCredential({
+            name: localWorkerData.name || localWorkerData.fullName || 'Worker',
+            skill: localWorkerData.skill || localWorkerData.skillCategory || '—',
+            city: localWorkerData.city || 'Unknown',
+            experience: localWorkerData.experience || '—',
+            bio: localWorkerData.bio || '',
+          });
+        } else {
+          setCredential(null);
+        }
       }
       const given = [];
       for (let i = 0; i < localStorage.length; i++) {
@@ -98,26 +107,26 @@ const Dashboard = () => {
   /* ── Not connected ─────────────────────────────────────────── */
   if (!isConnected) {
     return (
-      <div className="min-h-screen bg-background pt-[100px] flex items-center justify-center px-6 relative overflow-hidden text-gray-900">
+      <div className="min-h-screen bg-background pt-20 flex items-center justify-center px-6 relative overflow-hidden">
+        <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-accent/5 rounded-full blur-[150px] -z-10" />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
-          className="text-center max-w-md p-10 rounded-[20px] relative overflow-hidden shadow-lg"
-          style={{ background: '#FFFFFF', border: '1px solid #E5E7EB' }}
+          className="text-center max-w-md p-10 rounded-3xl relative overflow-hidden"
+          style={{
+            background: 'linear-gradient(145deg, rgba(124,58,237,0.08) 0%, rgba(255,255,255,0.03) 60%, rgba(124,58,237,0.04) 100%)',
+            border: '1px solid rgba(255,255,255,0.06)',
+          }}
         >
+          <div className="absolute -top-20 -right-20 w-48 h-48 bg-accent/10 rounded-full blur-[80px]" />
           <div className="relative z-10">
-            <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-5" style={{ background: '#EFF6FF', border: '1px solid #DBEAFE' }}>
-              <LayoutDashboard className="w-7 h-7 text-[#1E3A8A]" />
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-accent/20 to-purple-800/20 border border-accent/15 flex items-center justify-center mx-auto mb-5">
+              <LayoutDashboard className="w-7 h-7 text-accent" />
             </div>
-            <h2 className="text-3xl mb-2 text-gray-900" style={{ fontFamily: '"Playfair Display", serif', fontWeight: 500 }}>Command Center</h2>
-            <p className="mb-8 text-sm" style={{ color: '#6B7280', fontWeight: 400 }}>Connect wallet to access your dashboard.</p>
-            <button onClick={connect} className="w-full">
-              <div className="shiny-border">
-                <div className="shiny-border-inner w-full py-4 relative z-20 font-bold uppercase tracking-[0.2em] text-[10px] text-white flex items-center justify-center gap-2.5">
-                  <Wallet className="w-4 h-4" /> Connect Wallet
-                </div>
-              </div>
+            <h2 className="text-2xl font-black mb-2 tracking-tight">{t('dashboard.commandCenter')}</h2>
+            <p className="text-white/30 mb-6 text-sm font-medium">{t('dashboard.connectPrompt')}</p>
+            <button onClick={connect} className="group w-full py-4 bg-gradient-to-r from-accent to-purple-700 text-white rounded-2xl font-black uppercase tracking-[0.2em] text-[10px] transition-all flex items-center justify-center gap-2.5 shadow-xl shadow-accent/25 active:scale-[0.98]">
+              <Wallet className="w-4 h-4" /> {t('dashboard.connectBtn')}
             </button>
           </div>
         </motion.div>
@@ -133,137 +142,292 @@ const Dashboard = () => {
   const filteredEvents = activeTab === 'all' ? allEvents : allEvents.filter(e => e.type === activeTab);
 
   return (
-    <div className="min-h-screen bg-background pt-[100px] pb-6 px-4 sm:px-6 relative overflow-hidden text-gray-900">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-background pt-20 pb-6 px-4 sm:px-6 relative overflow-hidden text-white">
+      {/* Background */}
+      <div className="absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute top-10 left-1/3 w-[700px] h-[400px] bg-accent/5 rounded-full blur-[160px]" />
+        <div className="absolute bottom-20 right-10 w-[350px] h-[350px] bg-purple-800/5 rounded-full blur-[120px]" />
+        <div className="absolute inset-0 opacity-[0.012]"
+          style={{
+            backgroundImage: 'linear-gradient(rgba(124,58,237,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(124,58,237,0.5) 1px, transparent 1px)',
+            backgroundSize: '70px 70px',
+          }}
+        />
+      </div>
 
-        {/* ── Welcome Banner ──────────────────────────────────── */}
+      <div className="max-w-7xl mx-auto">
+        {/* ── Compact Header Bar ──────────────────────────────── */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
-          className="mb-4 p-5 sm:p-6 rounded-[20px] shadow-sm"
-          style={{ background: '#FFFFFF', border: '1px solid #E5E7EB' }}
+          className="mb-4 p-4 sm:p-5 rounded-2xl relative overflow-hidden"
+          style={{
+            background: 'linear-gradient(135deg, rgba(124,58,237,0.1) 0%, rgba(15,15,25,0.7) 50%, rgba(99,40,210,0.06) 100%)',
+            border: '1px solid rgba(124,58,237,0.12)',
+          }}
         >
-          <div className="flex items-center justify-between">
+          <div className="absolute -top-16 -right-16 w-40 h-40 bg-accent/12 rounded-full blur-[60px]" />
+          
+          <div className="flex items-center justify-between relative z-10">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-[#EFF6FF] border border-[#DBEAFE]">
-                <LayoutDashboard className="w-5 h-5 text-[#1E3A8A]" />
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-accent to-purple-800 flex items-center justify-center shadow-lg shadow-accent/20">
+                <LayoutDashboard className="w-4.5 h-4.5 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl sm:text-[32px] text-gray-900" style={{ fontFamily: '"Playfair Display", serif', fontWeight: 400, letterSpacing: '-0.02em' }}>
-                  Welcome Back
+                <h1 className="text-lg sm:text-xl font-black tracking-tight leading-tight">
+                  {t('dashboard.welcome')}{credential && credential.name && credential.name !== 'Worker' ? <span className="bg-gradient-to-r from-accent to-purple-400 bg-clip-text text-transparent">, {credential.name.split(' ')[0]}</span> : ''}
                 </h1>
-                <p className="text-sm font-medium" style={{ color: '#6B7280' }}>Your on-chain identity hub</p>
+                <p className="text-white/25 text-[10px] font-semibold hidden sm:block">{t('dashboard.identityHub')}</p>
               </div>
             </div>
 
             {/* Wallet Badge */}
-            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#ECFDF5] border border-[#D1FAE5]">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#10B981]" style={{ animation: 'pulse-dot 2s infinite' }} />
-              <span className="font-mono text-[11px] font-bold text-[#10B981]">{truncAddr(walletAddress)}</span>
-              <button onClick={copyAddress} className="transition-colors text-[#10B981] opacity-70 hover:opacity-100">
-                {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+            <div className="flex items-center gap-2 bg-white/[0.04] border border-white/[0.06] px-3 py-1.5 rounded-lg">
+              <div className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.5)]" />
+              <span className="font-mono text-[10px] text-white/40">{truncAddr(walletAddress)}</span>
+              <button onClick={copyAddress} className="text-white/15 hover:text-accent transition-colors">
+                {copied ? <Check className="w-3 h-3 text-green-400" /> : <Copy className="w-3 h-3" />}
               </button>
-              <a href={`https://stellar.expert/explorer/testnet/address/${walletAddress}`} target="_blank" rel="noopener noreferrer" className="transition-colors text-[#10B981] opacity-70 hover:opacity-100">
+              <a href={`https://stellar.expert/explorer/testnet/address/${walletAddress}`} target="_blank" rel="noopener noreferrer" className="text-white/15 hover:text-accent transition-colors">
                 <ExternalLink className="w-3 h-3" />
               </a>
             </div>
           </div>
         </motion.div>
 
-        {/* ── Stats Row (4 cards) ──────────────────────────────── */}
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05, ease: [0.23, 1, 0.32, 1] }} className="grid grid-cols-4 gap-3 mb-4">
+        {/* ── Stats Strip ─────────────────────────────────────── */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05 }}
+          className="grid grid-cols-4 gap-3 mb-4"
+        >
           {[
-            { icon: ShieldCheck, label: 'Credential', value: credential?.skill || '—', badge: credential ? 'Active' : null, accent: '#1E3A8A', badgeBg: '#ECFDF5', badgeBorder: '#D1FAE5', badgeColor: '#10B981' },
-            { icon: Star, label: 'Avg Rating', value: reputation?.average || '0.0', suffix: '/ 5', accent: '#EA580C' },
-            { icon: Award, label: 'Received', value: endorsementsReceived.length, accent: '#10B981' },
-            { icon: UserCheck, label: 'Given', value: endorsementsGiven.length, accent: '#0284C7' },
-          ].map((stat, i) => (
-            <motion.div
-              key={stat.label}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.05 + i * 0.05, ease: [0.23, 1, 0.32, 1] }}
-              className="p-5 rounded-[20px] relative overflow-hidden cursor-default shadow-sm"
-              style={{ background: '#FFFFFF', border: '1px solid #E5E7EB' }}
-            >
-              <div className="flex items-center justify-between mb-3">
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-sm" style={{ background: `${stat.accent}15`, border: `1px solid ${stat.accent}30` }}>
-                  <stat.icon className="w-4.5 h-4.5" style={{ color: stat.accent }} />
+            { 
+              icon: ShieldCheck, label: t('dashboard.credential'), 
+              value: credential?.skill || '—', 
+              badge: credential ? 'Active' : null,
+              color: 'accent',
+              glow: 'rgba(124,58,237,0.08)',
+              badgeClass: 'bg-green-500/10 text-green-400 border-green-500/15',
+            },
+            { 
+              icon: Star, label: t('dashboard.avgRating'), 
+              value: reputation?.average || '0.0', suffix: '/ 5',
+              color: 'amber',
+              glow: 'rgba(251,191,36,0.06)',
+            },
+            { 
+              icon: Award, label: t('dashboard.received'), 
+              value: endorsementsReceived.length,
+              color: 'blue',
+              glow: 'rgba(96,165,250,0.06)',
+            },
+            { 
+              icon: UserCheck, label: t('dashboard.given'), 
+              value: endorsementsGiven.length,
+              color: 'emerald',
+              glow: 'rgba(52,211,153,0.06)',
+            },
+          ].map((stat, i) => {
+            const iconColors = {
+              accent: 'text-accent', amber: 'text-amber-400',
+              blue: 'text-blue-400', emerald: 'text-emerald-400',
+            };
+            const bgColors = {
+              accent: 'rgba(124,58,237,0.12)', amber: 'rgba(251,191,36,0.12)',
+              blue: 'rgba(96,165,250,0.12)', emerald: 'rgba(52,211,153,0.12)',
+            };
+            const borderColors = {
+              accent: 'rgba(124,58,237,0.15)', amber: 'rgba(251,191,36,0.15)',
+              blue: 'rgba(96,165,250,0.15)', emerald: 'rgba(52,211,153,0.15)',
+            };
+            return (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.05 + i * 0.05 }}
+                className="p-4 rounded-xl relative overflow-hidden group hover:translate-y-[-2px] transition-transform cursor-default"
+                style={{
+                  background: `linear-gradient(145deg, ${stat.glow} 0%, rgba(255,255,255,0.025) 100%)`,
+                  border: '1px solid rgba(255,255,255,0.05)',
+                }}
+              >
+                <div className="absolute -top-8 -right-8 w-20 h-20 rounded-full blur-[40px] opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: stat.glow }} />
+                <div className="relative z-10 flex items-center justify-between mb-2">
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: bgColors[stat.color], border: `1px solid ${borderColors[stat.color]}` }}>
+                    <stat.icon className={`w-4 h-4 ${iconColors[stat.color]}`} />
+                  </div>
+                  {stat.badge && (
+                    <span className={`px-2 py-0.5 rounded text-[7px] font-black uppercase tracking-widest border ${stat.badgeClass}`}>{stat.badge}</span>
+                  )}
                 </div>
-                {stat.badge && (
-                  <span className="px-2 py-0.5 rounded-full text-[8px] font-bold uppercase tracking-wider" style={{ background: stat.badgeBg, border: `1px solid ${stat.badgeBorder}`, color: stat.badgeColor }}>
-                    {stat.badge}
-                  </span>
-                )}
-              </div>
-              <p className="label-mono mb-1 font-bold text-gray-500">{stat.label}</p>
-              <div className="flex items-baseline gap-1.5">
-                {stat.label === 'Credential' ? (
-                  <span className="text-[28px] text-gray-900" style={{ fontFamily: '"Playfair Display", serif', fontWeight: 500 }}>{stat.value}</span>
-                ) : (
-                  <span className="text-2xl font-bold tracking-tight text-gray-900">{stat.value}</span>
-                )}
-                {stat.suffix && <span className="text-xs font-bold" style={{ color: '#6B7280' }}>{stat.suffix}</span>}
-              </div>
-            </motion.div>
-          ))}
+                <p className="text-[8px] font-black uppercase tracking-[0.18em] text-white/20 mb-0.5">{stat.label}</p>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-xl font-black tracking-tight">{stat.value}</span>
+                  {stat.suffix && <span className="text-[10px] text-white/12 font-bold">{stat.suffix}</span>}
+                </div>
+              </motion.div>
+            );
+          })}
         </motion.div>
 
         {/* ── Main Content: 3-col ─────────────────────────────── */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
           
-          {/* ── Left: Quick Actions ───────────────────────────── */}
+          {/* ── Left: Quick Actions + Credential ─────────────── */}
           <div className="lg:col-span-3 space-y-4">
-            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, ease: [0.23, 1, 0.32, 1] }}
-              className="p-5 rounded-[20px] shadow-sm"
-              style={{ background: '#FFFFFF', border: '1px solid #E5E7EB' }}
+            
+            {/* Quick Actions */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15 }}
+              className="p-4 rounded-xl"
+              style={{
+                background: 'rgba(255,255,255,0.03)',
+                border: '1px solid rgba(255,255,255,0.05)',
+              }}
             >
-              <div className="flex items-center gap-2 mb-4">
-                <Zap className="w-3.5 h-3.5 text-[#1E3A8A]" />
-                <h3 className="text-sm font-bold text-gray-900" style={{ fontFamily: '"Playfair Display", serif', fontWeight: 500 }}>Quick Actions</h3>
+              <div className="flex items-center gap-1.5 mb-3">
+                <Zap className="w-3.5 h-3.5 text-accent" />
+                <h3 className="text-[10px] font-black uppercase tracking-wider">{t('dashboard.quickActions')}</h3>
               </div>
               <div className="space-y-1.5">
-                <QuickAction to="/worker" icon={credential ? FileCheck : ShieldCheck} label={credential ? 'Update Credential' : 'Mint Credential'} sublabel="Worker Portal" color="accent" />
-                <QuickAction to="/discover" icon={Users} label="Find Workers" sublabel="Browse & Hire" color="blue" />
-                <QuickAction to="/endorse" icon={Award} label="Endorse Worker" sublabel="Write Review" color="amber" />
-                <QuickAction to="/verify" icon={Search} label="Verify Worker" sublabel="Audit Reputation" color="emerald" />
+                <QuickAction to="/worker" icon={credential ? FileCheck : ShieldCheck} label={credential ? t('dashboard.updateCred') : t('dashboard.mintCred')} sublabel={t('dashboard.workerPortal')} color="accent" />
+                <QuickAction to="/discover" icon={Users} label={t('dashboard.findWorkers')} sublabel={t('dashboard.browseHire')} color="blue" />
+                <QuickAction to="/endorse" icon={Award} label={t('dashboard.endorseWorker')} sublabel={t('dashboard.writeReview')} color="amber" />
+                <QuickAction to="/verify" icon={Search} label={t('dashboard.verifyWorker')} sublabel={t('dashboard.auditReputation')} color="emerald" />
                 {credential && (
-                  <QuickAction to={`/profile/${walletAddress}`} icon={Eye} label="My Profile" sublabel="Public Page" color="accent" />
+                  <QuickAction to={`/profile/${walletAddress}`} icon={Eye} label={t('dashboard.myProfile')} sublabel={t('dashboard.publicPage')} color="accent" />
                 )}
               </div>
             </motion.div>
+
+            {/* Credential Card */}
+            {credential && (
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="rounded-xl relative overflow-hidden"
+                style={{
+                  background: 'linear-gradient(145deg, rgba(124,58,237,0.08) 0%, rgba(15,15,25,0.5) 100%)',
+                  border: '1px solid rgba(124,58,237,0.1)',
+                }}
+              >
+                <div className="h-[2px] bg-gradient-to-r from-accent via-purple-500 to-accent/30" />
+                <motion.div
+                  className="absolute top-0 left-0 right-0 h-[1px]"
+                  style={{ background: 'linear-gradient(90deg, transparent, rgba(124,58,237,0.4), transparent)' }}
+                  animate={{ x: ['-100%', '100%'] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
+                />
+                <div className="p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <p className="text-[8px] font-black uppercase tracking-[0.18em] text-accent/60">{t('dashboard.myCredential')}</p>
+                    <div className="flex items-center gap-1 px-1.5 py-0.5 bg-green-500/10 border border-green-500/12 rounded">
+                      <div className="w-1 h-1 rounded-full bg-green-500 animate-pulse" />
+                      <span className="text-[7px] font-black uppercase text-green-400">{t('dashboard.onChain')}</span>
+                    </div>
+                  </div>
+                  <h4 className="text-sm font-black mb-1.5">{credential.name}</h4>
+                  <div className="flex items-center gap-2.5 mb-2">
+                    <span className="flex items-center gap-1 text-white/30 text-[10px] font-semibold"><Briefcase className="w-2.5 h-2.5" /> {credential.skill}</span>
+                    <span className="flex items-center gap-1 text-white/30 text-[10px] font-semibold"><MapPin className="w-2.5 h-2.5" /> {credential.city}</span>
+                  </div>
+                  {credential.bio && (
+                    <p className="text-[10px] text-white/20 italic leading-relaxed border-t border-white/[0.04] pt-2 mt-2 line-clamp-2">
+                      "{credential.bio}"
+                    </p>
+                  )}
+                </div>
+              </motion.div>
+            )}
+
+            {/* Mini Reputation Card */}
+            {reputation && endorsementsReceived.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 }}
+                className="p-4 rounded-xl"
+                style={{
+                  background: 'linear-gradient(145deg, rgba(251,191,36,0.04) 0%, rgba(255,255,255,0.02) 100%)',
+                  border: '1px solid rgba(251,191,36,0.06)',
+                }}
+              >
+                <div className="flex items-center gap-2 mb-3">
+                  <BarChart3 className="w-3.5 h-3.5 text-amber-400/50" />
+                  <h3 className="text-[10px] font-black uppercase tracking-wider text-white/40">{t('dashboard.reputation')}</h3>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="relative w-12 h-12 shrink-0">
+                    <svg className="w-12 h-12 -rotate-90" viewBox="0 0 48 48">
+                      <circle cx="24" cy="24" r="20" fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="3" />
+                      <circle cx="24" cy="24" r="20" fill="none" stroke="url(#scoreGradD)" strokeWidth="3" strokeLinecap="round"
+                        strokeDasharray={`${(reputation.average / 5) * 125.6} 125.6`}
+                      />
+                      <defs>
+                        <linearGradient id="scoreGradD" x1="0%" y1="0%" x2="100%" y2="0%">
+                          <stop offset="0%" stopColor="#fbbf24" />
+                          <stop offset="100%" stopColor="#7c3aed" />
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="text-sm font-black">{reputation.average}</span>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex gap-0.5 mb-1">
+                      {[1,2,3,4,5].map(s => (
+                        <Star key={s} className={`w-3 h-3 ${s <= Math.round(reputation.average) ? 'text-amber-400 fill-amber-400' : 'text-white/6'}`} />
+                      ))}
+                    </div>
+                    <p className="text-[9px] text-white/20 font-semibold">
+                      {endorsementsReceived.length} {endorsementsReceived.length !== 1 ? t('dashboard.reviews') : t('dashboard.review')}
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            )}
           </div>
 
           {/* ── Right: Activity Feed ─────────────────────────── */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, ease: [0.23, 1, 0.32, 1] }}
-            className="lg:col-span-9 rounded-[20px] shadow-sm"
-            style={{ background: '#FFFFFF', border: '1px solid #E5E7EB', borderLeft: '3px solid #1E3A8A' }}
+            transition={{ delay: 0.2 }}
+            className="lg:col-span-9 rounded-xl"
+            style={{
+              background: 'rgba(255,255,255,0.03)',
+              border: '1px solid rgba(255,255,255,0.05)',
+            }}
           >
             <div className="p-5">
               {/* Header + Tabs */}
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2.5">
-                  <h3 className="text-gray-900" style={{ fontFamily: '"Playfair Display", serif', fontWeight: 500, fontSize: '18px' }}>Activity Feed</h3>
-                  <span className="label-mono px-2 py-0.5 rounded-full text-gray-500 font-bold" style={{ background: '#F9FAFB', border: '1px solid #E5E7EB' }}>{allEvents.length}</span>
+                  <div className="w-1 h-5 bg-gradient-to-b from-accent to-purple-600 rounded-full" />
+                  <h3 className="text-sm font-black tracking-tight">{t('dashboard.activityFeed')}</h3>
+                  <span className="text-[8px] font-bold text-white/12 bg-white/[0.04] px-1.5 py-0.5 rounded">{allEvents.length}</span>
                 </div>
-                <div className="flex gap-1 p-0.5 rounded-full" style={{ background: '#F9FAFB', border: '1px solid #E5E7EB' }}>
+                <div className="flex gap-1 p-0.5 rounded-lg bg-white/[0.03] border border-white/[0.04]">
                   {[
-                    { key: 'all', label: 'All' },
-                    { key: 'received', label: 'Received' },
-                    { key: 'given', label: 'Given' },
+                    { key: 'all', label: t('dashboard.tabAll') },
+                    { key: 'received', label: t('dashboard.tabReceived') },
+                    { key: 'given', label: t('dashboard.tabGiven') },
                   ].map(tab => (
                     <button
                       key={tab.key}
                       onClick={() => setActiveTab(tab.key)}
-                      className="px-3 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-wider transition-all duration-300"
-                      style={{
-                        background: activeTab === tab.key ? '#EFF6FF' : 'transparent',
-                        color: activeTab === tab.key ? '#1E3A8A' : '#6B7280',
-                      }}
+                      className={`px-2.5 py-1 rounded text-[9px] font-bold uppercase tracking-wider transition-all ${
+                        activeTab === tab.key
+                          ? 'bg-accent/15 text-accent border border-accent/20'
+                          : 'text-white/20 hover:text-white/35 border border-transparent'
+                      }`}
                     >
                       {tab.label}
                     </button>
@@ -275,84 +439,66 @@ const Dashboard = () => {
               {loading ? (
                 <div className="space-y-2">
                   {[1,2,3].map(i => (
-                    <div key={i} className="p-4 rounded-xl animate-pulse h-16" style={{ background: '#F9FAFB', border: '1px solid #E5E7EB' }} />
+                    <div key={i} className="p-4 rounded-lg bg-white/[0.02] border border-white/[0.03] animate-pulse h-16" />
                   ))}
                 </div>
               ) : filteredEvents.length === 0 ? (
-                <div className="text-center py-12 rounded-xl border border-dashed border-gray-200 bg-gray-50">
-                  <div className="w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-4 bg-white shadow-sm border border-gray-200">
-                    <Activity className="w-6 h-6 text-gray-400" />
+                <div className="text-center py-12">
+                  <div className="w-14 h-14 rounded-xl bg-white/[0.03] border border-white/[0.04] flex items-center justify-center mx-auto mb-4">
+                    <Inbox className="w-6 h-6 text-white/10" />
                   </div>
-                  <p className="font-bold uppercase tracking-[0.15em] text-[10px] mb-1.5 text-gray-600">No Activity Yet</p>
-                  <p className="text-xs max-w-xs mx-auto mb-5 font-medium text-gray-500">
-                    Start by minting a credential or endorsing a worker
+                  <p className="text-white/20 font-black uppercase tracking-[0.18em] text-[10px] mb-1.5">{t('dashboard.noActivity')}</p>
+                  <p className="text-white/30 text-[11px] font-medium max-w-xs mx-auto">
+                    {t('dashboard.noActivitySub')}
                   </p>
-                  <div className="flex justify-center gap-2.5">
-                    <Link to="/worker">
-                      <div className="shiny-border">
-                        <div className="shiny-border-inner px-4 py-2 text-[9px] font-bold uppercase tracking-wider text-white">Mint Credential</div>
-                      </div>
-                    </Link>
-                    <Link to="/endorse" className="px-4 py-2 rounded-full text-[9px] font-bold uppercase tracking-wider transition-all hover:bg-gray-100"
-                      style={{ background: '#F9FAFB', border: '1px solid #E5E7EB', color: '#4B5563' }}>
-                      Endorse Worker
-                    </Link>
-                  </div>
                 </div>
               ) : (
-                <div className="space-y-2 max-h-[420px] overflow-y-auto pr-1" style={{ scrollbarWidth: 'thin', scrollbarColor: '#E5E7EB transparent' }}>
+                <div className="space-y-2 max-h-[420px] overflow-y-auto pr-1" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.05) transparent' }}>
                   <AnimatePresence>
                     {filteredEvents.slice(0, 20).map((event, idx) => (
                       <motion.div
                         key={`${event.txHash}-${idx}`}
                         initial={{ opacity: 0, x: 8 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: idx * 0.03, ease: [0.23, 1, 0.32, 1] }}
-                        className="group p-4 rounded-xl transition-all duration-300 shadow-sm"
-                        style={{ background: '#FFFFFF', border: '1px solid #E5E7EB' }}
-                        onMouseEnter={e => { e.currentTarget.style.borderColor = '#1E3A8A'; e.currentTarget.style.background = '#F9FAFB'; }}
-                        onMouseLeave={e => { e.currentTarget.style.borderColor = '#E5E7EB'; e.currentTarget.style.background = '#FFFFFF'; }}
+                        transition={{ delay: idx * 0.03 }}
+                        className="group p-3.5 rounded-lg bg-white/[0.02] border border-white/[0.04] hover:border-white/[0.08] hover:bg-white/[0.04] transition-all"
                       >
                         <div className="flex items-start gap-3">
-                          <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{
-                            background: event.type === 'received' ? '#F0F9FF' : '#EFF6FF',
-                            border: `1px solid ${event.type === 'received' ? '#E0F2FE' : '#DBEAFE'}`,
-                          }}>
-                            {event.type === 'received'
-                              ? <Award className="w-4 h-4 text-[#0284C7]" />
-                              : <UserCheck className="w-4 h-4 text-[#1E3A8A]" />
+                          <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
+                            event.type === 'received' 
+                              ? 'bg-blue-400/10 border border-blue-400/12' 
+                              : 'bg-emerald-400/10 border border-emerald-400/12'
+                          }`}>
+                            {event.type === 'received' 
+                              ? <Award className="w-3.5 h-3.5 text-blue-400" />
+                              : <UserCheck className="w-3.5 h-3.5 text-emerald-400" />
                             }
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between mb-1">
                               <div className="flex items-center gap-2">
-                                <p className="text-xs font-bold text-gray-900 group-hover:text-[#1E3A8A] transition-colors">
-                                  {event.type === 'received' ? 'Endorsement Received' : 'Endorsement Given'}
+                                <p className="text-xs font-bold">
+                                  {event.type === 'received' ? t('dashboard.endorsementReceived') : t('dashboard.endorsementGiven')}
                                 </p>
-                                <span className="px-1.5 py-0.5 rounded-full text-[7px] font-bold uppercase" style={{
-                                  background: event.type === 'received' ? '#F0F9FF' : '#EFF6FF',
-                                  color: event.type === 'received' ? '#0284C7' : '#1E3A8A',
-                                  border: `1px solid ${event.type === 'received' ? '#E0F2FE' : '#DBEAFE'}`,
-                                }}>{event.jobType}</span>
+                                <span className={`px-1.5 py-0.5 rounded text-[7px] font-bold uppercase ${
+                                  event.type === 'received' ? 'bg-blue-400/10 text-blue-400' : 'bg-emerald-400/10 text-emerald-400'
+                                }`}>{event.jobType}</span>
                               </div>
                               <div className="flex gap-0.5 shrink-0">
                                 {[1,2,3,4,5].map(s => (
-                                  <Star key={s} className="w-2.5 h-2.5" style={{ color: s <= event.rating ? '#FBBF24' : '#E5E7EB', fill: s <= event.rating ? '#FBBF24' : 'none' }} />
+                                  <Star key={s} className={`w-2.5 h-2.5 ${s <= event.rating ? 'text-amber-400 fill-amber-400' : 'text-white/5'}`} />
                                 ))}
                               </div>
                             </div>
-                            <p className="text-[10px] truncate mb-1.5 font-medium leading-relaxed" style={{ color: '#4B5563', fontStyle: 'italic' }}>"{event.feedback}"</p>
+                            <p className="text-[10px] text-white/25 truncate mb-1.5">"{event.feedback}"</p>
                             <div className="flex items-center gap-3">
-                              <span className="text-[9px] font-bold flex items-center gap-1" style={{ color: '#6B7280' }}>
+                              <span className="text-[8px] font-semibold text-white/12 flex items-center gap-1">
                                 <Clock className="w-2.5 h-2.5" />
                                 {new Date(event.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                               </span>
                               {event.txHash && (
                                 <a href={`https://stellar.expert/explorer/testnet/tx/${event.txHash}`} target="_blank" rel="noopener noreferrer"
-                                  className="text-[9px] font-bold font-mono flex items-center gap-1 transition-colors"
-                                  style={{ color: '#1E3A8A' }}
-                                  onMouseEnter={e => e.currentTarget.style.color = '#EA580C'}
-                                  onMouseLeave={e => e.currentTarget.style.color = '#1E3A8A'}
+                                  className="text-[8px] font-mono text-white/8 hover:text-accent transition-colors flex items-center gap-1"
                                 >
                                   <Hash className="w-2 h-2" /> {event.txHash.slice(0,8)}…
                                 </a>
@@ -370,16 +516,21 @@ const Dashboard = () => {
         </div>
 
         {/* ── Footer Badges ──────────────────────────────────── */}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="mt-6 flex items-center justify-center gap-5" style={{ color: '#6B7280' }}>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className="mt-5 flex items-center justify-center gap-4 text-white/10"
+        >
           {[
-            { icon: Globe, text: 'Stellar Network' },
-            { icon: ShieldCheck, text: 'On-Chain Data' },
-            { icon: Target, text: 'Live Testnet' },
+            { icon: Globe, text: t('dashboard.badge1') },
+            { icon: ShieldCheck, text: t('dashboard.badge2') },
+            { icon: Target, text: t('dashboard.badge3') },
           ].map((badge, i) => (
             <React.Fragment key={i}>
-              {i > 0 && <div className="w-0.5 h-0.5 rounded-full" style={{ background: '#E5E7EB' }} />}
-              <div className="flex items-center gap-1.5 text-[9px] uppercase tracking-wider font-bold">
-                <badge.icon className="w-3 h-3" /> {badge.text}
+              {i > 0 && <div className="w-0.5 h-0.5 rounded-full bg-white/6" />}
+              <div className="flex items-center gap-1 text-[8px] font-bold uppercase tracking-wider">
+                <badge.icon className="w-2.5 h-2.5" /> {badge.text}
               </div>
             </React.Fragment>
           ))}
