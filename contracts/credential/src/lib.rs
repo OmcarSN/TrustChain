@@ -19,6 +19,7 @@ pub enum ContractError {
     NoProposedAdmin = 8,
     NotProposedAdmin = 9,
     CredentialRevoked = 10,
+    ContractPaused = 11, // NEW: Circuit breaker pattern
 }
 
 // ─── Storage Keys ──────────────────────────────────────────────
@@ -33,6 +34,7 @@ pub enum DataKey {
     ActiveCount,                 // u32 — current active (non-revoked, non-expired)
     Initialized,                 // bool — initialization guard
     VerificationLevel(Address),  // u32 — verification tier (0-3)
+    Paused,                      // bool — global emergency pause (circuit breaker)
 }
 
 // ─── Verification Levels ───────────────────────────────────────
@@ -101,6 +103,7 @@ impl CredentialContract {
         env.storage().persistent().set(&DataKey::Initialized, &true);
         env.storage().persistent().set(&DataKey::CredentialCount, &0u32);
         env.storage().persistent().set(&DataKey::ActiveCount, &0u32);
+        env.storage().persistent().set(&DataKey::Paused, &false); // Starts unpaused
 
         env.events().publish((TOPIC_INIT,), admin);
 
@@ -123,6 +126,11 @@ impl CredentialContract {
         exp: u32,
         bio: String,
     ) -> Result<(), ContractError> {
+        // Enforce Circuit Breaker (Contract Pause)
+        if env.storage().persistent().get(&DataKey::Paused).unwrap_or(false) {
+            return Err(ContractError::ContractPaused);
+        }
+
         worker.require_auth();
 
         // Input validation — enforce maximum field lengths
@@ -196,6 +204,11 @@ impl CredentialContract {
         exp: u32,
         bio: String,
     ) -> Result<(), ContractError> {
+        // Enforce Circuit Breaker
+        if env.storage().persistent().get(&DataKey::Paused).unwrap_or(false) {
+            return Err(ContractError::ContractPaused);
+        }
+
         worker.require_auth();
 
         // Input validation
@@ -245,6 +258,11 @@ impl CredentialContract {
     /// Worker can renew their credential before or after expiry.
     /// Extends validity by another year from current time.
     pub fn renew_credential(env: Env, worker: Address) -> Result<(), ContractError> {
+        // Enforce Circuit Breaker
+        if env.storage().persistent().get(&DataKey::Paused).unwrap_or(false) {
+            return Err(ContractError::ContractPaused);
+        }
+
         worker.require_auth();
 
         let mut data: WorkerData = env.storage().persistent()
@@ -450,7 +468,38 @@ impl CredentialContract {
     }
 
     // ══════════════════════════════════════════════════════════════
-    // 9. STORAGE TTL MANAGEMENT
+    // 9. CIRCUIT BREAKER (EMERGENCY PAUSE)
+    // ══════════════════════════════════════════════════════════════
+
+    /// Emergency pause for the entire contract system in case of active attack.
+    pub fn pause_contract(env: Env) -> Result<(), ContractError> {
+        let admin: Address = env.storage().persistent()
+            .get(&DataKey::Admin)
+            .ok_or(ContractError::Unauthorized)?;
+        admin.require_auth();
+
+        env.storage().persistent().set(&DataKey::Paused, &true);
+        Ok(())
+    }
+
+    /// Resume the contract after an emergency.
+    pub fn resume_contract(env: Env) -> Result<(), ContractError> {
+        let admin: Address = env.storage().persistent()
+            .get(&DataKey::Admin)
+            .ok_or(ContractError::Unauthorized)?;
+        admin.require_auth();
+
+        env.storage().persistent().set(&DataKey::Paused, &false);
+        Ok(())
+    }
+
+    /// Check if contract is currently paused
+    pub fn is_paused(env: Env) -> bool {
+        env.storage().persistent().get(&DataKey::Paused).unwrap_or(false)
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    // 10. STORAGE TTL MANAGEMENT
     // ══════════════════════════════════════════════════════════════
 
     /// Extend the TTL of a worker's credential storage.

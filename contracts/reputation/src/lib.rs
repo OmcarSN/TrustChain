@@ -19,6 +19,7 @@ pub enum ReputationError {
     InvalidInput = 8,
     AlreadyInitialized = 9,
     EndorsementNotFound = 10,
+    ContractPaused = 11, // NEW: Circuit breaker pattern
 }
 
 // ─── Storage Keys ──────────────────────────────────────────────
@@ -34,6 +35,7 @@ pub enum DataKey {
     TrustTier(Address),              // u32 — computed trust tier
     Disputes(Address),               // Vec<Dispute> — per-worker disputes
     ActiveDisputeCount,              // u32 — global pending disputes
+    Paused,                          // bool — global emergency pause (circuit breaker)
 }
 
 // ─── Trust Tier Constants ──────────────────────────────────────
@@ -112,6 +114,7 @@ impl ReputationContract {
         env.storage().persistent().set(&DataKey::Initialized, &true);
         env.storage().persistent().set(&DataKey::TotalEndorsements, &0u32);
         env.storage().persistent().set(&DataKey::ActiveDisputeCount, &0u32);
+        env.storage().persistent().set(&DataKey::Paused, &false); // Starts unpaused
 
         env.events().publish((TOPIC_INIT,), admin);
 
@@ -132,6 +135,11 @@ impl ReputationContract {
         job_type: String,
         feedback: String,
     ) -> Result<(), ReputationError> {
+        // Enforce Circuit Breaker (Contract Pause)
+        if env.storage().persistent().get(&DataKey::Paused).unwrap_or(false) {
+            return Err(ReputationError::ContractPaused);
+        }
+
         endorser.require_auth();
 
         // ── Validation ──
@@ -302,6 +310,11 @@ impl ReputationContract {
         endorsement_index: u32,
         reason: String,
     ) -> Result<(), ReputationError> {
+        // Enforce Circuit Breaker
+        if env.storage().persistent().get(&DataKey::Paused).unwrap_or(false) {
+            return Err(ReputationError::ContractPaused);
+        }
+
         filed_by.require_auth();
 
         // Verify endorsement exists
@@ -407,7 +420,38 @@ impl ReputationContract {
     }
 
     // ══════════════════════════════════════════════════════════════
-    // 5. TTL MANAGEMENT
+    // 5. CIRCUIT BREAKER (EMERGENCY PAUSE)
+    // ══════════════════════════════════════════════════════════════
+
+    /// Emergency pause for the entire contract system in case of active attack.
+    pub fn pause_contract(env: Env) -> Result<(), ReputationError> {
+        let admin: Address = env.storage().persistent()
+            .get(&DataKey::Admin)
+            .ok_or(ReputationError::Unauthorized)?;
+        admin.require_auth();
+
+        env.storage().persistent().set(&DataKey::Paused, &true);
+        Ok(())
+    }
+
+    /// Resume the contract after an emergency.
+    pub fn resume_contract(env: Env) -> Result<(), ReputationError> {
+        let admin: Address = env.storage().persistent()
+            .get(&DataKey::Admin)
+            .ok_or(ReputationError::Unauthorized)?;
+        admin.require_auth();
+
+        env.storage().persistent().set(&DataKey::Paused, &false);
+        Ok(())
+    }
+
+    /// Check if contract is currently paused
+    pub fn is_paused(env: Env) -> bool {
+        env.storage().persistent().get(&DataKey::Paused).unwrap_or(false)
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    // 6. TTL MANAGEMENT
     // ══════════════════════════════════════════════════════════════
 
     /// Extend TTL of a worker's endorsement data.
