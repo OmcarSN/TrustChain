@@ -421,7 +421,7 @@ const Endorse = () => {
                   {/* ── Job Type ─────────────────────────────────── */}
                   <div>
                     <label className="text-[9px] font-black uppercase tracking-[0.15em] text-white/30 flex items-center gap-1 mb-2">
-                      <Briefcase className="w-3 h-3" /> Job Type
+                      <Briefcase className="w-3 h-3" /> {t('jobTypes.label')}
                     </label>
                     <div className="relative">
                       <select 
@@ -430,11 +430,11 @@ const Endorse = () => {
                         className="w-full bg-white/[0.04] border border-white/[0.06] rounded-lg py-2.5 pl-3 pr-9 text-white text-xs appearance-none focus:outline-none focus:border-accent/30 transition-all font-medium cursor-pointer"
                       >
                         <option value="" disabled>{t('endorse.selectJobType')}</option>
-                        <option value="One-time Job" className="bg-[#0f1016]">One-time Job</option>
-                        <option value="Recurring" className="bg-[#0f1016]">Recurring</option>
-                        <option value="Contract" className="bg-[#0f1016]">Contract</option>
-                        <option value="Freelance" className="bg-[#0f1016]">Freelance</option>
-                        <option value="Full-time" className="bg-[#0f1016]">Full-time</option>
+                        <option value="One-time Job" className="bg-[#0f1016]">{t('jobTypes.One-time Job')}</option>
+                        <option value="Recurring" className="bg-[#0f1016]">{t('jobTypes.Recurring')}</option>
+                        <option value="Contract" className="bg-[#0f1016]">{t('jobTypes.Contract')}</option>
+                        <option value="Freelance" className="bg-[#0f1016]">{t('jobTypes.Freelance')}</option>
+                        <option value="Full-time" className="bg-[#0f1016]">{t('jobTypes.Full-time')}</option>
                       </select>
                       <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/15 pointer-events-none" />
                       {jobType && (

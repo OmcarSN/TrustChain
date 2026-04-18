@@ -49,10 +49,10 @@ const SKILL_OPTIONS = [
   'Transport', 'Other'
 ];
 const RATING_OPTIONS = [
-  { label: 'Any Rating', value: 0 },
-  { label: '3+ Stars', value: 3 },
-  { label: '4+ Stars', value: 4 },
-  { label: '5 Stars Only', value: 5 },
+  { labelKey: 'AnyRating', value: 0 },
+  { labelKey: '3Stars', value: 3 },
+  { labelKey: '4Stars', value: 4 },
+  { labelKey: '5Stars', value: 5 },
 ];
 
 /* ── Worker Card Component ────────────────────────────────────── */
@@ -99,7 +99,7 @@ const WorkerCard = ({ worker, index }) => {
           {/* Skill Badge */}
           <div className="mb-4">
             <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-accent/8 border border-accent/10 rounded-lg text-[10px] font-bold text-accent">
-              <Briefcase className="w-2.5 h-2.5" /> {worker.skill}
+              <Briefcase className="w-2.5 h-2.5" /> {worker.skill ? (t(`jobs.${worker.skill.replace(/\\s+/g, '')}`) || worker.skill) : ''}
             </span>
             {worker.experience > 0 && (
               <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-white/[0.03] border border-white/[0.05] rounded-lg text-[10px] font-bold text-white/30 ml-1.5">
@@ -312,7 +312,7 @@ const DiscoverWorkers = () => {
                         className="bg-white/[0.04] border border-white/[0.06] rounded-lg py-2 pl-3 pr-8 text-[11px] text-white font-medium appearance-none focus:outline-none focus:border-accent/30 transition-all cursor-pointer"
                       >
                         {SKILL_OPTIONS.map(s => (
-                          <option key={s} value={s} className="bg-[#0f1016]">{s}</option>
+                          <option key={s} value={s} className="bg-[#0f1016]">{t('jobs.' + s.replace(/\s+/g, ''))}</option>
                         ))}
                       </select>
                       <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3 h-3 text-white/15 pointer-events-none" />
@@ -350,7 +350,7 @@ const DiscoverWorkers = () => {
                               : 'bg-white/[0.03] border border-white/[0.05] text-white/25 hover:text-white/40'
                           }`}
                         >
-                          {opt.label}
+                          {t('ratings.' + opt.labelKey)}
                         </button>
                       ))}
                     </div>

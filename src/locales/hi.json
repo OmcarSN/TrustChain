@@ -3,7 +3,7 @@
     "home": "होम",
     "discover": "कामगार खोजें",
     "explorer": "एक्सप्लोरर",
-    "analytics": "एनालिटिक्स",
+    "analytics": "विश्लेषण",
     "dashboard": "डैशबोर्ड",
     "workerPortal": "कामगार पोर्टल",
     "verifiedEconomy": "सत्यापित अर्थव्यवस्था",
@@ -32,9 +32,9 @@
     "btnFind": "कामगार खोजें",
     "statsBar": "79 कुल इंटरैक्शन • 47 सक्रिय वॉलेट • स्टेलर टेस्टनेट पर निर्मित",
     "stat1Value": "2B+",
-    "stat1Label": "गैर-बैंकिंग कामगार",
+    "stat1Label": "बैंक-रहित कामगार",
     "stat2Value": "शून्य-लागत",
-    "stat2Label": "क्रेडेंशियल",
+    "stat2Label": "प्रमाणपत्र",
     "stat3Value": "फ्रेइटर",
     "stat3Label": "द्वारा संचालित",
     "howItWorks": "यह कैसे काम करता है",
@@ -90,7 +90,11 @@
     "endorsementGiven": "समर्थन दिया गया",
     "badge1": "स्टेलर नेटवर्क",
     "badge2": "ऑन-चेन डेटा",
-    "badge3": "लाइव टेस्टनेट"
+    "badge3": "लाइव टेस्टनेट",
+    "dashboardBtn": "डैशबोर्ड",
+    "realTimeEvents": "रीयल-टाइम अनुबंध ईवेंट",
+    "live": "लाइव",
+    "noActivitySubFeed": "स्टेलर टेस्टनेट पर अनुबंध इंटरैक्शन की प्रतीक्षा में..."
   },
   "discover": {
     "headerBadge": "सार्वजनिक निर्देशिका",
@@ -238,5 +242,40 @@
     "clearBtn": "लॉग साफ़ करें",
     "txLogsTab": "लेनदेन लॉग",
     "errorLogsTab": "अपवाद लॉग"
+  },
+  "jobs": {
+    "All": "सभी श्रेणियां",
+    "ACTechnician": "एसी तकनीशियन",
+    "Agriculture": "कृषि",
+    "Babysitting": "बेबीसिटिंग",
+    "Carpenter": "बढ़ई",
+    "Cleaning": "सफ़ाई",
+    "Construction": "निर्माण",
+    "Cooking": "खाना पकाना",
+    "DomesticWork": "घरेलू काम",
+    "Driver": "ड्राइवर",
+    "Electrician": "इलेक्ट्रीशियन",
+    "Gardening": "बागवानी",
+    "Maintenance": "रखरखाव",
+    "Painter": "पेंटर",
+    "Plumbing": "प्लंबिंग",
+    "Securityguard": "सुरक्षा गार्ड",
+    "Tailoring": "सिलाई",
+    "Transport": "परिवहन",
+    "Other": "अन्य"
+  },
+  "ratings": {
+    "AnyRating": "कोई भी रेटिंग",
+    "3Stars": "3+ सितारे",
+    "4Stars": "4+ सितारे",
+    "5Stars": "केवल 5 सितारे"
+  },
+  "jobTypes": {
+    "One-time Job": "एक बार का काम",
+    "Recurring": "आवर्ती (Recurring)",
+    "Contract": "अनुबंध (Contract)",
+    "Freelance": "फ्रीलांस",
+    "Full-time": "पूर्णकालिक",
+    "label": "नौकरी का प्रकार"
   }
 }

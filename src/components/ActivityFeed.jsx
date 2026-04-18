@@ -1,8 +1,10 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { Activity, ExternalLink, Clock, CheckCircle2, XCircle, Zap } from 'lucide-react';
 
 const ActivityFeed = ({ activities, loading }) => {
+  const { t } = useTranslation();
   const truncate = (addr) => (addr ? `${addr.slice(0, 6)}. . .${addr.slice(-4)}` : '');
 
   if (loading && (!activities || activities.length === 0)) {
@@ -19,7 +21,7 @@ const ActivityFeed = ({ activities, loading }) => {
           <div className="w-8 h-8 rounded-lg bg-accent/10 border border-accent/10 flex items-center justify-center">
             <Zap className="w-4 h-4 text-accent" />
           </div>
-          <h3 className="text-sm font-bold text-white tracking-tight">Live Activity Feed</h3>
+          <h3 className="text-sm font-bold text-white tracking-tight">{t("dashboard.activityFeed")}</h3>
         </div>
         <div className="space-y-2.5 flex-1">
           {[1, 2, 3, 4, 5].map((i) => (
@@ -46,8 +48,8 @@ const ActivityFeed = ({ activities, loading }) => {
             <Zap className="w-4 h-4 text-accent" />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-white tracking-tight leading-none mb-0.5">Live Activity Feed</h3>
-            <p className="text-[9px] font-medium text-white/25 uppercase tracking-wider">Real-time contract events</p>
+            <h3 className="text-sm font-bold text-white tracking-tight leading-none mb-0.5">{t("dashboard.activityFeed")}</h3>
+            <p className="text-[9px] font-medium text-white/25 uppercase tracking-wider">{t("dashboard.realTimeEvents")}</p>
           </div>
         </div>
         <div className="flex items-center gap-2 px-2.5 py-1.5 bg-emerald-400/10 border border-emerald-400/10 rounded-lg">
@@ -55,7 +57,7 @@ const ActivityFeed = ({ activities, loading }) => {
             <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
             <div className="absolute w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
           </div>
-          <span className="text-[9px] uppercase font-bold text-emerald-400/80 tracking-wider">Live</span>
+          <span className="text-[9px] uppercase font-bold text-emerald-400/80 tracking-wider">{t("dashboard.live")}</span>
         </div>
       </div>
 
@@ -73,8 +75,8 @@ const ActivityFeed = ({ activities, loading }) => {
             <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center mb-4">
               <Activity className="w-5 h-5 text-white/20" />
             </div>
-            <p className="text-xs font-bold text-white/30 mb-1">No Activity Yet</p>
-            <p className="text-[10px] text-white/15 max-w-[180px]">Waiting for contract interactions on the Stellar Testnet...</p>
+            <p className="text-xs font-bold text-white/30 mb-1">{t("dashboard.noActivity")}</p>
+            <p className="text-[10px] text-white/15 max-w-[180px]">{t("dashboard.noActivitySubFeed")}</p>
           </div>
         ) : (
           <AnimatePresence>

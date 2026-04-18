@@ -433,7 +433,7 @@ const WorkerRegistration = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
               {/* Name */}
-              <FormField icon={User} label="Full Name" error={errors.fullName} completed={(formData.fullName || '').length >= 2}>
+              <FormField icon={User} label={t('registration.labelName')} error={errors.fullName} completed={(formData.fullName || '').length >= 2}>
                 <input
                   name="fullName"
                   value={formData.fullName}
@@ -453,14 +453,14 @@ const WorkerRegistration = () => {
                     className={`${inputClass('skillCategory')} appearance-none pr-10 cursor-pointer`}
                   >
                     <option value="">{t('registration.skillSelect')}</option>
-                    {skillCategories.map(c => <option key={c} value={c} className="bg-[#0f1016]">{c}</option>)}
+                    {skillCategories.map(c => <option key={c} value={c} className="bg-[#0f1016]">{t('jobs.' + c.replace(/\s+/g, ''))}</option>)}
                   </select>
                   <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/15 pointer-events-none" />
                 </div>
               </FormField>
 
               {/* Experience */}
-              <FormField icon={Calendar} label="Years Experience" error={errors.experience} completed={formData.experience > 0}>
+              <FormField icon={Calendar} label={t('registration.labelExp')} error={errors.experience} completed={formData.experience > 0}>
                 <input
                   type="number"
                   name="experience"
@@ -474,7 +474,7 @@ const WorkerRegistration = () => {
               </FormField>
 
               {/* City */}
-              <FormField icon={MapPin} label="City" error={errors.city} completed={!!formData.city}>
+              <FormField icon={MapPin} label={t('registration.labelCity')} error={errors.city} completed={!!formData.city}>
                 <input
                   name="city"
                   value={formData.city}

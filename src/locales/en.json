@@ -90,7 +90,10 @@
     "endorsementGiven": "Endorsement Given",
     "badge1": "Stellar Network",
     "badge2": "On-Chain Data",
-    "badge3": "Live Testnet"
+    "badge3": "Live Testnet",
+    "realTimeEvents": "Real-time contract events",
+    "live": "Live",
+    "noActivitySubFeed": "Waiting for contract interactions on the Stellar Testnet..."
   },
   "discover": {
     "headerBadge": "Public Directory",
@@ -238,5 +241,40 @@
     "clearBtn": "Clear Logs",
     "txLogsTab": "Transaction Log",
     "errorLogsTab": "Exception Log"
+  },
+  "jobs": {
+    "All": "All Categories",
+    "ACTechnician": "AC Technician",
+    "Agriculture": "Agriculture",
+    "Babysitting": "Babysitting",
+    "Carpenter": "Carpenter",
+    "Cleaning": "Cleaning",
+    "Construction": "Construction",
+    "Cooking": "Cooking",
+    "DomesticWork": "Domestic Work",
+    "Driver": "Driver",
+    "Electrician": "Electrician",
+    "Gardening": "Gardening",
+    "Maintenance": "Maintenance",
+    "Painter": "Painter",
+    "Plumbing": "Plumbing",
+    "Securityguard": "Security guard",
+    "Tailoring": "Tailoring",
+    "Transport": "Transport",
+    "Other": "Other"
+  },
+  "ratings": {
+    "AnyRating": "Any Rating",
+    "3Stars": "3+ Stars",
+    "4Stars": "4+ Stars",
+    "5Stars": "5 Stars Only"
+  },
+  "jobTypes": {
+    "One-time Job": "One-time Job",
+    "Recurring": "Recurring",
+    "Contract": "Contract",
+    "Freelance": "Freelance",
+    "Full-time": "Full-time",
+    "label": "Job Type"
   }
 }
