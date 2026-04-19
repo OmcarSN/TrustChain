@@ -13,8 +13,9 @@ const ActivityFeed = ({ activities, loading }) => {
         className="rounded-2xl p-6 h-full flex flex-col"
         style={{
           background: 'linear-gradient(160deg, rgba(124,58,237,0.06) 0%, rgba(15,15,24,0.6) 40%, rgba(15,15,24,0.4) 100%)',
-          border: '1px solid rgba(124,58,237,0.06)',
-          backdropFilter: 'blur(16px)',
+          border: '1px solid rgba(124,58,237,0.08)',
+          backdropFilter: 'blur(24px)',
+          boxShadow: '0 16px 40px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05)'
         }}
       >
         <div className="flex items-center gap-2.5 mb-6">
@@ -37,8 +38,9 @@ const ActivityFeed = ({ activities, loading }) => {
       className="rounded-2xl p-5 h-full flex flex-col"
       style={{
         background: 'linear-gradient(160deg, rgba(124,58,237,0.06) 0%, rgba(15,15,24,0.6) 40%, rgba(15,15,24,0.4) 100%)',
-        border: '1px solid rgba(124,58,237,0.06)',
-        backdropFilter: 'blur(16px)',
+        border: '1px solid rgba(124,58,237,0.08)',
+        backdropFilter: 'blur(24px)',
+        boxShadow: '0 16px 40px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05)'
       }}
     >
       {/* Header */}

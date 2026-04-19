@@ -29,7 +29,7 @@ const AdminLogs = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] pt-28 pb-12 px-6 relative overflow-hidden">
+    <div className="min-h-screen bg-[#0a0a0f] pt-[4.5rem] pb-6 px-6 relative overflow-hidden">
       {/* Background */}
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-red-500/5 blur-[200px] rounded-full mix-blend-screen pointer-events-none" />
       <div className="absolute inset-0 opacity-[0.015]"

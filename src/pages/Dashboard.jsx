@@ -107,7 +107,7 @@ const Dashboard = () => {
   /* ── Not connected ─────────────────────────────────────────── */
   if (!isConnected) {
     return (
-      <div className="min-h-screen bg-background pt-20 flex items-center justify-center px-6 relative overflow-hidden">
+      <div className="min-h-[calc(100vh-4rem)] bg-background pt-[4.5rem] flex items-center justify-center px-6 relative overflow-hidden">
         <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-accent/5 rounded-full blur-[150px] -z-10" />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -120,13 +120,26 @@ const Dashboard = () => {
         >
           <div className="absolute -top-20 -right-20 w-48 h-48 bg-accent/10 rounded-full blur-[80px]" />
           <div className="relative z-10">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-accent/20 to-purple-800/20 border border-accent/15 flex items-center justify-center mx-auto mb-5">
-              <LayoutDashboard className="w-7 h-7 text-accent" />
+            <div className="relative mx-auto mb-6 w-fit">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-accent/20 to-purple-800/20 border border-accent/15 flex items-center justify-center">
+                <LayoutDashboard className="w-8 h-8 text-accent" />
+              </div>
+              <motion.div
+                className="absolute -inset-3 rounded-3xl border border-accent/10"
+                animate={{ scale: [1, 1.1, 1], opacity: [0.2, 0.5, 0.2] }}
+                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+              />
             </div>
             <h2 className="text-2xl font-black mb-2 tracking-tight">{t('dashboard.commandCenter')}</h2>
-            <p className="text-white/30 mb-6 text-sm font-medium">{t('dashboard.connectPrompt')}</p>
-            <button onClick={connect} className="group w-full py-4 bg-gradient-to-r from-accent to-purple-700 text-white rounded-2xl font-black uppercase tracking-[0.2em] text-[10px] transition-all flex items-center justify-center gap-2.5 shadow-xl shadow-accent/25 active:scale-[0.98]">
-              <Wallet className="w-4 h-4" /> {t('dashboard.connectBtn')}
+            <p className="text-white/30 mb-8 text-sm font-medium leading-relaxed">{t('dashboard.connectPrompt')}</p>
+            <button onClick={connect} className="group w-full py-4 bg-gradient-to-r from-accent to-purple-700 text-white rounded-2xl font-black uppercase tracking-[0.2em] text-[10px] transition-all flex items-center justify-center gap-2.5 shadow-xl shadow-accent/25 active:scale-[0.98] relative overflow-hidden">
+              <motion.div
+                className="absolute inset-0 opacity-20"
+                style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)' }}
+                animate={{ x: ['-100%', '200%'] }}
+                transition={{ duration: 2.5, repeat: Infinity, ease: 'linear' }}
+              />
+              <Wallet className="w-4 h-4 relative z-10" /> <span className="relative z-10">{t('dashboard.connectBtn')}</span>
             </button>
           </div>
         </motion.div>
@@ -142,7 +155,7 @@ const Dashboard = () => {
   const filteredEvents = activeTab === 'all' ? allEvents : allEvents.filter(e => e.type === activeTab);
 
   return (
-    <div className="min-h-screen bg-background pt-20 pb-6 px-4 sm:px-6 relative overflow-hidden text-white">
+    <div className="min-h-screen bg-background pt-[4.5rem] pb-4 px-4 sm:px-6 relative overflow-hidden text-white">
       {/* Background */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute top-10 left-1/3 w-[700px] h-[400px] bg-accent/5 rounded-full blur-[160px]" />

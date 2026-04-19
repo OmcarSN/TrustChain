@@ -1,21 +1,23 @@
 import React from 'react';
-import { Github, ExternalLink, Shield, Globe, ShieldCheck } from 'lucide-react';
+import { Github, ExternalLink, Globe, ShieldCheck } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import TrustChainLogo from './TrustChainLogo';
 
 const Footer = () => {
   const { t } = useTranslation();
   return (
-    <footer className="bg-[#0a0a0f] border-t border-white/5 py-8 px-6 relative overflow-hidden">
+    <footer className="bg-[#0a0a0f] border-t border-white/5 relative overflow-hidden">
+      {/* Top gradient accent line */}
+      <div className="h-[1px] bg-gradient-to-r from-transparent via-accent/20 to-transparent" />
+      
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-accent/3 rounded-full blur-[120px] -z-10" />
 
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto py-8 px-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8 border-b border-white/5 pb-8 items-start">
           {/* Logo */}
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 bg-accent rounded-lg flex items-center justify-center">
-                <Shield className="w-4 h-4 text-white" />
-              </div>
+              <TrustChainLogo size={28} />
               <span className="text-base font-black tracking-tighter uppercase italic">Trust<span className="text-accent underline decoration-2 decoration-accent underline-offset-4">Chain</span></span>
             </div>
             <p className="text-white/30 font-medium text-xs leading-relaxed max-w-[220px]">
@@ -43,7 +45,11 @@ const Footer = () => {
           <div className="space-y-3 text-left md:text-right">
             <h4 className="text-[9px] font-black uppercase tracking-[0.25em] text-white/25">{t('footer.tech')}</h4>
             <p className="text-xs font-bold text-white/50">{t('footer.builtOn')}</p>
-            <p className="text-[11px] font-medium text-white/25">React + Vite · Freighter Wallet · ManageData Ops</p>
+            <div className="flex flex-wrap gap-2 md:justify-end">
+              {['React', 'Vite', 'Soroban', 'Freighter'].map(tech => (
+                <span key={tech} className="px-2.5 py-1 bg-white/[0.03] border border-white/[0.06] rounded-lg text-[9px] font-bold text-white/30 uppercase tracking-wider">{tech}</span>
+              ))}
+            </div>
           </div>
         </div>
 

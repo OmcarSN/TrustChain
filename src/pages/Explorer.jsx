@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Loader2, Database, Hash, Clock, ExternalLink } from 'lucide-react';
+import { Search, Loader2, Database, Hash, Clock, ExternalLink, UserCheck, FileSearch, ShieldCheck } from 'lucide-react';
 import { fetchCredentialsByWallet } from '../services/indexer';
 import { validateWalletAddress } from '../utils/validation';
 import { useTranslation } from 'react-i18next';
@@ -35,7 +35,7 @@ const Explorer = () => {
       const credentials = await fetchCredentialsByWallet(searchQuery.trim());
       setResults(credentials);
     } catch (err) {
-      setError('Failed to fetch data from the Horizon indexer.');
+      setError(t('explorer.validationError'));
       console.error(err);
     } finally {
       setLoading(false);
@@ -45,7 +45,7 @@ const Explorer = () => {
   const truncate = (addr) => (addr ? `${addr.slice(0, 8)}...${addr.slice(-6)}` : '');
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] pt-28 pb-12 px-6 relative overflow-hidden">
+    <div className="min-h-screen bg-[#0a0a0f] pt-[4.5rem] pb-6 px-6 relative overflow-hidden">
       {/* Background Orbs */}
       <div className="absolute top-0 right-0 w-[800px] h-[600px] bg-accent/5 blur-[200px] rounded-full mix-blend-screen pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-cyan-500/5 blur-[150px] rounded-full mix-blend-screen pointer-events-none" />
@@ -59,18 +59,18 @@ const Explorer = () => {
       <div className="max-w-5xl mx-auto relative z-10">
         
         {/* Header Section */}
-        <div className="mb-10 text-center">
+        <div className="mb-6 text-center">
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="w-16 h-16 bg-accent/10 border border-accent/20 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-[0_0_40px_rgba(124,58,237,0.2)]"
+            className="w-12 h-12 bg-accent/10 border border-accent/20 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-[0_0_40px_rgba(124,58,237,0.2)]"
           >
-            <Database className="w-8 h-8 text-accent" />
+            <Database className="w-6 h-6 text-accent" />
           </motion.div>
           <motion.h1 
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-3xl md:text-5xl font-black tracking-tight mb-4 bg-gradient-to-r from-purple-400 via-accent to-cyan-400 bg-clip-text text-transparent"
+            className="text-2xl md:text-4xl font-black tracking-tight mb-2 bg-gradient-to-r from-purple-400 via-accent to-cyan-400 bg-clip-text text-transparent"
           >
             {t('explorer.header')}
           </motion.h1>
@@ -78,7 +78,7 @@ const Explorer = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.1 }}
-            className="text-white/40 text-sm md:text-base max-w-xl mx-auto font-medium"
+            className="text-white/40 text-xs md:text-sm max-w-xl mx-auto font-medium"
           >
             {t('explorer.subHeader')}
           </motion.p>
@@ -89,7 +89,7 @@ const Explorer = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="mb-12 max-w-2xl mx-auto flex flex-col"
+          className="mb-8 max-w-2xl mx-auto flex flex-col"
         >
           <form onSubmit={handleSearch} className="relative group">
             <div className="absolute inset-0 bg-accent/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300 opacity-50" />
@@ -102,7 +102,7 @@ const Explorer = () => {
                 placeholder={t('explorer.searchPlaceholder')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-transparent py-5 px-2 text-sm font-mono text-white placeholder-white/30 outline-none"
+                className="w-full bg-transparent py-3.5 px-2 text-sm font-mono text-white placeholder-white/30 outline-none"
               />
               <div className="pr-3">
                 <button 
@@ -117,7 +117,7 @@ const Explorer = () => {
           </form>
           {/* Validation error text */}
           {!isValidAddress && searchQuery.trim().length > 0 && (
-            <p className="text-red-400 text-sm mt-1 ml-2">Please enter a valid Stellar wallet address (Starts with G, 56 characters).</p>
+            <p className="text-red-400 text-sm mt-1 ml-2">{t('explorer.validationError')}</p>
           )}
         </motion.div>
 
@@ -126,14 +126,51 @@ const Explorer = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="text-center max-w-lg mx-auto text-sm text-gray-500 mb-8"
+            className="max-w-3xl mx-auto"
           >
-            <h3 className="font-bold text-gray-400 mb-3">{t('explorer.howToTitle')}</h3>
-            <ol className="space-y-2 text-left w-max mx-auto text-xs md:text-sm">
-              <li>1) {t('explorer.howToStep1')}</li>
-              <li>2) {t('explorer.howToStep2')}</li>
-              <li>3) {t('explorer.howToStep3')}</li>
-            </ol>
+            <div className="text-center mb-5">
+              <h3 className="text-sm font-black uppercase tracking-[0.2em] text-white/30 mb-1">{t('explorer.howToTitle')}</h3>
+              <div className="w-12 h-[2px] bg-gradient-to-r from-transparent via-accent/40 to-transparent mx-auto" />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {[
+                { step: '01', icon: UserCheck, title: t('explorer.howToStep1Title') || 'Get Worker ID', desc: t('explorer.howToStep1'), color: 'accent' },
+                { step: '02', icon: FileSearch, title: t('explorer.howToStep2Title') || 'Search', desc: t('explorer.howToStep2'), color: 'purple' },
+                { step: '03', icon: ShieldCheck, title: t('explorer.howToStep3Title') || 'Verify', desc: t('explorer.howToStep3'), color: 'emerald' },
+              ].map((item, i) => {
+                const colorMap = {
+                  accent: { bg: 'rgba(124,58,237,0.08)', border: 'rgba(124,58,237,0.12)', text: 'text-accent', glow: 'rgba(124,58,237,0.15)' },
+                  purple: { bg: 'rgba(168,85,247,0.08)', border: 'rgba(168,85,247,0.12)', text: 'text-purple-400', glow: 'rgba(168,85,247,0.15)' },
+                  emerald: { bg: 'rgba(52,211,153,0.08)', border: 'rgba(52,211,153,0.12)', text: 'text-emerald-400', glow: 'rgba(52,211,153,0.15)' },
+                };
+                const c = colorMap[item.color];
+                return (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.35 + i * 0.1 }}
+                    className="group relative p-4 rounded-xl overflow-hidden hover:translate-y-[-3px] transition-all duration-300 cursor-default"
+                    style={{
+                      background: `linear-gradient(145deg, ${c.bg} 0%, rgba(255,255,255,0.02) 100%)`,
+                      border: `1px solid ${c.border}`,
+                    }}
+                  >
+                    <div className="absolute -top-6 -right-6 w-16 h-16 rounded-full blur-[30px] opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: c.glow }} />
+                    <div className="relative z-10">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: c.bg, border: `1px solid ${c.border}` }}>
+                          <item.icon className={`w-4 h-4 ${c.text}`} />
+                        </div>
+                        <span className="text-[10px] font-black text-white/10 tracking-wider">{item.step}</span>
+                      </div>
+                      <h4 className="text-xs font-black mb-1.5 text-white/70">{item.title}</h4>
+                      <p className="text-[11px] text-white/30 leading-relaxed">{item.desc}</p>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
           </motion.div>
         )}
 
@@ -148,7 +185,7 @@ const Explorer = () => {
               {loading ? (
                 <div className="p-16 flex flex-col items-center justify-center text-white/40">
                   <Loader2 className="w-8 h-8 animate-spin mb-4 text-accent" />
-                  <p className="font-bold uppercase tracking-widest text-xs">Querying Horizon Indexer...</p>
+                  <p className="font-bold uppercase tracking-widest text-xs">{t('explorer.queryingHorizon')}</p>
                 </div>
               ) : error ? (
                 <div className="p-12 text-center text-red-400">
@@ -165,10 +202,10 @@ const Explorer = () => {
                   <table className="w-full text-left border-collapse">
                     <thead>
                       <tr className="border-b border-white/10 bg-white/5">
-                        <th className="p-5 text-xs font-black uppercase tracking-widest text-white/50 whitespace-nowrap">Credential Type</th>
-                        <th className="p-5 text-xs font-black uppercase tracking-widest text-white/50 whitespace-nowrap">Issued On</th>
-                        <th className="p-5 text-xs font-black uppercase tracking-widest text-white/50 whitespace-nowrap">Tx Hash</th>
-                        <th className="p-5 text-xs font-black uppercase tracking-widest text-white/50 whitespace-nowrap">Ledger</th>
+                        <th className="p-5 text-xs font-black uppercase tracking-widest text-white/50 whitespace-nowrap">{t('explorer.credentialType')}</th>
+                        <th className="p-5 text-xs font-black uppercase tracking-widest text-white/50 whitespace-nowrap">{t('explorer.issuedOn')}</th>
+                        <th className="p-5 text-xs font-black uppercase tracking-widest text-white/50 whitespace-nowrap">{t('explorer.txHash')}</th>
+                        <th className="p-5 text-xs font-black uppercase tracking-widest text-white/50 whitespace-nowrap">{t('explorer.ledger')}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -220,7 +257,7 @@ const Explorer = () => {
                   </table>
                   <div className="p-4 bg-white/[0.01] text-center border-t border-white/5">
                     <p className="text-[10px] uppercase font-bold text-white/30 tracking-widest">
-                      Showing {results.length} historical credentials
+                      Showing {results.length} {t('explorer.showingResults', { count: results.length }).split(' ').slice(1).join(' ')}
                     </p>
                   </div>
                 </div>

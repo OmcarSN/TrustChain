@@ -3,6 +3,7 @@
 members = [
     "contracts/credential",
     "contracts/reputation",
+    "contracts/governance",
 ]
 
 [profile.release]

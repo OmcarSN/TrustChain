@@ -55,29 +55,33 @@ export const ToastProvider = ({ children }) => {
               initial={{ opacity: 0, x: 20, scale: 0.95 }}
               animate={{ opacity: 1, x: 0, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.2 } }}
-              className={`p-4 rounded-xl border flex items-center gap-3 shadow-[0_8px_30px_rgb(0,0,0,0.08)] pointer-events-auto group relative overflow-hidden bg-white ${
+              className={`p-4 rounded-2xl border flex items-center gap-3.5 shadow-2xl pointer-events-auto group relative overflow-hidden backdrop-blur-xl ${
                 toast.type === 'success' 
-                  ? 'border-green-200' 
+                  ? 'bg-gradient-to-r from-emerald-500/10 to-teal-500/5 border-emerald-500/20 text-emerald-100 shadow-[0_8px_32px_rgba(16,185,129,0.15)]' 
                   : toast.type === 'error'
-                  ? 'border-red-200'
-                  : 'border-[#E5E7EB]'
+                  ? 'bg-gradient-to-r from-red-600/20 to-rose-600/5 border-red-500/30 text-red-50 shadow-[0_8px_32px_rgba(239,68,68,0.2)]'
+                  : 'bg-gradient-to-r from-accent/15 to-purple-800/10 border-accent/20 text-white shadow-[0_8px_32px_rgba(124,58,237,0.15)]'
               }`}
             >
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
-                toast.type === 'success' ? 'bg-green-50' : toast.type === 'error' ? 'bg-red-50' : 'bg-orange-50'
+              <div className="absolute inset-0 bg-white/[0.02]" />
+              
+              <div className={`relative z-10 w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${
+                toast.type === 'success' ? 'bg-emerald-500/20 border border-emerald-500/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]' 
+                : toast.type === 'error' ? 'bg-red-500/20 border border-red-500/20 shadow-[0_0_20px_rgba(239,68,68,0.4),inset_0_1px_0_rgba(255,255,255,0.2)]' 
+                : 'bg-accent/20 border border-accent/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]'
               }`}>
-                {toast.type === 'success' && <CheckCircle2 className="w-5 h-5 text-green-500" />}
-                {toast.type === 'error' && <AlertCircle className="w-5 h-5 text-red-500" />}
-                {toast.type === 'info' && <ShieldCheck className="w-5 h-5 text-orange-500" />}
+                {toast.type === 'success' && <CheckCircle2 className="w-5 h-5 text-emerald-400" />}
+                {toast.type === 'error' && <AlertCircle className="w-5 h-5 text-red-400" />}
+                {toast.type === 'info' && <ShieldCheck className="w-5 h-5 text-purple-400" />}
               </div>
 
-              <div className="flex-1">
-                 <p className="text-[13px] font-bold leading-tight text-gray-900">{toast.message}</p>
+              <div className="flex-1 relative z-10">
+                 <p className="text-[13px] font-bold leading-tight tracking-wide drop-shadow-sm">{toast.message}</p>
               </div>
 
               <button 
                 onClick={() => removeToast(toast.id)}
-                className="p-1.5 hover:bg-gray-100 rounded-md transition-colors text-gray-400 hover:text-gray-900"
+                className="relative z-10 p-1.5 hover:bg-white/10 rounded-md transition-colors text-white/40 hover:text-white"
               >
                 <X className="w-4 h-4" />
               </button>

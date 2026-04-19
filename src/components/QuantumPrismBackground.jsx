@@ -377,12 +377,28 @@ const QuantumPrismBackground = () => {
     
     animate();
 
-    /* ───────────── Resize ───────────── */
+    /* ───────────── Resize (Debounced) ───────────── */
+    let resizeTimeout;
     const handleResize = () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        composer.setSize(window.innerWidth, window.innerHeight);
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            if (!camera || !renderer || !composer) return;
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            composer.setSize(window.innerWidth, window.innerHeight);
+            
+            // Re-adjust floor texture size to standard ratio to prevent GPU crash
+            if (floor && floor.getRenderTarget) {
+              const target = floor.getRenderTarget();
+              if (target) {
+                 target.setSize(
+                    Math.floor(window.innerWidth * window.devicePixelRatio * 0.5),
+                    Math.floor(window.innerHeight * window.devicePixelRatio * 0.5)
+                 );
+              }
+            }
+        }, 150);
     };
     window.addEventListener('resize', handleResize);
 

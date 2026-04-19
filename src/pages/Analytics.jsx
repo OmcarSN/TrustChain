@@ -142,7 +142,7 @@ const Analytics = () => {
   /* ── Not connected ─────────────────────────────────────────── */
   if (!isConnected) {
     return (
-      <div className="min-h-screen bg-background pt-20 flex items-center justify-center px-6 relative overflow-hidden">
+      <div className="min-h-[calc(100vh-4rem)] bg-background pt-[4.5rem] flex items-center justify-center px-6 relative overflow-hidden">
         <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-accent/5 rounded-full blur-[150px] -z-10" />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -155,13 +155,26 @@ const Analytics = () => {
         >
           <div className="absolute -top-20 -right-20 w-48 h-48 bg-accent/10 rounded-full blur-[80px]" />
           <div className="relative z-10">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-accent/20 to-purple-800/20 border border-accent/15 flex items-center justify-center mx-auto mb-5">
-              <BarChart3 className="w-7 h-7 text-accent" />
+            <div className="relative mx-auto mb-6 w-fit">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-accent/20 to-purple-800/20 border border-accent/15 flex items-center justify-center">
+                <BarChart3 className="w-8 h-8 text-accent" />
+              </div>
+              <motion.div
+                className="absolute -inset-3 rounded-3xl border border-accent/10"
+                animate={{ scale: [1, 1.1, 1], opacity: [0.2, 0.5, 0.2] }}
+                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+              />
             </div>
             <h2 className="text-2xl font-black mb-2 tracking-tight">{t('analytics.headerTitle')}</h2>
-            <p className="text-white/30 mb-6 text-sm font-medium">{t('analytics.headerSubtitle')}</p>
-            <button onClick={connect} className="group w-full py-4 bg-gradient-to-r from-accent to-purple-700 text-white rounded-2xl font-black uppercase tracking-[0.2em] text-[10px] transition-all flex items-center justify-center gap-2.5 shadow-xl shadow-accent/25 active:scale-[0.98]">
-              {t('dashboard.connectBtn')}
+            <p className="text-white/30 mb-8 text-sm font-medium leading-relaxed">{t('analytics.headerSubtitle')}</p>
+            <button onClick={connect} className="group w-full py-4 bg-gradient-to-r from-accent to-purple-700 text-white rounded-2xl font-black uppercase tracking-[0.2em] text-[10px] transition-all flex items-center justify-center gap-2.5 shadow-xl shadow-accent/25 active:scale-[0.98] relative overflow-hidden">
+              <motion.div
+                className="absolute inset-0 opacity-20"
+                style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)' }}
+                animate={{ x: ['-100%', '200%'] }}
+                transition={{ duration: 2.5, repeat: Infinity, ease: 'linear' }}
+              />
+              <span className="relative z-10">{t('dashboard.connectBtn')}</span>
             </button>
           </div>
         </motion.div>
@@ -171,7 +184,7 @@ const Analytics = () => {
 
   /* ── Connected view ────────────────────────────────────────── */
   return (
-    <div className="min-h-screen bg-[#0a0a0f] pt-28 pb-16 px-6 relative overflow-hidden">
+    <div className="min-h-screen bg-[#0a0a0f] pt-[4.5rem] pb-4 px-6 relative overflow-hidden">
       {/* Ambient background glows */}
       <div className="absolute top-0 right-1/4 w-[700px] h-[500px] bg-purple-600/[0.04] blur-[200px] rounded-full pointer-events-none" />
       <div className="absolute bottom-1/4 left-0 w-[500px] h-[500px] bg-cyan-500/[0.03] blur-[180px] rounded-full pointer-events-none" />
@@ -188,7 +201,7 @@ const Analytics = () => {
       <div className="max-w-7xl mx-auto relative z-10">
         
         {/* ── Header ──────────────────────────────── */}
-        <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div className="mb-5 flex flex-col md:flex-row md:items-end justify-between gap-4">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -227,7 +240,7 @@ const Analytics = () => {
             >
               <Clock className="w-3.5 h-3.5 text-accent/60" />
               <span className="text-[10px] font-bold uppercase tracking-wider text-white/40">
-                Indexed: <span className="text-white/60">{timeSinceIndex}</span>
+                {t('analytics.indexed')} <span className="text-white/60">{timeSinceIndex}</span>
               </span>
             </div>
 
@@ -253,43 +266,42 @@ const Analytics = () => {
               }}
             >
               <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin' : ''}`} />
-              Index Now
+              {t('analytics.indexNow')}
             </button>
           </motion.div>
         </div>
 
         {/* ── 4-Col Metric Cards ──────────────────── */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 mb-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-5">
           <MetricCard 
             title={t('analytics.statCreds')} 
             value={metrics.totalCredentials} 
-            subtitle="Contract Index" 
+            subtitle={t('analytics.contractIndex')} 
             icon={ShieldCheck} 
             color="purple"
             delay={0}
-            sparkData={sparkValues}
           />
           <MetricCard 
             title={t('analytics.statTotalUsers')} 
             value={metrics.activeWallets} 
-            subtitle="Unique Participants" 
+            subtitle={t('analytics.uniqueParticipants')} 
             icon={Users} 
             color="blue"
             delay={1}
           />
           <MetricCard 
-            title="Transactions Today" 
+            title={t('analytics.txToday')} 
             value={metrics.todayTx} 
-            subtitle="Past 24 Hours" 
+            subtitle={t('analytics.past24h')} 
             icon={Zap} 
             color="amber"
             delay={2}
             trend={metrics.todayTx > 0 ? 12 : 0}
           />
           <MetricCard 
-            title="Network Status" 
+            title={t('analytics.networkStatus')} 
             value="100%" 
-            subtitle="Stellar Testnet Operational" 
+            subtitle={t('analytics.stellarOps')} 
             icon={Globe} 
             color="green"
             delay={3}
@@ -304,11 +316,12 @@ const Analytics = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="lg:col-span-2 rounded-2xl overflow-hidden"
+            className="lg:col-span-2 rounded-2xl overflow-hidden flex flex-col h-full"
             style={{
               background: 'linear-gradient(160deg, rgba(124,58,237,0.06) 0%, rgba(15,15,24,0.6) 40%, rgba(15,15,24,0.4) 100%)',
-              border: '1px solid rgba(124,58,237,0.06)',
-              backdropFilter: 'blur(16px)',
+              border: '1px solid rgba(124,58,237,0.08)',
+              backdropFilter: 'blur(24px)',
+              boxShadow: '0 16px 40px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05)'
             }}
           >
             {/* Chart header */}
@@ -319,7 +332,7 @@ const Analytics = () => {
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-white tracking-tight leading-none mb-0.5">{t('analytics.chartTitle')}</h3>
-                  <p className="text-[9px] font-medium text-white/25 uppercase tracking-wider">7-day overview</p>
+                  <p className="text-[9px] font-medium text-white/25 uppercase tracking-wider">{t('analytics.overview7d')}</p>
                 </div>
               </div>
 
@@ -365,17 +378,17 @@ const Analytics = () => {
                   <span className="text-[10px] font-black text-accent tracking-wider">
                     {metrics.totalCredentials}
                   </span>
-                  <span className="text-[9px] text-white/25 font-bold ml-1.5 uppercase tracking-wider">total</span>
+                  <span className="text-[9px] text-white/25 font-bold ml-1.5 uppercase tracking-wider">{t('analytics.total')}</span>
                 </div>
               </div>
             </div>
             
             {/* Chart body */}
-            <div style={{ width: '100%', minWidth: 200, height: 300 }} className="p-4 pt-2">
+            <div className="flex-1 w-full min-h-[240px] p-4 pt-2">
               {metrics.loading && !metrics.trendData.length ? (
                 <div className="w-full h-full flex flex-col items-center justify-center text-white/30 text-sm font-medium">
                   <RefreshCw className="w-6 h-6 animate-spin mb-4 text-accent/50" />
-                  <span className="text-xs uppercase tracking-widest font-bold">Indexing Horizon Data...</span>
+                  <span className="text-xs uppercase tracking-widest font-bold">{t('analytics.indexingData')}</span>
                 </div>
               ) : chartType === 'area' ? (
                 <ResponsiveContainer width="100%" height="100%">
@@ -491,7 +504,7 @@ const Analytics = () => {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="min-h-[400px]"
+            className="min-h-[340px]"
           >
             <ActivityFeed activities={metrics.recentActivity} loading={metrics.loading} />
           </motion.div>

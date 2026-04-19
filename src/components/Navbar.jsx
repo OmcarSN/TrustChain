@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Shield, Wallet, Menu, X, Check, LogOut, ChevronDown, LayoutDashboard, Languages } from 'lucide-react';
+import { Wallet, Menu, X, Check, LogOut, ChevronDown, LayoutDashboard, Languages } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useWallet } from '../context/WalletContext';
+import TrustChainLogo from './TrustChainLogo';
 
 const Navbar = () => {
   const location = useLocation();
@@ -62,10 +63,10 @@ const Navbar = () => {
     <>
       <nav className="fixed top-0 left-0 w-full z-50 border-b border-white/5 bg-background/80 backdrop-blur-2xl">
         <div className="max-w-[1400px] mx-auto px-6 h-16 flex items-center justify-between">
-          {/* Logo */}
+          {/* Logo — Custom SVG Brand Mark */}
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 bg-accent rounded-2xl flex items-center justify-center shadow-2xl shadow-accent/40 group-hover:scale-110 transition-transform duration-500">
-              <Shield className="w-6 h-6 text-white" />
+            <div className="group-hover:scale-110 transition-transform duration-500">
+              <TrustChainLogo size={40} />
             </div>
             <div className="flex flex-col leading-none">
               <span className="text-xl font-black tracking-tight uppercase italic underline-offset-4 decoration-accent">Trust<span className="text-accent underline decoration-2">Chain</span></span>
@@ -74,18 +75,21 @@ const Navbar = () => {
           </Link>
 
           {/* Center Nav Links (Desktop) */}
-          <div className="hidden lg:flex items-center gap-1.5 p-1.5 bg-white/5 rounded-2xl border border-white/5 backdrop-blur-md overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+          <div className="hidden lg:flex items-center gap-1 p-1.5 bg-white/[0.04] rounded-2xl border border-white/[0.06] backdrop-blur-xl overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
-                className={`px-4 py-2.5 rounded-xl text-[10px] whitespace-nowrap font-black uppercase tracking-widest transition-all duration-300 ${
+                className={`relative px-4 py-2.5 rounded-xl text-[11px] whitespace-nowrap font-black uppercase tracking-[0.12em] transition-all duration-300 ${
                   location.pathname === link.path 
-                    ? 'bg-accent text-white shadow-lg shadow-accent/20' 
-                    : 'text-white/40 hover:text-white hover:bg-white/5'
+                    ? 'bg-accent text-white shadow-lg shadow-accent/25' 
+                    : 'text-white/40 hover:text-white/80 hover:bg-white/[0.06]'
                 }`}
               >
                 {link.name}
+                {location.pathname === link.path && (
+                  <span className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-white shadow-[0_0_6px_rgba(255,255,255,0.8)]" />
+                )}
               </Link>
             ))}
           </div>
@@ -203,9 +207,7 @@ const Navbar = () => {
             >
               <div className="px-8 pt-20 pb-6 border-b border-white/5">
                 <div className="flex items-center gap-3 mb-2">
-                  <div className="w-8 h-8 bg-accent rounded-xl flex items-center justify-center">
-                    <Shield className="w-5 h-5 text-white" />
-                  </div>
+                  <TrustChainLogo size={32} />
                   <span className="text-lg font-black uppercase italic tracking-tight">Trust<span className="text-accent">Chain</span></span>
                 </div>
                 <p className="text-[9px] font-black uppercase tracking-[0.4em] text-white/20">{t('nav.navigationMenu', 'Navigation Menu')}</p>

@@ -1,0 +1,14 @@
+C:\Users\Devyani\.gemini\antigravity\scratch\trustchain\target\debug\deps\serde-cc7b7d377eb306ef.d: C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\lib.rs C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\integer128.rs C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\mod.rs C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\de.rs C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\ser.rs C:\Users\Devyani\.gemini\antigravity\scratch\trustchain\target\debug\build\serde-9b76ea22f6fba3a5\out/private.rs
+
+C:\Users\Devyani\.gemini\antigravity\scratch\trustchain\target\debug\deps\libserde-cc7b7d377eb306ef.rlib: C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\lib.rs C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\integer128.rs C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\mod.rs C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\de.rs C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\ser.rs C:\Users\Devyani\.gemini\antigravity\scratch\trustchain\target\debug\build\serde-9b76ea22f6fba3a5\out/private.rs
+
+C:\Users\Devyani\.gemini\antigravity\scratch\trustchain\target\debug\deps\libserde-cc7b7d377eb306ef.rmeta: C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\lib.rs C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\integer128.rs C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\mod.rs C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\de.rs C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\ser.rs C:\Users\Devyani\.gemini\antigravity\scratch\trustchain\target\debug\build\serde-9b76ea22f6fba3a5\out/private.rs
+
+C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\lib.rs:
+C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\integer128.rs:
+C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\mod.rs:
+C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\de.rs:
+C:\Users\Devyani\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\ser.rs:
+C:\Users\Devyani\.gemini\antigravity\scratch\trustchain\target\debug\build\serde-9b76ea22f6fba3a5\out/private.rs:
+
+# env-dep:OUT_DIR=C:\\Users\\Devyani\\.gemini\\antigravity\\scratch\\trustchain\\target\\debug\\build\\serde-9b76ea22f6fba3a5\\out

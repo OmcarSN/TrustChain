@@ -50,11 +50,11 @@ const Verify = () => {
       const reputation = calculateScore(endorsements);
       
       setProfile({ ...credential, address, reputation, endorsements });
-      toast.success('Reputation Profile Verified');
+      toast.success(t('verify.verifiedResult'));
     } catch (err) {
       console.error(err);
       setError(err.message || 'Worker not found on-chain');
-      toast.error('Verification failed');
+      toast.error(t('verify.failedResult'));
       setProfile(null);
     } finally {
       setIsSearching(false);
@@ -70,14 +70,14 @@ const Verify = () => {
     const url = `${window.location.origin}/verify?address=${profile.address}`;
     navigator.clipboard.writeText(url);
     setCopied(true);
-    toast.success('Profile link copied!');
+    toast.success(t('verify.copied'));
     setTimeout(() => setCopied(false), 2000);
   };
 
   const truncateAddress = (addr) => addr ? `${addr.slice(0, 6)}...${addr.slice(-6)}` : "";
 
   return (
-    <div className="min-h-screen bg-background pt-20 pb-6 px-4 sm:px-6 relative overflow-hidden text-white">
+    <div className="min-h-screen bg-background pt-[4.5rem] pb-4 px-4 sm:px-6 relative overflow-hidden text-white">
       {/* ── Background ──────────────────────────────────────── */}
       <FloatingOrb className="w-[800px] h-[500px] bg-accent/5 blur-[160px] top-10 left-1/2 -translate-x-1/2" />
       <FloatingOrb className="w-[400px] h-[400px] bg-purple-800/5 blur-[120px] bottom-40 right-10" delay={3} />
@@ -104,7 +104,7 @@ const Verify = () => {
             className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-accent/8 border border-accent/12 mb-5"
           >
             <Fingerprint className="w-3.5 h-3.5 text-accent" />
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-accent">On-Chain Verification</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-accent">{t('verify.onChainBadge')}</span>
           </motion.div>
 
           <motion.h1
@@ -151,7 +151,7 @@ const Verify = () => {
                 disabled={isSearching || !workerSearch}
                 className="absolute right-3 top-1/2 -translate-y-1/2 px-6 py-2.5 bg-gradient-to-r from-accent to-purple-700 text-white rounded-xl font-black uppercase tracking-[0.15em] text-[10px] hover:from-accent-hover hover:to-purple-800 active:scale-95 transition-all shadow-lg shadow-accent/15 disabled:opacity-30 flex items-center gap-2"
               >
-                {isSearching ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <><Globe className="w-3.5 h-3.5" /> Search</>}
+                {isSearching ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <><Globe className="w-3.5 h-3.5" /> {t('verify.searchBtn')}</>}
               </button>
             </div>
           </motion.form>
@@ -197,8 +197,8 @@ const Verify = () => {
                       <ShieldCheck className="w-4.5 h-4.5 text-green-400" />
                     </div>
                     <div>
-                      <p className="text-sm font-black text-green-400">Ledger Verified</p>
-                      <p className="text-[10px] font-medium text-green-400/35">Credential confirmed on Stellar Testnet</p>
+                      <p className="text-sm font-black text-green-400">{t('verify.ledgerVerified')}</p>
+                      <p className="text-[10px] font-medium text-green-400/35">{t('verify.credentialConfirmed')}</p>
                     </div>
                   </div>
                   <a 
@@ -262,7 +262,7 @@ const Verify = () => {
                           {profile.experience && (
                             <div className="flex items-center gap-3 px-3.5 py-2.5 bg-white/[0.03] rounded-lg border border-white/[0.03]">
                               <Calendar className="w-3.5 h-3.5 text-accent/60" />
-                              <span className="text-xs font-semibold text-white/50">{profile.experience} Years Exp</span>
+                              <span className="text-xs font-semibold text-white/50">{profile.experience} {t('verify.yearsExp')}</span>
                             </div>
                           )}
                         </div>
@@ -276,7 +276,7 @@ const Verify = () => {
 
                         {/* Address */}
                         <div className="mt-4 pt-4 border-t border-white/[0.04]">
-                          <p className="text-[8px] font-bold uppercase tracking-[0.2em] text-white/12 mb-1.5">Stellar Address</p>
+                          <p className="text-[8px] font-bold uppercase tracking-[0.2em] text-white/12 mb-1.5">{t('verify.stellarAddress')}</p>
                           <p className="text-[10px] font-mono text-white/20 truncate">{profile.address}</p>
                         </div>
                       </div>
@@ -302,8 +302,8 @@ const Verify = () => {
                         className="group w-full py-3.5 bg-white/[0.04] hover:bg-white/[0.06] border border-white/[0.06] text-white rounded-xl font-black uppercase tracking-[0.15em] text-[10px] transition-all flex items-center justify-center gap-2.5 active:scale-[0.98]"
                       >
                         {copied 
-                          ? <><Check className="w-4 h-4 text-green-400" /> Copied!</>
-                          : <><Share2 className="w-4 h-4 text-accent group-hover:rotate-12 transition-transform" /> Share Profile</>
+                          ? <><Check className="w-4 h-4 text-green-400" /> {t('verify.copied')}</>
+                          : <><Share2 className="w-4 h-4 text-accent group-hover:rotate-12 transition-transform" /> {t('verify.shareProfile')}</>
                         }
                       </button>
                     </motion.div>
@@ -357,7 +357,7 @@ const Verify = () => {
                               </svg>
                               <div className="text-center z-10">
                                 <div className="text-3xl font-black tracking-tighter">{profile.reputation.average || '0.0'}</div>
-                                <div className="text-[7px] font-bold uppercase tracking-[0.25em] text-white/18 mt-0.5">Score</div>
+                                <div className="text-[7px] font-bold uppercase tracking-[0.25em] text-white/18 mt-0.5">{t('verify.score')}</div>
                               </div>
                             </div>
                           </div>
@@ -365,7 +365,7 @@ const Verify = () => {
                           {/* Breakdown */}
                           <div className="flex-1 w-full">
                             <div className="flex items-center justify-between mb-4">
-                              <h3 className="text-xs font-black uppercase tracking-wider text-white/35">Rating Breakdown</h3>
+                              <h3 className="text-xs font-black uppercase tracking-wider text-white/35">{t('verify.ratingBreakdown')}</h3>
                               <span className="text-[9px] font-bold text-accent/50">
                                 {profile.reputation.total} {t('discover.reviews')}
                               </span>
@@ -395,7 +395,7 @@ const Verify = () => {
                                   <Star key={s} className={`w-3.5 h-3.5 ${s <= Math.floor(profile.reputation.average) ? 'text-amber-400 fill-amber-400' : 'text-white/[0.05]'}`} />
                                 ))}
                               </div>
-                              <span className="text-[10px] font-semibold text-white/18">{profile.reputation.average || '0.0'} out of 5</span>
+                              <span className="text-[10px] font-semibold text-white/18">{profile.reputation.average || '0.0'} {t('verify.outOf5')}</span>
                             </div>
                           </div>
                         </div>
@@ -412,9 +412,9 @@ const Verify = () => {
                       className="grid grid-cols-3 gap-3"
                     >
                       {[
-                        { value: profile.reputation.total, label: 'Total Jobs', color: 'text-accent' },
-                        { value: profile.experience ? `${profile.experience}yr` : '—', label: 'Experience' },
-                        { value: profile.timestamp ? new Date(profile.timestamp).toLocaleDateString(undefined, { month: 'short', year: '2-digit' }) : '—', label: 'Member Since' },
+                        { value: profile.reputation.total, label: t('verify.totalJobs'), color: 'text-accent' },
+                        { value: profile.experience ? `${profile.experience}yr` : '—', label: t('verify.experience') },
+                        { value: profile.timestamp ? new Date(profile.timestamp).toLocaleDateString(undefined, { month: 'short', year: '2-digit' }) : '—', label: t('verify.memberSince') },
                       ].map((stat, i) => (
                         <div key={i} className="p-4 rounded-xl text-center" style={{
                           background: 'rgba(255,255,255,0.025)',
@@ -469,7 +469,7 @@ const Verify = () => {
                                   <ShieldCheck className="w-4 h-4 text-accent" />
                                 </div>
                                 <div>
-                                  <span className="text-[8px] font-bold uppercase tracking-[0.15em] text-white/18 block">Endorser</span>
+                                  <span className="text-[8px] font-bold uppercase tracking-[0.15em] text-white/18 block">{t('profile.endorserLabel')}</span>
                                   <span className="text-xs font-mono font-semibold text-white/40">{truncateAddress(endorsement.endorser)}</span>
                                 </div>
                               </div>
@@ -498,7 +498,7 @@ const Verify = () => {
                                   target="_blank" rel="noopener noreferrer"
                                   className="flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-wider text-white/12 hover:text-accent transition-colors"
                                 >
-                                  View TX <ExternalLink className="w-2.5 h-2.5" />
+                                  {t('profile.viewTx')} <ExternalLink className="w-2.5 h-2.5" />
                                 </a>
                               )}
                             </div>
@@ -510,7 +510,7 @@ const Verify = () => {
                             <History className="w-6 h-6 text-white/[0.06]" />
                           </div>
                           <p className="text-[10px] font-bold uppercase tracking-wider text-white/15 mb-1">{t('profile.noReviews')}</p>
-                          <p className="text-[10px] text-white/8 font-medium">Be the first to endorse this worker</p>
+                          <p className="text-[10px] text-white/8 font-medium">{t('profile.beFirstEndorse')}</p>
                         </div>
                       )}
                     </div>
@@ -532,8 +532,8 @@ const Verify = () => {
             <div className="w-16 h-16 rounded-2xl bg-white/[0.02] border border-white/[0.04] flex items-center justify-center mx-auto mb-5">
               <Sparkles className="w-7 h-7 text-white/[0.06]" />
             </div>
-            <p className="text-white/12 text-xs font-bold mb-1">Paste a Stellar address above to get started</p>
-            <p className="text-white/[0.06] text-[10px] font-medium">Credentials are pulled directly from the blockchain</p>
+            <p className="text-white/12 text-xs font-bold mb-1">{t('verify.emptyStateTitle')}</p>
+            <p className="text-white/[0.06] text-[10px] font-medium">{t('verify.emptyStateSubtitle')}</p>
           </motion.div>
         )}
 
@@ -545,15 +545,15 @@ const Verify = () => {
           className="mt-10 flex items-center justify-center gap-5 text-white/10"
         >
           <div className="flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-wider">
-            <Fingerprint className="w-3 h-3" /> Immutable Data
+            <Fingerprint className="w-3 h-3" /> {t('verify.badgeImmutable')}
           </div>
           <div className="w-1 h-1 rounded-full bg-white/5" />
           <div className="flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-wider">
-            <ShieldCheck className="w-3 h-3" /> Tamper-Proof
+            <ShieldCheck className="w-3 h-3" /> {t('verify.badgeTamperProof')}
           </div>
           <div className="w-1 h-1 rounded-full bg-white/5" />
           <div className="flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-wider">
-            <Target className="w-3 h-3" /> Stellar Network
+            <Target className="w-3 h-3" /> {t('verify.badgeStellar')}
           </div>
         </motion.div>
       </div>

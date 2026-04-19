@@ -170,7 +170,8 @@ const MetricCard = ({ title, value, subtitle, icon: Icon, color = 'purple', tren
       style={{
         background: `linear-gradient(160deg, ${c.glow} 0%, rgba(15,15,24,0.6) 40%, rgba(15,15,24,0.4) 100%)`,
         border: `1px solid ${c.border}`,
-        backdropFilter: 'blur(16px)',
+        backdropFilter: 'blur(24px)',
+        boxShadow: '0 16px 40px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05)'
       }}
     >
       {/* Hover glow ring */}
@@ -188,7 +189,7 @@ const MetricCard = ({ title, value, subtitle, icon: Icon, color = 'purple', tren
         />
       )}
 
-      <div className="relative z-10 p-5 pb-4">
+      <div className="relative z-10 p-4 pb-3">
         {/* Top row: title + icon */}
         <div className="flex items-start justify-between mb-3">
           <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-white/40 leading-tight max-w-[60%]">

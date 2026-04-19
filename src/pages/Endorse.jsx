@@ -39,14 +39,14 @@ const Endorse = () => {
   const [error, setError] = useState(null);
 
   const currentStep = isSuccess ? 3 : (foundWorker ? 2 : 1);
-  const ratingLabels = ['', 'Poor', 'Fair', 'Good', 'Great', 'Outstanding'];
+  const ratingLabels = ['', t('endorse.ratingPoor'), t('endorse.ratingFair'), t('endorse.ratingGood'), t('endorse.ratingGreat'), t('endorse.ratingOutstanding')];
   const canSubmit = isConnected && foundWorker && rating > 0 && jobType && feedback.length >= 20;
   const activeStarValue = hoveredStar || rating;
   const truncAddr = (addr) => addr ? `${addr.slice(0, 6)}…${addr.slice(-6)}` : "";
 
   const handleSearch = async () => {
     if (!workerSearch) return;
-    if (workerSearch === walletAddress) { toast.error("You cannot endorse yourself."); return; }
+    if (workerSearch === walletAddress) { toast.error(t('endorse.cannotEndorseSelf')); return; }
     setIsSearching(true); setError(null); setFoundWorker(null);
     try {
       const credential = await fetchWorkerCredential(workerSearch);
@@ -61,7 +61,7 @@ const Endorse = () => {
         credential.phone = localData.phone || '';
       }
       setFoundWorker({ ...credential, address: workerSearch });
-      toast.success('Worker found');
+      toast.success(t('endorse.workerFound'));
     } catch (err) {
       // Even if on-chain fetch fails, check localStorage
       const localData = JSON.parse(localStorage.getItem(`trustchain_worker_${workerSearch}`) || 'null');
@@ -74,7 +74,7 @@ const Endorse = () => {
           experience: localData.experience || '—',
           address: workerSearch,
         });
-        toast.success('Worker found');
+        toast.success(t('endorse.workerFound'));
       } else {
         setError(err.message || 'Worker not found');
         toast.error(err.message || 'Search failed');
@@ -86,14 +86,14 @@ const Endorse = () => {
     if (!canSubmit) return;
     const localKey = `endorsements_${foundWorker.address}`;
     const prev = JSON.parse(localStorage.getItem(localKey) || '[]');
-    if (prev.some(e => e.endorser === walletAddress)) { toast.error("Already endorsed this worker."); return; }
+    if (prev.some(e => e.endorser === walletAddress)) { toast.error(t('endorse.alreadyEndorsed')); return; }
     setIsSigning(true); setError(null);
     try {
       const response = await submitWorkerEndorsement({ worker: foundWorker.address, rating, jobType, feedback }, walletAddress);
       const hash = response.hash;
       setTxHash(hash); setIsSuccess(true);
       localStorage.setItem(localKey, JSON.stringify([...prev, { endorser: walletAddress, worker: foundWorker.address, rating, jobType, feedback, txHash: hash, timestamp: new Date().toISOString() }]));
-      toast.success('Endorsement sealed');
+      toast.success(t('endorse.endorsementSealed'));
     } catch (err) {
       setError(err.message || 'Transaction failed');
       toast.error(err.message || 'Submission failed');
@@ -103,7 +103,7 @@ const Endorse = () => {
   /* ── Not connected ──────────────────────────────────────────── */
   if (!isConnected) {
     return (
-      <div className="min-h-screen bg-background pt-20 flex items-center justify-center px-6 relative overflow-hidden">
+      <div className="min-h-[calc(100vh-4rem)] bg-background pt-[4.5rem] flex items-center justify-center px-6 relative overflow-hidden">
         <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-accent/5 rounded-full blur-[150px] -z-10" />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -114,13 +114,26 @@ const Endorse = () => {
             border: '1px solid rgba(255,255,255,0.06)',
           }}
         >
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-accent/20 to-purple-800/20 border border-accent/15 flex items-center justify-center mx-auto mb-5">
-            <Award className="w-7 h-7 text-accent" />
+          <div className="relative mx-auto mb-6 w-fit">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-accent/20 to-purple-800/20 border border-accent/15 flex items-center justify-center">
+              <Award className="w-8 h-8 text-accent" />
+            </div>
+            <motion.div
+              className="absolute -inset-3 rounded-3xl border border-accent/10"
+              animate={{ scale: [1, 1.1, 1], opacity: [0.2, 0.5, 0.2] }}
+              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+            />
           </div>
           <h2 className="text-2xl font-black mb-2 tracking-tight">{t('endorse.headerTitle')}</h2>
-          <p className="text-white/30 mb-6 text-sm font-medium">{t('endorse.headerSubtitle')}</p>
-          <button onClick={connect} className="group w-full py-4 bg-gradient-to-r from-accent to-purple-700 text-white rounded-2xl font-black uppercase tracking-[0.2em] text-[10px] transition-all flex items-center justify-center gap-2.5 shadow-xl shadow-accent/25 active:scale-[0.98]">
-            <Wallet className="w-4 h-4" /> {t('dashboard.connectBtn')}
+          <p className="text-white/30 mb-8 text-sm font-medium leading-relaxed">{t('endorse.headerSubtitle')}</p>
+          <button onClick={connect} className="group w-full py-4 bg-gradient-to-r from-accent to-purple-700 text-white rounded-2xl font-black uppercase tracking-[0.2em] text-[10px] transition-all flex items-center justify-center gap-2.5 shadow-xl shadow-accent/25 active:scale-[0.98] relative overflow-hidden">
+            <motion.div
+              className="absolute inset-0 opacity-20"
+              style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)' }}
+              animate={{ x: ['-100%', '200%'] }}
+              transition={{ duration: 2.5, repeat: Infinity, ease: 'linear' }}
+            />
+            <Wallet className="w-4 h-4 relative z-10" /> <span className="relative z-10">{t('dashboard.connectBtn')}</span>
           </button>
         </motion.div>
       </div>
@@ -129,7 +142,7 @@ const Endorse = () => {
 
   /* ── Main Page ──────────────────────────────────────────────── */
   return (
-    <div className="min-h-screen bg-background pt-20 pb-6 px-4 sm:px-6 relative overflow-hidden text-white">
+    <div className="flex-1 w-full bg-background pt-[4.5rem] pb-4 px-4 sm:px-6 relative overflow-hidden text-white min-h-screen">
       {/* Background */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-accent/6 rounded-full blur-[150px]" />
@@ -147,7 +160,7 @@ const Endorse = () => {
         <motion.div 
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-4 p-4 sm:p-5 rounded-2xl relative overflow-hidden"
+          className="mb-3 p-3 sm:p-4 rounded-2xl relative overflow-hidden"
           style={{
             background: 'linear-gradient(135deg, rgba(124,58,237,0.1) 0%, rgba(15,15,25,0.7) 50%, rgba(99,40,210,0.06) 100%)',
             border: '1px solid rgba(124,58,237,0.12)',
@@ -209,10 +222,10 @@ const Endorse = () => {
         </motion.div>
 
         {/* ── Main 2-Column Grid ──────────────────────────────────── */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 items-start">
           
           {/* ── Left: Search + Worker Card ──────────────────────── */}
-          <div className="lg:col-span-4 space-y-4">
+          <div className="lg:col-span-4 space-y-3 lg:sticky lg:top-[4.5rem]">
             
             {/* Search Box */}
             <motion.div
@@ -221,13 +234,14 @@ const Endorse = () => {
               transition={{ delay: 0.1 }}
               className="p-4 rounded-xl"
               style={{
-                background: 'rgba(255,255,255,0.03)',
+                background: 'linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)',
                 border: '1px solid rgba(255,255,255,0.06)',
+                backdropFilter: 'blur(24px)',
               }}
             >
               <div className="flex items-center gap-1.5 mb-3">
                 <Search className="w-3.5 h-3.5 text-accent/60" />
-                <label className="text-[9px] font-black uppercase tracking-[0.15em] text-white/35">Find Worker</label>
+                <label className="text-[9px] font-black uppercase tracking-[0.15em] text-white/35">{t('endorse.findWorkerLabel')}</label>
               </div>
               <div className="flex gap-2">
                 <input 
@@ -295,18 +309,18 @@ const Endorse = () => {
 
                     <div className="space-y-1.5">
                       <div className="flex justify-between items-center p-2.5 bg-white/[0.03] rounded-lg border border-white/[0.03]">
-                        <span className="text-[8px] font-black uppercase tracking-wider text-white/20">Skill</span>
+                        <span className="text-[8px] font-black uppercase tracking-wider text-white/20">{t('endorse.skillLabel')}</span>
                         <span className="text-[11px] font-bold text-accent">{foundWorker.skill}</span>
                       </div>
                       {foundWorker.experience && foundWorker.experience !== '—' && (
                         <div className="flex justify-between items-center p-2.5 bg-white/[0.03] rounded-lg border border-white/[0.03]">
-                          <span className="text-[8px] font-black uppercase tracking-wider text-white/20">Experience</span>
+                          <span className="text-[8px] font-black uppercase tracking-wider text-white/20">{t('endorse.experienceLabel')}</span>
                           <span className="text-[11px] font-bold text-emerald-400">{foundWorker.experience}</span>
                         </div>
                       )}
                       {foundWorker.bio && (
                         <div className="p-2.5 bg-white/[0.03] rounded-lg border border-white/[0.03]">
-                          <p className="text-[8px] font-black uppercase tracking-wider text-white/20 mb-1">Bio</p>
+                          <p className="text-[8px] font-black uppercase tracking-wider text-white/20 mb-1">{t('endorse.bioLabel')}</p>
                           <p className="text-[10px] text-white/40 leading-relaxed">{foundWorker.bio}</p>
                         </div>
                       )}
@@ -328,8 +342,8 @@ const Endorse = () => {
                   <div className="w-10 h-10 rounded-xl bg-white/[0.03] flex items-center justify-center mb-2">
                     <User className="w-5 h-5 text-white/8" />
                   </div>
-                  <p className="text-white/12 text-[10px] font-bold uppercase tracking-wider">No Worker Selected</p>
-                  <p className="text-white/8 text-[9px] mt-0.5">Search by address above</p>
+                  <p className="text-white/12 text-[10px] font-bold uppercase tracking-wider">{t('endorse.noWorkerSelected')}</p>
+                  <p className="text-white/8 text-[9px] mt-0.5">{t('endorse.searchByAddress')}</p>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -343,8 +357,10 @@ const Endorse = () => {
               transition={{ delay: 0.15 }}
               className="relative rounded-xl overflow-hidden h-full"
               style={{
-                background: 'rgba(255,255,255,0.03)',
-                border: '1px solid rgba(255,255,255,0.06)',
+                background: 'linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.015) 100%)',
+                border: '1px solid rgba(255,255,255,0.08)',
+                backdropFilter: 'blur(24px)',
+                boxShadow: '0 16px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1)'
               }}
             >
               {/* Locked overlay */}
@@ -359,31 +375,31 @@ const Endorse = () => {
                     <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center">
                       <Search className="w-5 h-5 text-white/12" />
                     </div>
-                    <p className="text-white/15 font-black uppercase tracking-[0.2em] text-[8px]">Search a Worker First</p>
+                    <p className="text-white/15 font-black uppercase tracking-[0.2em] text-[8px]">{t('endorse.findWorkerLabel')}</p>
                   </motion.div>
                 )}
               </AnimatePresence>
 
-              <div className="p-5 sm:p-6">
+              <div className="p-4 sm:p-5">
                 {/* Form Header */}
-                <div className="flex items-center gap-2.5 mb-5 pb-4 border-b border-white/[0.05]">
+                <div className="flex items-center gap-2.5 mb-4 pb-3 border-b border-white/[0.05]">
                   <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center border border-accent/10">
                     <FileCheck className="w-4 h-4 text-accent" />
                   </div>
                   <div>
                     <h2 className="text-base font-black tracking-tight">{t('endorse.formTitle')}</h2>
-                    <p className="text-[9px] text-white/20 font-semibold">All fields required</p>
+                    <p className="text-[9px] text-white/20 font-semibold">{t('endorse.allFieldsRequired')}</p>
                   </div>
                 </div>
 
                 {/* Form Fields — 2 columns on large screens */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   
                   {/* ── Star Rating ──────────────────────────────── */}
                   <div>
                     <div className="flex items-center justify-between mb-2">
                       <label className="text-[9px] font-black uppercase tracking-[0.15em] text-accent/70 flex items-center gap-1">
-                        <Star className="w-3 h-3" /> Rating
+                        <Star className="w-3 h-3" /> {t('endorse.ratingFieldLabel')}
                       </label>
                       <AnimatePresence mode="wait">
                         {activeStarValue > 0 && (
@@ -451,7 +467,7 @@ const Endorse = () => {
                   <div className="sm:col-span-2">
                     <div className="flex justify-between items-center mb-2">
                       <label className="text-[9px] font-black uppercase tracking-[0.15em] text-white/30 flex items-center gap-1">
-                        <PenLine className="w-3 h-3" /> Review
+                        <PenLine className="w-3 h-3" /> {t('endorse.reviewLabel')}
                       </label>
                       <div className="flex items-center gap-1.5">
                         {feedback.length >= 20 && (
@@ -472,13 +488,13 @@ const Endorse = () => {
                       value={feedback}
                       onChange={(e) => e.target.value.length <= 300 && setFeedback(e.target.value)}
                       placeholder={t('endorse.placeholderFeedback')}
-                      className="w-full bg-white/[0.04] border border-white/[0.06] rounded-lg p-3 text-white text-xs focus:outline-none focus:border-accent/30 transition-all font-medium min-h-[100px] resize-none placeholder:text-white/12 leading-relaxed"
+                      className="w-full bg-white/[0.04] border border-white/[0.06] rounded-lg p-3 text-white text-xs focus:outline-none focus:border-accent/30 transition-all font-medium min-h-[80px] resize-none placeholder:text-white/12 leading-relaxed"
                     />
                     {feedback.length > 0 && feedback.length < 20 && (
                       <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                         className="text-amber-400/50 text-[9px] font-semibold mt-1.5 flex items-center gap-1"
                       >
-                        <Zap className="w-2.5 h-2.5" /> {20 - feedback.length} more characters needed
+                        <Zap className="w-2.5 h-2.5" /> {20 - feedback.length} {t('endorse.moreCharsNeeded', { count: 20 - feedback.length })}
                       </motion.p>
                     )}
                   </div>
@@ -503,8 +519,8 @@ const Endorse = () => {
                                 <CheckCircle2 className="w-4 h-4 text-green-400" />
                               </div>
                               <div>
-                                <h4 className="text-sm font-black uppercase tracking-tight">Endorsement Recorded</h4>
-                                <p className="text-[9px] text-green-400/50 font-semibold">Sealed on Stellar</p>
+                                <h4 className="text-sm font-black uppercase tracking-tight">{t('endorse.endorsementRecorded')}</h4>
+                                <p className="text-[9px] text-green-400/50 font-semibold">{t('endorse.sealedOnStellar')}</p>
                               </div>
                             </div>
                             <div className="bg-black/30 p-3 rounded-lg border border-white/[0.04] space-y-2">
@@ -518,7 +534,7 @@ const Endorse = () => {
                                 rel="noopener noreferrer"
                                 className="flex items-center justify-center gap-1.5 text-[9px] font-black uppercase tracking-wider text-accent hover:text-white bg-accent/10 hover:bg-accent/20 py-2 rounded-lg transition-all"
                               >
-                                <ExternalLink className="w-3 h-3" /> View on Explorer
+                                <ExternalLink className="w-3 h-3" /> {t('endorse.viewOnExplorer')}
                               </a>
                             </div>
                           </div>
@@ -553,7 +569,7 @@ const Endorse = () => {
                             ) : canSubmit ? (
                               <>{t('endorse.btnSubmit')} <ShieldCheck className="w-4 h-4 group-hover:rotate-[10deg] transition-transform" /></>
                             ) : (
-                              <span className="text-white/20">Complete All Fields</span>
+                              <span className="text-white/20">{t('endorse.completeAllFields')}</span>
                             )}
                           </span>
                         </motion.button>
@@ -571,17 +587,17 @@ const Endorse = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
-          className="mt-5 flex items-center justify-center gap-4 text-white/10"
+          className="mt-3 flex items-center justify-center gap-4 text-white/10"
         >
           {[
-            { icon: ShieldCheck, text: 'On-Chain Verified' },
-            { icon: Clock, text: 'Permanent Record' },
-            { icon: Sparkles, text: 'Stellar Testnet' },
+            { icon: ShieldCheck, textKey: 'endorse.badgeOnChain' },
+            { icon: Clock, textKey: 'endorse.badgePermanent' },
+            { icon: Sparkles, textKey: 'endorse.badgeStellar' },
           ].map((badge, i) => (
             <React.Fragment key={i}>
               {i > 0 && <div className="w-0.5 h-0.5 rounded-full bg-white/8" />}
               <div className="flex items-center gap-1 text-[8px] font-bold uppercase tracking-wider">
-                <badge.icon className="w-2.5 h-2.5" /> {badge.text}
+                <badge.icon className="w-2.5 h-2.5" /> {t(badge.textKey)}
               </div>
             </React.Fragment>
           ))}

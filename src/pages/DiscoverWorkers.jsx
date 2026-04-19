@@ -195,7 +195,7 @@ const DiscoverWorkers = () => {
   const totalEndorsements = workers.reduce((s, w) => s + w.totalEndorsements, 0);
 
   return (
-    <div className="min-h-screen bg-background pt-20 pb-8 px-4 sm:px-6 relative overflow-hidden text-white">
+    <div className="min-h-screen bg-background pt-[4.5rem] pb-4 px-4 sm:px-6 relative overflow-hidden text-white">
       {/* Background */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-accent/5 rounded-full blur-[160px]" />
@@ -236,17 +236,17 @@ const DiscoverWorkers = () => {
             <div className="flex items-center gap-4">
               <div className="text-center">
                 <p className="text-lg font-black text-accent">{totalWorkers}</p>
-                <p className="text-[8px] font-bold uppercase tracking-wider text-white/20">Workers</p>
+                <p className="text-[8px] font-bold uppercase tracking-wider text-white/20">{t('discover.workers')}</p>
               </div>
               <div className="w-px h-8 bg-white/5" />
               <div className="text-center">
                 <p className="text-lg font-black text-amber-400">{avgRating}</p>
-                <p className="text-[8px] font-bold uppercase tracking-wider text-white/20">Avg Rating</p>
+                <p className="text-[8px] font-bold uppercase tracking-wider text-white/20">{t('discover.avgRatingLabel')}</p>
               </div>
               <div className="w-px h-8 bg-white/5" />
               <div className="text-center">
                 <p className="text-lg font-black text-emerald-400">{totalEndorsements}</p>
-                <p className="text-[8px] font-bold uppercase tracking-wider text-white/20">Reviews</p>
+                <p className="text-[8px] font-bold uppercase tracking-wider text-white/20">{t('discover.reviewsLabel')}</p>
               </div>
             </div>
           </div>
@@ -338,7 +338,7 @@ const DiscoverWorkers = () => {
 
                   {/* Rating Filter */}
                   <div>
-                    <label className="text-[8px] font-black uppercase tracking-wider text-white/20 block mb-1 ml-1">Min Rating</label>
+                    <label className="text-[8px] font-black uppercase tracking-wider text-white/20 block mb-1 ml-1">{t('discover.filterRating')}</label>
                     <div className="flex gap-1">
                       {RATING_OPTIONS.map(opt => (
                         <button
@@ -377,10 +377,10 @@ const DiscoverWorkers = () => {
         <div className="flex items-center justify-between mb-4 px-1">
           <p className="text-[10px] font-bold text-white/20 uppercase tracking-wider">
             {filtered.length} {t('discover.results')}
-            {hasActiveFilters && <span className="text-accent/50"> (filtered)</span>}
+            {hasActiveFilters && <span className="text-accent/50"> ({t('discover.filtered')})</span>}
           </p>
           <div className="flex items-center gap-1 text-[9px] font-bold text-white/10 uppercase tracking-wider">
-            <TrendingUp className="w-3 h-3" /> Sorted by rating
+            <TrendingUp className="w-3 h-3" /> {t('discover.sortedByRating')}
           </div>
         </div>
 
@@ -402,18 +402,33 @@ const DiscoverWorkers = () => {
             animate={{ opacity: 1, y: 0 }}
             className="py-16 flex flex-col items-center text-center"
           >
-            <div className="w-20 h-20 rounded-2xl bg-accent/5 border border-accent/10 flex items-center justify-center mb-5">
-              <Users className="w-9 h-9 text-accent/30" />
+            <div className="relative mb-6">
+              <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-accent/10 to-purple-800/10 border border-accent/10 flex items-center justify-center">
+                <Users className="w-10 h-10 text-accent/40" />
+              </div>
+              <motion.div
+                className="absolute -inset-3 rounded-3xl border border-accent/10"
+                animate={{ scale: [1, 1.08, 1], opacity: [0.3, 0.6, 0.3] }}
+                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+              />
+              <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-amber-500/15 border border-amber-500/15 flex items-center justify-center">
+                <Sparkles className="w-3 h-3 text-amber-400" />
+              </div>
             </div>
-            <h3 className="text-lg font-black mb-2">{t('discover.noWorkers')}</h3>
-            <p className="text-white/20 text-sm max-w-md mb-6">
-              {t('discover.noWorkersSub')}
-            </p>
+            <h3 className="text-lg font-black mb-2 tracking-tight">{t('discover.noWorkers')}</h3>
+            <p className="text-white/25 text-sm max-w-md mb-3">{t('discover.noWorkersSub')}</p>
+            <div className="w-16 h-[2px] bg-gradient-to-r from-transparent via-accent/30 to-transparent mb-6" />
             <Link
               to="/worker"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-accent to-purple-700 text-white rounded-xl font-black uppercase tracking-[0.15em] text-[10px] shadow-xl shadow-accent/25 hover:shadow-accent/40 transition-all active:scale-[0.98]"
+              className="inline-flex items-center gap-2.5 px-8 py-4 bg-gradient-to-r from-accent to-purple-700 text-white rounded-xl font-black uppercase tracking-[0.15em] text-[10px] shadow-xl shadow-accent/25 hover:shadow-accent/40 transition-all active:scale-[0.98] relative overflow-hidden group"
             >
-              <Award className="w-4 h-4" /> Register as Worker
+              <motion.div
+                className="absolute inset-0 opacity-20"
+                style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)' }}
+                animate={{ x: ['-100%', '200%'] }}
+                transition={{ duration: 2.5, repeat: Infinity, ease: 'linear' }}
+              />
+              <Award className="w-4 h-4 relative z-10" /> <span className="relative z-10">{t('discover.registerAsWorker')}</span>
             </Link>
           </motion.div>
         ) : (
@@ -445,14 +460,14 @@ const DiscoverWorkers = () => {
           className="mt-8 flex items-center justify-center gap-4 text-white/10"
         >
           {[
-            { icon: ShieldCheck, text: 'On-Chain Verified' },
-            { icon: Sparkles, text: 'Stellar Testnet' },
-            { icon: Zap, text: 'Real-time Discovery' },
+            { icon: ShieldCheck, textKey: 'discover.badgeOnChain' },
+            { icon: Sparkles, textKey: 'discover.badgeStellar' },
+            { icon: Zap, textKey: 'discover.badgeRealtime' },
           ].map((badge, i) => (
             <React.Fragment key={i}>
               {i > 0 && <div className="w-0.5 h-0.5 rounded-full bg-white/8" />}
               <div className="flex items-center gap-1 text-[8px] font-bold uppercase tracking-wider">
-                <badge.icon className="w-2.5 h-2.5" /> {badge.text}
+                <badge.icon className="w-2.5 h-2.5" /> {t(badge.textKey)}
               </div>
             </React.Fragment>
           ))}

@@ -179,12 +179,12 @@ const WorkerRegistration = () => {
   const filledCount = [formData.fullName, formData.skillCategory, formData.experience, formData.city, (formData.bio || '').length >= 10].filter(Boolean).length;
   const currentStep = txResult ? 3 : isMinting ? 2 : 1;
 
-  const inputClass = (field) => `w-full bg-white/[0.03] border ${errors[field] ? 'border-red-500/30' : 'border-white/[0.06]'} rounded-xl py-3.5 pl-4 pr-4 text-white text-sm focus:outline-none focus:border-accent/30 focus:bg-white/[0.05] transition-all font-medium placeholder:text-white/12`;
+  const inputClass = (field) => `w-full bg-white/[0.03] border ${errors[field] ? 'border-red-500/30' : 'border-white/[0.06]'} rounded-xl py-2.5 sm:py-3 pl-4 pr-4 text-white text-xs focus:outline-none focus:border-accent/30 focus:bg-white/[0.05] transition-all font-medium placeholder:text-white/12`;
 
   /* ── Not connected ─────────────────────────────────────────── */
   if (!isConnected) {
     return (
-      <div className="min-h-screen bg-background pt-20 flex items-center justify-center px-6 relative overflow-hidden">
+      <div className="flex-1 w-full flex bg-background pt-[4.5rem] items-center justify-center px-6 relative overflow-hidden">
         <FloatingOrb className="w-[600px] h-[600px] bg-accent/5 blur-[150px] top-20 left-1/2 -translate-x-1/2" />
         <motion.div
           initial={{ opacity: 0, y: 25, scale: 0.97 }}
@@ -221,7 +221,7 @@ const WorkerRegistration = () => {
   /* ── Existing credential view ──────────────────────────────── */
   if (existingCredential && !isMinting && !txResult) {
     return (
-      <div className="min-h-screen bg-background pt-20 pb-8 px-4 sm:px-6 relative overflow-hidden">
+      <div className="min-h-screen bg-background pt-[4.5rem] pb-4 px-4 sm:px-6 relative overflow-hidden">
         <FloatingOrb className="w-[600px] h-[400px] bg-accent/5 blur-[150px] top-20 left-1/3" />
         <div className="max-w-xl mx-auto">
           <motion.div initial={{ opacity: 0, x: -15 }} animate={{ opacity: 1, x: 0 }} className="mb-6">
@@ -264,26 +264,26 @@ const WorkerRegistration = () => {
               <div className="space-y-3">
                 <div className="grid grid-cols-2 gap-3">
                   <div className="p-3.5 bg-white/[0.03] rounded-xl border border-white/[0.04]">
-                    <p className="text-[9px] uppercase text-white/25 font-bold tracking-wider mb-1">Name</p>
+                    <p className="text-[9px] uppercase text-white/25 font-bold tracking-wider mb-1">{t('registration.nameLabel')}</p>
                     <p className="font-bold text-sm">{existingCredential.name || existingCredential.fullName}</p>
                   </div>
                   <div className="p-3.5 bg-white/[0.03] rounded-xl border border-white/[0.04]">
-                    <p className="text-[9px] uppercase text-white/25 font-bold tracking-wider mb-1">Skill</p>
+                    <p className="text-[9px] uppercase text-white/25 font-bold tracking-wider mb-1">{t('registration.skillLabel')}</p>
                     <p className="font-bold text-sm text-accent">{existingCredential.skill || existingCredential.skillCategory}</p>
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="p-3.5 bg-white/[0.03] rounded-xl border border-white/[0.04]">
-                    <p className="text-[9px] uppercase text-white/25 font-bold tracking-wider mb-1">Experience</p>
-                    <p className="font-bold text-sm">{existingCredential.experience} Years</p>
+                    <p className="text-[9px] uppercase text-white/25 font-bold tracking-wider mb-1">{t('registration.experienceLabel')}</p>
+                    <p className="font-bold text-sm">{existingCredential.experience} {t('registration.yearsLabel')}</p>
                   </div>
                   <div className="p-3.5 bg-white/[0.03] rounded-xl border border-white/[0.04]">
-                    <p className="text-[9px] uppercase text-white/25 font-bold tracking-wider mb-1">City</p>
+                    <p className="text-[9px] uppercase text-white/25 font-bold tracking-wider mb-1">{t('registration.cityLabel')}</p>
                     <p className="font-bold text-sm">{existingCredential.city}</p>
                   </div>
                 </div>
                 <div className="p-3.5 bg-white/[0.03] rounded-xl border border-white/[0.04]">
-                  <p className="text-[9px] uppercase text-white/25 font-bold tracking-wider mb-1">Bio</p>
+                  <p className="text-[9px] uppercase text-white/25 font-bold tracking-wider mb-1">{t('registration.bioLabelShort')}</p>
                   <p className="text-xs text-white/50 italic leading-relaxed">"{existingCredential.bio}"</p>
                 </div>
               </div>
@@ -301,7 +301,7 @@ const WorkerRegistration = () => {
                 }}
                 className="mt-6 w-full py-3.5 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.06] text-white rounded-xl font-bold uppercase tracking-[0.15em] text-[10px] transition-all flex items-center justify-center gap-2"
               >
-                <PenLine className="w-3.5 h-3.5 text-accent" /> Update Credential
+                <PenLine className="w-3.5 h-3.5 text-accent" /> {t('registration.updateCredential')}
               </button>
             </div>
           </motion.div>
@@ -312,7 +312,7 @@ const WorkerRegistration = () => {
 
   /* ── Main Registration Form ────────────────────────────────── */
   return (
-    <div className="min-h-screen bg-background pt-20 pb-8 px-4 sm:px-6 relative overflow-hidden">
+    <div className="flex-1 w-full bg-background pt-[4.5rem] pb-2 px-4 sm:px-6 relative overflow-hidden">
       {/* Background */}
       <FloatingOrb className="w-[700px] h-[500px] bg-accent/5 blur-[160px] top-10 left-1/3" />
       <FloatingOrb className="w-[400px] h-[400px] bg-purple-800/5 blur-[120px] bottom-20 right-10" delay={3} />
@@ -323,11 +323,11 @@ const WorkerRegistration = () => {
         }}
       />
 
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-[1000px] w-full mx-auto">
         {/* Back link */}
-        <motion.div initial={{ opacity: 0, x: -15 }} animate={{ opacity: 1, x: 0 }} className="mb-6">
+        <motion.div initial={{ opacity: 0, x: -15 }} animate={{ opacity: 1, x: 0 }} className="mb-3 hidden sm:block">
           <Link to="/" className="inline-flex items-center gap-2 text-white/30 hover:text-accent transition-colors font-bold text-xs group">
-            <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" /> Back
+            <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" /> {t('registration.backToHome')}
           </Link>
         </motion.div>
 
@@ -336,7 +336,7 @@ const WorkerRegistration = () => {
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="mb-6 p-6 sm:p-8 rounded-2xl relative overflow-hidden"
+          className="mb-4 p-5 rounded-2xl relative overflow-hidden"
           style={{
             background: 'linear-gradient(135deg, rgba(124,58,237,0.12) 0%, rgba(15,15,25,0.8) 50%, rgba(99,40,210,0.08) 100%)',
             border: '1px solid rgba(124,58,237,0.15)',
@@ -365,7 +365,7 @@ const WorkerRegistration = () => {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="mb-8 flex items-center justify-center"
+          className="mb-4 flex items-center justify-center"
         >
           {STEPS.map((step, i) => {
             const stepNum = i + 1;
@@ -409,8 +409,10 @@ const WorkerRegistration = () => {
           transition={{ delay: 0.2 }}
           className="rounded-2xl relative overflow-hidden"
           style={{
-            background: 'linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 100%)',
-            border: '1px solid rgba(255,255,255,0.06)',
+            background: 'linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.015) 100%)',
+            border: '1px solid rgba(255,255,255,0.08)',
+            backdropFilter: 'blur(24px)',
+            boxShadow: '0 16px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1)'
           }}
         >
           {/* Progress bar */}
@@ -422,8 +424,8 @@ const WorkerRegistration = () => {
             />
           </div>
 
-          <div className="p-6 sm:p-8">
-            <div className="flex items-center justify-between mb-6 pb-5 border-b border-white/[0.04]">
+          <div className="py-5 px-6 sm:py-6 sm:px-10">
+            <div className="flex items-center justify-between mb-4 pb-3 border-b border-white/[0.04]">
               <div className="flex items-center gap-2">
                 <PenLine className="w-4 h-4 text-accent/60" />
                 <span className="text-xs font-bold text-white/40">Professional Details</span>
@@ -431,7 +433,7 @@ const WorkerRegistration = () => {
               <span className="text-[9px] font-bold text-white/15">{filledCount}/5 completed</span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               {/* Name */}
               <FormField icon={User} label={t('registration.labelName')} error={errors.fullName} completed={(formData.fullName || '').length >= 2}>
                 <input
@@ -492,10 +494,10 @@ const WorkerRegistration = () => {
                   name="bio"
                   value={formData.bio}
                   onChange={handleInputChange}
-                  rows="3"
+                  rows="2"
                   maxLength={64}
-                  placeholder="Briefly describe your expertise (max 64 chars)..."
-                  className={`${inputClass('bio')} resize-none min-h-[90px]`}
+                  placeholder={t('registration.bioPlaceholder')}
+                  className={`${inputClass('bio')} resize-none min-h-[70px]`}
                 />
                 <span className={`absolute right-3 bottom-2.5 text-[9px] font-bold ${
                   (formData.bio || '').length > 55 ? 'text-amber-400/50' : 'text-white/12'
@@ -506,7 +508,7 @@ const WorkerRegistration = () => {
             </FormField>
 
             {/* Submit / Result */}
-            <div className="mt-8">
+            <div className="mt-4">
               <AnimatePresence mode="wait">
                 {txResult ? (
                   <motion.div 
@@ -531,7 +533,7 @@ const WorkerRegistration = () => {
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.15em] text-accent hover:text-white bg-accent/10 hover:bg-accent/20 px-5 py-2.5 rounded-lg transition-all"
                       >
-                        <ExternalLink className="w-3 h-3" /> View on Explorer
+                        <ExternalLink className="w-3 h-3" /> {t('registration.viewOnExplorer')}
                       </a>
                     </div>
                   </motion.div>
@@ -542,20 +544,20 @@ const WorkerRegistration = () => {
                     animate={{ opacity: 1, y: 0 }}
                   >
                     {/* Gasless Transaction Info */}
-                    <div className="flex flex-col items-center justify-center mb-4 text-center">
+                    <div className="flex flex-col items-center justify-center mb-3 text-center">
                       <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-500/10 border border-amber-500/20 rounded-full mb-2">
                         <Zap className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                        <span className="text-[10px] font-black uppercase tracking-wider text-amber-400">Gasless Transaction</span>
+                        <span className="text-[10px] font-black uppercase tracking-wider text-amber-400">{t('registration.gaslessTransaction')}</span>
                       </div>
                       <p className="text-[11px] text-white/40 font-medium">
-                        Your transaction fee is sponsored by TrustChain — you pay nothing
+                        {t('registration.gaslessDesc')}
                       </p>
                     </div>
                     
                     <button
                       onClick={handleMint}
                       disabled={isMinting || filledCount !== 5}
-                      className="group w-full relative overflow-hidden py-5 text-white rounded-2xl font-black uppercase tracking-[0.2em] text-[11px] transition-all flex items-center justify-center gap-3 active:scale-[0.98] disabled:cursor-not-allowed"
+                      className="group w-full relative overflow-hidden py-3.5 text-white rounded-2xl font-black uppercase tracking-[0.2em] text-[11px] transition-all flex items-center justify-center gap-3 active:scale-[0.98] disabled:cursor-not-allowed"
                       style={{
                         background: filledCount === 5
                           ? 'linear-gradient(135deg, #7c3aed 0%, #6d28d9 50%, #5b21b6 100%)'
@@ -578,7 +580,7 @@ const WorkerRegistration = () => {
                         ) : filledCount === 5 ? (
                           <><ShieldCheck className="w-4.5 h-4.5 group-hover:rotate-[10deg] transition-transform" /> {t('registration.btnSubmit')}</>
                         ) : (
-                          <span className="text-white/25">Complete All Fields to Mint</span>
+                          <span className="text-white/25">{t('registration.completeAllFields')}</span>
                         )}
                       </span>
                     </button>
@@ -602,15 +604,15 @@ const WorkerRegistration = () => {
           className="mt-8 flex items-center justify-center gap-5 text-white/10"
         >
           <div className="flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-wider">
-            <ShieldCheck className="w-3 h-3" /> Soulbound Token
+            <ShieldCheck className="w-3 h-3" /> {t('registration.badgeSoulbound')}
           </div>
           <div className="w-1 h-1 rounded-full bg-white/5" />
           <div className="flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-wider">
-            <Clock className="w-3 h-3" /> Permanent Record
+            <Clock className="w-3 h-3" /> {t('registration.badgePermanent')}
           </div>
           <div className="w-1 h-1 rounded-full bg-white/5" />
           <div className="flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-wider">
-            <Sparkles className="w-3 h-3" /> Stellar Testnet
+            <Sparkles className="w-3 h-3" /> {t('registration.badgeStellar')}
           </div>
         </motion.div>
       </div>

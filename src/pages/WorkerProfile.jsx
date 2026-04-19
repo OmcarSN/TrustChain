@@ -64,14 +64,14 @@ const WorkerProfile = () => {
     const url = `${window.location.origin}/profile/${address}`;
     navigator.clipboard.writeText(url);
     setCopied(true);
-    toast.success('Profile link copied to clipboard!');
+    toast.success(t('profile.copied'));
     setTimeout(() => setCopied(false), 2000);
   };
 
   const copyAddress = () => {
     navigator.clipboard.writeText(address);
     setCopiedAddr(true);
-    toast.success('Wallet address copied!');
+    toast.success(t('profile.copied'));
     setTimeout(() => setCopiedAddr(false), 2000);
   };
 
@@ -80,12 +80,12 @@ const WorkerProfile = () => {
   /* ── Loading skeleton ──────────────────────────────────────── */
   if (loading) {
     return (
-      <div className="min-h-screen bg-background pt-20 pb-8 px-4 sm:px-6 relative overflow-hidden">
+      <div className="min-h-screen bg-background pt-[4.5rem] pb-4 px-4 sm:px-6 relative overflow-hidden">
         <FloatingOrb className="w-[600px] h-[400px] bg-accent/5 blur-[150px] top-20 left-1/3" />
         <div className="max-w-5xl mx-auto">
           <div className="mb-6">
             <Link to="/" className="inline-flex items-center gap-2 text-white/30 hover:text-accent transition-colors font-bold text-xs group">
-              <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" /> Back
+              <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" /> {t('profile.backBtn')}
             </Link>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -114,7 +114,7 @@ const WorkerProfile = () => {
   /* ── Error state ───────────────────────────────────────────── */
   if (error) {
     return (
-      <div className="min-h-screen bg-background pt-20 flex items-center justify-center px-6 relative overflow-hidden">
+      <div className="min-h-screen bg-background pt-[4.5rem] flex items-center justify-center px-6 relative overflow-hidden">
         <FloatingOrb className="w-[500px] h-[500px] bg-red-900/5 blur-[120px] top-1/4 left-1/2 -translate-x-1/2" />
         <motion.div
           initial={{ opacity: 0, y: 25, scale: 0.97 }}
@@ -137,7 +137,7 @@ const WorkerProfile = () => {
               <ShieldCheck className="w-3.5 h-3.5" /> {t('dashboard.verifyWorker')}
             </Link>
             <Link to="/" className="w-full py-3.5 bg-white/[0.04] hover:bg-white/[0.06] border border-white/[0.06] text-white rounded-xl font-black uppercase tracking-[0.15em] text-[10px] transition-all flex items-center justify-center gap-2">
-              <ArrowLeft className="w-3.5 h-3.5" /> Back to Home
+               <ArrowLeft className="w-3.5 h-3.5" /> {t('nav.home')}
             </Link>
           </div>
         </motion.div>
@@ -147,7 +147,7 @@ const WorkerProfile = () => {
 
   /* ── Profile View ──────────────────────────────────────────── */
   return (
-    <div className="min-h-screen bg-background pt-20 pb-8 px-4 sm:px-6 relative overflow-hidden text-white">
+    <div className="min-h-screen bg-background pt-[4.5rem] pb-4 px-4 sm:px-6 relative overflow-hidden text-white">
       {/* Background */}
       <FloatingOrb className="w-[700px] h-[500px] bg-accent/5 blur-[160px] top-10 right-1/4" />
       <FloatingOrb className="w-[400px] h-[400px] bg-purple-800/5 blur-[120px] bottom-20 left-10" delay={3} />
@@ -160,15 +160,15 @@ const WorkerProfile = () => {
 
       <div className="max-w-5xl mx-auto">
         {/* Back link */}
-        <motion.div initial={{ opacity: 0, x: -15 }} animate={{ opacity: 1, x: 0 }} className="mb-6">
+        <motion.div initial={{ opacity: 0, x: -15 }} animate={{ opacity: 1, x: 0 }} className="mb-3">
           <Link to="/" className="inline-flex items-center gap-2 text-white/30 hover:text-accent transition-colors font-bold text-xs group">
             <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" /> {t('profile.backBtn')}
           </Link>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
           {/* ── Left Column: Profile + Reputation ────────────── */}
-          <div className="lg:col-span-1 space-y-5">
+          <div className="lg:col-span-1 space-y-3">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -188,13 +188,13 @@ const WorkerProfile = () => {
                 transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
               />
 
-              <div className="p-6">
+              <div className="p-4">
                 {/* Avatar & Identity */}
-                <div className="text-center mb-6">
-                  <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-accent/20 to-purple-800/20 flex items-center justify-center border border-accent/15 mx-auto mb-4 shadow-[0_8px_24px_rgba(124,58,237,0.12)]">
-                    <User className="w-10 h-10 text-accent" />
+                <div className="text-center mb-4">
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-accent/20 to-purple-800/20 flex items-center justify-center border border-accent/15 mx-auto mb-3 shadow-[0_8px_24px_rgba(124,58,237,0.12)]">
+                    <User className="w-7 h-7 text-accent" />
                   </div>
-                  <h2 className="text-xl font-black mb-1 tracking-tight">{profile.name}</h2>
+                  <h2 className="text-lg font-black mb-1 tracking-tight">{profile.name}</h2>
                   <div className="flex items-center justify-center gap-3 mb-3">
                     <span className="flex items-center gap-1 text-white/35 text-[11px] font-semibold">
                       <Briefcase className="w-3 h-3 text-accent/60" /> {profile.skill}
@@ -210,16 +210,16 @@ const WorkerProfile = () => {
                 </div>
 
                 {/* Reputation Score */}
-                <div className="text-center mb-6">
-                  <div className="w-28 h-28 rounded-full mx-auto flex items-center justify-center relative mb-4">
-                    <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 112 112">
-                      <circle cx="56" cy="56" r="50" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="5" />
+                <div className="text-center mb-4">
+                  <div className="w-20 h-20 rounded-full mx-auto flex items-center justify-center relative mb-3">
+                    <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 80 80">
+                      <circle cx="40" cy="40" r="35" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="4" />
                       <circle 
-                        cx="56" cy="56" r="50" fill="none" 
+                        cx="40" cy="40" r="35" fill="none" 
                         stroke="url(#profileScoreGrad)" 
-                        strokeWidth="5" 
+                        strokeWidth="4" 
                         strokeLinecap="round"
-                        strokeDasharray={`${((reputation?.average || 0) / 5) * 314} 314`}
+                        strokeDasharray={`${((reputation?.average || 0) / 5) * 220} 220`}
                       />
                       <defs>
                         <linearGradient id="profileScoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -229,8 +229,8 @@ const WorkerProfile = () => {
                       </defs>
                     </svg>
                     <div className="text-center z-10">
-                      <div className="text-3xl font-black tracking-tighter">{reputation?.average || '0.0'}</div>
-                      <div className="text-[7px] font-bold uppercase tracking-[0.25em] text-white/18 mt-0.5">{t('dashboard.avgRating')}</div>
+                      <div className="text-2xl font-black tracking-tighter">{reputation?.average || '0.0'}</div>
+                      <div className="text-[6px] font-bold uppercase tracking-[0.25em] text-white/18 mt-0.5">{t('dashboard.avgRating')}</div>
                     </div>
                   </div>
                   <div className="flex justify-center gap-1 mb-2">
@@ -242,7 +242,7 @@ const WorkerProfile = () => {
                 </div>
 
                 {/* Star Breakdown */}
-                <div className="space-y-2 mb-6">
+                <div className="space-y-1.5 mb-4">
                   {[5,4,3,2,1].map(star => (
                     <div key={star} className="flex items-center gap-2.5">
                       <span className="text-[9px] font-bold text-white/20 w-5 text-right">{star}★</span>
@@ -261,7 +261,7 @@ const WorkerProfile = () => {
 
                 {/* Wallet */}
                 <div className="pt-4 border-t border-white/[0.04]">
-                  <p className="text-[8px] font-bold uppercase tracking-[0.2em] text-white/12 mb-2">Stellar Address</p>
+                  <p className="text-[8px] font-bold uppercase tracking-[0.2em] text-white/12 mb-2">{t('profile.stellarAddress')}</p>
                   <div className="flex items-center gap-2 p-2.5 bg-white/[0.03] rounded-lg border border-white/[0.03]">
                     <span className="text-[9px] font-mono text-white/20 truncate flex-1">{address}</span>
                     <button onClick={copyAddress} className="shrink-0">
@@ -287,7 +287,7 @@ const WorkerProfile = () => {
           </div>
 
           {/* ── Right Column: Bio, Actions, Endorsements ─────── */}
-          <div className="lg:col-span-2 space-y-5">
+          <div className="lg:col-span-2 space-y-3">
             {/* Identity Card */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
@@ -299,10 +299,10 @@ const WorkerProfile = () => {
                 border: '1px solid rgba(255,255,255,0.06)',
               }}
             >
-              <div className="p-6 sm:p-8">
-                <div className="mb-6 pb-6 border-b border-white/[0.04]">
-                  <h1 className="text-3xl font-black mb-3 tracking-tight">{profile.name}</h1>
-                  <div className="flex flex-wrap gap-4 items-center mb-4">
+              <div className="p-5 sm:p-6">
+                <div className="mb-4 pb-4 border-b border-white/[0.04]">
+                  <h1 className="text-2xl font-black mb-2 tracking-tight">{profile.name}</h1>
+                  <div className="flex flex-wrap gap-4 items-center mb-3">
                     <span className="flex items-center gap-1.5 text-white/40 text-[11px] font-bold uppercase tracking-wider">
                       <Briefcase className="w-3.5 h-3.5 text-accent" /> {profile.skill}
                     </span>
@@ -311,11 +311,11 @@ const WorkerProfile = () => {
                     </span>
                     {profile.experience && (
                       <span className="flex items-center gap-1.5 text-white/40 text-[11px] font-bold uppercase tracking-wider">
-                        <Calendar className="w-3.5 h-3.5 text-accent" /> {profile.experience} Yrs
+                        <Calendar className="w-3.5 h-3.5 text-accent" /> {profile.experience} {t('profile.yrs')}
                       </span>
                     )}
                   </div>
-                  <p className="text-base text-white/35 leading-relaxed font-medium italic max-w-2xl">
+                  <p className="text-sm text-white/35 leading-relaxed font-medium italic max-w-2xl">
                     "{profile.bio}"
                   </p>
                 </div>
@@ -324,16 +324,16 @@ const WorkerProfile = () => {
                 <div className="flex flex-wrap gap-3">
                   <button
                     onClick={handleShare}
-                    className="flex-1 min-w-[160px] py-3.5 bg-white/[0.04] hover:bg-white/[0.06] border border-white/[0.06] rounded-xl font-black uppercase tracking-[0.15em] text-[10px] transition-all flex items-center justify-center gap-2.5 active:scale-95 group"
+                    className="flex-1 min-w-[140px] py-3 bg-white/[0.04] hover:bg-white/[0.06] border border-white/[0.06] rounded-xl font-black uppercase tracking-[0.15em] text-[10px] transition-all flex items-center justify-center gap-2.5 active:scale-95 group"
                   >
                     {copied 
-                      ? <><Check className="w-3.5 h-3.5 text-green-400" /> Copied!</>
-                      : <><Share2 className="w-3.5 h-3.5 text-accent group-hover:rotate-12 transition-transform" /> Share Profile</>
+                      ? <><Check className="w-3.5 h-3.5 text-green-400" /> {t('profile.copied')}</>
+                      : <><Share2 className="w-3.5 h-3.5 text-accent group-hover:rotate-12 transition-transform" /> {t('profile.shareProfile')}</>
                     }
                   </button>
                   <button
                     onClick={() => navigate(`/endorse`)}
-                    className="flex-1 min-w-[160px] py-3.5 bg-gradient-to-r from-accent to-purple-700 hover:from-accent-hover hover:to-purple-800 text-white rounded-xl font-black uppercase tracking-[0.15em] text-[10px] transition-all flex items-center justify-center gap-2.5 shadow-lg shadow-accent/15 active:scale-95 group"
+                    className="flex-1 min-w-[140px] py-3 bg-gradient-to-r from-accent to-purple-700 hover:from-accent-hover hover:to-purple-800 text-white rounded-xl font-black uppercase tracking-[0.15em] text-[10px] transition-all flex items-center justify-center gap-2.5 shadow-lg shadow-accent/15 active:scale-95 group"
                   >
                     <Award className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" /> {t('profile.endorseBtn')}
                   </button>
@@ -347,7 +347,7 @@ const WorkerProfile = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <div className="flex items-center gap-3 ml-1 mb-5">
+              <div className="flex items-center gap-3 ml-1 mb-3">
                 <div className="w-1.5 h-6 bg-gradient-to-b from-accent to-purple-600 rounded-full" />
                 <h3 className="text-lg font-black tracking-tight">{t('profile.reviewsHeader')}</h3>
                 <span className="ml-auto text-[9px] font-bold text-white/12 bg-white/[0.03] px-2 py-0.5 rounded-md">{endorsements.length}</span>
@@ -374,7 +374,7 @@ const WorkerProfile = () => {
                             <ShieldCheck className="w-4 h-4 text-accent" />
                           </div>
                           <div>
-                            <span className="text-[8px] font-bold uppercase tracking-[0.15em] text-white/18 block">Endorser</span>
+                            <span className="text-[8px] font-bold uppercase tracking-[0.15em] text-white/18 block">{t('profile.endorserLabel')}</span>
                             <span className="text-xs font-mono font-semibold text-white/40">{truncateAddress(endorsement.endorser)}</span>
                           </div>
                         </div>
@@ -403,7 +403,7 @@ const WorkerProfile = () => {
                             target="_blank" rel="noopener noreferrer"
                             className="flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-wider text-white/12 hover:text-accent transition-colors"
                           >
-                            View TX <ExternalLink className="w-2.5 h-2.5" />
+                            {t('profile.viewTx')} <ExternalLink className="w-2.5 h-2.5" />
                           </a>
                         )}
                       </div>
@@ -414,7 +414,7 @@ const WorkerProfile = () => {
                       <Award className="w-6 h-6 text-white/[0.06]" />
                     </div>
                     <p className="text-[10px] font-bold uppercase tracking-wider text-white/15 mb-1">{t('profile.noReviews')}</p>
-                    <p className="text-[10px] text-white/8 font-medium">Be the first to endorse this worker</p>
+                    <p className="text-[10px] text-white/8 font-medium">{t('profile.beFirstEndorse')}</p>
                   </div>
                 )}
               </div>
@@ -430,15 +430,15 @@ const WorkerProfile = () => {
           className="mt-10 flex items-center justify-center gap-5 text-white/10"
         >
           <div className="flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-wider">
-            <Globe className="w-3 h-3" /> Public Profile
+            <Globe className="w-3 h-3" /> {t('profile.badgePublic')}
           </div>
           <div className="w-1 h-1 rounded-full bg-white/5" />
           <div className="flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-wider">
-            <ShieldCheck className="w-3 h-3" /> Verified Data
+            <ShieldCheck className="w-3 h-3" /> {t('profile.badgeVerifiedData')}
           </div>
           <div className="w-1 h-1 rounded-full bg-white/5" />
           <div className="flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-wider">
-            <Sparkles className="w-3 h-3" /> Stellar Testnet
+            <Sparkles className="w-3 h-3" /> {t('profile.badgeStellar')}
           </div>
         </motion.div>
       </div>

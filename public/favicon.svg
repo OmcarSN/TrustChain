@@ -1,27 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1E3A8A"/>
-      <stop offset="100%" stop-color="#1E40AF"/>
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="50%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#a855f7"/>
     </linearGradient>
-    <linearGradient id="chain" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#EA580C"/>
-      <stop offset="100%" stop-color="#F97316"/>
+    <linearGradient id="chain" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#c084fc"/>
+      <stop offset="100%" stop-color="#e9d5ff"/>
     </linearGradient>
     <linearGradient id="chk" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#10B981"/>
-      <stop offset="100%" stop-color="#34D399"/>
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#10b981"/>
     </linearGradient>
   </defs>
   <!-- Rounded square background -->
-  <rect width="64" height="64" rx="14" fill="url(#bg)"/>
-  <!-- Shield outline -->
-  <path d="M32 10L14 18V30C14 42 22 50 32 54C42 50 50 42 50 30V18L32 10Z" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect width="64" height="64" rx="16" fill="url(#bg)"/>
+  <!-- Shield -->
+  <path d="M32 8L12 18V30C12 44 21 52 32 56C43 52 52 44 52 30V18L32 8Z" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.25)" stroke-width="1.2" stroke-linejoin="round"/>
   <!-- Chain links -->
-  <ellipse cx="26" cy="28" rx="7" ry="4.5" fill="none" stroke="url(#chain)" stroke-width="2.2" stroke-linecap="round"/>
-  <ellipse cx="38" cy="28" rx="7" ry="4.5" fill="none" stroke="url(#chain)" stroke-width="2.2" stroke-linecap="round"/>
+  <rect x="19" y="24" width="14" height="8" rx="4" fill="none" stroke="url(#chain)" stroke-width="2.2"/>
+  <rect x="31" y="24" width="14" height="8" rx="4" fill="none" stroke="url(#chain)" stroke-width="2.2"/>
   <!-- Checkmark -->
-  <path d="M24 36L29 41L42 30" fill="none" stroke="url(#chk)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
-  <!-- Accent dots -->
-  <circle cx="32" cy="14" r="1.5" fill="#F97316" opacity="0.8"/>
+  <path d="M24 38L29 43L40 32" fill="none" stroke="url(#chk)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Top accent -->
+  <circle cx="32" cy="12.5" r="1.5" fill="white" opacity="0.6"/>
 </svg>
