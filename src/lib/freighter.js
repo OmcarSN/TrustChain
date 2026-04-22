@@ -143,6 +143,18 @@ export async function isWalletConnected() {
 }
 
 /**
+ * Strict check to ensure wallet is truly connected and unlocked
+ * before attempting any transaction or contract calls.
+ */
+export async function ensureConnection() {
+  const connected = await isWalletConnected();
+  if (!connected) throw new Error("Freighter is not connected.");
+  const pubKey = await getWalletAddress();
+  if (!pubKey) throw new Error("Wallet is locked or not accessible. Please unlock Freighter.");
+  return pubKey;
+}
+
+/**
  * Returns the current network string (e.g., "TESTNET", "PUBLIC").
  */
 export async function getFreighterNetwork() {

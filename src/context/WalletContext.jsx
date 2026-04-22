@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import { getWalletAddress, getFreighterNetwork, connectWallet } from '../lib/freighter';
 import { ShieldAlert, AlertCircle, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { STELLAR_NETWORK } from '../lib/stellar-config';
 
 const WalletContext = createContext();
 
@@ -19,7 +20,7 @@ export const WalletProvider = ({ children }) => {
       // Safety: ensure network is always a string or null
       const networkStr = (typeof currentNetwork === 'string') ? currentNetwork : null;
       setNetwork(networkStr);
-      if (networkStr && networkStr !== 'TESTNET') {
+      if (networkStr && networkStr !== STELLAR_NETWORK) {
         setIsWrongNetwork(true);
       } else {
         setIsWrongNetwork(false);
@@ -93,7 +94,7 @@ export const WalletProvider = ({ children }) => {
           >
             <ShieldAlert className="w-5 h-5 animate-pulse" />
             <p className="text-xs font-black uppercase tracking-widest">
-              Action Required: Switch Freighter to <span className="underline decoration-2 underline-offset-4">Testnet</span> to use TrustChain.
+              Action Required: Switch Freighter to <span className="underline decoration-2 underline-offset-4">{STELLAR_NETWORK}</span> to use TrustChain.
             </p>
             <div className="flex items-center gap-2 ml-4 bg-white/10 px-3 py-1 rounded-lg border border-white/20">
                <span className="text-[9px] font-bold">CURRENT: {network || 'UNKNOWN'}</span>

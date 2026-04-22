@@ -1,8 +1,8 @@
 import { parseTransactionToCredential, filterTrustChainOps } from './eventParser';
 import { logError } from '../utils/monitor';
+import { HORIZON_URL } from '../lib/stellar-config';
 
 const CONTRACT_ID = import.meta.env.VITE_CREDENTIAL_CONTRACT_ID || import.meta.env.VITE_CONTRACT_ID;
-const HORIZON_URL = 'https://horizon-testnet.stellar.org';
 
 const CACHE_KEY = 'trustchain_indexed_events';
 const CACHE_TIME_KEY = 'trustchain_indexed_events_timestamp';

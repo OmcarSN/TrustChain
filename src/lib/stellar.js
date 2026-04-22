@@ -10,11 +10,12 @@ import {
 import * as freighter from "./freighter";
 import { buildFeeBumpTransaction } from "../utils/feeBump";
 import { logError, logTransaction } from "../utils/monitor";
+import { HORIZON_URL, SOROBAN_URL, NETWORK_PASSPHRASE } from "./stellar-config";
 
 // Initialize Network Servers
-export const server = new Horizon.Server("https://horizon-testnet.stellar.org");
-export const sorobanServer = new rpc.Server("https://soroban-testnet.stellar.org");
-export const networkPassphrase = Networks.TESTNET;
+export const server = new Horizon.Server(HORIZON_URL);
+export const sorobanServer = new rpc.Server(SOROBAN_URL);
+export const networkPassphrase = NETWORK_PASSPHRASE;
 
 // Cache sponsor public key for the indexer to discover
 try {
@@ -40,12 +41,39 @@ export async function loadAccount(publicKey) {
 }
 
 /**
+ * Polls Horizon until a transaction is fully indexed.
+ */
+export async function waitForTransaction(txHash, maxRetries = 10) {
+  let retries = 0;
+  while (retries < maxRetries) {
+    try {
+      const tx = await server.transactions().transaction(txHash).call();
+      if (tx && tx.successful) {
+        return tx;
+      }
+    } catch (e) {
+      // 404 means not indexed yet
+    }
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    retries++;
+  }
+  console.warn(`Transaction ${txHash} not found by Horizon after ${maxRetries} retries, but it may have succeeded.`);
+  return null;
+}
+
+/**
  * Submits a signed transaction XDR to the network.
  */
 export async function submitTransaction(signedXdr, retry = true) {
   try {
     const transaction = TransactionBuilder.fromXDR(signedXdr, networkPassphrase);
     const response = await server.submitTransaction(transaction);
+    
+    // Ledger Latency Handling: Wait for it to be visible in Horizon
+    if (response.hash) {
+      await waitForTransaction(response.hash);
+    }
+    
     return response;
   } catch (error) {
     // Extract detailed Horizon error information for debugging
@@ -56,7 +84,10 @@ export async function submitTransaction(signedXdr, retry = true) {
       const txError = codes.transaction || '';
       const detail = [txError, opErrors].filter(Boolean).join(' — ');
       if (detail) {
-        throw new Error(`Transaction failed: ${detail}`);
+        // We throw the raw error response so decodeTransactionError can parse it in UI
+        const enhancedError = new Error(`Transaction failed: ${detail}`);
+        enhancedError.response = error.response;
+        throw enhancedError;
       }
     }
     console.error("Submission Error:", error);
