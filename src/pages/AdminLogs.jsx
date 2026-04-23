@@ -9,108 +9,61 @@ const AdminLogs = () => {
   const [errors, setErrors] = useState([]);
   const [txs, setTxs] = useState([]);
 
-  const loadData = () => {
-    setErrors(getErrorLog());
-    setTxs(getTxLog());
-  };
-
-  useEffect(() => {
-    loadData();
-    // Auto-refresh every 5 seconds while on this dashboard
-    const interval = setInterval(loadData, 5000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const handleClear = () => {
-    if (window.confirm("Are you sure you want to clear all monitoring logs?")) {
-      clearLogs();
-      loadData();
-    }
-  };
+  const loadData = () => { setErrors(getErrorLog()); setTxs(getTxLog()); };
+  useEffect(() => { loadData(); const iv = setInterval(loadData, 5000); return () => clearInterval(iv); }, []);
+  const handleClear = () => { if (window.confirm("Clear all logs?")) { clearLogs(); loadData(); } };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] pt-[4.5rem] pb-6 px-6 relative overflow-hidden">
-      {/* Background */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-red-500/5 blur-[200px] rounded-full mix-blend-screen pointer-events-none" />
-      <div className="absolute inset-0 opacity-[0.015]"
-        style={{
-          backgroundImage: 'linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
-        }}
-      />
+    <div className="min-h-screen bg-[#050505] pt-28 pb-12 px-6 lg:px-12 relative overflow-hidden text-white">
+      <div className="absolute rounded-full pointer-events-none" style={{ top: '-80px', right: '-80px', width: '400px', height: '400px', background: '#f97316', filter: 'blur(120px)', opacity: 0.04 }} />
 
       <div className="max-w-7xl mx-auto relative z-10">
-        
-        {/* Header Section */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-6 border-b border-white/5 pb-8">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-6 border-b border-white/5 pb-6">
           <div>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-center justify-center">
-                <Database className="w-6 h-6 text-red-400" />
-              </div>
-              <h1 className="text-3xl font-black tracking-tight text-white">{t('adminLogs.headerTitle')}</h1>
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-9 h-9 rounded-[2px] bg-white/5 border border-white/10 flex items-center justify-center"><Database className="w-5 h-5 text-white/30" /></div>
+              <h1 className="font-clash text-3xl font-bold tracking-tighter">{t('adminLogs.headerTitle')}</h1>
             </div>
-            <p className="text-white/40 text-sm max-w-xl font-medium">
-              {t('adminLogs.headerSubtitle')}
-            </p>
+            <p className="text-white/30 text-sm max-w-xl font-inter">{t('adminLogs.headerSubtitle')}</p>
           </div>
           <div className="flex items-center gap-3">
-            <button 
-              onClick={loadData}
-              className="flex items-center gap-2 px-5 py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-xl font-bold uppercase tracking-wider text-xs transition-all"
-            >
-              <RefreshCcw className="w-4 h-4 text-white/50" /> {t('adminLogs.refreshBtn')}
+            <button onClick={loadData} className="flex items-center gap-2 px-5 py-2.5 border border-white/10 rounded-[2px] font-bold uppercase tracking-wider text-xs text-white/40 hover:text-white hover:border-white/30 transition-all">
+              <RefreshCcw className="w-4 h-4" /> {t('adminLogs.refreshBtn')}
             </button>
-            <button 
-              onClick={handleClear}
-              className="flex items-center gap-2 px-5 py-2.5 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 rounded-xl font-bold uppercase tracking-wider text-xs transition-all"
-            >
+            <button onClick={handleClear} className="flex items-center gap-2 px-5 py-2.5 border border-red-400/20 rounded-[2px] font-bold uppercase tracking-wider text-xs text-red-400/80 hover:bg-red-400/10 transition-all">
               <Trash2 className="w-4 h-4" /> {t('adminLogs.clearBtn')}
             </button>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          
-          {/* TX Log Table */}
-          <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl flex flex-col h-[600px]">
-            <div className="p-6 border-b border-white/5 bg-white/[0.02] flex items-center justify-between shrink-0">
-              <div className="flex items-center gap-3">
-                <Activity className="w-5 h-5 text-green-400" />
-                <h2 className="text-lg font-black tracking-wider uppercase">{t('adminLogs.txLogsTab')}</h2>
-              </div>
-              <span className="text-xs font-mono text-white/40">{txs.length} Entries</span>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {/* TX Log */}
+          <div className="border border-white/[0.07] rounded-[2px] bg-white/[0.02] overflow-hidden flex flex-col h-[600px]">
+            <div className="p-5 border-b border-white/5 flex items-center justify-between shrink-0">
+              <div className="flex items-center gap-3"><Activity className="w-4 h-4 text-green-400" /><h2 className="text-sm font-bold tracking-tight font-inter uppercase">{t('adminLogs.txLogsTab')}</h2></div>
+              <span className="text-xs font-mono text-white/30">{txs.length} Entries</span>
             </div>
-            <div className="flex-1 overflow-auto p-0">
+            <div className="flex-1 overflow-auto">
               {txs.length === 0 ? (
-                <div className="h-full flex flex-col items-center justify-center text-white/20">
-                  <Activity className="w-12 h-12 mb-4 opacity-50" />
-                  <p className="font-bold uppercase tracking-widest text-xs">No Transactions Recorded</p>
-                </div>
+                <div className="h-full flex flex-col items-center justify-center text-white/15"><Activity className="w-10 h-10 mb-3 opacity-40" /><p className="font-bold uppercase tracking-widest text-xs font-inter">No Transactions</p></div>
               ) : (
                 <table className="w-full text-left text-sm whitespace-nowrap">
-                  <thead className="bg-black/20 sticky top-0 z-10">
+                  <thead className="bg-black/30 sticky top-0 z-10">
                     <tr>
-                      <th className="p-4 text-[10px] font-black uppercase text-white/40">Timestamp</th>
-                      <th className="p-4 text-[10px] font-black uppercase text-white/40">Type</th>
-                      <th className="p-4 text-[10px] font-black uppercase text-white/40">Wallet</th>
-                      <th className="p-4 text-[10px] font-black uppercase text-white/40">Tx Hash</th>
+                      <th className="p-4 text-[10px] font-bold uppercase text-white/30 font-inter">Timestamp</th>
+                      <th className="p-4 text-[10px] font-bold uppercase text-white/30 font-inter">Type</th>
+                      <th className="p-4 text-[10px] font-bold uppercase text-white/30 font-inter">Wallet</th>
+                      <th className="p-4 text-[10px] font-bold uppercase text-white/30 font-inter">Tx Hash</th>
                     </tr>
                   </thead>
                   <tbody>
                     {txs.map((tx, i) => (
-                      <tr key={i} className="border-b border-white/5 hover:bg-white/[0.02]">
-                        <td className="p-4 font-mono text-white/50 text-xs flex items-center gap-2">
-                          <Clock className="w-3 h-3" />
-                          {new Date(tx.timestamp).toLocaleTimeString()}
-                        </td>
-                        <td className="p-4 text-green-400 font-bold text-xs">{tx.type}</td>
-                        <td className="p-4 font-mono text-white/70 text-xs">
-                          {tx.wallet ? `${tx.wallet.slice(0,6)}...${tx.wallet.slice(-4)}` : 'N/A'}
-                        </td>
-                        <td className="p-4 font-mono text-xs text-white/50">
-                          {tx.txHash ? `${tx.txHash.slice(0,8)}...` : 'N/A'}
-                        </td>
+                      <tr key={i} className="border-b border-white/[0.04] hover:bg-white/[0.02]">
+                        <td className="p-4 font-mono text-white/40 text-xs flex items-center gap-2"><Clock className="w-3 h-3" />{new Date(tx.timestamp).toLocaleTimeString()}</td>
+                        <td className="p-4 text-green-400/80 font-bold text-xs">{tx.type}</td>
+                        <td className="p-4 font-mono text-white/50 text-xs">{tx.wallet ? `${tx.wallet.slice(0,6)}…${tx.wallet.slice(-4)}` : 'N/A'}</td>
+                        <td className="p-4 font-mono text-xs text-white/30">{tx.txHash ? `${tx.txHash.slice(0,8)}…` : 'N/A'}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -119,47 +72,32 @@ const AdminLogs = () => {
             </div>
           </div>
 
-          {/* Error Log Table */}
-          <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl flex flex-col h-[600px]">
-             <div className="p-6 border-b border-white/5 bg-white/[0.02] flex items-center justify-between shrink-0">
-              <div className="flex items-center gap-3">
-                <AlertTriangle className="w-5 h-5 text-red-500" />
-                <h2 className="text-lg font-black tracking-wider uppercase">{t('adminLogs.errorLogsTab')}</h2>
-              </div>
-              <span className="text-xs font-mono text-white/40">{errors.length} Entries</span>
+          {/* Error Log */}
+          <div className="border border-white/[0.07] rounded-[2px] bg-white/[0.02] overflow-hidden flex flex-col h-[600px]">
+            <div className="p-5 border-b border-white/5 flex items-center justify-between shrink-0">
+              <div className="flex items-center gap-3"><AlertTriangle className="w-4 h-4 text-red-400" /><h2 className="text-sm font-bold tracking-tight font-inter uppercase">{t('adminLogs.errorLogsTab')}</h2></div>
+              <span className="text-xs font-mono text-white/30">{errors.length} Entries</span>
             </div>
-            <div className="flex-1 overflow-auto p-0">
+            <div className="flex-1 overflow-auto">
               {errors.length === 0 ? (
-                <div className="h-full flex flex-col items-center justify-center text-white/20">
-                  <AlertTriangle className="w-12 h-12 mb-4 opacity-50" />
-                  <p className="font-bold uppercase tracking-widest text-xs">System Healthy</p>
-                </div>
+                <div className="h-full flex flex-col items-center justify-center text-white/15"><AlertTriangle className="w-10 h-10 mb-3 opacity-40" /><p className="font-bold uppercase tracking-widest text-xs font-inter">System Healthy</p></div>
               ) : (
                 <table className="w-full text-left text-sm max-w-full">
-                  <thead className="bg-black/20 sticky top-0 z-10 w-full">
+                  <thead className="bg-black/30 sticky top-0 z-10">
                     <tr>
-                      <th className="p-4 text-[10px] font-black uppercase text-white/40 whitespace-nowrap">Timestamp</th>
-                      <th className="p-4 text-[10px] font-black uppercase text-white/40 whitespace-nowrap">Context</th>
-                      <th className="p-4 text-[10px] font-black uppercase text-white/40">Error Message / Stack Trace</th>
+                      <th className="p-4 text-[10px] font-bold uppercase text-white/30 whitespace-nowrap font-inter">Timestamp</th>
+                      <th className="p-4 text-[10px] font-bold uppercase text-white/30 whitespace-nowrap font-inter">Context</th>
+                      <th className="p-4 text-[10px] font-bold uppercase text-white/30 font-inter">Error</th>
                     </tr>
                   </thead>
                   <tbody>
                     {errors.map((err, i) => (
-                      <tr key={i} className="border-b border-white/5 hover:bg-white/[0.02]">
-                        <td className="p-4 font-mono text-white/50 text-xs whitespace-nowrap flex items-center gap-2">
-                          <Clock className="w-3 h-3" />
-                          {new Date(err.timestamp).toLocaleTimeString()}
-                        </td>
-                        <td className="p-4 text-accent font-bold text-xs whitespace-nowrap">
-                          {err.context}
-                        </td>
+                      <tr key={i} className="border-b border-white/[0.04] hover:bg-white/[0.02]">
+                        <td className="p-4 font-mono text-white/40 text-xs whitespace-nowrap flex items-center gap-2"><Clock className="w-3 h-3" />{new Date(err.timestamp).toLocaleTimeString()}</td>
+                        <td className="p-4 text-white/50 font-bold text-xs whitespace-nowrap">{err.context}</td>
                         <td className="p-4 text-xs font-mono">
-                          <div className="text-red-400 mb-1">{err.message}</div>
-                          {err.stack && (
-                            <div className="text-white/30 text-[10px] w-full overflow-hidden text-ellipsis whitespace-nowrap max-w-xs xl:max-w-md">
-                              {err.stack.split('\n')[1] || err.stack.split('\n')[0]}
-                            </div>
-                          )}
+                          <div className="text-red-400/80 mb-1">{err.message}</div>
+                          {err.stack && <div className="text-white/20 text-[10px] overflow-hidden text-ellipsis whitespace-nowrap max-w-xs xl:max-w-md">{err.stack.split('\n')[1] || err.stack.split('\n')[0]}</div>}
                         </td>
                       </tr>
                     ))}
@@ -168,7 +106,6 @@ const AdminLogs = () => {
               )}
             </div>
           </div>
-
         </div>
       </div>
     </div>

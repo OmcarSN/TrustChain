@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  LayoutDashboard, ShieldCheck, Award, Search, UserCheck, 
-  Wallet, ArrowRight, ExternalLink, Clock, Star, 
+import {
+  LayoutDashboard, ShieldCheck, Award, Search, UserCheck,
+  Wallet, ArrowRight, ExternalLink, Clock, Star,
   Briefcase, MapPin, Hash, TrendingUp, Activity,
-  ChevronRight, Zap, Users, Copy, Check, 
+  ChevronRight, Zap, Users, Copy, Check,
   Sparkles, ArrowUpRight, BarChart3, Target,
   FileCheck, PenLine, Eye, Globe, Link2, Inbox
 } from 'lucide-react';
@@ -15,30 +15,18 @@ import { fetchWorkerCredential } from '../lib/stellar';
 import { calculateScore } from '../lib/reputation';
 
 /* ── Quick Action Link ────────────────────────────────────────── */
-const QuickAction = ({ to, icon: Icon, label, sublabel, color }) => {
-  const colorMap = {
-    accent:  { bg: 'rgba(124,58,237,0.1)',  border: 'rgba(124,58,237,0.15)', text: 'text-accent' },
-    amber:   { bg: 'rgba(251,191,36,0.1)',   border: 'rgba(251,191,36,0.15)',  text: 'text-amber-400' },
-    blue:    { bg: 'rgba(96,165,250,0.1)',    border: 'rgba(96,165,250,0.15)',  text: 'text-blue-400' },
-    emerald: { bg: 'rgba(52,211,153,0.1)',    border: 'rgba(52,211,153,0.15)', text: 'text-emerald-400' },
-  };
-  const c = colorMap[color] || colorMap.accent;
-  return (
-    <Link to={to} className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.04] hover:border-white/10 hover:bg-white/[0.05] transition-all group">
-      <div 
-        className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-        style={{ background: c.bg, border: `1px solid ${c.border}` }}
-      >
-        <Icon className={`w-3.5 h-3.5 ${c.text}`} />
-      </div>
-      <div className="flex-1 min-w-0">
-        <p className="text-xs font-bold text-white/80 group-hover:text-white transition-colors">{label}</p>
-        <p className="text-[9px] text-white/15 font-medium">{sublabel}</p>
-      </div>
-      <ArrowUpRight className="w-3.5 h-3.5 text-white/8 group-hover:text-accent group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
-    </Link>
-  );
-};
+const QuickAction = ({ to, icon: Icon, label, sublabel }) => (
+  <Link to={to} className="flex items-center gap-3 p-3 border border-white/[0.05] rounded-[2px] bg-white/[0.02] hover:border-white/[0.18] hover:bg-white/[0.05] transition-all group">
+    <div className="w-8 h-8 rounded-[2px] bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+      <Icon className="w-3.5 h-3.5 text-white/40" />
+    </div>
+    <div className="flex-1 min-w-0">
+      <p className="text-xs font-bold text-white/70 group-hover:text-white transition-colors font-inter">{label}</p>
+      <p className="text-[9px] text-white/20 font-inter">{sublabel}</p>
+    </div>
+    <ArrowUpRight className="w-3.5 h-3.5 text-white/10 group-hover:text-white/40 transition-all shrink-0" />
+  </Link>
+);
 
 const Dashboard = () => {
   const { walletAddress, isConnected, connect } = useWallet();
@@ -57,7 +45,6 @@ const Dashboard = () => {
       setLoading(true);
       try {
         const cred = await fetchWorkerCredential(walletAddress);
-        // Merge with localStorage data to get the real registered name
         const localWorkerData = JSON.parse(localStorage.getItem(`trustchain_worker_${walletAddress}`) || 'null');
         if (localWorkerData) {
           cred.name = localWorkerData.name || localWorkerData.fullName || cred.name;
@@ -72,7 +59,6 @@ const Dashboard = () => {
         const rep = calculateScore(received);
         setReputation(rep);
       } catch {
-        // Even if on-chain fetch fails, try localStorage for credential data
         const localWorkerData = JSON.parse(localStorage.getItem(`trustchain_worker_${walletAddress}`) || 'null');
         if (localWorkerData) {
           setCredential({
@@ -82,9 +68,7 @@ const Dashboard = () => {
             experience: localWorkerData.experience || '—',
             bio: localWorkerData.bio || '',
           });
-        } else {
-          setCredential(null);
-        }
+        } else { setCredential(null); }
       }
       const given = [];
       for (let i = 0; i < localStorage.length; i++) {
@@ -107,41 +91,17 @@ const Dashboard = () => {
   /* ── Not connected ─────────────────────────────────────────── */
   if (!isConnected) {
     return (
-      <div className="min-h-[calc(100vh-4rem)] bg-background pt-[4.5rem] flex items-center justify-center px-6 relative overflow-hidden">
-        <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-accent/5 rounded-full blur-[150px] -z-10" />
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center max-w-md p-10 rounded-3xl relative overflow-hidden"
-          style={{
-            background: 'linear-gradient(145deg, rgba(124,58,237,0.08) 0%, rgba(255,255,255,0.03) 60%, rgba(124,58,237,0.04) 100%)',
-            border: '1px solid rgba(255,255,255,0.06)',
-          }}
-        >
-          <div className="absolute -top-20 -right-20 w-48 h-48 bg-accent/10 rounded-full blur-[80px]" />
-          <div className="relative z-10">
-            <div className="relative mx-auto mb-6 w-fit">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-accent/20 to-purple-800/20 border border-accent/15 flex items-center justify-center">
-                <LayoutDashboard className="w-8 h-8 text-accent" />
-              </div>
-              <motion.div
-                className="absolute -inset-3 rounded-3xl border border-accent/10"
-                animate={{ scale: [1, 1.1, 1], opacity: [0.2, 0.5, 0.2] }}
-                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-              />
-            </div>
-            <h2 className="text-2xl font-black mb-2 tracking-tight">{t('dashboard.commandCenter')}</h2>
-            <p className="text-white/30 mb-8 text-sm font-medium leading-relaxed">{t('dashboard.connectPrompt')}</p>
-            <button onClick={connect} className="group w-full py-4 bg-gradient-to-r from-accent to-purple-700 text-white rounded-2xl font-black uppercase tracking-[0.2em] text-[10px] transition-all flex items-center justify-center gap-2.5 shadow-xl shadow-accent/25 active:scale-[0.98] relative overflow-hidden">
-              <motion.div
-                className="absolute inset-0 opacity-20"
-                style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)' }}
-                animate={{ x: ['-100%', '200%'] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: 'linear' }}
-              />
-              <Wallet className="w-4 h-4 relative z-10" /> <span className="relative z-10">{t('dashboard.connectBtn')}</span>
-            </button>
+      <div className="min-h-screen bg-[#050505] pt-28 pb-12 px-6 lg:px-12 flex items-center justify-center relative overflow-hidden text-white">
+        <div className="absolute rounded-full pointer-events-none" style={{ top: '-80px', left: '-80px', width: '400px', height: '400px', background: '#f97316', filter: 'blur(120px)', opacity: 0.04 }} />
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center max-w-md">
+          <div className="w-14 h-14 rounded-[2px] bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-6">
+            <LayoutDashboard className="w-7 h-7 text-white/30" />
           </div>
+          <h2 className="font-clash text-3xl font-bold mb-3 tracking-tighter">{t('dashboard.commandCenter')}</h2>
+          <p className="text-white/30 mb-8 text-sm font-inter font-light leading-relaxed">{t('dashboard.connectPrompt')}</p>
+          <button onClick={connect} className="w-full py-4 bg-white text-black rounded-[2px] font-bold uppercase tracking-[0.15em] text-[11px] hover:opacity-85 transition-opacity flex items-center justify-center gap-2">
+            <Wallet className="w-4 h-4" /> {t('dashboard.connectBtn')}
+          </button>
         </motion.div>
       </div>
     );
@@ -155,364 +115,160 @@ const Dashboard = () => {
   const filteredEvents = activeTab === 'all' ? allEvents : allEvents.filter(e => e.type === activeTab);
 
   return (
-    <div className="min-h-screen bg-background pt-[4.5rem] pb-4 px-4 sm:px-6 relative overflow-hidden text-white">
-      {/* Background */}
-      <div className="absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute top-10 left-1/3 w-[700px] h-[400px] bg-accent/5 rounded-full blur-[160px]" />
-        <div className="absolute bottom-20 right-10 w-[350px] h-[350px] bg-purple-800/5 rounded-full blur-[120px]" />
-        <div className="absolute inset-0 opacity-[0.012]"
-          style={{
-            backgroundImage: 'linear-gradient(rgba(124,58,237,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(124,58,237,0.5) 1px, transparent 1px)',
-            backgroundSize: '70px 70px',
-          }}
-        />
-      </div>
+    <div className="min-h-screen bg-[#050505] pt-28 pb-12 px-6 lg:px-12 relative overflow-hidden text-white">
+      {/* Light leaks */}
+      <div className="absolute rounded-full pointer-events-none" style={{ top: '-80px', left: '20%', width: '400px', height: '400px', background: '#f97316', filter: 'blur(120px)', opacity: 0.04 }} />
+      <div className="absolute rounded-full pointer-events-none" style={{ bottom: '-80px', right: '-80px', width: '400px', height: '400px', background: '#1e3a8a', filter: 'blur(120px)', opacity: 0.05 }} />
 
       <div className="max-w-7xl mx-auto">
-        {/* ── Compact Header Bar ──────────────────────────────── */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-4 p-4 sm:p-5 rounded-2xl relative overflow-hidden"
-          style={{
-            background: 'linear-gradient(135deg, rgba(124,58,237,0.1) 0%, rgba(15,15,25,0.7) 50%, rgba(99,40,210,0.06) 100%)',
-            border: '1px solid rgba(124,58,237,0.12)',
-          }}
-        >
-          <div className="absolute -top-16 -right-16 w-40 h-40 bg-accent/12 rounded-full blur-[60px]" />
-          
-          <div className="flex items-center justify-between relative z-10">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-accent to-purple-800 flex items-center justify-center shadow-lg shadow-accent/20">
-                <LayoutDashboard className="w-4.5 h-4.5 text-white" />
-              </div>
-              <div>
-                <h1 className="text-lg sm:text-xl font-black tracking-tight leading-tight">
-                  {t('dashboard.welcome')}{credential && credential.name && credential.name !== 'Worker' ? <span className="bg-gradient-to-r from-accent to-purple-400 bg-clip-text text-transparent">, {credential.name.split(' ')[0]}</span> : ''}
-                </h1>
-                <p className="text-white/25 text-[10px] font-semibold hidden sm:block">{t('dashboard.identityHub')}</p>
-              </div>
-            </div>
-
-            {/* Wallet Badge */}
-            <div className="flex items-center gap-2 bg-white/[0.04] border border-white/[0.06] px-3 py-1.5 rounded-lg">
-              <div className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.5)]" />
-              <span className="font-mono text-[10px] text-white/40">{truncAddr(walletAddress)}</span>
-              <button onClick={copyAddress} className="text-white/15 hover:text-accent transition-colors">
-                {copied ? <Check className="w-3 h-3 text-green-400" /> : <Copy className="w-3 h-3" />}
-              </button>
-              <a href={`https://stellar.expert/explorer/testnet/address/${walletAddress}`} target="_blank" rel="noopener noreferrer" className="text-white/15 hover:text-accent transition-colors">
-                <ExternalLink className="w-3 h-3" />
-              </a>
-            </div>
+        {/* Header */}
+        <div className="mb-6 flex flex-col md:flex-row md:items-end justify-between gap-4 reveal">
+          <div>
+            <p className="text-[10px] uppercase tracking-[0.25em] text-white/30 font-inter mb-2">{t('dashboard.identityHub', 'Identity Hub')}</p>
+            <h1 className="font-clash text-3xl lg:text-4xl font-bold tracking-tighter">
+              {t('dashboard.welcome', 'Welcome')}
+              {credential && credential.name && credential.name !== 'Worker' && <span className="text-white/40">, {credential.name.split(' ')[0]}</span>}
+            </h1>
           </div>
-        </motion.div>
+          <div className="flex items-center gap-2 border border-white/10 rounded-[2px] px-4 py-2">
+            <span className="w-1.5 h-1.5 bg-green-400 rounded-full" />
+            <span className="font-mono text-[10px] text-white/50">{truncAddr(walletAddress)}</span>
+            <button onClick={copyAddress} className="text-white/20 hover:text-white transition-colors">
+              {copied ? <Check className="w-3 h-3 text-green-400" /> : <Copy className="w-3 h-3" />}
+            </button>
+            <a href={`https://stellar.expert/explorer/testnet/address/${walletAddress}`} target="_blank" rel="noopener noreferrer" className="text-white/20 hover:text-white transition-colors">
+              <ExternalLink className="w-3 h-3" />
+            </a>
+          </div>
+        </div>
 
-        {/* ── Stats Strip ─────────────────────────────────────── */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.05 }}
-          className="grid grid-cols-4 gap-3 mb-4"
-        >
+        {/* Stats Strip */}
+        <div className="border-t border-b border-white/5 grid grid-cols-2 md:grid-cols-4 mb-6 reveal reveal-d1">
           {[
-            { 
-              icon: ShieldCheck, label: t('dashboard.credential'), 
-              value: credential?.skill || '—', 
-              badge: credential ? 'Active' : null,
-              color: 'accent',
-              glow: 'rgba(124,58,237,0.08)',
-              badgeClass: 'bg-green-500/10 text-green-400 border-green-500/15',
-            },
-            { 
-              icon: Star, label: t('dashboard.avgRating'), 
-              value: reputation?.average || '0.0', suffix: '/ 5',
-              color: 'amber',
-              glow: 'rgba(251,191,36,0.06)',
-            },
-            { 
-              icon: Award, label: t('dashboard.received'), 
-              value: endorsementsReceived.length,
-              color: 'blue',
-              glow: 'rgba(96,165,250,0.06)',
-            },
-            { 
-              icon: UserCheck, label: t('dashboard.given'), 
-              value: endorsementsGiven.length,
-              color: 'emerald',
-              glow: 'rgba(52,211,153,0.06)',
-            },
-          ].map((stat, i) => {
-            const iconColors = {
-              accent: 'text-accent', amber: 'text-amber-400',
-              blue: 'text-blue-400', emerald: 'text-emerald-400',
-            };
-            const bgColors = {
-              accent: 'rgba(124,58,237,0.12)', amber: 'rgba(251,191,36,0.12)',
-              blue: 'rgba(96,165,250,0.12)', emerald: 'rgba(52,211,153,0.12)',
-            };
-            const borderColors = {
-              accent: 'rgba(124,58,237,0.15)', amber: 'rgba(251,191,36,0.15)',
-              blue: 'rgba(96,165,250,0.15)', emerald: 'rgba(52,211,153,0.15)',
-            };
-            return (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.05 + i * 0.05 }}
-                className="p-4 rounded-xl relative overflow-hidden group hover:translate-y-[-2px] transition-transform cursor-default"
-                style={{
-                  background: `linear-gradient(145deg, ${stat.glow} 0%, rgba(255,255,255,0.025) 100%)`,
-                  border: '1px solid rgba(255,255,255,0.05)',
-                }}
-              >
-                <div className="absolute -top-8 -right-8 w-20 h-20 rounded-full blur-[40px] opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: stat.glow }} />
-                <div className="relative z-10 flex items-center justify-between mb-2">
-                  <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: bgColors[stat.color], border: `1px solid ${borderColors[stat.color]}` }}>
-                    <stat.icon className={`w-4 h-4 ${iconColors[stat.color]}`} />
-                  </div>
-                  {stat.badge && (
-                    <span className={`px-2 py-0.5 rounded text-[7px] font-black uppercase tracking-widest border ${stat.badgeClass}`}>{stat.badge}</span>
-                  )}
-                </div>
-                <p className="text-[8px] font-black uppercase tracking-[0.18em] text-white/20 mb-0.5">{stat.label}</p>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-xl font-black tracking-tight">{stat.value}</span>
-                  {stat.suffix && <span className="text-[10px] text-white/12 font-bold">{stat.suffix}</span>}
-                </div>
-              </motion.div>
-            );
-          })}
-        </motion.div>
+            { icon: ShieldCheck, label: t('dashboard.credential'), value: credential?.skill || '—' },
+            { icon: Star, label: t('dashboard.avgRating'), value: reputation?.average || '0.0' },
+            { icon: Award, label: t('dashboard.received'), value: endorsementsReceived.length },
+            { icon: UserCheck, label: t('dashboard.given'), value: endorsementsGiven.length },
+          ].map((stat, i, arr) => (
+            <div key={stat.label} className={`px-6 py-6 ${i < arr.length - 1 ? 'border-r border-white/5' : ''}`}>
+              <p className="text-[8px] font-bold uppercase tracking-[0.2em] text-white/25 mb-1 font-inter">{stat.label}</p>
+              <p className="font-clash text-xl font-bold">{stat.value}</p>
+            </div>
+          ))}
+        </div>
 
-        {/* ── Main Content: 3-col ─────────────────────────────── */}
+        {/* Main Content: 3-col */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-          
-          {/* ── Left: Quick Actions + Credential ─────────────── */}
-          <div className="lg:col-span-3 space-y-4">
-            
-            {/* Quick Actions */}
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.15 }}
-              className="p-4 rounded-xl"
-              style={{
-                background: 'rgba(255,255,255,0.03)',
-                border: '1px solid rgba(255,255,255,0.05)',
-              }}
-            >
-              <div className="flex items-center gap-1.5 mb-3">
-                <Zap className="w-3.5 h-3.5 text-accent" />
-                <h3 className="text-[10px] font-black uppercase tracking-wider">{t('dashboard.quickActions')}</h3>
-              </div>
+          {/* Left: Quick Actions + Credential */}
+          <div className="lg:col-span-3 space-y-4 reveal reveal-d2">
+            <div className="border border-white/[0.05] rounded-[2px] p-4">
+              <h3 className="text-[10px] font-bold uppercase tracking-[0.15em] text-white/30 mb-3 font-inter">{t('dashboard.quickActions')}</h3>
               <div className="space-y-1.5">
-                <QuickAction to="/worker" icon={credential ? FileCheck : ShieldCheck} label={credential ? t('dashboard.updateCred') : t('dashboard.mintCred')} sublabel={t('dashboard.workerPortal')} color="accent" />
-                <QuickAction to="/discover" icon={Users} label={t('dashboard.findWorkers')} sublabel={t('dashboard.browseHire')} color="blue" />
-                <QuickAction to="/endorse" icon={Award} label={t('dashboard.endorseWorker')} sublabel={t('dashboard.writeReview')} color="amber" />
-                <QuickAction to="/verify" icon={Search} label={t('dashboard.verifyWorker')} sublabel={t('dashboard.auditReputation')} color="emerald" />
-                {credential && (
-                  <QuickAction to={`/profile/${walletAddress}`} icon={Eye} label={t('dashboard.myProfile')} sublabel={t('dashboard.publicPage')} color="accent" />
-                )}
+                <QuickAction to="/worker" icon={credential ? FileCheck : ShieldCheck} label={credential ? t('dashboard.updateCred') : t('dashboard.mintCred')} sublabel={t('dashboard.workerPortal')} />
+                <QuickAction to="/discover" icon={Users} label={t('dashboard.findWorkers')} sublabel={t('dashboard.browseHire')} />
+                <QuickAction to="/endorse" icon={Award} label={t('dashboard.endorseWorker')} sublabel={t('dashboard.writeReview')} />
+                <QuickAction to="/verify" icon={Search} label={t('dashboard.verifyWorker')} sublabel={t('dashboard.auditReputation')} />
+                {credential && <QuickAction to={`/profile/${walletAddress}`} icon={Eye} label={t('dashboard.myProfile')} sublabel={t('dashboard.publicPage')} />}
               </div>
-            </motion.div>
+            </div>
 
             {/* Credential Card */}
             {credential && (
-              <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="rounded-xl relative overflow-hidden"
-                style={{
-                  background: 'linear-gradient(145deg, rgba(124,58,237,0.08) 0%, rgba(15,15,25,0.5) 100%)',
-                  border: '1px solid rgba(124,58,237,0.1)',
-                }}
-              >
-                <div className="h-[2px] bg-gradient-to-r from-accent via-purple-500 to-accent/30" />
-                <motion.div
-                  className="absolute top-0 left-0 right-0 h-[1px]"
-                  style={{ background: 'linear-gradient(90deg, transparent, rgba(124,58,237,0.4), transparent)' }}
-                  animate={{ x: ['-100%', '100%'] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
-                />
-                <div className="p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <p className="text-[8px] font-black uppercase tracking-[0.18em] text-accent/60">{t('dashboard.myCredential')}</p>
-                    <div className="flex items-center gap-1 px-1.5 py-0.5 bg-green-500/10 border border-green-500/12 rounded">
-                      <div className="w-1 h-1 rounded-full bg-green-500 animate-pulse" />
-                      <span className="text-[7px] font-black uppercase text-green-400">{t('dashboard.onChain')}</span>
-                    </div>
+              <div className="border border-white/[0.07] rounded-[2px] p-4 bg-white/[0.02]">
+                <div className="flex items-center justify-between mb-3">
+                  <p className="text-[8px] font-bold uppercase tracking-[0.18em] text-white/30 font-inter">{t('dashboard.myCredential')}</p>
+                  <div className="flex items-center gap-1 px-1.5 py-0.5 border border-green-400/20 rounded-[2px]">
+                    <div className="w-1 h-1 rounded-full bg-green-400" />
+                    <span className="text-[7px] font-bold uppercase text-green-400/70">{t('dashboard.onChain')}</span>
                   </div>
-                  <h4 className="text-sm font-black mb-1.5">{credential.name}</h4>
-                  <div className="flex items-center gap-2.5 mb-2">
-                    <span className="flex items-center gap-1 text-white/30 text-[10px] font-semibold"><Briefcase className="w-2.5 h-2.5" /> {credential.skill}</span>
-                    <span className="flex items-center gap-1 text-white/30 text-[10px] font-semibold"><MapPin className="w-2.5 h-2.5" /> {credential.city}</span>
-                  </div>
-                  {credential.bio && (
-                    <p className="text-[10px] text-white/20 italic leading-relaxed border-t border-white/[0.04] pt-2 mt-2 line-clamp-2">
-                      "{credential.bio}"
-                    </p>
-                  )}
                 </div>
-              </motion.div>
+                <h4 className="text-sm font-bold mb-1.5 font-inter">{credential.name}</h4>
+                <div className="flex items-center gap-2.5 mb-2 text-white/30 text-[10px] font-inter">
+                  <span className="flex items-center gap-1"><Briefcase className="w-2.5 h-2.5" /> {credential.skill}</span>
+                  <span className="flex items-center gap-1"><MapPin className="w-2.5 h-2.5" /> {credential.city}</span>
+                </div>
+                {credential.bio && <p className="text-[10px] text-white/20 italic leading-relaxed border-t border-white/5 pt-2 mt-2 line-clamp-2 font-inter">"{credential.bio}"</p>}
+              </div>
             )}
 
-            {/* Mini Reputation Card */}
+            {/* Reputation */}
             {reputation && endorsementsReceived.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.25 }}
-                className="p-4 rounded-xl"
-                style={{
-                  background: 'linear-gradient(145deg, rgba(251,191,36,0.04) 0%, rgba(255,255,255,0.02) 100%)',
-                  border: '1px solid rgba(251,191,36,0.06)',
-                }}
-              >
-                <div className="flex items-center gap-2 mb-3">
-                  <BarChart3 className="w-3.5 h-3.5 text-amber-400/50" />
-                  <h3 className="text-[10px] font-black uppercase tracking-wider text-white/40">{t('dashboard.reputation')}</h3>
-                </div>
+              <div className="border border-white/[0.07] rounded-[2px] p-4 bg-white/[0.02]">
+                <p className="text-[8px] font-bold uppercase tracking-[0.2em] text-white/25 mb-3 font-inter">{t('dashboard.reputation')}</p>
                 <div className="flex items-center gap-3">
-                  <div className="relative w-12 h-12 shrink-0">
-                    <svg className="w-12 h-12 -rotate-90" viewBox="0 0 48 48">
-                      <circle cx="24" cy="24" r="20" fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="3" />
-                      <circle cx="24" cy="24" r="20" fill="none" stroke="url(#scoreGradD)" strokeWidth="3" strokeLinecap="round"
-                        strokeDasharray={`${(reputation.average / 5) * 125.6} 125.6`}
-                      />
-                      <defs>
-                        <linearGradient id="scoreGradD" x1="0%" y1="0%" x2="100%" y2="0%">
-                          <stop offset="0%" stopColor="#fbbf24" />
-                          <stop offset="100%" stopColor="#7c3aed" />
-                        </linearGradient>
-                      </defs>
-                    </svg>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-sm font-black">{reputation.average}</span>
-                    </div>
-                  </div>
+                  <span className="font-clash text-3xl font-bold">{reputation.average}</span>
                   <div>
                     <div className="flex gap-0.5 mb-1">
-                      {[1,2,3,4,5].map(s => (
-                        <Star key={s} className={`w-3 h-3 ${s <= Math.round(reputation.average) ? 'text-amber-400 fill-amber-400' : 'text-white/6'}`} />
-                      ))}
+                      {[1,2,3,4,5].map(s => (<Star key={s} className={`w-3 h-3 ${s <= Math.round(reputation.average) ? 'text-white fill-white' : 'text-white/10'}`} />))}
                     </div>
-                    <p className="text-[9px] text-white/20 font-semibold">
-                      {endorsementsReceived.length} {endorsementsReceived.length !== 1 ? t('dashboard.reviews') : t('dashboard.review')}
-                    </p>
+                    <p className="text-[9px] text-white/25 font-inter">{endorsementsReceived.length} {endorsementsReceived.length !== 1 ? t('dashboard.reviews') : t('dashboard.review')}</p>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             )}
           </div>
 
-          {/* ── Right: Activity Feed ─────────────────────────── */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="lg:col-span-9 rounded-xl"
-            style={{
-              background: 'rgba(255,255,255,0.03)',
-              border: '1px solid rgba(255,255,255,0.05)',
-            }}
-          >
+          {/* Right: Activity Feed */}
+          <div className="lg:col-span-9 border border-white/[0.05] rounded-[2px] reveal reveal-d3">
             <div className="p-5">
-              {/* Header + Tabs */}
               <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-1 h-5 bg-gradient-to-b from-accent to-purple-600 rounded-full" />
-                  <h3 className="text-sm font-black tracking-tight">{t('dashboard.activityFeed')}</h3>
-                  <span className="text-[8px] font-bold text-white/12 bg-white/[0.04] px-1.5 py-0.5 rounded">{allEvents.length}</span>
-                </div>
-                <div className="flex gap-1 p-0.5 rounded-lg bg-white/[0.03] border border-white/[0.04]">
+                <h3 className="text-sm font-bold tracking-tight font-inter">{t('dashboard.activityFeed')}</h3>
+                <div className="flex gap-px">
                   {[
                     { key: 'all', label: t('dashboard.tabAll') },
                     { key: 'received', label: t('dashboard.tabReceived') },
                     { key: 'given', label: t('dashboard.tabGiven') },
                   ].map(tab => (
-                    <button
-                      key={tab.key}
-                      onClick={() => setActiveTab(tab.key)}
-                      className={`px-2.5 py-1 rounded text-[9px] font-bold uppercase tracking-wider transition-all ${
-                        activeTab === tab.key
-                          ? 'bg-accent/15 text-accent border border-accent/20'
-                          : 'text-white/20 hover:text-white/35 border border-transparent'
-                      }`}
-                    >
+                    <button key={tab.key} onClick={() => setActiveTab(tab.key)}
+                      className={`px-3 py-1.5 text-[9px] font-bold uppercase tracking-wider transition-all ${
+                        activeTab === tab.key ? 'bg-white text-black' : 'text-white/25 hover:text-white/50 bg-white/[0.02]'
+                      }`}>
                       {tab.label}
                     </button>
                   ))}
                 </div>
               </div>
 
-              {/* Events */}
               {loading ? (
-                <div className="space-y-2">
-                  {[1,2,3].map(i => (
-                    <div key={i} className="p-4 rounded-lg bg-white/[0.02] border border-white/[0.03] animate-pulse h-16" />
-                  ))}
-                </div>
+                <div className="space-y-2">{[1,2,3].map(i => (<div key={i} className="p-4 bg-white/[0.02] border border-white/[0.03] animate-pulse h-14 rounded-[2px]" />))}</div>
               ) : filteredEvents.length === 0 ? (
                 <div className="text-center py-12">
-                  <div className="w-14 h-14 rounded-xl bg-white/[0.03] border border-white/[0.04] flex items-center justify-center mx-auto mb-4">
-                    <Inbox className="w-6 h-6 text-white/10" />
+                  <div className="w-12 h-12 rounded-[2px] bg-white/[0.03] border border-white/[0.05] flex items-center justify-center mx-auto mb-4">
+                    <Inbox className="w-5 h-5 text-white/10" />
                   </div>
-                  <p className="text-white/20 font-black uppercase tracking-[0.18em] text-[10px] mb-1.5">{t('dashboard.noActivity')}</p>
-                  <p className="text-white/30 text-[11px] font-medium max-w-xs mx-auto">
-                    {t('dashboard.noActivitySub')}
-                  </p>
+                  <p className="text-white/20 font-bold uppercase tracking-[0.18em] text-[10px] mb-1 font-inter">{t('dashboard.noActivity')}</p>
+                  <p className="text-white/25 text-[11px] font-inter max-w-xs mx-auto">{t('dashboard.noActivitySub')}</p>
                 </div>
               ) : (
-                <div className="space-y-2 max-h-[420px] overflow-y-auto pr-1" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.05) transparent' }}>
+                <div className="space-y-px max-h-[420px] overflow-y-auto" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.05) transparent' }}>
                   <AnimatePresence>
                     {filteredEvents.slice(0, 20).map((event, idx) => (
-                      <motion.div
-                        key={`${event.txHash}-${idx}`}
-                        initial={{ opacity: 0, x: 8 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: idx * 0.03 }}
-                        className="group p-3.5 rounded-lg bg-white/[0.02] border border-white/[0.04] hover:border-white/[0.08] hover:bg-white/[0.04] transition-all"
-                      >
+                      <motion.div key={`${event.txHash}-${idx}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: idx * 0.03 }}
+                        className="group p-3.5 border-b border-white/[0.04] hover:bg-white/[0.03] transition-all">
                         <div className="flex items-start gap-3">
-                          <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
-                            event.type === 'received' 
-                              ? 'bg-blue-400/10 border border-blue-400/12' 
-                              : 'bg-emerald-400/10 border border-emerald-400/12'
+                          <div className={`w-7 h-7 rounded-[2px] flex items-center justify-center shrink-0 ${
+                            event.type === 'received' ? 'bg-white/5 border border-white/10' : 'bg-white/5 border border-white/10'
                           }`}>
-                            {event.type === 'received' 
-                              ? <Award className="w-3.5 h-3.5 text-blue-400" />
-                              : <UserCheck className="w-3.5 h-3.5 text-emerald-400" />
-                            }
+                            {event.type === 'received' ? <Award className="w-3.5 h-3.5 text-white/40" /> : <UserCheck className="w-3.5 h-3.5 text-white/40" />}
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between mb-1">
                               <div className="flex items-center gap-2">
-                                <p className="text-xs font-bold">
-                                  {event.type === 'received' ? t('dashboard.endorsementReceived') : t('dashboard.endorsementGiven')}
-                                </p>
-                                <span className={`px-1.5 py-0.5 rounded text-[7px] font-bold uppercase ${
-                                  event.type === 'received' ? 'bg-blue-400/10 text-blue-400' : 'bg-emerald-400/10 text-emerald-400'
-                                }`}>{event.jobType}</span>
+                                <p className="text-xs font-bold font-inter">{event.type === 'received' ? t('dashboard.endorsementReceived') : t('dashboard.endorsementGiven')}</p>
+                                <span className="px-1.5 py-0.5 border border-white/10 rounded-[2px] text-[7px] font-bold uppercase text-white/40">{event.jobType}</span>
                               </div>
                               <div className="flex gap-0.5 shrink-0">
-                                {[1,2,3,4,5].map(s => (
-                                  <Star key={s} className={`w-2.5 h-2.5 ${s <= event.rating ? 'text-amber-400 fill-amber-400' : 'text-white/5'}`} />
-                                ))}
+                                {[1,2,3,4,5].map(s => (<Star key={s} className={`w-2.5 h-2.5 ${s <= event.rating ? 'text-white fill-white' : 'text-white/5'}`} />))}
                               </div>
                             </div>
-                            <p className="text-[10px] text-white/25 truncate mb-1.5">"{event.feedback}"</p>
+                            <p className="text-[10px] text-white/25 truncate mb-1.5 font-inter">"{event.feedback}"</p>
                             <div className="flex items-center gap-3">
-                              <span className="text-[8px] font-semibold text-white/12 flex items-center gap-1">
-                                <Clock className="w-2.5 h-2.5" />
-                                {new Date(event.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                              <span className="text-[8px] text-white/15 flex items-center gap-1 font-inter">
+                                <Clock className="w-2.5 h-2.5" />{new Date(event.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                               </span>
                               {event.txHash && (
                                 <a href={`https://stellar.expert/explorer/testnet/tx/${event.txHash}`} target="_blank" rel="noopener noreferrer"
-                                  className="text-[8px] font-mono text-white/8 hover:text-accent transition-colors flex items-center gap-1"
-                                >
+                                  className="text-[8px] font-mono text-white/10 hover:text-white/40 transition-colors flex items-center gap-1">
                                   <Hash className="w-2 h-2" /> {event.txHash.slice(0,8)}…
                                 </a>
                               )}
@@ -525,29 +281,8 @@ const Dashboard = () => {
                 </div>
               )}
             </div>
-          </motion.div>
+          </div>
         </div>
-
-        {/* ── Footer Badges ──────────────────────────────────── */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-          className="mt-5 flex items-center justify-center gap-4 text-white/10"
-        >
-          {[
-            { icon: Globe, text: t('dashboard.badge1') },
-            { icon: ShieldCheck, text: t('dashboard.badge2') },
-            { icon: Target, text: t('dashboard.badge3') },
-          ].map((badge, i) => (
-            <React.Fragment key={i}>
-              {i > 0 && <div className="w-0.5 h-0.5 rounded-full bg-white/6" />}
-              <div className="flex items-center gap-1 text-[8px] font-bold uppercase tracking-wider">
-                <badge.icon className="w-2.5 h-2.5" /> {badge.text}
-              </div>
-            </React.Fragment>
-          ))}
-        </motion.div>
       </div>
     </div>
   );

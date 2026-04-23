@@ -14,7 +14,6 @@ import { calculateScore } from '../lib/reputation';
 const getAllWorkers = () => {
   const registry = JSON.parse(localStorage.getItem('trustchain_worker_registry') || '[]');
   const workers = [];
-
   registry.forEach(address => {
     const data = localStorage.getItem(`trustchain_worker_${address}`);
     if (data) {
@@ -36,16 +35,14 @@ const getAllWorkers = () => {
       } catch { /* skip malformed entries */ }
     }
   });
-
   return workers;
 };
 
-/* ── Skill filter options ─────────────────────────────────────── */
 const SKILL_OPTIONS = [
-  'All', 'AC Technician', 'Agriculture', 'Babysitting', 'Carpenter', 
-  'Cleaning', 'Construction', 'Cooking', 'Domestic Work', 
-  'Driver', 'Electrician', 'Gardening', 'Maintenance', 
-  'Painter', 'Plumbing', 'Security guard', 'Tailoring', 
+  'All', 'AC Technician', 'Agriculture', 'Babysitting', 'Carpenter',
+  'Cleaning', 'Construction', 'Cooking', 'Domestic Work',
+  'Driver', 'Electrician', 'Gardening', 'Maintenance',
+  'Painter', 'Plumbing', 'Security guard', 'Tailoring',
   'Transport', 'Other'
 ];
 const RATING_OPTIONS = [
@@ -55,88 +52,68 @@ const RATING_OPTIONS = [
   { labelKey: '5Stars', value: 5 },
 ];
 
-/* ── Worker Card Component ────────────────────────────────────── */
+/* ── Worker Card ─────────────────────────────────────────────── */
 const WorkerCard = ({ worker, index }) => {
   const { t } = useTranslation();
-  const starColor = worker.rating >= 4 ? 'text-amber-400' : worker.rating >= 3 ? 'text-yellow-500' : 'text-white/20';
-
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20, scale: 0.97 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ delay: index * 0.05, duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.04, duration: 0.4 }}
     >
       <Link
         to={`/profile/${worker.address}`}
-        className="group block rounded-xl overflow-hidden transition-all duration-300 hover:translate-y-[-3px] hover:shadow-xl hover:shadow-accent/10"
-        style={{
-          background: 'linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 100%)',
-          border: '1px solid rgba(255,255,255,0.06)',
-        }}
+        className="group block border border-white/[0.07] rounded-[2px] p-6 bg-white/[0.02] hover:border-white/[0.18] hover:bg-white/[0.05] transition-all duration-400"
       >
-        {/* Top accent */}
-        <div className="h-[2px] bg-gradient-to-r from-transparent via-accent/20 to-transparent group-hover:via-accent/50 transition-all" />
-
-        <div className="p-5">
-          {/* Avatar + Name */}
-          <div className="flex items-start gap-3 mb-4">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-accent/20 to-purple-800/20 flex items-center justify-center border border-accent/10 group-hover:border-accent/25 transition-all shrink-0 relative">
-              <User className="w-5 h-5 text-accent" />
-              {worker.totalEndorsements > 0 && (
-                <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-green-500 border-2 border-[#0a0a0f] flex items-center justify-center">
-                  <CheckCircle2 className="w-2.5 h-2.5 text-white" />
-                </div>
-              )}
-            </div>
-            <div className="min-w-0 flex-1">
-              <h3 className="text-sm font-black truncate group-hover:text-accent transition-colors">{worker.name}</h3>
-              <div className="flex items-center gap-1 text-white/30 text-[10px] font-semibold">
-                <MapPin className="w-2.5 h-2.5" /> {worker.city}
+        {/* Avatar + Name */}
+        <div className="flex items-start gap-3 mb-4">
+          <div className="w-10 h-10 rounded-[2px] bg-white/5 border border-white/10 flex items-center justify-center shrink-0 relative">
+            <User className="w-4 h-4 text-white/40" />
+            {worker.totalEndorsements > 0 && (
+              <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-green-400 border-2 border-[#050505] flex items-center justify-center">
+                <CheckCircle2 className="w-2 h-2 text-black" />
               </div>
-            </div>
-          </div>
-
-          {/* Skill Badge */}
-          <div className="mb-4">
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-accent/8 border border-accent/10 rounded-lg text-[10px] font-bold text-accent">
-              <Briefcase className="w-2.5 h-2.5" /> {worker.skill ? (t(`jobs.${worker.skill.replace(/\\s+/g, '')}`) || worker.skill) : ''}
-            </span>
-            {worker.experience > 0 && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-white/[0.03] border border-white/[0.05] rounded-lg text-[10px] font-bold text-white/30 ml-1.5">
-                {worker.experience}{t('discover.yrExp')}
-              </span>
             )}
           </div>
-
-          {/* Rating + Endorsements */}
-          <div className="flex items-center justify-between pt-3 border-t border-white/[0.04]">
-            <div className="flex items-center gap-1.5">
-              <div className="flex gap-0.5">
-                {[1, 2, 3, 4, 5].map(s => (
-                  <Star
-                    key={s}
-                    className={`w-3.5 h-3.5 ${
-                      s <= Math.round(worker.rating) ? `${starColor} fill-current` : 'text-white/8'
-                    }`}
-                  />
-                ))}
-              </div>
-              {worker.rating > 0 && (
-                <span className="text-[11px] font-black text-white/50">{worker.rating}</span>
-              )}
+          <div className="min-w-0 flex-1">
+            <h3 className="text-sm font-bold truncate group-hover:text-white transition-colors">{worker.name}</h3>
+            <div className="flex items-center gap-1 text-white/30 text-[10px] font-medium">
+              <MapPin className="w-2.5 h-2.5" /> {worker.city}
             </div>
-            <span className="text-[9px] font-bold text-white/20 uppercase tracking-wider">
-              {worker.totalEndorsements} {worker.totalEndorsements === 1 ? t('discover.review') : t('discover.reviews')}
-            </span>
           </div>
         </div>
 
-        {/* View Profile Footer */}
-        <div className="px-5 py-2.5 bg-white/[0.02] border-t border-white/[0.04] flex items-center justify-between group-hover:bg-accent/5 transition-all">
-          <span className="text-[9px] font-black uppercase tracking-wider text-white/15 group-hover:text-accent/60 transition-colors">
-            {t('discover.viewProfile')}
+        {/* Skill */}
+        <div className="mb-4 flex flex-wrap gap-1.5">
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-white/[0.04] border border-white/[0.08] rounded-[2px] text-[10px] font-bold text-white/60">
+            <Briefcase className="w-2.5 h-2.5" /> {worker.skill ? (t(`jobs.${worker.skill.replace(/\s+/g, '')}`) || worker.skill) : ''}
           </span>
-          <ArrowRight className="w-3.5 h-3.5 text-white/10 group-hover:text-accent group-hover:translate-x-1 transition-all" />
+          {worker.experience > 0 && (
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-white/[0.02] border border-white/[0.05] rounded-[2px] text-[10px] font-bold text-white/30">
+              {worker.experience}{t('discover.yrExp')}
+            </span>
+          )}
+        </div>
+
+        {/* Rating */}
+        <div className="flex items-center justify-between pt-3 border-t border-white/[0.05]">
+          <div className="flex items-center gap-1.5">
+            <div className="flex gap-0.5">
+              {[1, 2, 3, 4, 5].map(s => (
+                <Star key={s} className={`w-3 h-3 ${s <= Math.round(worker.rating) ? 'text-white fill-white' : 'text-white/10'}`} />
+              ))}
+            </div>
+            {worker.rating > 0 && <span className="text-[11px] font-bold text-white/50">{worker.rating}</span>}
+          </div>
+          <span className="text-[9px] font-bold text-white/20 uppercase tracking-wider">
+            {worker.totalEndorsements} {worker.totalEndorsements === 1 ? t('discover.review') : t('discover.reviews')}
+          </span>
+        </div>
+
+        {/* View Profile */}
+        <div className="mt-4 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.15em] text-white/15 group-hover:text-white/40 transition-colors">
+          {t('discover.viewProfile')}
+          <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
         </div>
       </Link>
     </motion.div>
@@ -160,13 +137,11 @@ const DiscoverWorkers = () => {
     setLoading(false);
   }, []);
 
-  /* Derive unique cities from workers */
   const cities = useMemo(() => {
     const set = new Set(workers.map(w => w.city).filter(Boolean));
     return ['All Cities', ...Array.from(set).sort()];
   }, [workers]);
 
-  /* Filter logic */
   const filtered = useMemo(() => {
     return workers.filter(w => {
       if (selectedSkill !== 'All' && w.skill !== selectedSkill) return false;
@@ -180,298 +155,156 @@ const DiscoverWorkers = () => {
     }).sort((a, b) => b.rating - a.rating || b.totalEndorsements - a.totalEndorsements);
   }, [workers, selectedSkill, selectedCity, minRating, searchQuery]);
 
-  const clearFilters = () => {
-    setSearchQuery('');
-    setSelectedSkill('All');
-    setSelectedCity('');
-    setMinRating(0);
-  };
+  const clearFilters = () => { setSearchQuery(''); setSelectedSkill('All'); setSelectedCity(''); setMinRating(0); };
   const hasActiveFilters = searchQuery || selectedSkill !== 'All' || (selectedCity && selectedCity !== 'All Cities') || minRating > 0;
 
-  /* Stats */
   const totalWorkers = workers.length;
   const calculated = workers.length > 0 ? (workers.reduce((s, w) => s + w.rating, 0) / workers.length) : 0;
   const avgRating = isNaN(calculated) ? "0.0" : calculated.toFixed(1);
   const totalEndorsements = workers.reduce((s, w) => s + w.totalEndorsements, 0);
 
   return (
-    <div className="min-h-screen bg-background pt-[4.5rem] pb-4 px-4 sm:px-6 relative overflow-hidden text-white">
-      {/* Background */}
-      <div className="absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-accent/5 rounded-full blur-[160px]" />
-        <div className="absolute bottom-20 right-10 w-[300px] h-[300px] bg-purple-900/5 rounded-full blur-[100px]" />
-        <div className="absolute inset-0 opacity-[0.012]"
-          style={{
-            backgroundImage: 'linear-gradient(rgba(124,58,237,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(124,58,237,0.5) 1px, transparent 1px)',
-            backgroundSize: '60px 60px',
-          }}
-        />
-      </div>
+    <div className="min-h-screen bg-[#050505] pt-28 pb-12 px-6 lg:px-12 relative overflow-hidden text-white">
+      {/* Light leaks */}
+      <div className="absolute rounded-full pointer-events-none" style={{ top: '-80px', left: '-80px', width: '400px', height: '400px', background: '#f97316', filter: 'blur(120px)', opacity: 0.04 }} />
+      <div className="absolute rounded-full pointer-events-none" style={{ bottom: '-80px', right: '-80px', width: '400px', height: '400px', background: '#1e3a8a', filter: 'blur(120px)', opacity: 0.05 }} />
 
       <div className="max-w-7xl mx-auto">
-        {/* ── Header ───────────────────────────────────────────── */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-5 p-5 rounded-2xl relative overflow-hidden"
-          style={{
-            background: 'linear-gradient(135deg, rgba(124,58,237,0.1) 0%, rgba(15,15,25,0.7) 50%, rgba(99,40,210,0.06) 100%)',
-            border: '1px solid rgba(124,58,237,0.12)',
-          }}
-        >
-          <div className="absolute -top-16 -right-16 w-40 h-40 bg-accent/12 rounded-full blur-[60px]" />
-          
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 relative z-10">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-accent to-purple-800 flex items-center justify-center shadow-lg shadow-accent/20">
-                <Users className="w-5 h-5 text-white" />
-              </div>
-              <div>
-                <h1 className="text-xl font-black tracking-tight">{t('discover.titleP1')} <span className="text-accent">{t('discover.titleP2')}</span></h1>
-                <p className="text-white/30 text-[10px] font-semibold">{t('discover.subtitle')}</p>
-              </div>
-            </div>
-
-            {/* Quick Stats */}
-            <div className="flex items-center gap-4">
-              <div className="text-center">
-                <p className="text-lg font-black text-accent">{totalWorkers}</p>
-                <p className="text-[8px] font-bold uppercase tracking-wider text-white/20">{t('discover.workers')}</p>
-              </div>
-              <div className="w-px h-8 bg-white/5" />
-              <div className="text-center">
-                <p className="text-lg font-black text-amber-400">{avgRating}</p>
-                <p className="text-[8px] font-bold uppercase tracking-wider text-white/20">{t('discover.avgRatingLabel')}</p>
-              </div>
-              <div className="w-px h-8 bg-white/5" />
-              <div className="text-center">
-                <p className="text-lg font-black text-emerald-400">{totalEndorsements}</p>
-                <p className="text-[8px] font-bold uppercase tracking-wider text-white/20">{t('discover.reviewsLabel')}</p>
-              </div>
+        {/* Header */}
+        <div className="mb-8 reveal">
+          <p className="text-[10px] uppercase tracking-[0.25em] text-white/30 font-inter mb-3">
+            {t('discover.subtitle', 'Browse & hire verified workers')}
+          </p>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <h1 className="font-clash text-4xl lg:text-5xl font-bold tracking-tighter text-white">
+              {t('discover.titleP1', 'Find')} {t('discover.titleP2', 'Workers')}
+            </h1>
+            {/* Stats */}
+            <div className="flex items-center gap-6">
+              {[
+                { label: t('discover.workers', 'Workers'), value: totalWorkers },
+                { label: t('discover.avgRatingLabel', 'Avg Rating'), value: avgRating },
+                { label: t('discover.reviewsLabel', 'Reviews'), value: totalEndorsements },
+              ].map((s, i) => (
+                <div key={i} className="text-right">
+                  <p className="font-clash text-xl font-bold">{s.value}</p>
+                  <p className="text-[8px] font-bold uppercase tracking-[0.2em] text-white/25">{s.label}</p>
+                </div>
+              ))}
             </div>
           </div>
-        </motion.div>
+        </div>
 
-        {/* ── Search + Filters Row ──────────────────────────────── */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="mb-5 p-4 rounded-xl"
-          style={{
-            background: 'rgba(255,255,255,0.03)',
-            border: '1px solid rgba(255,255,255,0.06)',
-          }}
-        >
-          {/* Search Bar */}
+        {/* Search + Filters */}
+        <div className="mb-6 border-t border-b border-white/5 py-5 reveal reveal-d1">
           <div className="flex gap-3 mb-4">
             <div className="relative flex-1">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/15" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
               <input
                 type="text"
                 placeholder={t('discover.searchPlaceholder')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-white/[0.04] border border-white/[0.06] rounded-lg py-2.5 pl-10 pr-4 text-xs focus:outline-none focus:border-accent/30 transition-all font-medium text-white placeholder:text-white/15"
+                className="w-full border-0 border-b border-white/20 bg-transparent text-white py-3 pl-10 pr-4 text-sm focus:outline-none focus:border-white/60 placeholder:text-white/30 font-inter"
               />
             </div>
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className={`flex items-center gap-2 px-4 rounded-lg border text-[10px] font-black uppercase tracking-wider transition-all ${
-                showFilters 
-                  ? 'bg-accent/10 border-accent/20 text-accent' 
-                  : 'bg-white/[0.04] border-white/[0.06] text-white/30 hover:text-white/50'
+              className={`flex items-center gap-2 px-4 py-2 border rounded-[2px] text-[10px] font-bold uppercase tracking-wider transition-all ${
+                showFilters ? 'border-white/30 text-white' : 'border-white/10 text-white/30 hover:text-white/50'
               }`}
             >
               <SlidersHorizontal className="w-3.5 h-3.5" />
               {t('discover.filters')}
-              {hasActiveFilters && (
-                <div className="w-1.5 h-1.5 rounded-full bg-accent" />
-              )}
+              {hasActiveFilters && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
             </button>
           </div>
 
-          {/* Filter Controls */}
           <AnimatePresence>
             {showFilters && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="overflow-hidden"
-              >
-                <div className="flex flex-wrap items-center gap-3 pt-3 border-t border-white/[0.04]">
-                  {/* Skill Filter */}
-                  <div className="relative">
-                    <label className="text-[8px] font-black uppercase tracking-wider text-white/20 block mb-1 ml-1">{t('discover.filterSkill')}</label>
-                    <div className="relative">
-                      <select
-                        value={selectedSkill}
-                        onChange={(e) => setSelectedSkill(e.target.value)}
-                        className="bg-white/[0.04] border border-white/[0.06] rounded-lg py-2 pl-3 pr-8 text-[11px] text-white font-medium appearance-none focus:outline-none focus:border-accent/30 transition-all cursor-pointer"
-                      >
-                        {SKILL_OPTIONS.map(s => (
-                          <option key={s} value={s} className="bg-[#0f1016]">{t('jobs.' + s.replace(/\s+/g, ''))}</option>
-                        ))}
-                      </select>
-                      <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3 h-3 text-white/15 pointer-events-none" />
-                    </div>
-                  </div>
-
-                  {/* City Filter */}
-                  <div className="relative">
-                    <label className="text-[8px] font-black uppercase tracking-wider text-white/20 block mb-1 ml-1">{t('discover.filterCity')}</label>
-                    <div className="relative">
-                      <select
-                        value={selectedCity || 'All Cities'}
-                        onChange={(e) => setSelectedCity(e.target.value === 'All Cities' ? '' : e.target.value)}
-                        className="bg-white/[0.04] border border-white/[0.06] rounded-lg py-2 pl-3 pr-8 text-[11px] text-white font-medium appearance-none focus:outline-none focus:border-accent/30 transition-all cursor-pointer"
-                      >
-                        {cities.map(c => (
-                          <option key={c} value={c} className="bg-[#0f1016]">{c}</option>
-                        ))}
-                      </select>
-                      <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3 h-3 text-white/15 pointer-events-none" />
-                    </div>
-                  </div>
-
-                  {/* Rating Filter */}
+              <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }} className="overflow-hidden">
+                <div className="flex flex-wrap items-end gap-4 pt-3">
                   <div>
-                    <label className="text-[8px] font-black uppercase tracking-wider text-white/20 block mb-1 ml-1">{t('discover.filterRating')}</label>
+                    <label className="text-[8px] font-bold uppercase tracking-wider text-white/20 block mb-1">{t('discover.filterSkill')}</label>
+                    <select value={selectedSkill} onChange={(e) => setSelectedSkill(e.target.value)}
+                      className="bg-transparent border-0 border-b border-white/20 py-2 pr-6 text-[11px] text-white font-medium appearance-none focus:outline-none focus:border-white/60 cursor-pointer">
+                      {SKILL_OPTIONS.map(s => (<option key={s} value={s} className="bg-[#0a0a0a]">{t('jobs.' + s.replace(/\s+/g, ''))}</option>))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-[8px] font-bold uppercase tracking-wider text-white/20 block mb-1">{t('discover.filterCity')}</label>
+                    <select value={selectedCity || 'All Cities'} onChange={(e) => setSelectedCity(e.target.value === 'All Cities' ? '' : e.target.value)}
+                      className="bg-transparent border-0 border-b border-white/20 py-2 pr-6 text-[11px] text-white font-medium appearance-none focus:outline-none focus:border-white/60 cursor-pointer">
+                      {cities.map(c => (<option key={c} value={c} className="bg-[#0a0a0a]">{c}</option>))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-[8px] font-bold uppercase tracking-wider text-white/20 block mb-1">{t('discover.filterRating')}</label>
                     <div className="flex gap-1">
                       {RATING_OPTIONS.map(opt => (
-                        <button
-                          key={opt.value}
-                          onClick={() => setMinRating(opt.value)}
-                          className={`px-3 py-2 rounded-lg text-[10px] font-bold transition-all ${
-                            minRating === opt.value
-                              ? 'bg-accent/15 border border-accent/25 text-accent'
-                              : 'bg-white/[0.03] border border-white/[0.05] text-white/25 hover:text-white/40'
-                          }`}
-                        >
+                        <button key={opt.value} onClick={() => setMinRating(opt.value)}
+                          className={`px-3 py-2 rounded-[2px] text-[10px] font-bold transition-all ${
+                            minRating === opt.value ? 'bg-white text-black' : 'border border-white/10 text-white/30 hover:text-white/50'
+                          }`}>
                           {t('ratings.' + opt.labelKey)}
                         </button>
                       ))}
                     </div>
                   </div>
-
-                  {/* Clear Button */}
                   {hasActiveFilters && (
-                    <motion.button
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      onClick={clearFilters}
-                      className="self-end px-3 py-2 rounded-lg text-[10px] font-bold text-red-400/60 hover:text-red-400 bg-red-500/5 border border-red-500/10 hover:border-red-500/20 transition-all flex items-center gap-1"
-                    >
+                    <button onClick={clearFilters} className="px-3 py-2 rounded-[2px] text-[10px] font-bold text-red-400/60 hover:text-red-400 border border-red-400/20 transition-all flex items-center gap-1">
                       <X className="w-3 h-3" /> {t('discover.clearFilters')}
-                    </motion.button>
+                    </button>
                   )}
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
-        </motion.div>
+        </div>
 
-        {/* ── Results Header ───────────────────────────────────── */}
-        <div className="flex items-center justify-between mb-4 px-1">
+        {/* Results header */}
+        <div className="flex items-center justify-between mb-4 reveal reveal-d2">
           <p className="text-[10px] font-bold text-white/20 uppercase tracking-wider">
             {filtered.length} {t('discover.results')}
-            {hasActiveFilters && <span className="text-accent/50"> ({t('discover.filtered')})</span>}
+            {hasActiveFilters && <span className="text-white/40"> ({t('discover.filtered')})</span>}
           </p>
           <div className="flex items-center gap-1 text-[9px] font-bold text-white/10 uppercase tracking-wider">
             <TrendingUp className="w-3 h-3" /> {t('discover.sortedByRating')}
           </div>
         </div>
 
-        {/* ── Worker Grid ──────────────────────────────────────── */}
+        {/* Worker Grid */}
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <div className="w-8 h-8 border-2 border-accent/30 border-t-accent rounded-full animate-spin" />
+            <div className="w-6 h-6 border border-white/20 border-t-white/60 rounded-full animate-spin" />
           </div>
         ) : filtered.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {filtered.map((worker, i) => (
-              <WorkerCard key={worker.address} worker={worker} index={i} />
-            ))}
+            {filtered.map((worker, i) => (<WorkerCard key={worker.address} worker={worker} index={i} />))}
           </div>
         ) : workers.length === 0 ? (
-          /* No workers registered at all */
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="py-16 flex flex-col items-center text-center"
-          >
-            <div className="relative mb-6">
-              <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-accent/10 to-purple-800/10 border border-accent/10 flex items-center justify-center">
-                <Users className="w-10 h-10 text-accent/40" />
-              </div>
-              <motion.div
-                className="absolute -inset-3 rounded-3xl border border-accent/10"
-                animate={{ scale: [1, 1.08, 1], opacity: [0.3, 0.6, 0.3] }}
-                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-              />
-              <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-amber-500/15 border border-amber-500/15 flex items-center justify-center">
-                <Sparkles className="w-3 h-3 text-amber-400" />
-              </div>
+          <div className="py-20 flex flex-col items-center text-center reveal">
+            <div className="w-16 h-16 rounded-[2px] bg-white/[0.03] border border-white/[0.06] flex items-center justify-center mb-6">
+              <Users className="w-7 h-7 text-white/15" />
             </div>
-            <h3 className="text-lg font-black mb-2 tracking-tight">{t('discover.noWorkers')}</h3>
-            <p className="text-white/25 text-sm max-w-md mb-3">{t('discover.noWorkersSub')}</p>
-            <div className="w-16 h-[2px] bg-gradient-to-r from-transparent via-accent/30 to-transparent mb-6" />
-            <Link
-              to="/worker"
-              className="inline-flex items-center gap-2.5 px-8 py-4 bg-gradient-to-r from-accent to-purple-700 text-white rounded-xl font-black uppercase tracking-[0.15em] text-[10px] shadow-xl shadow-accent/25 hover:shadow-accent/40 transition-all active:scale-[0.98] relative overflow-hidden group"
-            >
-              <motion.div
-                className="absolute inset-0 opacity-20"
-                style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)' }}
-                animate={{ x: ['-100%', '200%'] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: 'linear' }}
-              />
-              <Award className="w-4 h-4 relative z-10" /> <span className="relative z-10">{t('discover.registerAsWorker')}</span>
+            <h3 className="font-clash text-2xl font-bold mb-2 tracking-tighter">{t('discover.noWorkers')}</h3>
+            <p className="text-white/30 text-sm max-w-md mb-6 font-inter">{t('discover.noWorkersSub')}</p>
+            <Link to="/worker" className="bg-white text-black rounded-[2px] font-bold text-[11px] tracking-[0.15em] uppercase px-8 py-4 hover:opacity-85 transition-opacity flex items-center gap-2">
+              <Award className="w-4 h-4" /> {t('discover.registerAsWorker')}
             </Link>
-          </motion.div>
+          </div>
         ) : (
-          /* Filters returned no results */
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="py-16 flex flex-col items-center text-center"
-          >
-            <div className="w-16 h-16 rounded-2xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-center mb-4">
-              <Search className="w-7 h-7 text-white/10" />
+          <div className="py-16 flex flex-col items-center text-center reveal">
+            <div className="w-14 h-14 rounded-[2px] bg-white/[0.03] border border-white/[0.06] flex items-center justify-center mb-4">
+              <Search className="w-6 h-6 text-white/10" />
             </div>
-            <h3 className="text-base font-black mb-1">{t('discover.noWorkers')}</h3>
-            <p className="text-white/20 text-xs mb-4">{t('discover.noWorkersSub')}</p>
-            <button
-              onClick={clearFilters}
-              className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-accent/10 border border-accent/20 text-accent rounded-lg font-black uppercase tracking-wider text-[10px] transition-all hover:bg-accent/15"
-            >
+            <h3 className="font-clash text-lg font-bold mb-1">{t('discover.noWorkers')}</h3>
+            <p className="text-white/20 text-xs mb-4 font-inter">{t('discover.noWorkersSub')}</p>
+            <button onClick={clearFilters} className="px-4 py-2.5 border border-white/20 rounded-[2px] text-[10px] font-bold uppercase tracking-wider hover:bg-white/5 transition-all flex items-center gap-1">
               <X className="w-3 h-3" /> {t('discover.clearFilters')}
             </button>
-          </motion.div>
+          </div>
         )}
-
-        {/* ── Footer Badges ────────────────────────────────────── */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="mt-8 flex items-center justify-center gap-4 text-white/10"
-        >
-          {[
-            { icon: ShieldCheck, textKey: 'discover.badgeOnChain' },
-            { icon: Sparkles, textKey: 'discover.badgeStellar' },
-            { icon: Zap, textKey: 'discover.badgeRealtime' },
-          ].map((badge, i) => (
-            <React.Fragment key={i}>
-              {i > 0 && <div className="w-0.5 h-0.5 rounded-full bg-white/8" />}
-              <div className="flex items-center gap-1 text-[8px] font-bold uppercase tracking-wider">
-                <badge.icon className="w-2.5 h-2.5" /> {t(badge.textKey)}
-              </div>
-            </React.Fragment>
-          ))}
-        </motion.div>
       </div>
     </div>
   );

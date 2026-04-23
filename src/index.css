@@ -1,42 +1,57 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #0a0a0f;
-  --color-accent: #7c3aed;
-  --color-accent-hover: #6d28d9;
+  --color-background: #050505;
+  --color-bg-2: #0a0a0a;
+  --color-fg: #ffffff;
+  --color-muted: rgba(255,255,255,0.4);
+  --color-border: rgba(255,255,255,0.05);
+  --color-border-h: rgba(255,255,255,0.18);
+  --color-glow-orange: #f97316;
+  --color-glow-blue: #1e3a8a;
+  --color-accent: #f97316;
+  --color-accent-hover: #ea580c;
   --font-inter: "Inter", system-ui, sans-serif;
+  --font-clash: "Clash Display", sans-serif;
 }
 
-/* Custom Reset and Global Styles */
+/* ── Global Reset ──────────────────────────────────────────── */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Base Styles ───────────────────────────────────────────── */
 @layer base {
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 100px;
   }
-  
+
   body {
-    @apply bg-background text-white font-inter antialiased;
-    margin: 0;
+    background: #050505;
+    color: #fff;
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   /* Premium scrollbar */
   ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 4px;
+    height: 4px;
   }
   ::-webkit-scrollbar-track {
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: rgba(124, 58, 237, 0.2);
-    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 2px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(124, 58, 237, 0.4);
+    background: rgba(255, 255, 255, 0.15);
   }
 
-  /* Selection color */
+  /* Selection */
   ::selection {
-    background: rgba(124, 58, 237, 0.3);
+    background: rgba(249, 115, 22, 0.25);
     color: white;
   }
 
@@ -49,28 +64,31 @@
   html[lang="hi"] .leading-tight {
     line-height: 1.35 !important;
   }
-  
-  html[lang="hi"] .bg-clip-text {
-    padding-top: 0.15em !important;
-    padding-bottom: 0.15em !important;
-  }
 }
 
-@layer utilities {
-  .glass {
-    @apply bg-white/5 backdrop-blur-lg border border-white/10;
-  }
-  
-  .glow-purple {
-    box-shadow: 0 0 20px rgba(124, 58, 237, 0.3);
-  }
+/* ── Font Classes ──────────────────────────────────────────── */
+.font-clash {
+  font-family: 'Clash Display', sans-serif;
 }
 
-/* ── Brand Logo Glow ──────────────────────────────────────── */
-.tc-logo-glow {
-  filter: drop-shadow(0 0 20px rgba(124, 58, 237, 0.4))
-          drop-shadow(0 0 40px rgba(124, 58, 237, 0.15));
+.font-inter {
+  font-family: 'Inter', system-ui, sans-serif;
 }
+
+/* ── Reveal Animations ─────────────────────────────────────── */
+@keyframes revealUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  animation: revealUp 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.reveal-d1 { animation-delay: 0.1s; }
+.reveal-d2 { animation-delay: 0.2s; }
+.reveal-d3 { animation-delay: 0.3s; }
+.reveal-d4 { animation-delay: 0.4s; }
+.reveal-d5 { animation-delay: 0.5s; }
 
 /* ── Gradient Text Shift Animation ────────────────────────── */
 .tc-gradient-shift {
@@ -110,9 +128,15 @@
   animation: tc-pulse-ring 3s ease-in-out infinite;
 }
 
-/* ── Card hover micro-interaction ─────────────────────────── */
-@keyframes tc-card-glow {
-  0% { box-shadow: 0 0 0 0 rgba(124, 58, 237, 0); }
-  50% { box-shadow: 0 0 20px 0 rgba(124, 58, 237, 0.1); }
-  100% { box-shadow: 0 0 0 0 rgba(124, 58, 237, 0); }
+/* ── Editorial Utilities ──────────────────────────────────── */
+@layer utilities {
+  .glass {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+}
+
+/* ── Brand Logo — no glow effects ─────────────────────────── */
+.tc-logo-glow {
+  /* clean — no effects */
 }

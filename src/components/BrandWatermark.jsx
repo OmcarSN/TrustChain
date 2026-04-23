@@ -3,7 +3,7 @@ import TrustChainLogo from './TrustChainLogo';
 
 /**
  * BrandWatermark — Subtle brand presence on page backgrounds
- * Shows the icon-only logo as a ghosted watermark
+ * Shows the logo as a ghosted watermark
  */
 const BrandWatermark = ({ position = 'bottom-right', opacity = 0.03 }) => {
   const positionStyles = {
@@ -21,7 +21,7 @@ const BrandWatermark = ({ position = 'bottom-right', opacity = 0.03 }) => {
         opacity,
       }}
     >
-      <TrustChainLogo size={200} variant="icon" />
+      <TrustChainLogo size={200} />
     </div>
   );
 };

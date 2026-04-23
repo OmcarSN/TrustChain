@@ -1,446 +1,226 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  User, Star, MapPin, Briefcase, ShieldCheck, ExternalLink, 
-  Calendar, Share2, Award, CheckCircle2, Clock, Hash, 
-  ArrowLeft, Loader2, AlertCircle, Copy, Check, Sparkles,
-  Target, Globe, Fingerprint
+import React, { useEffect, useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import {
+  User, Briefcase, MapPin, Star, Calendar, Award,
+  ArrowLeft, Copy, Check, ExternalLink, Share2,
+  ShieldCheck, Clock, Hash, ArrowRight
 } from 'lucide-react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import { fetchWorkerCredential } from '../lib/stellar';
-import { calculateScore } from '../lib/reputation';
-import { useToast } from '../context/ToastContext';
 import { useTranslation } from 'react-i18next';
-
-/* ── Floating Orb ─────────────────────────────────────────────── */
-const FloatingOrb = ({ className, delay = 0 }) => (
-  <motion.div
-    className={`absolute rounded-full pointer-events-none -z-10 ${className}`}
-    animate={{ y: [0, -15, 0], scale: [1, 1.05, 1], opacity: [0.5, 0.8, 0.5] }}
-    transition={{ duration: 8, delay, repeat: Infinity, ease: 'easeInOut' }}
-  />
-);
+import { calculateScore } from '../lib/reputation';
+import TrustChainLogo from '../components/TrustChainLogo';
 
 const WorkerProfile = () => {
   const { address } = useParams();
-  const navigate = useNavigate();
-  const toast = useToast();
-  const { t } = useTranslation();
-
   const [profile, setProfile] = useState(null);
   const [endorsements, setEndorsements] = useState([]);
   const [reputation, setReputation] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [copied, setCopied] = useState(false);
   const [copiedAddr, setCopiedAddr] = useState(false);
+  const [copiedShare, setCopiedShare] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
-    if (!address) return;
-    loadProfile();
+    const data = JSON.parse(localStorage.getItem(`trustchain_worker_${address}`) || 'null');
+    const endorse = JSON.parse(localStorage.getItem(`endorsements_${address}`) || '[]');
+    if (data) {
+      setProfile({
+        name: data.name || data.fullName || 'Unknown',
+        skill: data.skill || data.skillCategory || 'General',
+        city: data.city || 'Unknown',
+        experience: data.experience || 0,
+        bio: data.bio || '',
+        timestamp: data.timestamp,
+      });
+    }
+    setEndorsements(endorse);
+    setReputation(calculateScore(endorse));
+    setLoading(false);
   }, [address]);
 
-  const loadProfile = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const credential = await fetchWorkerCredential(address);
-      const localKey = `endorsements_${address}`;
-      const endorse = JSON.parse(localStorage.getItem(localKey) || '[]');
-      const rep = calculateScore(endorse);
+  const truncate = (a) => a ? `${a.slice(0,6)}…${a.slice(-6)}` : '';
+  const copyAddr = () => { navigator.clipboard.writeText(address); setCopiedAddr(true); setTimeout(() => setCopiedAddr(false), 2000); };
+  const shareProfile = () => { navigator.clipboard.writeText(window.location.href); setCopiedShare(true); setTimeout(() => setCopiedShare(false), 2000); };
 
-      setProfile({ ...credential, address });
-      setEndorsements(endorse);
-      setReputation(rep);
-    } catch (err) {
-      setError(err.message || 'Worker profile not found on-chain.');
-      setProfile(null);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleShare = () => {
-    const url = `${window.location.origin}/profile/${address}`;
-    navigator.clipboard.writeText(url);
-    setCopied(true);
-    toast.success(t('profile.copied'));
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  const copyAddress = () => {
-    navigator.clipboard.writeText(address);
-    setCopiedAddr(true);
-    toast.success(t('profile.copied'));
-    setTimeout(() => setCopiedAddr(false), 2000);
-  };
-
-  const truncateAddress = (addr) => addr ? `${addr.slice(0, 6)}...${addr.slice(-6)}` : '';
-
-  /* ── Loading skeleton ──────────────────────────────────────── */
   if (loading) {
     return (
-      <div className="min-h-screen bg-background pt-[4.5rem] pb-4 px-4 sm:px-6 relative overflow-hidden">
-        <FloatingOrb className="w-[600px] h-[400px] bg-accent/5 blur-[150px] top-20 left-1/3" />
+      <div className="min-h-screen bg-[#050505] pt-28 pb-12 px-6 lg:px-12 relative overflow-hidden text-white">
         <div className="max-w-5xl mx-auto">
-          <div className="mb-6">
-            <Link to="/" className="inline-flex items-center gap-2 text-white/30 hover:text-accent transition-colors font-bold text-xs group">
-              <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" /> {t('profile.backBtn')}
-            </Link>
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-1">
-              <div className="p-8 rounded-2xl animate-pulse" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)' }}>
-                <div className="w-20 h-20 rounded-2xl bg-white/[0.04] mx-auto mb-5" />
-                <div className="h-6 bg-white/[0.04] rounded-lg w-2/3 mx-auto mb-3" />
-                <div className="h-3 bg-white/[0.04] rounded-lg w-1/2 mx-auto mb-6" />
-                <div className="space-y-2.5">{[1,2,3,4,5].map(i => <div key={i} className="h-2 bg-white/[0.04] rounded-full" />)}</div>
-              </div>
-            </div>
-            <div className="lg:col-span-2">
-              <div className="p-10 rounded-2xl animate-pulse" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)' }}>
-                <div className="h-8 bg-white/[0.04] rounded-xl w-1/2 mb-5" />
-                <div className="h-3 bg-white/[0.04] rounded-lg w-full mb-2" />
-                <div className="h-3 bg-white/[0.04] rounded-lg w-3/4 mb-8" />
-                <div className="flex gap-3"><div className="h-12 bg-white/[0.04] rounded-xl flex-1" /><div className="h-12 bg-white/[0.04] rounded-xl flex-1" /></div>
-              </div>
-            </div>
+          <div className="animate-pulse space-y-6">
+            <div className="h-6 w-48 bg-white/5 rounded-[2px]" />
+            <div className="h-40 bg-white/5 rounded-[2px]" />
           </div>
         </div>
       </div>
     );
   }
 
-  /* ── Error state ───────────────────────────────────────────── */
-  if (error) {
+  if (!profile) {
     return (
-      <div className="min-h-screen bg-background pt-[4.5rem] flex items-center justify-center px-6 relative overflow-hidden">
-        <FloatingOrb className="w-[500px] h-[500px] bg-red-900/5 blur-[120px] top-1/4 left-1/2 -translate-x-1/2" />
-        <motion.div
-          initial={{ opacity: 0, y: 25, scale: 0.97 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.6 }}
-          className="text-center max-w-md p-10 rounded-2xl relative overflow-hidden"
-          style={{
-            background: 'linear-gradient(145deg, rgba(239,68,68,0.05) 0%, rgba(255,255,255,0.03) 100%)',
-            border: '1px solid rgba(239,68,68,0.1)',
-          }}
-        >
-          <div className="w-16 h-16 rounded-2xl bg-red-500/10 border border-red-500/15 flex items-center justify-center mx-auto mb-6">
-            <AlertCircle className="w-8 h-8 text-red-400" />
+      <div className="min-h-screen bg-[#050505] pt-28 pb-12 px-6 lg:px-12 flex items-center justify-center relative overflow-hidden text-white">
+        <div className="absolute rounded-full pointer-events-none" style={{ top: '-80px', left: '-80px', width: '400px', height: '400px', background: '#f97316', filter: 'blur(120px)', opacity: 0.04 }} />
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center max-w-sm">
+          <div className="w-14 h-14 rounded-[2px] bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-6">
+            <User className="w-7 h-7 text-white/20" />
           </div>
-          <h2 className="text-2xl font-black mb-2 tracking-tight">{t('profile.notFound')}</h2>
-          <p className="text-white/30 mb-3 font-medium text-sm">{error}</p>
-          <p className="text-white/15 font-mono text-[10px] mb-6 truncate px-4">{address}</p>
-          <div className="flex flex-col gap-2.5">
-            <Link to="/verify" className="w-full py-3.5 bg-gradient-to-r from-accent to-purple-700 text-white rounded-xl font-black uppercase tracking-[0.15em] text-[10px] transition-all flex items-center justify-center gap-2">
-              <ShieldCheck className="w-3.5 h-3.5" /> {t('dashboard.verifyWorker')}
-            </Link>
-            <Link to="/" className="w-full py-3.5 bg-white/[0.04] hover:bg-white/[0.06] border border-white/[0.06] text-white rounded-xl font-black uppercase tracking-[0.15em] text-[10px] transition-all flex items-center justify-center gap-2">
-               <ArrowLeft className="w-3.5 h-3.5" /> {t('nav.home')}
-            </Link>
+          <h2 className="font-clash text-2xl font-bold mb-2">{t('profile.noCredentialTitle')}</h2>
+          <p className="text-white/30 text-sm mb-6 font-inter">{t('profile.noCredentialSub')}</p>
+          <div className="flex gap-3">
+            <Link to="/verify" className="flex-1 py-3 bg-white text-black rounded-[2px] font-bold text-[10px] tracking-[0.15em] uppercase text-center hover:opacity-85 transition-opacity">{t('profile.verify')}</Link>
+            <Link to="/" className="flex-1 py-3 border border-white/15 rounded-[2px] font-bold text-[10px] tracking-[0.15em] uppercase text-center hover:bg-white/5 transition-all">{t('profile.goHome')}</Link>
           </div>
         </motion.div>
       </div>
     );
   }
 
-  /* ── Profile View ──────────────────────────────────────────── */
   return (
-    <div className="min-h-screen bg-background pt-[4.5rem] pb-4 px-4 sm:px-6 relative overflow-hidden text-white">
-      {/* Background */}
-      <FloatingOrb className="w-[700px] h-[500px] bg-accent/5 blur-[160px] top-10 right-1/4" />
-      <FloatingOrb className="w-[400px] h-[400px] bg-purple-800/5 blur-[120px] bottom-20 left-10" delay={3} />
-      <div className="absolute inset-0 -z-10 opacity-[0.015]"
-        style={{
-          backgroundImage: `linear-gradient(rgba(124,58,237,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(124,58,237,0.5) 1px, transparent 1px)`,
-          backgroundSize: '70px 70px',
-        }}
-      />
+    <div className="min-h-screen bg-[#050505] pt-28 pb-12 px-6 lg:px-12 relative overflow-hidden text-white">
+      {/* Light leaks */}
+      <div className="absolute rounded-full pointer-events-none" style={{ top: '-80px', right: '-80px', width: '400px', height: '400px', background: '#f97316', filter: 'blur(120px)', opacity: 0.04 }} />
+      <div className="absolute rounded-full pointer-events-none" style={{ bottom: '-80px', left: '-80px', width: '400px', height: '400px', background: '#1e3a8a', filter: 'blur(120px)', opacity: 0.05 }} />
 
-      <div className="max-w-5xl mx-auto">
-        {/* Back link */}
-        <motion.div initial={{ opacity: 0, x: -15 }} animate={{ opacity: 1, x: 0 }} className="mb-3">
-          <Link to="/" className="inline-flex items-center gap-2 text-white/30 hover:text-accent transition-colors font-bold text-xs group">
-            <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" /> {t('profile.backBtn')}
-          </Link>
-        </motion.div>
+      <div className="max-w-5xl mx-auto relative z-10">
+        {/* Breadcrumb */}
+        <Link to="/discover" className="inline-flex items-center gap-2 text-white/30 hover:text-white transition-colors text-xs font-bold mb-6 group">
+          <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" /> {t('profile.backToDiscover')}
+        </Link>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
-          {/* ── Left Column: Profile + Reputation ────────────── */}
-          <div className="lg:col-span-1 space-y-3">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.05 }}
-              className="rounded-2xl relative overflow-hidden"
-              style={{
-                background: 'linear-gradient(145deg, rgba(124,58,237,0.06) 0%, rgba(255,255,255,0.03) 100%)',
-                border: '1px solid rgba(255,255,255,0.06)',
-              }}
-            >
-              {/* Top accent */}
-              <div className="h-1 bg-gradient-to-r from-accent via-purple-500 to-accent/30" />
-              <motion.div
-                className="absolute top-0 left-0 right-0 h-[1px]"
-                style={{ background: 'linear-gradient(90deg, transparent, rgba(124,58,237,0.5), transparent)' }}
-                animate={{ x: ['-100%', '100%'] }}
-                transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
-              />
-
-              <div className="p-4">
-                {/* Avatar & Identity */}
-                <div className="text-center mb-4">
-                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-accent/20 to-purple-800/20 flex items-center justify-center border border-accent/15 mx-auto mb-3 shadow-[0_8px_24px_rgba(124,58,237,0.12)]">
-                    <User className="w-7 h-7 text-accent" />
-                  </div>
-                  <h2 className="text-lg font-black mb-1 tracking-tight">{profile.name}</h2>
-                  <div className="flex items-center justify-center gap-3 mb-3">
-                    <span className="flex items-center gap-1 text-white/35 text-[11px] font-semibold">
-                      <Briefcase className="w-3 h-3 text-accent/60" /> {profile.skill}
-                    </span>
-                    <span className="flex items-center gap-1 text-white/35 text-[11px] font-semibold">
-                      <MapPin className="w-3 h-3 text-accent/60" /> {profile.city}
-                    </span>
-                  </div>
-                  <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-green-500/10 border border-green-500/12 rounded-lg">
-                    <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                    <span className="text-[8px] font-black uppercase tracking-widest text-green-400">{t('profile.badgeVerified')}</span>
-                  </div>
-                </div>
-
-                {/* Reputation Score */}
-                <div className="text-center mb-4">
-                  <div className="w-20 h-20 rounded-full mx-auto flex items-center justify-center relative mb-3">
-                    <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 80 80">
-                      <circle cx="40" cy="40" r="35" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="4" />
-                      <circle 
-                        cx="40" cy="40" r="35" fill="none" 
-                        stroke="url(#profileScoreGrad)" 
-                        strokeWidth="4" 
-                        strokeLinecap="round"
-                        strokeDasharray={`${((reputation?.average || 0) / 5) * 220} 220`}
-                      />
-                      <defs>
-                        <linearGradient id="profileScoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                          <stop offset="0%" stopColor="#7c3aed" />
-                          <stop offset="100%" stopColor="#a78bfa" />
-                        </linearGradient>
-                      </defs>
-                    </svg>
-                    <div className="text-center z-10">
-                      <div className="text-2xl font-black tracking-tighter">{reputation?.average || '0.0'}</div>
-                      <div className="text-[6px] font-bold uppercase tracking-[0.25em] text-white/18 mt-0.5">{t('dashboard.avgRating')}</div>
-                    </div>
-                  </div>
-                  <div className="flex justify-center gap-1 mb-2">
-                    {[1,2,3,4,5].map(s => (
-                      <Star key={s} className={`w-4 h-4 ${s <= Math.floor(reputation?.average || 0) ? 'text-amber-400 fill-amber-400' : 'text-white/5'}`} />
-                    ))}
-                  </div>
-                  <p className="text-[9px] font-bold uppercase tracking-wider text-white/18">{reputation?.total || 0} {t('discover.reviews')}</p>
-                </div>
-
-                {/* Star Breakdown */}
-                <div className="space-y-1.5 mb-4">
-                  {[5,4,3,2,1].map(star => (
-                    <div key={star} className="flex items-center gap-2.5">
-                      <span className="text-[9px] font-bold text-white/20 w-5 text-right">{star}★</span>
-                      <div className="flex-1 h-1.5 bg-white/[0.03] rounded-full overflow-hidden">
-                        <motion.div 
-                          initial={{ width: 0 }}
-                          animate={{ width: `${reputation?.breakdown[star] || 0}%` }}
-                          transition={{ duration: 1, delay: 0.5 + star * 0.1 }}
-                          className="h-full bg-gradient-to-r from-accent to-purple-400 rounded-full" 
-                        />
-                      </div>
-                      <span className="text-[9px] font-bold text-white/15 w-7 text-right">{reputation?.breakdown[star] || 0}%</span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Wallet */}
-                <div className="pt-4 border-t border-white/[0.04]">
-                  <p className="text-[8px] font-bold uppercase tracking-[0.2em] text-white/12 mb-2">{t('profile.stellarAddress')}</p>
-                  <div className="flex items-center gap-2 p-2.5 bg-white/[0.03] rounded-lg border border-white/[0.03]">
-                    <span className="text-[9px] font-mono text-white/20 truncate flex-1">{address}</span>
-                    <button onClick={copyAddress} className="shrink-0">
-                      {copiedAddr ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5 text-white/15 hover:text-accent transition-colors" />}
-                    </button>
-                  </div>
-                  <a 
-                    href={`https://stellar.expert/explorer/testnet/address/${address}`}
-                    target="_blank" rel="noopener noreferrer"
-                    className="mt-2.5 flex items-center justify-center gap-2 py-2.5 bg-white/[0.03] hover:bg-white/[0.05] rounded-lg border border-white/[0.04] transition-all text-[8px] font-bold uppercase tracking-wider text-white/25 group"
-                  >
-                    Explorer <ExternalLink className="w-2.5 h-2.5 group-hover:scale-110 transition-transform" />
-                  </a>
-                  <Link
-                    to="/endorse"
-                    className="mt-2 flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-accent to-purple-700 hover:from-accent-hover hover:to-purple-800 text-white rounded-lg font-black uppercase tracking-[0.15em] text-[9px] transition-all shadow-lg shadow-accent/20 active:scale-[0.97]"
-                  >
-                    <Award className="w-3.5 h-3.5" /> {t('profile.endorseBtn')}
-                  </Link>
-                </div>
+        {/* Profile Header */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mb-10 reveal">
+          {/* Identity Card */}
+          <div className="md:col-span-4 border border-white/[0.07] rounded-[2px] p-6 bg-white/[0.02]">
+            <div className="flex flex-col items-center text-center mb-6">
+              <div className="w-16 h-16 rounded-[2px] bg-white/5 border border-white/10 flex items-center justify-center mb-4">
+                <User className="w-8 h-8 text-white/30" />
               </div>
-            </motion.div>
+              <h2 className="font-clash text-xl font-bold mb-1">{profile.name}</h2>
+              <div className="flex items-center gap-3 text-white/30 text-[10px] font-inter">
+                <span className="flex items-center gap-1"><Briefcase className="w-2.5 h-2.5" /> {profile.skill}</span>
+                <span className="flex items-center gap-1"><MapPin className="w-2.5 h-2.5" /> {profile.city}</span>
+              </div>
+              {profile.experience > 0 && (
+                <span className="flex items-center gap-1 text-white/20 text-[10px] mt-1 font-inter">
+                  <Calendar className="w-2.5 h-2.5" /> {profile.experience} {t('profile.yrs')}
+                </span>
+              )}
+            </div>
+            {profile.bio && <p className="text-[11px] text-white/30 italic leading-relaxed border-t border-white/5 pt-4 text-center font-inter">"{profile.bio}"</p>}
+
+            {/* Wallet */}
+            <div className="mt-4 pt-4 border-t border-white/5">
+              <p className="text-[8px] font-bold uppercase tracking-[0.2em] text-white/20 mb-2 font-inter">{t('profile.walletAddress')}</p>
+              <div className="flex items-center gap-2">
+                <span className="font-mono text-[10px] text-white/40 flex-1 truncate">{address}</span>
+                <button onClick={copyAddr} className="text-white/20 hover:text-white transition-colors">
+                  {copiedAddr ? <Check className="w-3 h-3 text-green-400" /> : <Copy className="w-3 h-3" />}
+                </button>
+              </div>
+              <a href={`https://stellar.expert/explorer/testnet/address/${address}`} target="_blank" rel="noopener noreferrer"
+                className="mt-2 flex items-center justify-center gap-2 py-2.5 border border-white/10 rounded-[2px] text-[9px] font-bold uppercase tracking-wider text-white/30 hover:text-white hover:border-white/30 transition-all">
+                <ExternalLink className="w-3 h-3" /> {t('profile.viewOnStellar')}
+              </a>
+            </div>
+
+            {/* Actions */}
+            <div className="mt-4 flex gap-2">
+              <button onClick={shareProfile} className="flex-1 py-2.5 border border-white/10 rounded-[2px] text-[9px] font-bold uppercase tracking-wider text-white/30 hover:text-white hover:border-white/30 transition-all flex items-center justify-center gap-1.5">
+                {copiedShare ? <><Check className="w-3 h-3 text-green-400" /> {t('profile.copied')}</> : <><Share2 className="w-3 h-3" /> {t('profile.shareProfile')}</>}
+              </button>
+              <Link to={`/endorse?worker=${address}`} className="flex-1 py-2.5 bg-white text-black rounded-[2px] text-[9px] font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 hover:opacity-85 transition-opacity">
+                <Award className="w-3 h-3" /> {t('profile.endorse')}
+              </Link>
+            </div>
           </div>
 
-          {/* ── Right Column: Bio, Actions, Endorsements ─────── */}
-          <div className="lg:col-span-2 space-y-3">
-            {/* Identity Card */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="rounded-2xl relative overflow-hidden"
-              style={{
-                background: 'linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 100%)',
-                border: '1px solid rgba(255,255,255,0.06)',
-              }}
-            >
-              <div className="p-5 sm:p-6">
-                <div className="mb-4 pb-4 border-b border-white/[0.04]">
-                  <h1 className="text-2xl font-black mb-2 tracking-tight">{profile.name}</h1>
-                  <div className="flex flex-wrap gap-4 items-center mb-3">
-                    <span className="flex items-center gap-1.5 text-white/40 text-[11px] font-bold uppercase tracking-wider">
-                      <Briefcase className="w-3.5 h-3.5 text-accent" /> {profile.skill}
-                    </span>
-                    <span className="flex items-center gap-1.5 text-white/40 text-[11px] font-bold uppercase tracking-wider">
-                      <MapPin className="w-3.5 h-3.5 text-accent" /> {profile.city}
-                    </span>
-                    {profile.experience && (
-                      <span className="flex items-center gap-1.5 text-white/40 text-[11px] font-bold uppercase tracking-wider">
-                        <Calendar className="w-3.5 h-3.5 text-accent" /> {profile.experience} {t('profile.yrs')}
-                      </span>
-                    )}
+          {/* Right side: Reputation + Endorsements */}
+          <div className="md:col-span-8 space-y-4">
+            {/* Reputation Bar */}
+            <div className="border border-white/[0.07] rounded-[2px] p-6 bg-white/[0.02]">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-1 h-5 bg-white/20 rounded-full" />
+                <h3 className="text-sm font-bold tracking-tight font-inter">{t('profile.reputationScore')}</h3>
+              </div>
+              {endorsements.length > 0 ? (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="text-center">
+                    <p className="font-clash text-3xl font-bold">{reputation?.average || '0.0'}</p>
+                    <div className="flex justify-center gap-0.5 mt-1">
+                      {[1,2,3,4,5].map(s => (<Star key={s} className={`w-3 h-3 ${s <= Math.round(reputation?.average || 0) ? 'text-white fill-white' : 'text-white/10'}`} />))}
+                    </div>
+                    <p className="text-[8px] uppercase tracking-wider text-white/20 mt-1 font-inter">{t('profile.avgRating')}</p>
                   </div>
-                  <p className="text-sm text-white/35 leading-relaxed font-medium italic max-w-2xl">
-                    "{profile.bio}"
-                  </p>
+                  <div className="text-center">
+                    <p className="font-clash text-3xl font-bold">{endorsements.length}</p>
+                    <p className="text-[8px] uppercase tracking-wider text-white/20 mt-1 font-inter">{t('profile.totalReviews')}</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="font-clash text-3xl font-bold">{reputation?.highest || '—'}</p>
+                    <p className="text-[8px] uppercase tracking-wider text-white/20 mt-1 font-inter">{t('profile.highestScore')}</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="font-clash text-3xl font-bold">{reputation?.weighted?.toFixed(1) || '—'}</p>
+                    <p className="text-[8px] uppercase tracking-wider text-white/20 mt-1 font-inter">{t('profile.weightedScore')}</p>
+                  </div>
                 </div>
+              ) : (
+                <p className="text-white/20 text-xs font-inter">{t('profile.noEndorsements')}</p>
+              )}
+            </div>
 
-                {/* Buttons */}
-                <div className="flex flex-wrap gap-3">
-                  <button
-                    onClick={handleShare}
-                    className="flex-1 min-w-[140px] py-3 bg-white/[0.04] hover:bg-white/[0.06] border border-white/[0.06] rounded-xl font-black uppercase tracking-[0.15em] text-[10px] transition-all flex items-center justify-center gap-2.5 active:scale-95 group"
-                  >
-                    {copied 
-                      ? <><Check className="w-3.5 h-3.5 text-green-400" /> {t('profile.copied')}</>
-                      : <><Share2 className="w-3.5 h-3.5 text-accent group-hover:rotate-12 transition-transform" /> {t('profile.shareProfile')}</>
-                    }
-                  </button>
-                  <button
-                    onClick={() => navigate(`/endorse`)}
-                    className="flex-1 min-w-[140px] py-3 bg-gradient-to-r from-accent to-purple-700 hover:from-accent-hover hover:to-purple-800 text-white rounded-xl font-black uppercase tracking-[0.15em] text-[10px] transition-all flex items-center justify-center gap-2.5 shadow-lg shadow-accent/15 active:scale-95 group"
-                  >
-                    <Award className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" /> {t('profile.endorseBtn')}
-                  </button>
+            {/* Endorsements List */}
+            <div className="border border-white/[0.07] rounded-[2px] bg-white/[0.02]">
+              <div className="p-5 border-b border-white/5 flex items-center justify-between">
+                <h3 className="text-sm font-bold tracking-tight font-inter">{t('profile.endorsements')}</h3>
+                <span className="text-[9px] font-bold text-white/20 uppercase tracking-wider">{endorsements.length} {t('profile.total')}</span>
+              </div>
+              {endorsements.length === 0 ? (
+                <div className="p-10 text-center border-t border-dashed border-white/5">
+                  <Award className="w-8 h-8 text-white/10 mx-auto mb-3" />
+                  <p className="text-white/20 text-xs font-inter">{t('profile.noEndorsementsYet')}</p>
                 </div>
-              </div>
-            </motion.div>
-
-            {/* Endorsement History */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-            >
-              <div className="flex items-center gap-3 ml-1 mb-3">
-                <div className="w-1.5 h-6 bg-gradient-to-b from-accent to-purple-600 rounded-full" />
-                <h3 className="text-lg font-black tracking-tight">{t('profile.reviewsHeader')}</h3>
-                <span className="ml-auto text-[9px] font-bold text-white/12 bg-white/[0.03] px-2 py-0.5 rounded-md">{endorsements.length}</span>
-              </div>
-
-              <div className="space-y-3">
-                {endorsements.length > 0 ? endorsements
-                  .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-                  .map((endorsement, idx) => (
+              ) : (
+                <div className="max-h-[400px] overflow-y-auto" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.05) transparent' }}>
+                  {endorsements.map((e, idx) => (
                     <motion.div
                       key={idx}
-                      initial={{ opacity: 0, x: 12 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.3 + idx * 0.06 }}
-                      className="p-5 rounded-xl transition-all group"
-                      style={{
-                        background: 'rgba(255,255,255,0.025)',
-                        border: '1px solid rgba(255,255,255,0.04)',
-                      }}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: idx * 0.03 }}
+                      className="p-4 border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors"
                     >
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center border border-accent/12">
-                            <ShieldCheck className="w-4 h-4 text-accent" />
+                      <div className="flex items-start gap-3">
+                        <div className="w-7 h-7 rounded-[2px] bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+                          <ShieldCheck className="w-3.5 h-3.5 text-white/30" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="px-2 py-0.5 border border-white/10 rounded-[2px] text-[8px] font-bold uppercase text-white/40">{e.jobType}</span>
+                            <div className="flex gap-0.5">
+                              {[1,2,3,4,5].map(s => (<Star key={s} className={`w-2.5 h-2.5 ${s <= e.rating ? 'text-white fill-white' : 'text-white/10'}`} />))}
+                            </div>
                           </div>
-                          <div>
-                            <span className="text-[8px] font-bold uppercase tracking-[0.15em] text-white/18 block">{t('profile.endorserLabel')}</span>
-                            <span className="text-xs font-mono font-semibold text-white/40">{truncateAddress(endorsement.endorser)}</span>
+                          <p className="text-[11px] text-white/30 leading-relaxed mb-1.5 font-inter">"{e.feedback}"</p>
+                          <div className="flex items-center gap-3">
+                            <span className="text-[8px] text-white/15 flex items-center gap-1 font-inter">
+                              <Clock className="w-2.5 h-2.5" /> {new Date(e.timestamp).toLocaleDateString()}
+                            </span>
+                            {e.txHash && (
+                              <a href={`https://stellar.expert/explorer/testnet/tx/${e.txHash}`} target="_blank" rel="noopener noreferrer"
+                                className="text-[8px] font-mono text-white/10 hover:text-white/30 transition-colors flex items-center gap-1">
+                                <Hash className="w-2 h-2" /> {e.txHash.slice(0,8)}…
+                              </a>
+                            )}
                           </div>
                         </div>
-                        <div className="flex gap-0.5 p-1.5 bg-white/[0.02] rounded-md">
-                          {[1,2,3,4,5].map(s => (
-                            <Star key={s} className={`w-3 h-3 ${s <= endorsement.rating ? 'text-amber-400 fill-amber-400' : 'text-white/5'}`} />
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="mb-3">
-                        <span className="inline-block px-2 py-0.5 rounded-md bg-accent/8 border border-accent/12 text-[8px] font-bold uppercase tracking-wider text-accent/70 mb-2">
-                          {endorsement.jobType}
-                        </span>
-                        <p className="text-[11px] text-white/30 leading-relaxed italic">"{endorsement.feedback}"</p>
-                      </div>
-
-                      <div className="flex items-center justify-between pt-3 border-t border-white/[0.03]">
-                        <span className="text-[9px] font-semibold text-white/12 flex items-center gap-1.5">
-                          <Calendar className="w-2.5 h-2.5" />
-                          {new Date(endorsement.timestamp).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
-                        </span>
-                        {endorsement.txHash && (
-                          <a
-                            href={`https://stellar.expert/explorer/testnet/tx/${endorsement.txHash}`}
-                            target="_blank" rel="noopener noreferrer"
-                            className="flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-wider text-white/12 hover:text-accent transition-colors"
-                          >
-                            {t('profile.viewTx')} <ExternalLink className="w-2.5 h-2.5" />
-                          </a>
-                        )}
                       </div>
                     </motion.div>
-                  )) : (
-                  <div className="p-10 text-center rounded-xl border border-dashed border-white/[0.05]">
-                    <div className="w-14 h-14 rounded-2xl bg-white/[0.02] flex items-center justify-center mx-auto mb-4">
-                      <Award className="w-6 h-6 text-white/[0.06]" />
-                    </div>
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-white/15 mb-1">{t('profile.noReviews')}</p>
-                    <p className="text-[10px] text-white/8 font-medium">{t('profile.beFirstEndorse')}</p>
-                  </div>
-                )}
-              </div>
-            </motion.div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
-
-        {/* Footer */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="mt-10 flex items-center justify-center gap-5 text-white/10"
-        >
-          <div className="flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-wider">
-            <Globe className="w-3 h-3" /> {t('profile.badgePublic')}
-          </div>
-          <div className="w-1 h-1 rounded-full bg-white/5" />
-          <div className="flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-wider">
-            <ShieldCheck className="w-3 h-3" /> {t('profile.badgeVerifiedData')}
-          </div>
-          <div className="w-1 h-1 rounded-full bg-white/5" />
-          <div className="flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-wider">
-            <Sparkles className="w-3 h-3" /> {t('profile.badgeStellar')}
-          </div>
-        </motion.div>
       </div>
     </div>
   );
