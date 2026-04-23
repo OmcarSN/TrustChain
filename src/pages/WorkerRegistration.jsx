@@ -87,7 +87,7 @@ const WorkerRegistration = () => {
         <div className="absolute rounded-full pointer-events-none" style={{ top: '-80px', left: '-80px', width: '400px', height: '400px', background: '#f97316', filter: 'blur(120px)', opacity: 0.04 }} />
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center max-w-md z-10">
           <div className="w-14 h-14 rounded-[2px] bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-6"><Wallet className="w-7 h-7 text-white/30" /></div>
-          <h2 className="font-clash text-3xl font-bold mb-3 tracking-tighter">{t('registration.headerTitle')}</h2>
+          <h2 className="font-clash text-3xl font-bold mb-3 tracking-tight">{t('registration.headerTitle')}</h2>
           <p className="text-white/30 mb-8 text-sm font-inter">{t('registration.headerSubtitle')}</p>
           <button onClick={connect} className="w-full py-4 bg-white text-black rounded-[2px] font-bold uppercase tracking-[0.15em] text-[11px] hover:opacity-85 transition-opacity flex items-center justify-center gap-2"><Wallet className="w-4 h-4" /> {t('dashboard.connectBtn')}</button>
         </motion.div>

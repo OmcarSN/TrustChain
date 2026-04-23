@@ -56,67 +56,71 @@ const RATING_OPTIONS = [
 const WorkerCard = ({ worker, index }) => {
   const { t } = useTranslation();
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.04, duration: 0.4 }}
-    >
       <Link
         to={`/profile/${worker.address}`}
-        className="group block border border-white/[0.07] rounded-[2px] p-6 bg-white/[0.02] hover:border-white/[0.18] hover:bg-white/[0.05] transition-all duration-400"
+        className="worker-card group flex flex-col h-full"
+        style={{ 
+          padding: '18px', 
+          border: '1px solid rgba(255,255,255,0.08)', 
+          backgroundColor: '#111111', 
+          borderRadius: '0px',
+          gap: '0',
+          animationDelay: `${(index + 1) * 0.05}s`
+        }}
       >
-        {/* Avatar + Name */}
-        <div className="flex items-start gap-3 mb-4">
-          <div className="w-10 h-10 rounded-[2px] bg-white/5 border border-white/10 flex items-center justify-center shrink-0 relative">
-            <User className="w-4 h-4 text-white/40" />
-            {worker.totalEndorsements > 0 && (
-              <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-green-400 border-2 border-[#050505] flex items-center justify-center">
-                <CheckCircle2 className="w-2 h-2 text-black" />
-              </div>
-            )}
+        {/* Avatar + Info */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
+          <div className="flex items-center justify-center shrink-0" style={{ width: '44px', height: '44px', backgroundColor: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '4px' }}>
+            <User style={{ color: 'rgba(255,255,255,0.2)', width: '24px', height: '24px' }} />
           </div>
           <div className="min-w-0 flex-1">
-            <h3 className="text-sm font-bold truncate group-hover:text-white transition-colors">{worker.name}</h3>
-            <div className="flex items-center gap-1 text-white/30 text-[10px] font-medium">
-              <MapPin className="w-2.5 h-2.5" /> {worker.city}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '3px' }}>
+              <h3 style={{ fontSize: '13px', fontWeight: '700', color: '#ffffff', letterSpacing: '0.01em', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} className="group-hover:text-white transition-colors">{worker.name}</h3>
+              {worker.totalEndorsements > 0 && (
+                <span style={{ fontSize: '8px', letterSpacing: '1px', color: '#00dc6e', backgroundColor: 'rgba(0,220,110,0.08)', border: '1px solid rgba(0,220,110,0.2)', padding: '2px 6px', borderRadius: '2px', whiteSpace: 'nowrap', display: 'inline-block' }}>
+                  ● VERIFIED
+                </span>
+              )}
+            </div>
+            <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.4)', display: 'flex', alignItems: 'center', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              <MapPin className="w-3 h-3 mr-1 shrink-0" /> <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{worker.city}</span> <span style={{ opacity: 0.5, margin: '0 6px' }}>•</span> <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{worker.skill ? (t(`jobs.${worker.skill.replace(/\s+/g, '')}`) || worker.skill) : ''}</span>
             </div>
           </div>
         </div>
 
-        {/* Skill */}
-        <div className="mb-4 flex flex-wrap gap-1.5">
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-white/[0.04] border border-white/[0.08] rounded-[2px] text-[10px] font-bold text-white/60">
-            <Briefcase className="w-2.5 h-2.5" /> {worker.skill ? (t(`jobs.${worker.skill.replace(/\s+/g, '')}`) || worker.skill) : ''}
+        {/* Rating */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '14px', paddingBottom: '12px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+          <div className="flex items-center">
+            <div className="flex" style={{ gap: '2px' }}>
+              {[1, 2, 3, 4, 5].map(s => (
+                <Star key={s} style={{ width: '12px', height: '12px', color: s <= Math.round(worker.rating) ? '#f5c518' : 'rgba(255,255,255,0.15)', fill: s <= Math.round(worker.rating) ? '#f5c518' : 'transparent' }} />
+              ))}
+            </div>
+            {worker.rating > 0 && <span style={{ fontSize: '13px', fontWeight: '800', marginLeft: '6px', color: '#fff' }}>{worker.rating}</span>}
+          </div>
+          <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.25)', letterSpacing: '1px', textTransform: 'uppercase', fontWeight: 'bold' }}>
+            {worker.totalEndorsements} {worker.totalEndorsements === 1 ? t('discover.review') : t('discover.reviews')}
+          </span>
+        </div>
+
+        {/* Tags */}
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'nowrap', marginTop: '12px', marginBottom: '0', overflow: 'hidden' }}>
+          <span style={{ padding: '3px 10px', backgroundColor: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', fontSize: '10px', color: 'rgba(255,255,255,0.6)', letterSpacing: '0.5px', borderRadius: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            {worker.skill ? (t(`jobs.${worker.skill.replace(/\s+/g, '')}`) || worker.skill) : 'Skilled Worker'}
           </span>
           {worker.experience > 0 && (
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-white/[0.02] border border-white/[0.05] rounded-[2px] text-[10px] font-bold text-white/30">
+            <span style={{ padding: '3px 10px', backgroundColor: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', fontSize: '10px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.5px', borderRadius: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', flexShrink: 0 }}>
               {worker.experience}{t('discover.yrExp')}
             </span>
           )}
         </div>
 
-        {/* Rating */}
-        <div className="flex items-center justify-between pt-3 border-t border-white/[0.05]">
-          <div className="flex items-center gap-1.5">
-            <div className="flex gap-0.5">
-              {[1, 2, 3, 4, 5].map(s => (
-                <Star key={s} className={`w-3 h-3 ${s <= Math.round(worker.rating) ? 'text-white fill-white' : 'text-white/10'}`} />
-              ))}
-            </div>
-            {worker.rating > 0 && <span className="text-[11px] font-bold text-white/50">{worker.rating}</span>}
-          </div>
-          <span className="text-[9px] font-bold text-white/20 uppercase tracking-wider">
-            {worker.totalEndorsements} {worker.totalEndorsements === 1 ? t('discover.review') : t('discover.reviews')}
-          </span>
-        </div>
-
         {/* View Profile */}
-        <div className="mt-4 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.15em] text-white/15 group-hover:text-white/40 transition-colors">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '12px', fontSize: '9px', fontWeight: '700', letterSpacing: '3px', marginTop: 'auto', transition: 'all 0.25s ease' }} className="uppercase text-[rgba(255,255,255,0.35)] group-hover:text-white">
           {t('discover.viewProfile')}
-          <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+          <ArrowRight style={{ width: '18px', height: '18px', transition: 'all 0.25s ease' }} className="text-[rgba(255,255,255,0.35)] group-hover:text-white group-hover:translate-x-[5px]" />
         </div>
       </Link>
-    </motion.div>
   );
 };
 
@@ -159,36 +163,36 @@ const DiscoverWorkers = () => {
   const hasActiveFilters = searchQuery || selectedSkill !== 'All' || (selectedCity && selectedCity !== 'All Cities') || minRating > 0;
 
   const totalWorkers = workers.length;
-  const calculated = workers.length > 0 ? (workers.reduce((s, w) => s + w.rating, 0) / workers.length) : 0;
-  const avgRating = isNaN(calculated) ? "0.0" : calculated.toFixed(1);
-  const totalEndorsements = workers.reduce((s, w) => s + w.totalEndorsements, 0);
+  const calculated = workers.length > 0 ? (workers.reduce((s, w) => s + parseFloat(w.rating || 0), 0) / workers.length) : 0;
+  const avgRating = (!calculated || isNaN(calculated)) ? "—" : calculated.toFixed(1);
+  const totalEndorsements = workers.reduce((s, w) => s + parseInt(w.totalEndorsements || 0, 10), 0);
 
   return (
-    <div className="min-h-screen bg-[#050505] pt-28 pb-12 px-6 lg:px-12 relative overflow-hidden text-white">
+    <div className="min-h-screen bg-[#050505] pb-12 relative overflow-hidden text-white" style={{ paddingTop: '100px' }}>
       {/* Light leaks */}
       <div className="absolute rounded-full pointer-events-none" style={{ top: '-80px', left: '-80px', width: '400px', height: '400px', background: '#f97316', filter: 'blur(120px)', opacity: 0.04 }} />
       <div className="absolute rounded-full pointer-events-none" style={{ bottom: '-80px', right: '-80px', width: '400px', height: '400px', background: '#1e3a8a', filter: 'blur(120px)', opacity: 0.05 }} />
 
-      <div className="max-w-7xl mx-auto">
+      <div style={{ maxWidth: '1400px', margin: '0 auto', paddingLeft: '3vw', paddingRight: '3vw' }}>
         {/* Header */}
-        <div className="mb-8 reveal">
-          <p className="text-[10px] uppercase tracking-[0.25em] text-white/30 font-inter mb-3">
-            {t('discover.subtitle', 'Browse & hire verified workers')}
+        <div className="reveal" style={{ paddingTop: '16px', marginBottom: '0px' }}>
+          <p style={{ fontSize: '10px', letterSpacing: '4px', color: 'rgba(255,255,255,0.3)', marginBottom: '10px', textTransform: 'uppercase', fontFamily: 'Inter, sans-serif' }}>
+            {t('discover.subtitle', 'BROWSE THE DECENTRALIZED REGISTRY...')}
           </p>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-            <h1 className="font-clash text-4xl lg:text-5xl font-bold tracking-tighter text-white">
-              {t('discover.titleP1', 'Find')} {t('discover.titleP2', 'Workers')}
+            <h1 className="font-clash text-white" style={{ fontSize: 'clamp(2.2rem, 4.5vw, 3.2rem)', fontWeight: '800', letterSpacing: '0.02em', marginBottom: '20px', lineHeight: '1.1' }}>
+              {t('discover.title', 'Discover Verified Workers')}
             </h1>
             {/* Stats */}
-            <div className="flex items-center gap-6">
+            <div className="flex items-center" style={{ marginBottom: '20px', gap: '48px', borderLeft: '1px solid rgba(255,255,255,0.1)', paddingLeft: '40px', paddingBottom: '8px' }}>
               {[
                 { label: t('discover.workers', 'Workers'), value: totalWorkers },
                 { label: t('discover.avgRatingLabel', 'Avg Rating'), value: avgRating },
                 { label: t('discover.reviewsLabel', 'Reviews'), value: totalEndorsements },
               ].map((s, i) => (
                 <div key={i} className="text-right">
-                  <p className="font-clash text-xl font-bold">{s.value}</p>
-                  <p className="text-[8px] font-bold uppercase tracking-[0.2em] text-white/25">{s.label}</p>
+                  <p className="font-clash" style={{ fontSize: '2.2rem', fontWeight: '900', lineHeight: '1' }}>{s.value}</p>
+                  <p style={{ fontSize: '9px', letterSpacing: '3px', color: 'rgba(255,255,255,0.3)', marginTop: '6px', textTransform: 'uppercase' }}>{s.label}</p>
                 </div>
               ))}
             </div>
@@ -196,66 +200,113 @@ const DiscoverWorkers = () => {
         </div>
 
         {/* Search + Filters */}
-        <div className="mb-6 border-t border-b border-white/5 py-5 reveal reveal-d1">
-          <div className="flex gap-3 mb-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
+        <div className="mb-6 pb-5 reveal reveal-d1" style={{ marginTop: '0px' }}>
+          <div className="flex flex-col mb-4">
+            {/* Search Bar */}
+            <div className="relative w-full group" style={{ marginBottom: '20px' }}>
               <input
                 type="text"
                 placeholder={t('discover.searchPlaceholder')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full border-0 border-b border-white/20 bg-transparent text-white py-3 pl-10 pr-4 text-sm focus:outline-none focus:border-white/60 placeholder:text-white/30 font-inter"
+                style={{
+                  width: '100%',
+                  padding: '14px 48px 14px 20px',
+                  backgroundColor: 'rgba(255,255,255,0.04)',
+                  border: '1px solid rgba(255,255,255,0.15)',
+                  color: '#fff',
+                  fontSize: '15px',
+                  outline: 'none',
+                  transition: 'all 0.3s ease',
+                }}
+                onFocus={(e) => {
+                  e.currentTarget.style.border = '1px solid rgba(255,255,255,0.4)';
+                  e.currentTarget.style.boxShadow = '0 0 20px rgba(255,255,255,0.04)';
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.border = '1px solid rgba(255,255,255,0.15)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
               />
+              <Search className="absolute right-6 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: 'rgba(255,255,255,0.3)' }} />
             </div>
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className={`flex items-center gap-2 px-4 py-2 border rounded-[2px] text-[10px] font-bold uppercase tracking-wider transition-all ${
-                showFilters ? 'border-white/30 text-white' : 'border-white/10 text-white/30 hover:text-white/50'
-              }`}
-            >
-              <SlidersHorizontal className="w-3.5 h-3.5" />
-              {t('discover.filters')}
-              {hasActiveFilters && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
-            </button>
+
+            <div className="flex" style={{ marginBottom: showFilters ? '0' : '24px' }}>
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className={`flex items-center gap-2 px-4 py-2 border rounded-[2px] text-[10px] font-bold uppercase tracking-wider transition-all ${
+                  showFilters ? 'border-white/30 text-white' : 'border-white/10 text-white/30 hover:text-white/50'
+                }`}
+              >
+                <SlidersHorizontal className="w-3.5 h-3.5" />
+                {t('discover.filters')}
+                {hasActiveFilters && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+              </button>
+            </div>
           </div>
 
           <AnimatePresence>
             {showFilters && (
               <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }} className="overflow-hidden">
-                <div className="flex flex-wrap items-end gap-4 pt-3">
-                  <div>
-                    <label className="text-[8px] font-bold uppercase tracking-wider text-white/20 block mb-1">{t('discover.filterSkill')}</label>
-                    <select value={selectedSkill} onChange={(e) => setSelectedSkill(e.target.value)}
-                      className="bg-transparent border-0 border-b border-white/20 py-2 pr-6 text-[11px] text-white font-medium appearance-none focus:outline-none focus:border-white/60 cursor-pointer">
-                      {SKILL_OPTIONS.map(s => (<option key={s} value={s} className="bg-[#0a0a0a]">{t('jobs.' + s.replace(/\s+/g, ''))}</option>))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="text-[8px] font-bold uppercase tracking-wider text-white/20 block mb-1">{t('discover.filterCity')}</label>
-                    <select value={selectedCity || 'All Cities'} onChange={(e) => setSelectedCity(e.target.value === 'All Cities' ? '' : e.target.value)}
-                      className="bg-transparent border-0 border-b border-white/20 py-2 pr-6 text-[11px] text-white font-medium appearance-none focus:outline-none focus:border-white/60 cursor-pointer">
-                      {cities.map(c => (<option key={c} value={c} className="bg-[#0a0a0a]">{c}</option>))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="text-[8px] font-bold uppercase tracking-wider text-white/20 block mb-1">{t('discover.filterRating')}</label>
-                    <div className="flex gap-1">
-                      {RATING_OPTIONS.map(opt => (
-                        <button key={opt.value} onClick={() => setMinRating(opt.value)}
-                          className={`px-3 py-2 rounded-[2px] text-[10px] font-bold transition-all ${
-                            minRating === opt.value ? 'bg-white text-black' : 'border border-white/10 text-white/30 hover:text-white/50'
-                          }`}>
-                          {t('ratings.' + opt.labelKey)}
-                        </button>
-                      ))}
+                <div style={{ paddingTop: '20px', paddingBottom: '24px', borderTop: '1px solid rgba(255,255,255,0.07)', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+                  <div style={{ display: 'flex', alignItems: 'flex-end', gap: '40px', flexWrap: 'wrap' }}>
+                    <div>
+                      <label style={{ fontSize: '11px', letterSpacing: '2px', color: 'rgba(255,255,255,0.4)', marginBottom: '12px', display: 'block', textTransform: 'uppercase', fontWeight: 'bold' }}>{t('discover.filterSkill', 'SKILL')}</label>
+                      <div className="relative">
+                        <select value={selectedSkill} onChange={(e) => setSelectedSkill(e.target.value)}
+                          style={{ padding: '8px 40px 8px 18px', height: '36px', border: '1px solid rgba(255,255,255,0.18)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.7)', fontSize: '12px', letterSpacing: '1px', cursor: 'pointer', appearance: 'none', borderRadius: '4px', transition: 'all 0.3s' }}
+                          onMouseOver={(e) => { e.currentTarget.style.border = '1px solid rgba(255,255,255,0.4)'; e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.08)'; }}
+                          onMouseOut={(e) => { e.currentTarget.style.border = '1px solid rgba(255,255,255,0.18)'; e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; }}>
+                          <option value="All Categories" className="bg-[#0a0a0a]">{t('discover.allCategories', 'All Categories')}</option>
+                          {SKILL_OPTIONS.map(s => (<option key={s} value={s} className="bg-[#0a0a0a]">{t('jobs.' + s.replace(/\s+/g, ''))}</option>))}
+                        </select>
+                        <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: 'rgba(255,255,255,0.7)' }} />
+                      </div>
                     </div>
+                    <div>
+                      <label style={{ fontSize: '11px', letterSpacing: '2px', color: 'rgba(255,255,255,0.4)', marginBottom: '12px', display: 'block', textTransform: 'uppercase', fontWeight: 'bold' }}>{t('discover.filterCity', 'CITY')}</label>
+                      <div className="relative">
+                        <select value={selectedCity || 'All Cities'} onChange={(e) => setSelectedCity(e.target.value === 'All Cities' ? '' : e.target.value)}
+                          style={{ padding: '8px 40px 8px 18px', height: '36px', border: '1px solid rgba(255,255,255,0.18)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.7)', fontSize: '12px', letterSpacing: '1px', cursor: 'pointer', appearance: 'none', borderRadius: '4px', transition: 'all 0.3s' }}
+                          onMouseOver={(e) => { e.currentTarget.style.border = '1px solid rgba(255,255,255,0.4)'; e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.08)'; }}
+                          onMouseOut={(e) => { e.currentTarget.style.border = '1px solid rgba(255,255,255,0.18)'; e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; }}>
+                          <option value="All Cities" className="bg-[#0a0a0a]">{t('discover.allCities', 'All Cities')}</option>
+                          {cities.map(c => (<option key={c} value={c} className="bg-[#0a0a0a]">{c}</option>))}
+                        </select>
+                        <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: 'rgba(255,255,255,0.7)' }} />
+                      </div>
+                    </div>
+                    <div>
+                      <label style={{ fontSize: '11px', letterSpacing: '2px', color: 'rgba(255,255,255,0.4)', marginBottom: '12px', display: 'block', textTransform: 'uppercase', fontWeight: 'bold' }}>{t('discover.filterRating', 'MINIMUM RATING')}</label>
+                      <div className="flex" style={{ gap: '8px' }}>
+                        {RATING_OPTIONS.map(opt => {
+                          const isActive = minRating === opt.value;
+                          return (
+                            <button key={opt.value} onClick={() => setMinRating(opt.value)}
+                              style={{
+                                padding: '8px 18px', height: '36px', border: isActive ? '1px solid #ffffff' : '1px solid rgba(255,255,255,0.18)', fontSize: '12px', letterSpacing: '1px',
+                                backgroundColor: isActive ? '#ffffff' : 'transparent',
+                                color: isActive ? '#000000' : 'inherit',
+                                fontWeight: isActive ? '700' : 'normal',
+                                transition: 'all 0.3s ease',
+                                borderRadius: '4px',
+                                display: 'flex', alignItems: 'center'
+                              }}
+                              onMouseOver={(e) => { if (!isActive) e.currentTarget.style.borderColor = 'rgba(255,255,255,0.5)'; }}
+                              onMouseOut={(e) => { if (!isActive) e.currentTarget.style.borderColor = 'rgba(255,255,255,0.18)'; }}
+                            >
+                              {t('ratings.' + opt.labelKey)}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                    {hasActiveFilters && (
+                      <button onClick={clearFilters} className="transition-all flex items-center justify-center gap-1" style={{ padding: '8px 18px', height: '36px', borderRadius: '4px', fontSize: '12px', letterSpacing: '1px', fontWeight: 'bold', border: '1px solid rgba(255,80,80,0.4)', color: 'rgba(255,100,100,0.8)', marginBottom: '1px', backgroundColor: 'transparent' }}>
+                        <X className="w-3 h-3" /> {t('discover.clearFilters')}
+                      </button>
+                    )}
                   </div>
-                  {hasActiveFilters && (
-                    <button onClick={clearFilters} className="px-3 py-2 rounded-[2px] text-[10px] font-bold text-red-400/60 hover:text-red-400 border border-red-400/20 transition-all flex items-center gap-1">
-                      <X className="w-3 h-3" /> {t('discover.clearFilters')}
-                    </button>
-                  )}
                 </div>
               </motion.div>
             )}
@@ -263,13 +314,13 @@ const DiscoverWorkers = () => {
         </div>
 
         {/* Results header */}
-        <div className="flex items-center justify-between mb-4 reveal reveal-d2">
-          <p className="text-[10px] font-bold text-white/20 uppercase tracking-wider">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '24px', paddingBottom: '16px' }} className="reveal reveal-d2">
+          <p style={{ fontSize: '11px', letterSpacing: '3px', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', fontWeight: 'bold' }}>
             {filtered.length} {t('discover.results')}
-            {hasActiveFilters && <span className="text-white/40"> ({t('discover.filtered')})</span>}
+            {hasActiveFilters && <span style={{ color: 'rgba(255,200,50,0.6)', fontSize: '10px', letterSpacing: '2px' }}> ({t('discover.filtered')})</span>}
           </p>
-          <div className="flex items-center gap-1 text-[9px] font-bold text-white/10 uppercase tracking-wider">
-            <TrendingUp className="w-3 h-3" /> {t('discover.sortedByRating')}
+          <div style={{ fontSize: '11px', letterSpacing: '3px', color: 'rgba(255,255,255,0.4)', display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase', fontWeight: 'bold' }}>
+            ↑ {t('discover.sortedByRating')}
           </div>
         </div>
 
@@ -279,7 +330,7 @@ const DiscoverWorkers = () => {
             <div className="w-6 h-6 border border-white/20 border-t-white/60 rounded-full animate-spin" />
           </div>
         ) : filtered.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginTop: '8px', marginBottom: '80px', alignItems: 'stretch' }}>
             {filtered.map((worker, i) => (<WorkerCard key={worker.address} worker={worker} index={i} />))}
           </div>
         ) : workers.length === 0 ? (

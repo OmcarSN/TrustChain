@@ -61,8 +61,21 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 w-full z-50" style={{ mixBlendMode: 'difference' }}>
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-12 h-[80px] flex items-center justify-between">
+      <nav className="fixed top-0 left-0 w-full z-50 bg-[#050505]/95 backdrop-blur-md border-b border-white/[0.05] transition-all duration-300">
+        <div 
+          className="h-[80px]"
+          style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center', 
+            width: '100%', 
+            boxSizing: 'border-box', 
+            maxWidth: '1400px',
+            margin: '0 auto',
+            paddingLeft: '3vw',
+            paddingRight: '3vw'
+          }}
+        >
           
           {/* Logo + Brand */}
           <Link to="/" className="flex items-center gap-3 group">
@@ -78,88 +91,198 @@ const Navbar = () => {
           </Link>
 
           {/* Center Nav Links (Desktop) */}
-          <div className="hidden lg:flex items-center gap-6">
-            {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={`relative font-inter text-[11px] font-bold uppercase tracking-[0.18em] transition-opacity duration-300 ${
-                  location.pathname === link.path
-                    ? 'text-white'
-                    : 'text-white/50 hover:text-white'
-                }`}
-              >
-                {link.name}
-                {location.pathname === link.path && (
-                  <span className="absolute -bottom-1 left-0 w-full h-px bg-white/20" />
-                )}
-              </Link>
-            ))}
+          <div className="hidden lg:flex items-center h-full" style={{ gap: '32px' }}>
+            {navLinks.map((link) => {
+              const isActive = location.pathname === link.path;
+              return (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className="font-inter uppercase transition-all duration-300 hover:text-white"
+                  style={{
+                    fontSize: '13px',
+                    fontWeight: '500',
+                    letterSpacing: '1.5px',
+                    color: isActive ? '#ffffff' : 'rgba(255,255,255,0.6)',
+                    borderBottom: isActive ? '1px solid #ffffff' : '1px solid transparent',
+                    paddingBottom: '4px'
+                  }}
+                >
+                  {link.name}
+                </Link>
+              );
+            })}
           </div>
 
           {/* Right: Actions */}
-          <div className="flex items-center gap-3 relative">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }} className="relative h-full">
             {/* Language toggle */}
+            <style>{`
+              .lang-btn:hover { border-color: rgba(255,255,255,0.5) !important; color: #fff !important; }
+              .wallet-btn:hover { background-color: rgba(255,255,255,0.08) !important; border-color: rgba(255,255,255,0.3) !important; }
+              @keyframes verifiedPulse {
+                0%, 100% { box-shadow: 0 0 0 0 rgba(0,220,110,0.4); }
+                50%       { box-shadow: 0 0 0 6px rgba(0,220,110,0); }
+              }
+              @keyframes dropdownOpen {
+                from { opacity: 0; transform: translateY(-6px); }
+                to   { opacity: 1; transform: translateY(0); }
+              }
+              .dropdown-item:hover { background-color: rgba(255,255,255,0.05) !important; color: #fff !important; }
+              .dropdown-disconnect:hover { background-color: rgba(255,50,50,0.08) !important; color: #ff5555 !important; }
+            `}</style>
             <button
               onClick={toggleLanguage}
               title="Toggle Language"
-              className="p-2.5 border border-white/10 rounded-[2px] hover:border-white/30 transition-all relative group flex items-center justify-center shrink-0"
+              className="lang-btn font-inter uppercase"
+              style={{
+                height: '36px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '0 14px',
+                backgroundColor: 'transparent',
+                border: '1px solid rgba(255,255,255,0.2)',
+                color: 'rgba(255,255,255,0.6)',
+                fontSize: '11px',
+                fontWeight: '600',
+                letterSpacing: '2px',
+                cursor: 'pointer',
+                borderRadius: '0',
+                transition: 'all 0.2s ease',
+              }}
             >
-              <Languages className="w-4 h-4 text-white/60 group-hover:text-white transition-colors" />
-              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-white/10 rounded-[2px] border border-white/20 flex items-center justify-center text-[7px] font-bold tracking-wider">
-                {i18n.language === 'en' ? 'EN' : 'HI'}
-              </div>
+              {i18n.language === 'en' ? 'EN ▾' : 'HI ▾'}
             </button>
 
             {/* Desktop wallet button */}
             {isConnected ? (
-              <div className="relative" ref={dropdownRef}>
+              <div className="relative flex items-center h-full" ref={dropdownRef}>
                 <button
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className="hidden sm:flex items-center gap-2 border border-white/10 rounded-[2px] px-4 py-2.5 hover:border-white/30 transition-all"
+                  className="hidden sm:flex wallet-btn"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    height: '36px',
+                    padding: '0 16px',
+                    backgroundColor: isDropdownOpen ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.05)',
+                    border: isDropdownOpen ? '1px solid rgba(255,255,255,0.3)' : '1px solid rgba(255,255,255,0.15)',
+                    color: 'rgba(255,255,255,0.8)',
+                    fontSize: '12px',
+                    fontWeight: '600',
+                    letterSpacing: '1px',
+                    fontFamily: 'monospace',
+                    cursor: 'pointer',
+                    borderRadius: '0',
+                    transition: 'all 0.2s ease',
+                  }}
                 >
-                  <span className="w-1.5 h-1.5 bg-green-400 rounded-full" />
-                  <span className="text-[11px] tracking-[0.12em] font-mono text-white/70">
-                    {truncate(walletAddress)}
+                  <span style={{
+                    width: '8px',
+                    height: '8px',
+                    borderRadius: '50%',
+                    backgroundColor: '#00dc6e',
+                    boxShadow: '0 0 6px rgba(0,220,110,0.6)',
+                    flexShrink: 0,
+                    animation: 'verifiedPulse 2s ease infinite',
+                  }} />
+                  {truncate(walletAddress)}
+                  <span style={{ 
+                    fontSize: '10px', 
+                    marginLeft: '4px',
+                    transform: isDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                    transition: 'transform 0.2s ease',
+                    display: 'inline-block'
+                  }}>
+                    ▾
                   </span>
                 </button>
 
                 <AnimatePresence>
                   {isDropdownOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -4 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -4 }}
-                      transition={{ duration: 0.15 }}
-                      className="absolute right-0 mt-2 w-48 bg-[#0a0a0a] border border-white/10 rounded-[2px] overflow-hidden z-[60]"
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: '100%',
+                        right: '0',
+                        minWidth: '200px',
+                        backgroundColor: '#0d0d0d',
+                        border: '1px solid rgba(255,255,255,0.12)',
+                        boxShadow: '0 20px 60px rgba(0,0,0,0.8)',
+                        zIndex: 1000,
+                        overflow: 'hidden',
+                        paddingTop: '4px',
+                        animation: 'dropdownOpen 0.15s ease forwards',
+                      }}
                     >
+                      <div style={{
+                        padding: '12px 16px',
+                        borderBottom: '1px solid rgba(255,255,255,0.08)',
+                        fontSize: '10px',
+                        letterSpacing: '2px',
+                        color: 'rgba(255,255,255,0.25)',
+                        fontFamily: 'monospace'
+                      }}>
+                        {truncate(walletAddress)}
+                      </div>
                       <Link
                         to="/dashboard"
                         onClick={() => setIsDropdownOpen(false)}
-                        className="w-full px-4 py-3 text-left text-[10px] font-bold uppercase tracking-[0.15em] text-white/50 hover:bg-white/5 hover:text-white transition-all flex items-center gap-2"
+                        className="dropdown-item font-inter uppercase transition-all"
+                        style={{
+                          padding: '11px 16px',
+                          fontSize: '11px',
+                          fontWeight: '600',
+                          letterSpacing: '2px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '10px',
+                          cursor: 'pointer',
+                          color: 'rgba(255,255,255,0.65)',
+                          textDecoration: 'none',
+                          transition: 'all 0.15s ease'
+                        }}
                       >
-                        <LayoutDashboard className="w-3.5 h-3.5" />
+                        <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)' }}>⊞</span>
                         {t('nav.dashboardBtn', 'Dashboard')}
                       </Link>
-                      <div className="border-t border-white/5" />
                       <button
                         onClick={() => {
                           disconnect();
                           setIsDropdownOpen(false);
                         }}
-                        className="w-full px-4 py-3 text-left text-[10px] font-bold uppercase tracking-[0.15em] text-red-400/70 hover:bg-red-400/5 hover:text-red-400 transition-all flex items-center gap-2"
+                        className="dropdown-disconnect font-inter uppercase transition-all w-full"
+                        style={{
+                          padding: '11px 16px',
+                          fontSize: '11px',
+                          fontWeight: '600',
+                          letterSpacing: '2px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '10px',
+                          cursor: 'pointer',
+                          color: 'rgba(220,60,60,0.75)',
+                          textAlign: 'left',
+                          border: 'none',
+                          background: 'none',
+                          borderTop: '1px solid rgba(255,255,255,0.06)',
+                          transition: 'all 0.15s ease'
+                        }}
                       >
-                        <LogOut className="w-3.5 h-3.5" />
+                        <span style={{ fontSize: '13px', color: 'rgba(220,60,60,0.5)' }}>⏻</span>
                         {t('nav.disconnect', 'Disconnect')}
                       </button>
-                    </motion.div>
+                    </div>
                   )}
                 </AnimatePresence>
               </div>
             ) : (
               <button
                 onClick={connect}
-                className="hidden sm:flex items-center gap-2 border border-white/20 rounded-[2px] px-6 py-2.5 text-[11px] font-bold tracking-[0.15em] uppercase hover:bg-white hover:text-black transition-all duration-300"
+                className="hidden sm:flex items-center justify-center gap-2 border border-white/20 rounded-[0px] px-6 text-[11px] font-bold tracking-[0.15em] uppercase hover:bg-white hover:text-black transition-all duration-300"
+                style={{ height: '36px' }}
               >
                 <Wallet className="w-4 h-4" />
                 {t('nav.connectWallet', 'Connect Wallet')}

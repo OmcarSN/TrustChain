@@ -56,58 +56,106 @@ const Landing = () => {
       />
 
       {/* ── HERO SECTION ─────────────────────────────────────── */}
-      <section className="relative min-h-screen flex flex-col px-6 lg:px-12 pt-[20vh] pb-24 overflow-hidden">
-
-        {/* Top-right metadata block */}
-        <div className="absolute top-24 right-6 lg:right-12 w-56 hidden md:block reveal reveal-d2">
-          <p className="text-[10px] uppercase tracking-[0.2em] text-white/40 mb-3 font-inter">
-            STELLAR SOROBAN · SOULBOUND
-          </p>
-          <p className="text-sm font-inter font-light text-white/50 leading-relaxed">
-            {t('landing.desc', 'On-chain credentials for informal economy workers. Non-transferable. Forever verifiable.')}
-          </p>
-        </div>
+      <section
+        className="overflow-hidden"
+        style={{
+          position: 'relative',
+          height: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          maxWidth: '1400px',
+          margin: '0 auto',
+          paddingLeft: '3vw',
+          paddingRight: '3vw',
+          paddingTop: '120px',
+          paddingBottom: '60px',
+        }}
+      >
 
         {/* Center logo */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 reveal pointer-events-none">
           <div className="transition-transform duration-[2000ms] ease-out hover:scale-105">
-            <TrustChainLogo size={200} className="max-w-[200px] w-full h-auto opacity-40" style={{ filter: 'invert(1)', mixBlendMode: 'screen' }} />
+            <TrustChainLogo size={200} className="max-w-[200px] w-full h-auto opacity-10" style={{ filter: 'invert(1)', mixBlendMode: 'screen' }} />
           </div>
         </div>
 
-        {/* Hero heading — 3 lines */}
-        <div className="relative z-10 reveal reveal-d1">
-          <div className="font-clash font-bold uppercase tracking-tighter text-[9vw] md:text-[7vw] leading-none text-white mb-2">YOUR WORK.</div>
-          <div className="font-clash font-bold uppercase tracking-tighter text-[9vw] md:text-[7vw] leading-none text-white mb-2">YOUR REPUTATION.</div>
-          <div className="font-clash font-bold uppercase tracking-tighter text-[9vw] md:text-[7vw] leading-none text-white/20">ON-CHAIN FOREVER.</div>
-        </div>
+        {/* Hero content wrapper to keep text and buttons grouped */}
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', flex: 1 }}>
+          {/* Hero heading — 3 lines */}
+          <div className="reveal reveal-d1 text-center md:text-left flex flex-col" style={{ gap: '8px' }}>
+            <div className="font-clash font-bold uppercase tracking-wide text-white hero-line-1" style={{ fontSize: 'clamp(3rem, 8vw, 7rem)', lineHeight: '1.05', marginBottom: '0' }}>YOUR&nbsp;&nbsp;WORK.</div>
+            <div className="font-clash font-bold uppercase tracking-wide text-white hero-line-2" style={{ fontSize: 'clamp(3rem, 8vw, 7rem)', lineHeight: '1.05', marginBottom: '0' }}>YOUR&nbsp;&nbsp;REPUTATION.</div>
+            <div className="font-clash font-bold uppercase tracking-wide text-white/20 hero-line-3" style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)', lineHeight: '1.05', marginBottom: '0' }}>ON-CHAIN&nbsp;&nbsp;FOREVER.</div>
+          </div>
 
-        {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-3 mt-8 relative z-10 reveal reveal-d3">
-          <Link
-            to="/worker"
-            className="bg-white text-black rounded-[2px] font-bold text-[11px] tracking-[0.15em] uppercase px-8 py-4 hover:opacity-85 transition-opacity text-center"
-          >
-            {t('landing.btnWorker', "I'M A WORKER")} →
-          </Link>
-          <Link
-            to="/discover"
-            className="border border-white/20 text-white rounded-[2px] font-bold text-[11px] tracking-[0.15em] uppercase px-8 py-4 hover:border-white/50 hover:bg-white/5 transition-all text-center"
-          >
-            {t('landing.btnFind', 'FIND WORKERS')}
-          </Link>
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row reveal reveal-d3 text-center md:text-left justify-center md:justify-start items-center" style={{ gap: '16px', marginTop: '40px', display: 'flex', alignItems: 'center' }}>
+            <Link
+              to="/worker"
+              className="flex items-center justify-center uppercase transition-all duration-300 ease-in-out cursor-pointer text-center"
+              style={{
+                padding: '14px 36px',
+                backgroundColor: '#ffffff',
+                color: '#000000',
+                fontWeight: '700',
+                fontSize: '13px',
+                letterSpacing: '2.5px',
+                border: '2px solid white',
+                borderRadius: '0',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#000';
+                e.currentTarget.style.color = '#fff';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#ffffff';
+                e.currentTarget.style.color = '#000000';
+              }}
+            >
+              {t('landing.btnWorker', "I'M A WORKER")} →
+            </Link>
+            <Link
+              to="/discover"
+              className="flex items-center justify-center uppercase transition-all duration-300 ease-in-out cursor-pointer text-center"
+              style={{
+                padding: '14px 36px',
+                backgroundColor: 'transparent',
+                color: '#ffffff',
+                fontWeight: '700',
+                fontSize: '13px',
+                letterSpacing: '2.5px',
+                border: '2px solid rgba(255,255,255,0.4)',
+                borderRadius: '0',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = '#fff';
+                e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.08)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.4)';
+                e.currentTarget.style.backgroundColor = 'transparent';
+              }}
+            >
+              {t('landing.btnFind', 'FIND WORKERS')}
+            </Link>
+          </div>
         </div>
 
         {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
-          <div className="w-px h-12 bg-white/20" />
-          <span className="text-[9px] tracking-[0.25em] uppercase text-white/30 font-inter">SCROLL</span>
+        <div style={{ position: 'absolute', bottom: '32px', left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', zIndex: 20 }}>
+          <div className="tc-bounce" style={{ fontSize: '18px', color: 'rgba(255,255,255,0.35)' }}>
+            ↓
+          </div>
+          <span style={{ fontSize: '11px', letterSpacing: '4px', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase' }} className="font-inter">
+            SCROLL DOWN
+          </span>
         </div>
       </section>
 
       {/* ── STATS BAND ───────────────────────────────────────── */}
-      <section className="border-t border-white/5">
-        <div className="grid grid-cols-2 md:grid-cols-4">
+      <section style={{ borderTop: '1px solid rgba(255,255,255,0.1)', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto', paddingLeft: '3vw', paddingRight: '3vw', paddingTop: '48px', paddingBottom: '48px', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', overflow: 'hidden' }}>
           {[
             { label: t('landing.stat1Label', 'TARGET USERS'), value: '2B+', delay: 'reveal-d1' },
             { label: t('landing.stat2Label', 'CREDENTIALS'), value: t('landing.stat2Value', 'SOULBOUND'), delay: 'reveal-d2' },
@@ -116,14 +164,15 @@ const Landing = () => {
           ].map((stat, i, arr) => (
             <div
               key={i}
-              className={`px-6 lg:px-10 py-8 reveal ${stat.delay} ${
-                i < arr.length - 1 ? 'border-r border-white/5' : ''
+              className={`reveal ${stat.delay} ${
+                i < arr.length - 1 ? 'border-r border-white/10' : ''
               }`}
+              style={{ paddingRight: '48px' }}
             >
-              <p className="text-[10px] uppercase tracking-[0.2em] text-white/40 mb-3 font-inter">
+              <p className="text-xs tracking-widest text-gray-500 uppercase mb-1 font-inter">
                 {stat.label}
               </p>
-              <p className="font-clash text-xl lg:text-2xl font-bold text-white">
+              <p className="font-clash font-black text-white" style={{ fontSize: 'clamp(1.4rem, 3vw, 2.2rem)', whiteSpace: 'nowrap' }}>
                 {stat.value}
               </p>
             </div>
@@ -132,59 +181,68 @@ const Landing = () => {
       </section>
 
       {/* ── FEATURES / HOW IT WORKS ──────────────────────────── */}
-      <section className="border-t border-white/5 py-20 lg:py-32 px-6 lg:px-12">
-        <div className="max-w-6xl mx-auto">
+      <section className="border-t border-white/5 pt-20 pb-10">
+        <div style={{ maxWidth: '1400px', margin: '0 auto', paddingLeft: '3vw', paddingRight: '3vw' }}>
           {/* Section header */}
-          <div className="mb-16 reveal">
-            <p className="text-[10px] uppercase tracking-[0.25em] text-white/30 font-inter mb-4">
+          <div className="reveal relative z-10" style={{ marginTop: '80px', marginBottom: '40px' }}>
+            <p className="text-[10px] uppercase tracking-[0.25em] text-white/30 font-inter" style={{ marginBottom: '12px' }}>
               {t('landing.howItWorks', 'How It Works')}
             </p>
-            <h2 className="font-clash text-4xl lg:text-5xl font-bold tracking-tighter text-white">
+            <h2 className="font-clash font-black tracking-normal text-white" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}>
               {t('landing.stepsTitleP1', 'Three Steps to')}{' '}
               {t('landing.stepsTitleP2', 'Trust')}
             </h2>
           </div>
 
-          {features.map((feature, idx) => (
-            <div key={idx} className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 mb-16 md:mb-24 reveal">
-              {/* Index number */}
-              <div className="md:col-span-3">
-                <span className="font-clash text-[60px] md:text-[80px] font-bold text-white/[0.06] leading-none md:sticky md:top-24">
+          <div className="relative z-10" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '80px', width: '100%', boxSizing: 'border-box', overflow: 'hidden' }}>
+            {features.map((feature, idx) => (
+              <div key={idx} className="relative bg-white/5 flex flex-col h-full reveal group overflow-hidden step-card" style={{ padding: '40px 32px', borderRadius: '0', minWidth: '0' }}>
+                {/* Decorative large background number */}
+                <div className="absolute -top-6 -left-4 font-clash text-[120px] font-black text-white/5 leading-none select-none z-0 transition-transform duration-500 group-hover:scale-110 step-number">
                   {feature.step}
-                </span>
+                </div>
+                
+                {/* Content */}
+                <div className="relative z-10 flex flex-col h-full">
+                  <div className="text-[10px] uppercase tracking-[0.2em] text-white/40 font-inter font-semibold mb-6 flex items-center gap-4">
+                    STEP {feature.step}
+                    <div className="flex-1 h-px bg-white/10" />
+                  </div>
+                  
+                  <h3 className="font-clash font-black tracking-tight mb-4 text-white" style={{ fontSize: 'clamp(1.2rem, 2.5vw, 1.8rem)' }}>
+                    {feature.title}
+                  </h3>
+                  
+                  <p className="font-inter text-gray-400 text-lg leading-relaxed max-w-xl mb-12 flex-1">
+                    {feature.description}
+                  </p>
+                  
+                  <div className="mt-auto pt-6 border-t border-white/10">
+                    <Link
+                      to={feature.link}
+                      className="inline-flex items-center gap-2 text-sm uppercase tracking-[0.15em] text-white/60 hover:text-white transition-colors group/link font-inter font-semibold learn-more"
+                    >
+                      LEARN MORE
+                      <span className="group-hover/link:translate-x-1 transition-transform">→</span>
+                    </Link>
+                  </div>
+                </div>
               </div>
-
-              {/* Content */}
-              <div className="md:col-span-8 md:col-start-5 pt-0 md:pt-4">
-                <h3 className="font-clash text-2xl md:text-4xl font-bold tracking-tighter mb-4 md:mb-6 text-white">
-                  {feature.title}
-                </h3>
-                <p className="font-inter font-light text-base md:text-xl leading-relaxed text-white/50 max-w-[60ch] mb-6 md:mb-8">
-                  {feature.description}
-                </p>
-                <Link
-                  to={feature.link}
-                  className="inline-flex items-center gap-2 border-b border-white/30 pb-1 text-[11px] uppercase tracking-[0.15em] hover:opacity-60 transition-opacity group font-inter font-bold"
-                >
-                  LEARN MORE
-                  <span className="group-hover:translate-x-1.5 transition-transform">→</span>
-                </Link>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
       {/* ── BUILT WITH ───────────────────────────────────────── */}
-      <section className="border-t border-white/5 py-16 px-6 lg:px-12">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-10 reveal">
-            <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-white/20 font-inter">
-              {t('landing.builtWith', 'Built With Leading Technology')}
-            </span>
+      <section className="border-t border-white/5" style={{ paddingTop: '60px', paddingBottom: '60px' }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto', paddingLeft: '3vw', paddingRight: '3vw' }}>
+          <div className="text-center reveal" style={{ marginBottom: '32px' }}>
+            <h2 className="text-sm font-black uppercase tracking-[0.3em] text-white/50 font-inter">
+              {t('landing.builtWith', 'BUILT WITH LEADING TECHNOLOGY')}
+            </h2>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-8 lg:gap-12 reveal reveal-d1">
+          <div className="reveal reveal-d1" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px' }}>
             {[
               { name: 'Stellar', abbr: 'ST', desc: t('landing.techBlockchain', 'Blockchain') },
               { name: 'Soroban', abbr: 'SR', desc: t('landing.techSmartContracts', 'Smart Contracts') },
@@ -192,14 +250,15 @@ const Landing = () => {
               { name: 'Freighter', abbr: 'FR', desc: t('landing.techWallet', 'Wallet') },
               { name: 'Rust', abbr: 'RS', desc: t('landing.techBackend', 'Backend') },
             ].map((tech, i) => (
-              <div key={i} className="flex flex-col items-center gap-2 group">
-                <div className="w-12 h-12 border border-white/10 rounded-[2px] flex items-center justify-center text-white/40 text-[10px] font-bold tracking-wider group-hover:border-white/30 group-hover:text-white/70 transition-all">
+              <div key={i} className="flex flex-col items-center justify-center bg-white/[0.02] rounded-[4px] group hover:border-white/40 hover:bg-white/10 transition-all cursor-default" style={{ padding: '24px 16px', border: '1px solid rgba(255,255,255,0.1)', textAlign: 'center' }}>
+                {/* Simulated Icon/Logo */}
+                <div className="w-12 h-12 mb-4 bg-[#0a0a0a] border border-white/10 rounded-full flex items-center justify-center text-white/70 font-clash font-bold text-lg group-hover:scale-110 group-hover:text-white group-hover:border-white/30 transition-all">
                   {tech.abbr}
                 </div>
-                <span className="text-sm font-bold text-white/30 group-hover:text-white/70 tracking-tight transition-colors font-inter">
+                <span className="text-sm font-bold text-white tracking-wide mb-1 font-inter">
                   {tech.name}
                 </span>
-                <span className="text-[7px] font-bold uppercase tracking-[0.2em] text-white/10 font-inter">
+                <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/40 font-inter">
                   {tech.desc}
                 </span>
               </div>
