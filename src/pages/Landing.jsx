@@ -1,10 +1,34 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import TrustChainLogo from '../components/TrustChainLogo';
 
 const Landing = () => {
   const { t } = useTranslation();
+  const [statsVisible, setStatsVisible] = useState(false);
+  const [userCount, setUserCount] = useState(0);
+  const statsRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        setStatsVisible(true);
+        let start = 0;
+        const end = 2;
+        const timer = setInterval(() => {
+          start += 1;
+          setUserCount(start);
+          if (start >= end) clearInterval(timer);
+        }, 300);
+        observer.disconnect();
+      }
+    }, { threshold: 0.3 });
+
+    if (statsRef.current) {
+      observer.observe(statsRef.current);
+    }
+    return () => observer.disconnect();
+  }, []);
 
   const features = [
     {
@@ -63,13 +87,13 @@ const Landing = () => {
           height: '100vh',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'space-between',
+          justifyContent: 'flex-start',
           maxWidth: '1400px',
           margin: '0 auto',
           paddingLeft: '3vw',
           paddingRight: '3vw',
           paddingTop: '120px',
-          paddingBottom: '60px',
+          paddingBottom: '80px',
         }}
       >
 
@@ -81,16 +105,16 @@ const Landing = () => {
         </div>
 
         {/* Hero content wrapper to keep text and buttons grouped */}
-        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', flex: 1 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', textAlign: 'left', paddingLeft: '0px', paddingRight: '0' }}>
           {/* Hero heading — 3 lines */}
-          <div className="reveal reveal-d1 text-center md:text-left flex flex-col" style={{ gap: '8px' }}>
-            <div className="font-clash font-bold uppercase tracking-wide text-white hero-line-1" style={{ fontSize: 'clamp(3rem, 8vw, 7rem)', lineHeight: '1.05', marginBottom: '0' }}>YOUR&nbsp;&nbsp;WORK.</div>
-            <div className="font-clash font-bold uppercase tracking-wide text-white hero-line-2" style={{ fontSize: 'clamp(3rem, 8vw, 7rem)', lineHeight: '1.05', marginBottom: '0' }}>YOUR&nbsp;&nbsp;REPUTATION.</div>
-            <div className="font-clash font-bold uppercase tracking-wide text-white/20 hero-line-3" style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)', lineHeight: '1.05', marginBottom: '0' }}>ON-CHAIN&nbsp;&nbsp;FOREVER.</div>
+          <div className="reveal reveal-d1 flex flex-col" style={{ gap: '4px', textAlign: 'left' }}>
+            <div className="font-clash font-bold uppercase tracking-wide text-white hero-line-1" style={{ fontSize: 'clamp(3.5rem, 7vw, 6rem)', lineHeight: '1.05', letterSpacing: '-0.01em', marginBottom: '0' }}>YOUR&nbsp;&nbsp;WORK.</div>
+            <div className="font-clash font-bold uppercase tracking-wide text-white hero-line-2" style={{ fontSize: 'clamp(3.5rem, 7vw, 6rem)', lineHeight: '1.05', letterSpacing: '-0.01em', marginBottom: '0' }}>YOUR&nbsp;&nbsp;REPUTATION.</div>
+            <div className="font-clash font-bold uppercase tracking-wide hero-line-3" style={{ fontSize: 'clamp(3rem, 6.5vw, 5.5rem)', lineHeight: '1.05', letterSpacing: '-0.01em', marginBottom: '0' }}>ON-CHAIN&nbsp;&nbsp;FOREVER.</div>
           </div>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row reveal reveal-d3 text-center md:text-left justify-center md:justify-start items-center" style={{ gap: '16px', marginTop: '40px', display: 'flex', alignItems: 'center' }}>
+          <div className="flex flex-col sm:flex-row reveal reveal-d3 justify-start items-start sm:items-center" style={{ gap: '16px', marginTop: '24px', display: 'flex' }}>
             <Link
               to="/worker"
               className="flex items-center justify-center uppercase transition-all duration-300 ease-in-out cursor-pointer text-center"
@@ -154,25 +178,30 @@ const Landing = () => {
       </section>
 
       {/* ── STATS BAND ───────────────────────────────────────── */}
-      <section style={{ borderTop: '1px solid rgba(255,255,255,0.1)', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-        <div style={{ maxWidth: '1400px', margin: '0 auto', paddingLeft: '3vw', paddingRight: '3vw', paddingTop: '48px', paddingBottom: '48px', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', overflow: 'hidden' }}>
+      <section style={{ borderTop: '1px solid rgba(255,255,255,0.08)', borderBottom: '1px solid rgba(255,255,255,0.08)', backgroundColor: 'rgba(255,255,255,0.02)' }}>
+        <div ref={statsRef} style={{ maxWidth: '1400px', margin: '0 auto', paddingLeft: '24px', paddingRight: '24px', paddingTop: '48px', paddingBottom: '48px', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', overflow: 'hidden' }}>
           {[
-            { label: t('landing.stat1Label', 'TARGET USERS'), value: '2B+', delay: 'reveal-d1' },
-            { label: t('landing.stat2Label', 'CREDENTIALS'), value: t('landing.stat2Value', 'SOULBOUND'), delay: 'reveal-d2' },
-            { label: t('landing.stat3Label', 'VERIFICATION'), value: t('landing.stat3Value', 'INSTANT'), delay: 'reveal-d3' },
-            { label: 'NETWORK', value: 'STELLAR TESTNET', delay: 'reveal-d4' },
-          ].map((stat, i, arr) => (
+            { label: t('landing.stat1Label', 'UNBANKED WORKERS'), value: statsVisible ? `${userCount}B+` : '0B+' },
+            { label: t('landing.stat2Label', 'CREDENTIALS'), value: t('landing.stat2Value', 'Zero-Cost') },
+            { label: t('landing.stat3Label', 'POWERED'), value: t('landing.stat3Value', 'Freighter') },
+            { label: 'NETWORK', value: 'STELLAR TESTNET', customFontSize: 'clamp(1.2rem, 2.5vw, 2rem)' },
+          ].map((stat, i) => (
             <div
               key={i}
-              className={`reveal ${stat.delay} ${
-                i < arr.length - 1 ? 'border-r border-white/10' : ''
-              }`}
-              style={{ paddingRight: '48px' }}
+              className="stat-item"
+              style={{ 
+                paddingRight: '48px',
+                borderLeft: i !== 0 ? '2px solid rgba(255,255,255,0.15)' : 'none',
+                paddingLeft: i !== 0 ? '20px' : '0',
+                opacity: statsVisible ? 1 : 0,
+                transform: statsVisible ? 'translateY(0)' : 'translateY(12px)',
+                transition: `opacity 0.6s ease ${i * 0.1}s, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1) ${i * 0.1}s, background-color 0.3s ease, border-left-color 0.3s ease`
+              }}
             >
-              <p className="text-xs tracking-widest text-gray-500 uppercase mb-1 font-inter">
+              <p className="font-inter" style={{ fontSize: '10px', letterSpacing: '3px', color: 'rgba(255,255,255,0.3)', marginBottom: '10px', textTransform: 'uppercase' }}>
                 {stat.label}
               </p>
-              <p className="font-clash font-black text-white" style={{ fontSize: 'clamp(1.4rem, 3vw, 2.2rem)', whiteSpace: 'nowrap' }}>
+              <p className="font-clash stat-value" style={{ fontSize: stat.customFontSize || 'clamp(1.8rem, 3vw, 2.8rem)', fontWeight: '900', letterSpacing: '-0.02em', color: '#ffffff', lineHeight: '1', whiteSpace: 'nowrap', transition: 'text-shadow 0.3s ease' }}>
                 {stat.value}
               </p>
             </div>

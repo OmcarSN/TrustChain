@@ -115,11 +115,16 @@ const Navbar = () => {
           </div>
 
           {/* Right: Actions */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }} className="relative h-full">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }} className="relative h-full">
             {/* Language toggle */}
             <style>{`
               .lang-btn:hover { border-color: rgba(255,255,255,0.5) !important; color: #fff !important; }
               .wallet-btn:hover { background-color: rgba(255,255,255,0.08) !important; border-color: rgba(255,255,255,0.3) !important; }
+              .connect-btn-refine:hover { 
+                background-color: rgba(255,255,255,0.06) !important; 
+                border-color: rgba(255,255,255,0.5) !important; 
+                color: #fff !important; 
+              }
               @keyframes verifiedPulse {
                 0%, 100% { box-shadow: 0 0 0 0 rgba(0,220,110,0.4); }
                 50%       { box-shadow: 0 0 0 6px rgba(0,220,110,0); }
@@ -136,17 +141,17 @@ const Navbar = () => {
               title="Toggle Language"
               className="lang-btn font-inter uppercase"
               style={{
-                height: '36px',
+                height: '34px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                padding: '0 14px',
+                padding: '7px 12px',
                 backgroundColor: 'transparent',
                 border: '1px solid rgba(255,255,255,0.2)',
                 color: 'rgba(255,255,255,0.6)',
                 fontSize: '11px',
                 fontWeight: '600',
-                letterSpacing: '2px',
+                letterSpacing: '1.5px',
                 cursor: 'pointer',
                 borderRadius: '0',
                 transition: 'all 0.2s ease',
@@ -281,10 +286,24 @@ const Navbar = () => {
             ) : (
               <button
                 onClick={connect}
-                className="hidden sm:flex items-center justify-center gap-2 border border-white/20 rounded-[0px] px-6 text-[11px] font-bold tracking-[0.15em] uppercase hover:bg-white hover:text-black transition-all duration-300"
-                style={{ height: '36px' }}
+                className="hidden sm:flex items-center justify-center gap-2 connect-btn-refine"
+                style={{ 
+                  height: '34px',
+                  padding: '8px 18px',
+                  fontSize: '11px',
+                  fontWeight: '600',
+                  letterSpacing: '1.5px',
+                  border: '1px solid rgba(255,255,255,0.25)',
+                  backgroundColor: 'transparent',
+                  color: 'rgba(255,255,255,0.8)',
+                  borderRadius: '0',
+                  transition: 'all 0.2s ease',
+                  cursor: 'pointer',
+                  textTransform: 'uppercase',
+                  fontFamily: 'Inter, sans-serif'
+                }}
               >
-                <Wallet className="w-4 h-4" />
+                <Wallet style={{ width: '12px', height: '12px' }} />
                 {t('nav.connectWallet', 'Connect Wallet')}
               </button>
             )}

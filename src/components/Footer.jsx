@@ -6,7 +6,7 @@ import TrustChainLogo from './TrustChainLogo';
 const Footer = () => {
   const { t } = useTranslation();
   return (
-    <footer className="bg-[#0a0a0a] relative overflow-hidden" style={{ paddingTop: '32px', paddingBottom: '32px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+    <footer className="bg-[#0a0a0a] overflow-hidden" style={{ position: 'relative', zIndex: 1, paddingTop: '32px', paddingBottom: '32px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
       <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-6" style={{ maxWidth: '1400px', margin: '0 auto', paddingLeft: '3vw', paddingRight: '3vw', width: '100%' }}>
         
         {/* Left: Logo + Title */}

@@ -113,12 +113,12 @@ const WorkerProfile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] pb-12 relative text-white" style={{ overflowX: 'hidden', position: 'relative' }}>
+    <div className="bg-[#050505] pb-12 text-white" style={{ overflowX: 'hidden', position: 'relative', display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       {/* Light leaks */}
       <div className="absolute rounded-full pointer-events-none" style={{ top: '-80px', right: '-80px', width: '400px', height: '400px', background: '#f97316', filter: 'blur(120px)', opacity: 0.04 }} />
       <div className="absolute rounded-full pointer-events-none" style={{ bottom: '-80px', left: '-80px', width: '400px', height: '400px', background: '#1e3a8a', filter: 'blur(120px)', opacity: 0.05 }} />
 
-      <div style={{ maxWidth: '1200px', margin: '0 auto', paddingLeft: '3vw', paddingRight: '3vw', paddingTop: '100px' }} className="relative z-10">
+      <div style={{ maxWidth: '1200px', margin: '0 auto', paddingLeft: '24px', paddingRight: '24px', paddingTop: '100px', width: '100%' }} className="relative z-10">
         <style>{`
           @keyframes fadeSlideUp {
             from { opacity: 0; transform: translateY(16px); }
@@ -137,7 +137,7 @@ const WorkerProfile = () => {
           }
           @keyframes borderPulse {
             0%, 100% { border-color: rgba(255,255,255,0.1); }
-            50%       { border-color: rgba(255,255,255,0.3); }
+            50%       { border-color: rgba(255,255,255,0.35); }
           }
           .bio-quote {
             animation: borderPulse 3s ease infinite;
@@ -149,8 +149,8 @@ const WorkerProfile = () => {
             box-shadow: inset 0 0 20px rgba(255,255,255,0.03);
           }
           @keyframes endorsePulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.2); }
-            50%       { box-shadow: 0 0 0 8px rgba(255,255,255,0); }
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.15); }
+            50%       { box-shadow: 0 0 0 6px rgba(255,255,255,0); }
           }
           .endorse-btn {
             transition: all 0.25s ease;
@@ -172,46 +172,57 @@ const WorkerProfile = () => {
           }
           .endorsement-card:hover {
             border-color: rgba(255,255,255,0.15) !important;
-            transform: translateX(4px);
+            transform: translateX(3px);
           }
           .back-link-group {
             transition: color 0.2s ease;
           }
           .back-link-group:hover {
-            color: rgba(255,255,255,0.8) !important;
+            color: rgba(255,255,255,0.7) !important;
           }
           .back-link-group:hover .back-arrow {
-            transform: translateX(-4px);
+            transform: translateX(-3px);
           }
           .back-arrow {
             transition: transform 0.2s ease;
           }
+          .stat-cell {
+            transition: background-color 0.2s ease;
+          }
+          .stat-cell:hover {
+            background-color: rgba(255,255,255,0.02) !important;
+          }
         `}</style>
         {/* Breadcrumb */}
-        <Link to="/discover" className="inline-flex items-center gap-2 font-bold mb-6 back-link-group" style={{ fontSize: '11px', letterSpacing: '2px', color: 'rgba(255,255,255,0.35)', marginBottom: '24px', textTransform: 'uppercase', animation: 'fadeSlideUp 0.4s ease forwards' }}>
+        <Link to="/discover" className="inline-flex items-center gap-2 font-bold back-link-group" style={{ fontSize: '11px', letterSpacing: '2.5px', color: 'rgba(255,255,255,0.3)', marginBottom: '28px', textTransform: 'uppercase', animation: 'fadeSlideUp 0.4s ease forwards' }}>
           <ArrowLeft className="w-3.5 h-3.5 back-arrow" /> Back to Discover
         </Link>
 
         {/* Profile Header */}
-        <div style={{ display: 'flex', gap: '48px', alignItems: 'flex-start', marginBottom: '40px' }} className="reveal">
+        <div style={{ display: 'flex', gap: '48px', alignItems: 'flex-start', marginBottom: '40px', width: '100%' }} className="reveal">
           {/* Identity Card (Left Sidebar) */}
-          <div className="border border-white/[0.07] rounded-[2px] p-6 bg-white/[0.02] md:sticky top-[100px]" style={{ minWidth: '260px', width: '260px', flexShrink: '0', opacity: 0, animation: 'fadeSlideUp 0.5s 0.1s ease forwards' }}>
+          <div className="border border-white/[0.07] rounded-[2px] p-6 bg-white/[0.02]" style={{ position: 'sticky', top: '100px', alignSelf: 'flex-start', minWidth: '280px', width: '280px', flexShrink: '0', opacity: 0, animation: 'fadeSlideUp 0.5s 0.1s ease forwards' }}>
             <div className="flex flex-col mb-4">
-              <div className="flex items-center justify-center hover-glow" style={{ width: '80px', height: '80px', backgroundColor: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '4px', marginBottom: '16px' }}>
+              <div className="flex items-center justify-center hover-glow" style={{ width: '88px', height: '88px', backgroundColor: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '4px' }}>
                 <User style={{ color: 'rgba(255,255,255,0.3)', width: '32px', height: '32px' }} />
               </div>
-              <h2 className="font-clash worker-name" style={{ fontSize: '20px', fontWeight: '800', marginBottom: '8px' }}>{profile.name}</h2>
-              <div style={{ display: 'flex', alignItems: 'center', fontSize: '12px', color: 'rgba(255,255,255,0.45)', gap: '12px', marginBottom: '6px' }} className="font-inter">
-                <span className="flex items-center gap-1"><Briefcase className="w-3 h-3" /> {profile.skill}</span>
-                <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {profile.city}</span>
+              <div style={{ marginBottom: '16px' }}>
+                <span style={{ fontSize: '9px', letterSpacing: '2px', color: '#00dc6e', backgroundColor: 'rgba(0,220,110,0.1)', border: '1px solid rgba(0,220,110,0.2)', padding: '3px 8px', marginTop: '8px', display: 'inline-block', borderRadius: '2px' }} className="font-inter uppercase font-bold">
+                  ● VERIFIED
+                </span>
+              </div>
+              <h2 className="font-clash worker-name" style={{ fontSize: '22px', fontWeight: '800', letterSpacing: '-0.01em', marginBottom: '10px', paddingLeft: '0' }}>{profile.name}</h2>
+              <div style={{ display: 'flex', alignItems: 'center', fontSize: '12px', color: 'rgba(255,255,255,0.5)', gap: '16px', marginBottom: '6px' }} className="font-inter">
+                <span className="flex items-center gap-2"><Briefcase style={{ color: 'rgba(255,255,255,0.3)', width: '12px', height: '12px' }} /> {profile.skill}</span>
+                <span className="flex items-center gap-2"><MapPin style={{ color: 'rgba(255,255,255,0.3)', width: '12px', height: '12px' }} /> {profile.city}</span>
               </div>
               {profile.experience > 0 && (
-                <span style={{ display: 'flex', alignItems: 'center', fontSize: '12px', color: 'rgba(255,255,255,0.35)', gap: '4px', marginBottom: '6px' }} className="font-inter">
-                  <Calendar className="w-3 h-3" /> {profile.experience} Yrs Exp
+                <span style={{ display: 'flex', alignItems: 'center', fontSize: '12px', color: 'rgba(255,255,255,0.5)', gap: '8px', marginBottom: '6px' }} className="font-inter">
+                  <Calendar style={{ color: 'rgba(255,255,255,0.3)', width: '12px', height: '12px' }} /> {profile.experience} Yrs Exp
                 </span>
               )}
             </div>
-            {profile.bio && <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)', fontStyle: 'italic', borderLeft: '2px solid rgba(255,255,255,0.15)', paddingLeft: '12px', marginTop: '12px', marginBottom: '20px' }} className="leading-relaxed font-inter bio-quote">"{profile.bio}"</p>}
+            {profile.bio && <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', fontStyle: 'italic', borderLeft: '2px solid rgba(255,255,255,0.15)', paddingLeft: '12px', marginTop: '14px', marginBottom: '20px' }} className="leading-relaxed font-inter bio-quote">"{profile.bio}"</p>}
 
             {/* Wallet */}
             <div style={{ backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', padding: '10px 12px', borderRadius: '2px', marginBottom: '8px' }}>
@@ -229,46 +240,46 @@ const WorkerProfile = () => {
             </div>
 
             {/* Actions */}
-            <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <button onClick={shareProfile} style={{ padding: '10px', border: '1px solid rgba(255,255,255,0.2)', backgroundColor: 'transparent', color: 'rgba(255,255,255,0.6)', fontSize: '12px', letterSpacing: '1.5px', width: '100%', cursor: 'pointer', borderRadius: '0' }} className="uppercase flex items-center justify-center gap-2 share-btn font-inter">
+            <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <button onClick={shareProfile} style={{ padding: '12px', border: '1px solid rgba(255,255,255,0.15)', backgroundColor: 'transparent', color: 'rgba(255,255,255,0.55)', fontSize: '11px', letterSpacing: '2px', width: '100%', cursor: 'pointer', borderRadius: '0' }} className="uppercase flex items-center justify-center gap-2 share-btn font-inter">
                 {copiedShare ? <><Check className="w-4 h-4 text-green-400" /> Copied!</> : <><Share2 className="w-4 h-4" /> Share Profile</>}
               </button>
-              <Link to={`/endorse?worker=${address}`} style={{ padding: '10px', backgroundColor: '#ffffff', color: '#000000', fontWeight: '700', fontSize: '12px', letterSpacing: '1.5px', border: 'none', width: '100%', cursor: 'pointer', borderRadius: '0' }} className="uppercase flex items-center justify-center gap-2 endorse-btn font-inter">
+              <Link to={`/endorse?worker=${address}`} style={{ padding: '12px', backgroundColor: '#ffffff', color: '#000000', fontWeight: '800', fontSize: '11px', letterSpacing: '2px', border: 'none', width: '100%', cursor: 'pointer', borderRadius: '0', marginTop: '8px' }} className="uppercase flex items-center justify-center gap-2 endorse-btn font-inter">
                 <Award className="w-4 h-4" /> Endorse Worker
               </Link>
             </div>
           </div>
 
           {/* Right side: Reputation + Endorsements */}
-          <div style={{ flex: '1', minWidth: '0' }}>
+          <div style={{ flex: '1', minWidth: '0', width: '100%' }}>
             {/* Stats Row */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0', border: '1px solid rgba(255,255,255,0.08)', marginBottom: '32px', opacity: 0, animation: 'fadeSlideUp 0.5s 0.2s ease forwards' }}>
-              <div style={{ backgroundColor: '#0a0a0a', padding: '20px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', borderRight: '1px solid rgba(255,255,255,0.08)', borderTop: '2px solid rgba(255,255,255,0.15)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', width: '100%', gap: '0', border: '1px solid rgba(255,255,255,0.08)', marginBottom: '32px', opacity: 0, animation: 'fadeSlideUp 0.5s 0.2s ease forwards' }}>
+              <div className="stat-cell" style={{ backgroundColor: '#0a0a0a', padding: '24px 20px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', borderRight: '1px solid rgba(255,255,255,0.06)', borderTop: '2px solid rgba(255,255,255,0.1)' }}>
                 <div className="flex justify-center gap-0.5 mb-2">
                   {[1,2,3,4,5].map(s => (<Star key={s} style={{ width: '16px', height: '16px' }} className={`${s <= Math.round(statAvgRating) ? 'text-[#f5c518] fill-[#f5c518]' : 'text-white/10'}`} />))}
                 </div>
                 <p style={{ fontSize: '2rem', fontWeight: '900', letterSpacing: '-0.02em' }} className="font-clash">{renderStatValue(statAvgRating, true)}</p>
-                <p style={{ fontSize: '9px', letterSpacing: '2px', color: 'rgba(255,255,255,0.3)', marginTop: '4px' }} className="uppercase font-inter">Avg Rating</p>
+                <p style={{ fontSize: '9px', letterSpacing: '3px', color: 'rgba(255,255,255,0.3)', marginTop: '8px' }} className="uppercase font-inter">Avg Rating</p>
               </div>
-              <div style={{ backgroundColor: '#0a0a0a', padding: '20px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', borderRight: '1px solid rgba(255,255,255,0.08)', borderTop: '2px solid rgba(255,255,255,0.15)' }}>
+              <div className="stat-cell" style={{ backgroundColor: '#0a0a0a', padding: '24px 20px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', borderRight: '1px solid rgba(255,255,255,0.06)', borderTop: '2px solid rgba(255,255,255,0.1)' }}>
                 <p style={{ fontSize: '2rem', fontWeight: '900', letterSpacing: '-0.02em' }} className="font-clash">{renderStatValue(statTotalReviews, false)}</p>
-                <p style={{ fontSize: '9px', letterSpacing: '2px', color: 'rgba(255,255,255,0.3)', marginTop: '6px' }} className="uppercase font-inter">Total Reviews</p>
+                <p style={{ fontSize: '9px', letterSpacing: '3px', color: 'rgba(255,255,255,0.3)', marginTop: '8px' }} className="uppercase font-inter">Total Reviews</p>
               </div>
-              <div style={{ backgroundColor: '#0a0a0a', padding: '20px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', borderRight: '1px solid rgba(255,255,255,0.08)', borderTop: '2px solid rgba(255,255,255,0.15)' }}>
+              <div className="stat-cell" style={{ backgroundColor: '#0a0a0a', padding: '24px 20px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', borderRight: '1px solid rgba(255,255,255,0.06)', borderTop: '2px solid rgba(255,255,255,0.1)' }}>
                 <p style={{ fontSize: '2rem', fontWeight: '900', letterSpacing: '-0.02em' }} className="font-clash">{renderStatValue(statHighestScore, false)}</p>
-                <p style={{ fontSize: '9px', letterSpacing: '2px', color: 'rgba(255,255,255,0.3)', marginTop: '6px' }} className="uppercase font-inter">Highest Score</p>
+                <p style={{ fontSize: '9px', letterSpacing: '3px', color: 'rgba(255,255,255,0.3)', marginTop: '8px' }} className="uppercase font-inter">Highest Score</p>
               </div>
-              <div style={{ backgroundColor: '#0a0a0a', padding: '20px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', borderTop: '2px solid rgba(255,255,255,0.15)' }}>
+              <div className="stat-cell" style={{ backgroundColor: '#0a0a0a', padding: '24px 20px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', borderTop: '2px solid rgba(255,255,255,0.1)' }}>
                 <p style={{ fontSize: '2rem', fontWeight: '900', letterSpacing: '-0.02em' }} className="font-clash">{renderStatValue(statWeightedScore, true)}</p>
-                <p style={{ fontSize: '9px', letterSpacing: '2px', color: 'rgba(255,255,255,0.3)', marginTop: '6px' }} className="uppercase font-inter">Weighted Score</p>
+                <p style={{ fontSize: '9px', letterSpacing: '3px', color: 'rgba(255,255,255,0.3)', marginTop: '8px' }} className="uppercase font-inter">Weighted Score</p>
               </div>
             </div>
 
             {/* Endorsements List */}
             <div style={{ opacity: 0, animation: 'fadeSlideUp 0.5s 0.3s ease forwards' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                <h3 style={{ fontSize: '14px', fontWeight: '700', letterSpacing: '3px', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase' }} className="font-inter">Endorsements</h3>
-                <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)' }} className="font-inter">{endorsements.length} Total</span>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid rgba(255,255,255,0.06)', paddingBottom: '12px' }}>
+                <h3 style={{ fontSize: '11px', fontWeight: '700', letterSpacing: '4px', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase' }} className="font-inter">Endorsements</h3>
+                <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', textAlign: 'right' }} className="font-inter">{endorsements.length} Total</span>
               </div>
               {endorsements.length === 0 ? (
                 <div style={{ padding: '20px', border: '1px solid rgba(255,255,255,0.08)', backgroundColor: 'rgba(255,255,255,0.02)', textAlign: 'center' }}>
@@ -283,20 +294,20 @@ const WorkerProfile = () => {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: idx * 0.03 }}
-                      style={{ padding: '20px', border: '1px solid rgba(255,255,255,0.08)', backgroundColor: 'rgba(255,255,255,0.02)', borderLeft: '3px solid rgba(255,200,50,0.4)' }}
+                      style={{ width: '100%', padding: '20px 24px', border: '1px solid rgba(255,255,255,0.08)', backgroundColor: 'rgba(255,255,255,0.02)', borderLeft: '3px solid rgba(255,200,50,0.5)' }}
                       className="endorsement-card"
                     >
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
-                        <span style={{ fontSize: '10px', letterSpacing: '2px', backgroundColor: 'rgba(255,200,50,0.08)', border: '1px solid rgba(255,200,50,0.2)', color: 'rgba(255,200,50,0.7)', padding: '2px 10px', textTransform: 'uppercase' }} className="font-inter">{e.jobType || 'FREELANCE PROJECT'}</span>
+                        <span style={{ fontSize: '10px', letterSpacing: '2px', backgroundColor: 'rgba(255,200,50,0.08)', border: '1px solid rgba(255,200,50,0.25)', color: 'rgba(255,200,50,0.8)', padding: '3px 10px', textTransform: 'uppercase' }} className="font-inter">{e.jobType || 'FREELANCE PROJECT'}</span>
                         <div style={{ display: 'flex', gap: '2px' }}>
-                          {[1,2,3,4,5].map(s => (<Star key={s} style={{ width: '12px', height: '12px', color: s <= e.rating ? '#f5c518' : 'rgba(255,255,255,0.1)', fill: s <= e.rating ? '#f5c518' : 'none', filter: s <= e.rating ? 'drop-shadow(0 0 4px rgba(245,197,24,0.5))' : 'none' }} />))}
+                          {[1,2,3,4,5].map(s => (<Star key={s} style={{ width: '12px', height: '12px', color: s <= e.rating ? '#f5c518' : 'rgba(255,255,255,0.1)', fill: s <= e.rating ? '#f5c518' : 'none', filter: s <= e.rating ? 'drop-shadow(0 0 4px rgba(245,197,24,0.4))' : 'none' }} />))}
                         </div>
                       </div>
-                      <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.75)', fontStyle: 'italic', marginBottom: '12px' }} className="font-inter">"{e.feedback}"</p>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '10px', color: 'rgba(255,255,255,0.25)', fontFamily: 'monospace' }}>
+                      <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.75)', fontStyle: 'italic', margin: '12px 0' }} className="font-inter">"{e.feedback}"</p>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11px', color: 'rgba(255,255,255,0.25)', fontFamily: 'monospace' }}>
                         <span>{new Date(e.timestamp).toLocaleDateString()} • From: {e.endorser ? `${e.endorser.substring(0, 6)}...${e.endorser.substring(e.endorser.length - 4)}` : 'Unknown'}</span>
                         {e.txHash && (
-                          <a href={`https://stellar.expert/explorer/testnet/tx/${e.txHash}`} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+                          <a href={`https://stellar.expert/explorer/testnet/tx/${e.txHash}`} target="_blank" rel="noopener noreferrer" style={{ textAlign: 'right' }} className="hover:text-white transition-colors">
                             Tx: {e.txHash.substring(0, 8)}...
                           </a>
                         )}

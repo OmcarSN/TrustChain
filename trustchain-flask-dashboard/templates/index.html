@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrustChain — Verified Economy</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+    <!-- ========== NAVBAR (Fixed) ========== -->
+    <nav>
+        <div class="logo-section">
+            <div class="logo-flame"></div>
+            <div class="logo-text-group">
+                <div class="logo-title">TRUSTCHAIN</div>
+                <div class="logo-subtitle">VERIFIED ECONOMY</div>
+            </div>
+        </div>
+        <div class="nav-center">
+            <a href="#" class="nav-link">Home</a>
+            <a href="#" class="nav-link">Find Workers</a>
+            <a href="#" class="nav-link">Explorer</a>
+            <a href="#" class="nav-link active">Analytics</a>
+            <a href="#" class="nav-link">Dashboard</a>
+            <a href="#" class="nav-link">Worker Portal</a>
+        </div>
+        <div class="nav-right">
+            <div class="lang-dropdown">EN ▾</div>
+            <div class="wallet-btn">
+                <div class="dot-green"></div>
+                GDKHCX...LVYX ▾
+            </div>
+        </div>
+    </nav>
+
+    <!-- ========== PAGE WRAPPER (clears navbar, pads edges) ========== -->
+    <div class="page-wrapper">
+
+        <!-- Info Bar -->
+        <div class="info-bar">
+            <div class="info-left">
+                <i data-lucide="globe" style="width: 14px; height: 14px;"></i>
+                Network insights and activity on the TrustChain smart contracts.
+            </div>
+            <div class="info-right">
+                <div class="indexed-status">
+                    <i data-lucide="clock" style="width: 14px; height: 14px;"></i>
+                    INDEXED: 6S AGO
+                </div>
+                <button class="btn-index">
+                    <i data-lucide="rotate-cw" style="width: 14px; height: 14px;"></i>
+                    INDEX NOW
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-label">ACTIVE CREDENTIALS</div>
+                    <i data-lucide="shield" class="stat-icon" style="width: 18px; height: 18px;"></i>
+                </div>
+                <div class="stat-number">89</div>
+                <div class="stat-subtitle">Contract Index</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-label">TOTAL REGISTERED</div>
+                    <i data-lucide="user" class="stat-icon" style="width: 18px; height: 18px;"></i>
+                </div>
+                <div class="stat-number">49</div>
+                <div class="stat-subtitle">Unique Participants</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-label">TRANSACTIONS TODAY</div>
+                    <i data-lucide="zap" class="stat-icon" style="width: 18px; height: 18px;"></i>
+                </div>
+                <div class="stat-number">
+                    1
+                    <span style="font-size: 1rem; color: var(--accent-green); vertical-align: middle; margin-left: 8px;">
+                        ↗ 12%
+                    </span>
+                </div>
+                <div class="stat-subtitle">Past 24 Hours</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-label">NETWORK STATUS</div>
+                    <i data-lucide="globe" class="stat-icon" style="width: 18px; height: 18px;"></i>
+                </div>
+                <div class="stat-number" style="color: var(--accent-green);">100</div>
+                <div class="stat-subtitle">Stellar Testnet Operational</div>
+            </div>
+        </div>
+
+        <!-- Main Content: Chart + Feed -->
+        <div class="main-grid">
+
+            <!-- LEFT: Chart Panel -->
+            <div class="panel-chart">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <h2>
+                            <i data-lucide="activity" style="width: 20px; height: 20px; color: var(--accent-green);"></i>
+                            System Growth Over Time
+                        </h2>
+                        <div class="panel-subtitle">7-DAY OVERVIEW</div>
+                    </div>
+                    <div class="panel-controls">
+                        <div class="toggle-group">
+                            <button class="toggle-btn active" id="btn-area">AREA</button>
+                            <button class="toggle-btn" id="btn-bar">BAR</button>
+                        </div>
+                        <div class="data-badge">89 TOTAL</div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="growthChart"></canvas>
+                </div>
+            </div>
+
+            <!-- RIGHT: Activity Feed Panel -->
+            <div class="panel-feed">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <h2 style="font-size: 1rem;">Activity Feed</h2>
+                        <div class="panel-subtitle" style="font-weight: 500;">REAL-TIME CONTRACT EVENTS</div>
+                    </div>
+                    <div class="live-indicator">
+                        <div class="pulse"></div>
+                        LIVE
+                    </div>
+                </div>
+                <div class="activity-feed">
+                    {% set feed_data = [
+                        {"addr": "GDKHCX...LVYX", "time": "8m ago",   "type": "Verified Interaction"},
+                        {"addr": "GD50KF...VKCU", "time": "113h ago", "type": "Worker Endorsement"},
+                        {"addr": "GBNJOK...7NEP", "time": "113h ago", "type": "Verified Interaction"},
+                        {"addr": "GBGUXG...EAGD", "time": "144h ago", "type": "Verified Interaction"},
+                        {"addr": "GDKHCX...LVYX", "time": "19h ago",  "type": "Verified Interaction"},
+                        {"addr": "GDKHCX...LVYX", "time": "54h ago",  "type": "Verified Interaction"},
+                        {"addr": "GDKHCX...LVYX", "time": "183h ago", "type": "Verified Interaction"},
+                        {"addr": "GDKHCX...LVYX", "time": "193h ago", "type": "Verified Interaction"},
+                        {"addr": "GBWKUB...7I7S", "time": "194h ago", "type": "Verified Interaction"},
+                        {"addr": "GAJNHY...3QUB", "time": "196h ago", "type": "Worker Endorsement"}
+                    ] %}
+                    {% for item in feed_data %}
+                    <div class="activity-item">
+                        <div class="icon-check-circle">
+                            <i data-lucide="check" style="width: 12px; height: 12px; stroke-width: 3;"></i>
+                        </div>
+                        <div class="item-content">
+                            <div class="item-address">{{ item.addr }}</div>
+                            <div class="item-meta">{{ item.time }} • {{ item.type }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
