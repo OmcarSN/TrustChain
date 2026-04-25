@@ -9,7 +9,7 @@ const Contact = () => {
     <div style={{ paddingTop: '120px', paddingLeft: '24px', paddingRight: '24px', maxWidth: '800px', margin: '0 auto', minHeight: '80vh', paddingBottom: '80px' }}>
       
       <h1 className="font-clash" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: '900', color: '#ffffff', marginBottom: '40px', textTransform: 'uppercase' }}>
-        {t('contact.title', 'Contact Us')}
+        {t('contact_us')}
       </h1>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginBottom: '48px' }}>
@@ -49,7 +49,7 @@ const Contact = () => {
 
       <div style={{ paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
         <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.5)', lineHeight: '1.8' }} className="font-inter">
-          For support or partnerships, reach out via GitHub.
+          {t('contact_support_text')}
         </p>
       </div>
 

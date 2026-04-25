@@ -117,7 +117,7 @@ const Navbar = () => {
           </Link>
 
           {/* Center Nav Links (Desktop) */}
-          <div className="hidden lg:flex items-center h-full" style={{ gap: '32px' }}>
+          <div className="hidden md:flex items-center h-full" style={{ gap: '32px' }}>
             {navLinks.map((link) => {
               const isActive = location.pathname === link.path;
               return (
@@ -337,7 +337,7 @@ const Navbar = () => {
             {/* Hamburger menu button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2.5 border border-white/10 rounded-[2px] hover:border-white/30 transition-all text-white relative z-[60]"
+              className="md:hidden p-2.5 border border-white/10 rounded-[2px] hover:border-white/30 transition-all text-white relative z-[60]"
             >
               <AnimatePresence mode="wait">
                 {isMobileMenuOpen ? (

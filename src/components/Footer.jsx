@@ -82,11 +82,11 @@ const Footer = () => {
         {/* Col 4: Community */}
         <div>
           <h4 className="font-clash" style={{ fontSize: '10px', letterSpacing: '3px', color: 'rgba(255,255,255,0.25)', marginBottom: '16px', textTransform: 'uppercase' }}>
-            Community
+            {t('community', 'Community')}
           </h4>
-          <Link to="/about" className="footer-link">About</Link>
-          <Link to="/mission" className="footer-link">Mission</Link>
-          <Link to="/contact" className="footer-link">Contact</Link>
+          <Link to="/about" className="footer-link">{t('about', 'About')}</Link>
+          <Link to="/mission" className="footer-link">{t('mission', 'Mission')}</Link>
+          <Link to="/contact" className="footer-link">{t('contact', 'Contact')}</Link>
         </div>
       </div>
 

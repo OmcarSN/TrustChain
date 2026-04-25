@@ -22,37 +22,91 @@ const Dashboard = () => {
     if (!walletAddress) { setLoading(false); return; }
     const loadData = async () => {
       setLoading(true);
+
+      // ── 1. Always read endorsements received (never skip this) ──
+      const localKey = `endorsements_${walletAddress}`;
+      const received = JSON.parse(localStorage.getItem(localKey) || '[]');
+
+      if (import.meta.env.DEV) {
+        console.group('🔍 TrustChain Dashboard — Data Diagnostic');
+        console.log('Wallet:', walletAddress);
+        console.log('LocalStorage key checked:', localKey);
+        console.log('Raw value:', localStorage.getItem(localKey));
+        console.log('Parsed received endorsements:', received);
+        console.log('All localStorage keys:', Object.keys(localStorage));
+        console.groupEnd();
+      }
+
+      // Fallback: if received is empty, scan all endorsement keys
+      // to check if any endorsements reference this wallet as the worker
+      let receivedFinal = received;
+      if (received.length === 0) {
+        const allReceived = [];
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (key && key.startsWith('endorsements_')) {
+            const list = JSON.parse(localStorage.getItem(key) || '[]');
+            list.forEach(e => {
+              if (e.worker === walletAddress) allReceived.push(e);
+            });
+          }
+        }
+        if (allReceived.length > 0) {
+          receivedFinal = allReceived;
+          // Also fix the storage so the correct key exists going forward
+          localStorage.setItem(localKey, JSON.stringify(allReceived));
+        }
+      }
+      setEndorsementsReceived(receivedFinal);
+      const rep = calculateScore(receivedFinal);
+      setReputation(rep);
+
+      // ── 2. Always read endorsements given (scan all keys) ──
+      const given = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('endorsements_') && key !== localKey) {
+          const list = JSON.parse(localStorage.getItem(key) || '[]');
+          list.forEach(e => {
+            if (e.endorser === walletAddress) given.push(e);
+          });
+        }
+      }
+      given.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      setEndorsementsGiven(given);
+
+      // ── 3. Try to load credential (on-chain first, fallback to localStorage) ──
       try {
         const cred = await fetchWorkerCredential(walletAddress);
-        const localWorkerData = JSON.parse(localStorage.getItem(`trustchain_worker_${walletAddress}`) || 'null');
+        const localWorkerData = JSON.parse(
+          localStorage.getItem(`trustchain_worker_${walletAddress}`) || 'null'
+        );
         if (localWorkerData) {
           cred.name = localWorkerData.name || localWorkerData.fullName || cred.name;
+          cred.skill = localWorkerData.skill || localWorkerData.skillCategory || cred.skill;
           cred.city = localWorkerData.city || cred.city;
           cred.bio = localWorkerData.bio || cred.bio;
           cred.experience = localWorkerData.experience || cred.experience;
         }
         setCredential(cred);
-        const localKey = `endorsements_${walletAddress}`;
-        const received = JSON.parse(localStorage.getItem(localKey) || '[]');
-        setEndorsementsReceived(received);
-        const rep = calculateScore(received);
-        setReputation(rep);
       } catch {
-        const localWorkerData = JSON.parse(localStorage.getItem(`trustchain_worker_${walletAddress}`) || 'null');
+        // Fallback: read credential entirely from localStorage
+        const localWorkerData = JSON.parse(
+          localStorage.getItem(`trustchain_worker_${walletAddress}`) || 'null'
+        );
         if (localWorkerData) {
-          setCredential({ name: localWorkerData.name || localWorkerData.fullName || 'Worker', skill: localWorkerData.skill || localWorkerData.skillCategory || '—', city: localWorkerData.city || 'Unknown', experience: localWorkerData.experience || '—', bio: localWorkerData.bio || '' });
-        } else { setCredential(null); }
-      }
-      const given = [];
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key && key.startsWith('endorsements_')) {
-          const list = JSON.parse(localStorage.getItem(key) || '[]');
-          list.forEach(e => { if (e.endorser === walletAddress) given.push(e); });
+          setCredential({
+            name: localWorkerData.name || localWorkerData.fullName || 'Worker',
+            skill: localWorkerData.skill || localWorkerData.skillCategory || '—',
+            city: localWorkerData.city || 'Unknown',
+            experience: localWorkerData.experience || '—',
+            bio: localWorkerData.bio || '',
+          });
+        } else {
+          setCredential(null);
         }
       }
-      given.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-      setEndorsementsGiven(given);
+
       setLoading(false);
     };
     loadData();
@@ -63,18 +117,46 @@ const Dashboard = () => {
 
   if (!isConnected) {
     return (
-      <div className="min-h-screen bg-[#050505] relative overflow-hidden text-white" style={{ paddingTop:'100px', display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center' }}>
-        <div className="absolute rounded-full pointer-events-none" style={{ top:'-80px', left:'-80px', width:'400px', height:'400px', background:'#f97316', filter:'blur(120px)', opacity:0.04 }} />
-        <motion.div initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }} className="text-center max-w-md" style={{ padding:'0 24px' }}>
-          <div style={{ width:'56px', height:'56px', border:'1px solid rgba(255,255,255,0.1)', backgroundColor:'rgba(255,255,255,0.05)', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 24px' }}>
-            <LayoutDashboard style={{ width:'28px', height:'28px', color:'rgba(255,255,255,0.3)' }} />
+      <div className="min-h-screen bg-[#050505] relative overflow-hidden text-white" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden', paddingTop: '80px' }}>
+        <style>{`
+          @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+          @keyframes iconPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.05); } 50% { box-shadow: 0 0 0 12px rgba(255,255,255,0); } }
+          @keyframes btnPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.15); } 50% { box-shadow: 0 0 0 8px rgba(255,255,255,0); } }
+          @keyframes shimmer { 0% { background-position: 200% center; } 100% { background-position: -200% center; } }
+          .conn-anim { opacity: 0; animation: fadeSlideUp 0.6s ease forwards; }
+          .shimmer-text { background: linear-gradient(to right, #ffffff 20%, #888888 50%, #ffffff 80%); background-size: 200% auto; color: transparent; -webkit-background-clip: text; animation: shimmer 3s linear infinite; }
+          .conn-btn { transition: all 0.25s ease; animation: btnPulse 2.5s ease infinite; }
+          .conn-btn:hover { background-color: rgba(220,220,220,1) !important; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,255,255,0.15) !important; }
+        `}</style>
+
+        {/* Background Graphics */}
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)', backgroundSize: '60px 60px', pointerEvents: 'none', zIndex: 0 }} />
+        <div style={{ position: 'absolute', top: '-150px', right: '-150px', width: '500px', height: '500px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,80,200,0.07) 0%, transparent 70%)', pointerEvents: 'none', zIndex: 0 }} />
+        <div style={{ position: 'absolute', bottom: '-100px', left: '-100px', width: '400px', height: '400px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,220,110,0.04) 0%, transparent 70%)', pointerEvents: 'none', zIndex: 0 }} />
+
+        <div className="text-center" style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '0 24px' }}>
+          
+          <div className="conn-anim" style={{ width: '72px', height: '72px', border: '1px solid rgba(255,255,255,0.12)', backgroundColor: 'rgba(255,255,255,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px', animation: 'iconPulse 3s ease infinite, fadeSlideUp 0.6s ease forwards', animationDelay: '0s, 0.1s', borderRadius: '2px' }}>
+            <LayoutDashboard style={{ width: '28px', height: '28px', color: 'rgba(255,255,255,0.5)' }} />
           </div>
-          <h2 className="font-clash" style={{ fontSize:'1.8rem', fontWeight:'900', marginBottom:'12px' }}>{t('dashboard.commandCenter')}</h2>
-          <p className="font-inter" style={{ color:'rgba(255,255,255,0.3)', marginBottom:'32px', fontSize:'14px', lineHeight:'1.6' }}>{t('dashboard.connectPrompt')}</p>
-          <button onClick={connect} style={{ width:'100%', padding:'16px', backgroundColor:'#fff', color:'#000', border:'none', fontWeight:'800', fontSize:'11px', letterSpacing:'3px', textTransform:'uppercase', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', gap:'8px' }}>
-            <Wallet style={{ width:'16px', height:'16px' }} /> {t('dashboard.connectBtn')}
-          </button>
-        </motion.div>
+
+          <h2 className="font-clash shimmer-text conn-anim" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: '900', letterSpacing: '-0.02em', marginBottom: '12px', animationDelay: '0.2s' }}>{t('dashboard.commandCenter')}</h2>
+          
+          <p className="font-inter conn-anim" style={{ fontSize: '15px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.5px', marginBottom: '32px', maxWidth: '400px', textAlign: 'center', lineHeight: '1.6', animationDelay: '0.3s' }}>{t('dashboard.connectPrompt')}</p>
+          
+          <div className="conn-anim" style={{ animationDelay: '0.4s' }}>
+            <button onClick={connect} className="conn-btn font-inter" style={{ padding: '14px 40px', backgroundColor: '#ffffff', color: '#000000', border: 'none', fontWeight: '800', fontSize: '13px', letterSpacing: '2px', cursor: 'pointer', borderRadius: '0', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', textTransform: 'uppercase' }}>
+              <Wallet style={{ width: '16px', height: '16px' }} /> {t('dashboard.connectBtn')}
+            </button>
+          </div>
+
+          <div className="conn-anim font-inter" style={{ display: 'flex', gap: '32px', marginTop: '48px', opacity: 0.4, animationDelay: '0.6s' }}>
+            <span style={{ fontSize: '11px', letterSpacing: '2px', fontWeight: '700' }}>✓ VIEW STATS</span>
+            <span style={{ fontSize: '11px', letterSpacing: '2px', fontWeight: '700' }}>✓ MANAGE PROFILE</span>
+            <span style={{ fontSize: '11px', letterSpacing: '2px', fontWeight: '700' }}>✓ TRACK ENDORSEMENTS</span>
+          </div>
+
+        </div>
       </div>
     );
   }
@@ -106,27 +188,73 @@ const Dashboard = () => {
       `}</style>
 
       {/* Two-column layout */}
-      <div className="db-layout" style={{ display:'flex', paddingTop:'100px', minHeight:'100vh', position:'relative', zIndex:10 }}>
+      <div className="db-layout" style={{ display:'flex', paddingTop:'100px', paddingLeft:'24px', paddingRight:'24px', minHeight:'100vh', position:'relative', zIndex:10 }}>
 
         {/* ═══ LEFT SIDEBAR ═══ */}
-        <div className="db-sidebar" style={{ width:'280px', flexShrink:0, borderRight:'1px solid rgba(255,255,255,0.06)', display:'flex', flexDirection:'column', overflowY:'auto', paddingBottom:'40px' }}>
+        <div className="db-sidebar" style={{ width:'280px', minWidth:'260px', flexShrink:0, borderRight:'1px solid rgba(255,255,255,0.06)', display:'flex', flexDirection:'column', overflowY:'auto', paddingBottom:'40px' }}>
 
-          {/* Stats Row */}
-          <div className="db-anim" style={{ padding:'24px 20px', borderBottom:'1px solid rgba(255,255,255,0.06)', display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:'0', animationDelay:'0s' }}>
-            {[
-              { val: credential?.skill || '—', label: t('dashboard.credential'), isSkill:true },
-              { val: reputation?.average || '0.0', label: t('dashboard.avgRating') },
-              { val: endorsementsReceived.length, label: t('dashboard.received') },
-            ].map((s, i, arr) => (
-              <div key={i} style={{ textAlign:'center', padding:'0 8px', borderRight: i < arr.length-1 ? '1px solid rgba(255,255,255,0.06)' : 'none' }}>
-                {s.isSkill ? (
-                  <span style={{ display:'inline-block', padding:'3px 10px', border:'1px solid rgba(255,255,255,0.12)', fontSize:'10px', letterSpacing:'2px', color:'rgba(255,255,255,0.6)', backgroundColor:'rgba(255,255,255,0.04)', marginBottom:'4px' }}>{s.val}</span>
-                ) : (
-                  <p className="font-clash" style={{ fontSize:'1.4rem', fontWeight:'900', color:'#fff', lineHeight:'1', marginBottom:'4px' }}>{s.val}</p>
-                )}
-                <p className="font-inter" style={{ fontSize:'9px', letterSpacing:'3px', color:'rgba(255,255,255,0.25)', textTransform:'uppercase' }}>{s.label}</p>
+          {/* Sidebar stats — vertical stack, not cramped grid */}
+          <div className="db-anim" style={{
+            padding: '20px',
+            borderBottom: '1px solid rgba(255,255,255,0.06)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '14px',
+            animationDelay: '0s'
+          }}>
+            {/* Credential/Skill pill — full width */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span className="font-inter" style={{ fontSize: '9px', letterSpacing: '3px', color: 'rgba(255,255,255,0.25)', textTransform: 'uppercase', fontWeight: '700' }}>
+                {t('dashboard.credential')}
+              </span>
+              <span style={{
+                padding: '3px 12px',
+                border: '1px solid rgba(255,255,255,0.12)',
+                fontSize: '10px',
+                letterSpacing: '2px',
+                color: 'rgba(255,255,255,0.7)',
+                backgroundColor: 'rgba(255,255,255,0.04)',
+                fontWeight: '600'
+              }}>
+                {credential?.skill || '—'}
+              </span>
+            </div>
+
+            {/* Divider */}
+            <div style={{ height: '1px', backgroundColor: 'rgba(255,255,255,0.04)' }} />
+
+            {/* Avg Rating row */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span className="font-inter" style={{ fontSize: '9px', letterSpacing: '3px', color: 'rgba(255,255,255,0.25)', textTransform: 'uppercase', fontWeight: '700' }}>
+                {t('dashboard.avgRating')}
+              </span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span className="font-clash" style={{ fontSize: '1.3rem', fontWeight: '900', color: '#fff' }}>
+                  {reputation?.average || '0.0'}
+                </span>
+                <Star style={{ width: '12px', height: '12px', color: '#f5a623', fill: '#f5a623' }} />
               </div>
-            ))}
+            </div>
+
+            {/* Received row */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span className="font-inter" style={{ fontSize: '9px', letterSpacing: '3px', color: 'rgba(255,255,255,0.25)', textTransform: 'uppercase', fontWeight: '700' }}>
+                {t('dashboard.received')}
+              </span>
+              <span className="font-clash" style={{ fontSize: '1.3rem', fontWeight: '900', color: '#fff' }}>
+                {endorsementsReceived.length}
+              </span>
+            </div>
+
+            {/* Given row */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span className="font-inter" style={{ fontSize: '9px', letterSpacing: '3px', color: 'rgba(255,255,255,0.25)', textTransform: 'uppercase', fontWeight: '700' }}>
+                {t('dashboard.given')}
+              </span>
+              <span className="font-clash" style={{ fontSize: '1.3rem', fontWeight: '900', color: '#fff' }}>
+                {endorsementsGiven.length}
+              </span>
+            </div>
           </div>
 
           {/* Quick Actions */}
@@ -202,7 +330,7 @@ const Dashboard = () => {
               <button onClick={copyAddress} style={{ background:'none', border:'none', cursor:'pointer', color:'rgba(255,255,255,0.2)', display:'flex', padding:'2px' }}>
                 {copied ? <Check style={{ width:'12px', height:'12px', color:'#00dc6e' }} /> : <Copy style={{ width:'12px', height:'12px' }} />}
               </button>
-              <a href={`https://stellar.expert/explorer/testnet/address/${walletAddress}`} target="_blank" rel="noopener noreferrer" style={{ color:'rgba(255,255,255,0.2)', display:'flex' }}>
+              <a href={`https://stellar.expert/explorer/testnet/account/${walletAddress}`} target="_blank" rel="noopener noreferrer" style={{ color:'rgba(255,255,255,0.2)', display:'flex' }}>
                 <ExternalLink style={{ width:'12px', height:'12px' }} />
               </a>
             </div>

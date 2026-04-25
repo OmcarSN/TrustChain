@@ -7,6 +7,7 @@ import { mintWorkerCredential } from '../lib/stellar';
 import { useToast } from '../context/ToastContext';
 import { validateWalletAddress, validateCredentialInput, sanitizeString } from '../utils/validation';
 import { useTranslation } from 'react-i18next';
+import { notifyStatsUpdated } from '../hooks/usePlatformStats';
 
 const STEPS = [
   { icon: PenLine, label: 'registration.step1' },
@@ -15,7 +16,7 @@ const STEPS = [
 ];
 
 const FormField = ({ icon: Icon, label, error, children, completed }) => (
-  <div className="space-y-2">
+  <div className="space-y-2 p-6 bg-white/5 border border-white/5 rounded-sm">
     <div className="flex items-center justify-between">
       <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/30 flex items-center gap-1.5 font-inter"><Icon className="w-3 h-3" /> {label}</label>
       {completed && <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="w-4 h-4 rounded-[2px] bg-green-400/10 flex items-center justify-center"><CheckCircle2 className="w-2.5 h-2.5 text-green-400" /></motion.div>}
@@ -71,6 +72,7 @@ const WorkerRegistration = () => {
       localStorage.setItem(`trustchain_worker_${walletAddress}`, JSON.stringify(data));
       const reg = JSON.parse(localStorage.getItem('trustchain_worker_registry') || '[]');
       if (!reg.includes(walletAddress)) { reg.push(walletAddress); localStorage.setItem('trustchain_worker_registry', JSON.stringify(reg)); }
+      notifyStatsUpdated();
       setTxResult(response); setExistingCredential(data);
       toast.success(`Credential issued! Tx: ${response?.hash?.slice(0,8) || 'ok'}...`);
     } catch (err) { console.error(err); toast.error(err.message || 'Failed to mint'); }
@@ -85,14 +87,46 @@ const WorkerRegistration = () => {
 
   if (!isConnected) {
     return (
-      <div className="min-h-screen bg-[#050505] pt-28 pb-12 px-6 lg:px-12 flex items-center justify-center relative overflow-hidden text-white">
-        <div className="absolute rounded-full pointer-events-none" style={{ top: '-80px', left: '-80px', width: '400px', height: '400px', background: '#f97316', filter: 'blur(120px)', opacity: 0.04 }} />
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center max-w-md z-10">
-          <div className="w-14 h-14 rounded-[2px] bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-6"><Wallet className="w-7 h-7 text-white/30" /></div>
-          <h2 className="font-clash text-3xl font-bold mb-3 tracking-tight">{t('registration.headerTitle')}</h2>
-          <p className="text-white/30 mb-8 text-sm font-inter">{t('registration.headerSubtitle')}</p>
-          <button onClick={connect} className="w-full py-4 bg-white text-black rounded-[2px] font-bold uppercase tracking-[0.15em] text-[11px] hover:opacity-85 transition-opacity flex items-center justify-center gap-2"><Wallet className="w-4 h-4" /> {t('dashboard.connectBtn')}</button>
-        </motion.div>
+      <div className="min-h-screen bg-[#050505] relative overflow-hidden text-white" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden', paddingTop: '80px' }}>
+        <style>{`
+          @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+          @keyframes iconPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.05); } 50% { box-shadow: 0 0 0 12px rgba(255,255,255,0); } }
+          @keyframes btnPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.15); } 50% { box-shadow: 0 0 0 8px rgba(255,255,255,0); } }
+          @keyframes shimmer { 0% { background-position: 200% center; } 100% { background-position: -200% center; } }
+          .conn-anim { opacity: 0; animation: fadeSlideUp 0.6s ease forwards; }
+          .shimmer-text { background: linear-gradient(to right, #ffffff 20%, #888888 50%, #ffffff 80%); background-size: 200% auto; color: transparent; -webkit-background-clip: text; animation: shimmer 3s linear infinite; }
+          .conn-btn { transition: all 0.25s ease; animation: btnPulse 2.5s ease infinite; }
+          .conn-btn:hover { background-color: rgba(220,220,220,1) !important; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,255,255,0.15) !important; }
+        `}</style>
+
+        {/* Background Graphics */}
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)', backgroundSize: '60px 60px', pointerEvents: 'none', zIndex: 0 }} />
+        <div style={{ position: 'absolute', top: '-150px', right: '-150px', width: '500px', height: '500px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,80,200,0.07) 0%, transparent 70%)', pointerEvents: 'none', zIndex: 0 }} />
+        <div style={{ position: 'absolute', bottom: '-100px', left: '-100px', width: '400px', height: '400px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,220,110,0.04) 0%, transparent 70%)', pointerEvents: 'none', zIndex: 0 }} />
+
+        <div className="text-center" style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '0 24px' }}>
+          
+          <div className="conn-anim" style={{ width: '72px', height: '72px', border: '1px solid rgba(255,255,255,0.12)', backgroundColor: 'rgba(255,255,255,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px', animation: 'iconPulse 3s ease infinite, fadeSlideUp 0.6s ease forwards', animationDelay: '0s, 0.1s', borderRadius: '2px' }}>
+            <Wallet style={{ width: '28px', height: '28px', color: 'rgba(255,255,255,0.5)' }} />
+          </div>
+
+          <h2 className="font-clash shimmer-text conn-anim" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: '900', letterSpacing: '-0.02em', marginBottom: '12px', animationDelay: '0.2s' }}>{t('registration.headerTitle')}</h2>
+          
+          <p className="font-inter conn-anim" style={{ fontSize: '15px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.5px', marginBottom: '32px', maxWidth: '400px', textAlign: 'center', lineHeight: '1.6', animationDelay: '0.3s' }}>{t('registration.headerSubtitle')}</p>
+          
+          <div className="conn-anim" style={{ animationDelay: '0.4s' }}>
+            <button onClick={connect} className="conn-btn font-inter" style={{ padding: '14px 40px', backgroundColor: '#ffffff', color: '#000000', border: 'none', fontWeight: '800', fontSize: '13px', letterSpacing: '2px', cursor: 'pointer', borderRadius: '0', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', textTransform: 'uppercase' }}>
+              <Wallet style={{ width: '16px', height: '16px' }} /> {t('dashboard.connectBtn')}
+            </button>
+          </div>
+
+          <div className="conn-anim font-inter" style={{ display: 'flex', gap: '32px', marginTop: '48px', opacity: 0.4, animationDelay: '0.6s' }}>
+            <span style={{ fontSize: '11px', letterSpacing: '2px', fontWeight: '700' }}>✓ MINT CREDENTIAL</span>
+            <span style={{ fontSize: '11px', letterSpacing: '2px', fontWeight: '700' }}>✓ BUILD REPUTATION</span>
+            <span style={{ fontSize: '11px', letterSpacing: '2px', fontWeight: '700' }}>✓ GET ENDORSED</span>
+          </div>
+
+        </div>
       </div>
     );
   }
@@ -122,21 +156,15 @@ const WorkerRegistration = () => {
         `}</style>
 
         {/* Page Wrapper — centered column */}
-        <div style={{
+        <div className="min-h-screen px-4 md:px-12 lg:px-24 w-full flex flex-col items-center" style={{
           paddingTop: '100px',
           paddingBottom: '60px',
-          paddingLeft: '24px',
-          paddingRight: '24px',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          minHeight: '100vh',
           position: 'relative',
           zIndex: 10
         }}>
 
           {/* ═══ Page Header — centered ═══ */}
-          <div style={{ width: '100%', maxWidth: '680px', textAlign: 'center', marginBottom: '32px' }}>
+          <div style={{ width: '100%', maxWidth: '1100px', textAlign: 'center', marginBottom: '32px' }}>
             <p className="wp-anim font-inter" style={{ fontSize: '10px', letterSpacing: '4px', color: 'rgba(255,255,255,0.3)', marginBottom: '10px', textTransform: 'uppercase', fontWeight: '600', textAlign: 'center', animationDelay: '0s' }}>
               {t('nav.workerPortal')}
             </p>
@@ -151,7 +179,7 @@ const WorkerRegistration = () => {
           {/* ═══ Credential Card ═══ */}
           <div className="wp-anim" style={{
             width: '100%',
-            maxWidth: '680px',
+            maxWidth: '1100px',
             border: '1px solid rgba(255,255,255,0.1)',
             borderTop: '2px solid rgba(255,255,255,0.15)',
             backgroundColor: 'rgba(255,255,255,0.02)',
@@ -282,7 +310,7 @@ const WorkerRegistration = () => {
         .reg-anim { opacity:0; animation: regFadeUp 0.4s ease forwards; }
         .reg-mint-btn { transition: all 0.2s ease; }
         .reg-mint-btn:hover:not(:disabled) { background-color: #e8e8e8 !important; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(255,255,255,0.12); }
-        .reg-input { background:transparent; border:none; border-bottom:1px solid rgba(255,255,255,0.1); padding:8px 0; font-size:14px; font-weight:600; color:#fff; width:100%; outline:none; transition: border-color 0.2s; }
+        .reg-input { background:transparent; border:none; border-bottom:1px solid rgba(255,255,255,0.1); font-weight:600; color:#fff; outline:none; transition: border-color 0.2s; }
         .reg-input:focus { border-bottom-color: rgba(255,255,255,0.4); }
         .reg-input::placeholder { color: rgba(255,255,255,0.2); }
         .reg-input-err { border-bottom-color: rgba(239,68,68,0.4) !important; }
@@ -290,17 +318,17 @@ const WorkerRegistration = () => {
         .reg-select { appearance:none; cursor:pointer; padding-right:28px; }
       `}</style>
 
-      <div style={{ paddingTop:'90px', paddingBottom:'32px', paddingLeft:'24px', paddingRight:'24px', display:'flex', flexDirection:'column', alignItems:'center', minHeight:'100vh', position:'relative', zIndex:10 }}>
+      <div className="min-h-screen px-4 md:px-12 lg:px-24 w-full flex flex-col items-center" style={{ paddingTop:'90px', paddingBottom:'32px', position:'relative', zIndex:10 }}>
 
         {/* Page Header */}
-        <div className="reg-anim" style={{ width:'100%', maxWidth:'680px', textAlign:'center', marginBottom:'16px', animationDelay:'0s' }}>
+        <div className="reg-anim" style={{ width:'100%', maxWidth:'1100px', textAlign:'center', marginBottom:'16px', animationDelay:'0s' }}>
           <p className="font-inter" style={{ fontSize:'10px', letterSpacing:'4px', color:'rgba(255,255,255,0.3)', marginBottom:'8px', textTransform:'uppercase', fontWeight:'600' }}>{t('nav.workerPortal')}</p>
           <h1 className="font-clash" style={{ fontSize:'clamp(1.5rem, 3vw, 2.2rem)', fontWeight:'900', marginBottom:'4px', letterSpacing:'-0.02em', lineHeight:'1.1' }}>{t('registration.headerTitle')}</h1>
           <p className="font-inter" style={{ fontSize:'13px', color:'rgba(255,255,255,0.4)' }}>{t('registration.headerSubtitle')}</p>
         </div>
 
         {/* Stepper */}
-        <div className="reg-anim" style={{ width:'100%', maxWidth:'680px', display:'flex', alignItems:'center', marginBottom:'16px', animationDelay:'0.1s' }}>
+        <div className="reg-anim" style={{ width:'100%', maxWidth:'1100px', display:'flex', alignItems:'center', justifyContent: 'space-between', marginBottom:'16px', animationDelay:'0.1s' }}>
           {STEPS.map((step, i) => {
             const sn = i + 1, isDone = curStep > sn, isCur = curStep === sn, Ic = step.icon;
             return (
@@ -321,7 +349,7 @@ const WorkerRegistration = () => {
         </div>
 
         {/* Form Card */}
-        <motion.div initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }} transition={{ delay:0.2, duration:0.5 }} style={{ width:'100%', maxWidth:'680px', border:'1px solid rgba(255,255,255,0.1)', borderTop:'2px solid rgba(255,255,255,0.12)', backgroundColor:'rgba(255,255,255,0.02)', boxShadow:'0 0 0 1px rgba(255,255,255,0.04), 0 24px 48px rgba(0,0,0,0.4)', overflow:'hidden', borderRadius:'2px' }}>
+        <motion.div initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }} transition={{ delay:0.2, duration:0.5 }} style={{ width:'100%', maxWidth:'1100px', border:'1px solid rgba(255,255,255,0.1)', borderTop:'2px solid rgba(255,255,255,0.12)', backgroundColor:'rgba(255,255,255,0.02)', boxShadow:'0 0 0 1px rgba(255,255,255,0.04), 0 24px 48px rgba(0,0,0,0.4)', overflow:'hidden', borderRadius:'2px' }}>
 
           {/* Progress bar */}
           <div style={{ height:'2px', backgroundColor:'rgba(255,255,255,0.03)' }}><motion.div style={{ height:'100%', backgroundColor:'rgba(0,220,110,0.5)' }} animate={{ width:`${(filled/5)*100}%` }} /></div>
@@ -336,14 +364,14 @@ const WorkerRegistration = () => {
           </div>
 
           {/* Form Fields */}
-          <div style={{ padding:'14px 24px' }}>
-            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'14px', marginBottom:'14px' }}>
+          <div style={{ padding:'24px 32px' }}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8" style={{ marginBottom:'14px' }}>
               <FormField icon={User} label={t('registration.labelName')} error={errors.fullName} completed={(formData.fullName||'').length>=2}>
-                <input name="fullName" value={formData.fullName} onChange={handleInputChange} placeholder="e.g. Raj Kumar" className={`reg-input ${errors.fullName ? 'reg-input-err' : ''}`} />
+                <input name="fullName" value={formData.fullName} onChange={handleInputChange} placeholder="e.g. Raj Kumar" className={`reg-input w-full px-3 py-2.5 text-sm ${errors.fullName ? 'reg-input-err' : ''}`} />
               </FormField>
               <FormField icon={Briefcase} label={t('registration.labelSkill')} error={errors.skillCategory} completed={!!formData.skillCategory}>
                 <div className="relative">
-                  <select name="skillCategory" value={formData.skillCategory} onChange={handleInputChange} className={`reg-input reg-select ${errors.skillCategory ? 'reg-input-err' : ''}`}>
+                  <select name="skillCategory" value={formData.skillCategory} onChange={handleInputChange} className={`reg-input reg-select w-full px-3 py-2.5 text-sm ${errors.skillCategory ? 'reg-input-err' : ''}`}>
                     <option value="">{t('registration.skillSelect')}</option>
                     {skillCategories.map(c => <option key={c} value={c} style={{ backgroundColor:'#0a0a0a' }}>{t('jobs.'+c.replace(/\s+/g,''))}</option>)}
                   </select>
@@ -351,16 +379,16 @@ const WorkerRegistration = () => {
                 </div>
               </FormField>
               <FormField icon={Calendar} label={t('registration.labelExp')} error={errors.experience} completed={formData.experience>0}>
-                <input type="number" name="experience" value={formData.experience} onChange={handleInputChange} placeholder="0" min="0" max="50" className={`reg-input ${errors.experience ? 'reg-input-err' : ''}`} />
+                <input type="number" name="experience" value={formData.experience} onChange={handleInputChange} placeholder="0" min="0" max="50" className={`reg-input w-full px-3 py-2.5 text-sm ${errors.experience ? 'reg-input-err' : ''}`} />
               </FormField>
               <FormField icon={MapPin} label={t('registration.labelCity')} error={errors.city} completed={!!formData.city}>
-                <input name="city" value={formData.city} onChange={handleInputChange} placeholder="e.g. Mumbai" className={`reg-input ${errors.city ? 'reg-input-err' : ''}`} />
+                <input name="city" value={formData.city} onChange={handleInputChange} placeholder="e.g. Mumbai" className={`reg-input w-full px-3 py-2.5 text-sm ${errors.city ? 'reg-input-err' : ''}`} />
               </FormField>
             </div>
             <div style={{ gridColumn:'1 / -1' }}>
               <FormField icon={FileText} label="Short Bio" error={errors.bio} completed={(formData.bio||'').length>=10}>
                 <div className="relative">
-                  <textarea name="bio" value={formData.bio} onChange={handleInputChange} rows="2" maxLength={64} placeholder={t('registration.bioPlaceholder')} className={`reg-input reg-textarea ${errors.bio ? 'reg-input-err' : ''}`} style={{ borderBottom:'1px solid rgba(255,255,255,0.1)', padding:'10px 0' }} />
+                  <textarea name="bio" value={formData.bio} onChange={handleInputChange} rows="2" maxLength={64} placeholder={t('registration.bioPlaceholder')} className={`reg-input reg-textarea w-full px-3 py-2.5 text-sm ${errors.bio ? 'reg-input-err' : ''}`} style={{ borderBottom:'1px solid rgba(255,255,255,0.1)' }} />
                   <span className="font-inter" style={{ position:'absolute', right:'0', bottom:'8px', fontSize:'10px', fontWeight:'700', color: (formData.bio||'').length > 55 ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.15)' }}>{(formData.bio||'').length}/64</span>
                 </div>
               </FormField>

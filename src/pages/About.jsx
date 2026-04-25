@@ -8,30 +8,30 @@ const About = () => {
     <div style={{ paddingTop: '120px', paddingLeft: '24px', paddingRight: '24px', maxWidth: '800px', margin: '0 auto', minHeight: '80vh', paddingBottom: '80px' }}>
       
       <h1 className="font-clash" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: '900', color: '#ffffff', marginBottom: '40px', textTransform: 'uppercase' }}>
-        {t('about.title', 'About TrustChain')}
+        {t('about_trustchain')}
       </h1>
 
       <div style={{ marginBottom: '40px' }}>
         <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.6)', lineHeight: '1.8' }} className="font-inter">
-          TrustChain is a decentralized credential and reputation platform for the informal economy, built on Stellar Soroban blockchain.
+          {t('about_description')}
         </p>
       </div>
 
       <div style={{ marginBottom: '40px' }}>
         <p className="font-inter uppercase" style={{ fontSize: '11px', letterSpacing: '4px', color: 'rgba(255,255,255,0.3)', marginBottom: '12px', fontWeight: 'bold' }}>
-          {t('about.missionSubtitle', 'OUR MISSION')}
+          {t('our_mission')}
         </p>
         <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.6)', lineHeight: '1.8' }} className="font-inter">
-          Empowering unbanked workers with verifiable, tamper-proof on-chain credentials.
+          {t('mission_text')}
         </p>
       </div>
 
       <div style={{ marginBottom: '40px' }}>
         <p className="font-inter uppercase" style={{ fontSize: '11px', letterSpacing: '4px', color: 'rgba(255,255,255,0.3)', marginBottom: '12px', fontWeight: 'bold' }}>
-          {t('about.builtBy', 'BUILT BY')}
+          {t('built_by')}
         </p>
         <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.6)', lineHeight: '1.8' }} className="font-inter">
-          A team passionate about financial inclusion and blockchain technology.
+          {t('built_by_text')}
         </p>
       </div>
 

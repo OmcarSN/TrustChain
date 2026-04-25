@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-
+import { usePlatformStats } from '../hooks/usePlatformStats';
 const Landing = () => {
   const { t } = useTranslation();
   const [statsVisible, setStatsVisible] = useState(false);
@@ -56,10 +56,12 @@ const Landing = () => {
     },
   ];
 
+  const { workerCount, avgRating, totalEndorsements } = usePlatformStats();
+
   const stats = [
-    { value: '8', label: t('landing.statVerifiedWorkers') },
-    { value: '2.5', label: t('landing.statAvgRating') },
-    { value: '6', label: t('landing.statTotalReviews') },
+    { value: workerCount.toString(), label: t('landing.statVerifiedWorkers') },
+    { value: avgRating.toString(), label: t('landing.statAvgRating') },
+    { value: totalEndorsements.toString(), label: t('landing.statTotalReviews') },
     { value: '100%', label: t('landing.statGaslessTxns') },
   ];
 
@@ -218,12 +220,11 @@ const Landing = () => {
          ══════════════════════════════════════════════════════════ */}
       <section style={{
         position: 'relative',
-        height: '100vh', boxSizing: 'border-box',
+        minHeight: '100vh', boxSizing: 'border-box',
         display: 'flex', flexDirection: 'column', justifyContent: 'center',
         paddingTop: '80px', paddingBottom: '0px',
         paddingLeft: '48px', paddingRight: '48px',
         backgroundColor: '#080808',
-        clipPath: 'inset(0)',
       }}>
 
         {/* Grid lines background */}
@@ -282,59 +283,62 @@ const Landing = () => {
         }} />
 
         {/* Hero text block */}
-        <div style={{ position: 'relative', zIndex: 1, marginBottom: '24px', paddingTop: '60px', paddingLeft: '24px' }}>
+        <div style={{ position: 'relative', zIndex: 1, marginBottom: '24px', paddingTop: '60px', paddingLeft: '24px', width: '100%' }}>
 
           {/* Line 1 — YOUR WORK. */}
-          <div className="font-clash hero-line-1" style={{
-            fontSize: 'clamp(3.5rem, 7.5vw, 6.5rem)', fontWeight: '900',
+          <div className="font-clash hero-line-1 text-4xl md:text-6xl lg:text-8xl font-black" style={{
+            fontWeight: '900',
             letterSpacing: '0.04em', lineHeight: '1.05',
             marginBottom: '0', display: 'block',
+            whiteSpace: 'normal', wordBreak: 'break-word', width: '100%',
           }}>
             <span>{t('landing.titleLine1')}</span>
           </div>
 
           {/* Line 2 — YOUR REPUTATION. */}
-          <div className="font-clash hero-line-2" style={{
-            fontSize: 'clamp(3.5rem, 7.5vw, 6.5rem)', fontWeight: '900',
+          <div className="font-clash hero-line-2 text-4xl md:text-6xl lg:text-8xl font-black" style={{
+            fontWeight: '900',
             letterSpacing: '0.04em', lineHeight: '1.05',
             marginBottom: '0', display: 'block',
+            whiteSpace: 'normal', wordBreak: 'break-word', width: '100%',
           }}>
             {t('landing.titleLine2')}
           </div>
 
           {/* Line 3 — ON-CHAIN FOREVER. */}
-          <div className="font-clash hero-line-3" style={{
-            fontSize: 'clamp(3.5rem, 7.5vw, 6.5rem)', fontWeight: '900',
+          <div className="font-clash hero-line-3 text-4xl md:text-6xl lg:text-8xl font-black" style={{
+            fontWeight: '900',
             letterSpacing: '0.04em', lineHeight: '1.05',
             display: 'block',
+            whiteSpace: 'normal', wordBreak: 'break-word', width: '100%', overflow: 'visible'
           }}>
             {t('landing.titleLine3')}
           </div>
         </div>
 
         {/* CTA Buttons */}
-        <div style={{
-          display: 'flex', gap: '16px', alignItems: 'center', marginTop: '40px',
+        <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto" style={{
+          alignItems: 'center', marginTop: '40px',
           position: 'relative', zIndex: 1,
           opacity: 0, animation: 'fadeSlideUp 0.6s ease forwards',
-          animationDelay: '0.6s',
+          animationDelay: '0.6s', flexWrap: 'wrap', paddingBottom: '32px'
         }}>
-          <Link to="/worker" className="hero-btn-primary font-inter" style={{
-            padding: '18px 36px', backgroundColor: '#ffffff', color: '#000000',
-            fontSize: '12px', letterSpacing: '3px', fontWeight: '800',
+          <Link to="/worker" className="hero-btn-primary font-inter w-full sm:w-auto px-6 py-3" style={{
+            backgroundColor: '#ffffff', color: '#000000',
+            letterSpacing: '3px', fontWeight: '800',
             border: 'none', cursor: 'pointer', textDecoration: 'none',
             borderRadius: '0', textTransform: 'uppercase',
-            display: 'inline-flex', alignItems: 'center',
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center'
           }}>
             <span>{t('landing.btnWorker', "I'M A WORKER")}</span>
             <span className="btn-arrow">→</span>
           </Link>
-          <Link to="/discover" className="hero-btn-secondary font-inter" style={{
-            padding: '18px 36px', backgroundColor: 'transparent', color: '#ffffff',
-            fontSize: '12px', letterSpacing: '3px', fontWeight: '700',
+          <Link to="/discover" className="hero-btn-secondary font-inter w-full sm:w-auto px-6 py-3" style={{
+            backgroundColor: 'transparent', color: '#ffffff',
+            letterSpacing: '3px', fontWeight: '700',
             border: '1px solid rgba(255,255,255,0.3)', cursor: 'pointer',
             borderRadius: '0', textDecoration: 'none', textTransform: 'uppercase',
-            display: 'inline-flex', alignItems: 'center',
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center'
           }}>
             {t('landing.btnFind', 'FIND WORKERS')}
           </Link>
@@ -364,11 +368,10 @@ const Landing = () => {
       {/* ══════════════════════════════════════════════════════════
           SECTION B — STATS BAR
          ══════════════════════════════════════════════════════════ */}
-      <section ref={statsRef} style={{
+      <section ref={statsRef} className="grid grid-cols-2 md:grid-cols-4 divide-x-0 md:divide-x divide-y md:divide-y-0 divide-zinc-800" style={{
         borderTop: '1px solid rgba(255,255,255,0.08)',
         borderBottom: '1px solid rgba(255,255,255,0.06)',
         backgroundColor: 'rgba(255,255,255,0.02)',
-        display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)',
         position: 'relative', overflow: 'hidden',
         paddingLeft: '24px', paddingRight: '24px',
         marginTop: '80px',
@@ -384,7 +387,7 @@ const Landing = () => {
           return (
             <div key={i} style={{
               padding: '20px 32px',
-              borderRight: i < 3 ? '1px solid rgba(255,255,255,0.06)' : 'none',
+              borderRight: i % 2 === 0 ? '1px solid rgba(255,255,255,0.06)' : 'none',
               textAlign: 'center',
               display: 'flex', flexDirection: 'column', alignItems: 'center',
               opacity: statsVisible ? 1 : 0,
@@ -441,7 +444,7 @@ const Landing = () => {
         </div>
 
         {/* Steps grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2px', position: 'relative', paddingBottom: '0px' }}>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4" style={{ position: 'relative', paddingBottom: '0px' }}>
           {/* Connecting dotted line between cards */}
           <div style={{
             position: 'absolute', top: '50%', left: '33%', width: '34%', height: '1px',
@@ -501,8 +504,8 @@ const Landing = () => {
       {/* ══════════════════════════════════════════════════════════
           CTA BANNER (NEW)
          ══════════════════════════════════════════════════════════ */}
-      <section style={{
-        margin: '0 24px', padding: '48px',
+      <section className="px-4 py-12 md:px-16 md:py-24" style={{
+        margin: '0 24px',
         border: '1px solid rgba(255,255,255,0.1)', borderTop: '1px solid rgba(255,255,255,0.06)', 
         backgroundColor: 'rgba(255,255,255,0.02)',
         position: 'relative', overflow: 'hidden',
@@ -514,19 +517,19 @@ const Landing = () => {
         <div style={{ position: 'absolute', bottom: 16, right: 16, width: 28, height: 28, borderBottom: '2px solid rgba(255,255,255,0.25)', borderRight: '2px solid rgba(255,255,255,0.25)' }} />
         
         <div style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
-          <h2 className="font-clash" style={{ fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', fontWeight: '800', color: '#fff', marginBottom: '8px' }}>
-            Ready to build your on-chain reputation?
+          <h2 className="font-clash text-2xl md:text-4xl font-black text-center" style={{ color: '#fff', marginBottom: '8px' }}>
+            {t('landing.ctaTitle')}
           </h2>
           <p className="font-inter" style={{ fontSize: '14px', color: 'rgba(255,255,255,0.4)', marginBottom: '32px' }}>
-            Join 8+ verified workers on TrustChain.
+            {t('landing.ctaSubtitle', { count: workerCount })}
           </p>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <Link to="/discover" className="hero-btn-primary font-inter" style={{
-              height: '48px', padding: '0 40px', backgroundColor: '#fff', color: '#000', border: 'none',
-              fontSize: '11px', letterSpacing: '2px', fontWeight: '800', textTransform: 'uppercase', textDecoration: 'none',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto', width: 'fit-content'
+            <Link to="/discover" className="hero-btn-primary font-inter w-full sm:w-auto px-8 py-4" style={{
+              backgroundColor: '#fff', color: '#000', border: 'none',
+              letterSpacing: '2px', fontWeight: '800', textTransform: 'uppercase', textDecoration: 'none',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto'
             }}>
-              EXPLORE THE NETWORK →
+              {t('landing.ctaButton')}
             </Link>
           </div>
         </div>

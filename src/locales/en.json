@@ -1,4 +1,24 @@
 {
+  "about_trustchain": "About TrustChain",
+  "about_description": "TrustChain is a decentralized credential and reputation platform for the informal economy, built on Stellar Soroban blockchain.",
+  "our_mission": "Our Mission",
+  "mission_text": "Empowering unbanked workers with verifiable, tamper-proof on-chain credentials.",
+  "built_by": "Built By",
+  "built_by_text": "A team passionate about financial inclusion and blockchain technology.",
+  "mission_page_title": "Our Mission",
+  "mission_quote": "\"Verified reputation for every worker, regardless of where they are.\"",
+  "the_problem": "The Problem",
+  "problem_text": "2B+ informal economy workers have no way to prove their skills or track record.",
+  "the_solution": "The Solution",
+  "solution_text": "Soulbound credentials on Stellar blockchain — permanent, tamper-proof, verifiable by anyone.",
+  "the_vision": "The Vision",
+  "vision_text": "A world where your work history belongs to you, not a platform.",
+  "contact_us": "Contact Us",
+  "contact_support_text": "For support or partnerships, reach out via GitHub.",
+  "about": "About",
+  "mission": "Mission",
+  "contact": "Contact",
+  "community": "Community",
   "nav": {
     "home": "Home",
     "discover": "Find Workers",
@@ -85,7 +105,10 @@
     "statVerifiedWorkers": "VERIFIED WORKERS",
     "statAvgRating": "AVG RATING",
     "statTotalReviews": "TOTAL REVIEWS",
-    "statGaslessTxns": "GASLESS TXNS"
+    "statGaslessTxns": "GASLESS TXNS",
+    "ctaTitle": "Ready to build your on-chain reputation?",
+    "ctaSubtitle": "Join {{count}}+ verified workers on TrustChain.",
+    "ctaButton": "EXPLORE THE NETWORK →"
   },
   "dashboard": {
     "searchPlaceholder": "Search or enter address...",
