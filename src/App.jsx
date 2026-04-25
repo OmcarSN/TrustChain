@@ -15,6 +15,9 @@ import WorkerProfile from './pages/WorkerProfile';
 import NotFound from './pages/NotFound';
 import DiscoverWorkers from './pages/DiscoverWorkers';
 import AdminLogs from './pages/AdminLogs';
+import About from './pages/About';
+import Mission from './pages/Mission';
+import Contact from './pages/Contact';
 
 // Page Transition Wrapper
 const PageWrapper = ({ children }) => (
@@ -39,6 +42,7 @@ const App = () => {
           <Routes location={location} key={location.pathname}>
             <Route path="/" element={<PageWrapper><Landing /></PageWrapper>} />
             <Route path="/worker" element={<PageWrapper><WorkerRegistration /></PageWrapper>} />
+            <Route path="/worker-portal" element={<PageWrapper><WorkerRegistration /></PageWrapper>} />
             <Route path="/endorse" element={<PageWrapper><Endorse /></PageWrapper>} />
             <Route path="/verify" element={<PageWrapper><Verify /></PageWrapper>} />
             <Route path="/dashboard" element={<PageWrapper><Dashboard /></PageWrapper>} />
@@ -47,6 +51,10 @@ const App = () => {
             <Route path="/discover" element={<PageWrapper><DiscoverWorkers /></PageWrapper>} />
             <Route path="/profile/:address" element={<PageWrapper><WorkerProfile /></PageWrapper>} />
             
+            <Route path="/about" element={<PageWrapper><About /></PageWrapper>} />
+            <Route path="/mission" element={<PageWrapper><Mission /></PageWrapper>} />
+            <Route path="/contact" element={<PageWrapper><Contact /></PageWrapper>} />
+
             {/* Hidden Admin Route */}
             <Route path="/admin/logs" element={<PageWrapper><AdminLogs /></PageWrapper>} />
             

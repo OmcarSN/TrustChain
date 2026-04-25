@@ -4,7 +4,6 @@ import { ShieldCheck, Users, Activity, BarChart3, Globe, RefreshCw, Clock, Trend
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { useWallet } from '../context/WalletContext';
 import { fetchAllCredentialEvents } from '../services/indexer';
-import MetricCard from '../components/MetricCard';
 import ActivityFeed from '../components/ActivityFeed';
 import { useTranslation } from 'react-i18next';
 
@@ -44,68 +43,196 @@ const Analytics = () => {
     update(); const iv = setInterval(update, 1000); return () => clearInterval(iv);
   }, [lastIndexed]);
 
+  const statCards = [
+    { title: t('analytics.statCreds'), value: metrics.totalCredentials, subtitle: t('analytics.contractIndex'), icon: ShieldCheck },
+    { title: t('analytics.statTotalUsers'), value: metrics.activeWallets, subtitle: t('analytics.uniqueParticipants'), icon: Users },
+    { title: t('analytics.txToday'), value: metrics.todayTx, subtitle: t('analytics.past24h'), icon: Zap, trend: metrics.todayTx > 0 ? 12 : 0 },
+    { title: t('analytics.networkStatus'), value: '100', subtitle: t('analytics.stellarOps'), icon: Globe, isGreen: true },
+  ];
+
   return (
-    <div className="min-h-screen bg-[#050505] pt-28 pb-12 px-6 lg:px-12 relative overflow-hidden text-white">
+    <div className="min-h-screen bg-[#050505] relative overflow-hidden text-white">
+      {/* Ambient glow */}
       <div className="absolute rounded-full pointer-events-none" style={{ top: '-80px', right: '-80px', width: '400px', height: '400px', background: '#f97316', filter: 'blur(120px)', opacity: 0.04 }} />
       <div className="absolute rounded-full pointer-events-none" style={{ bottom: '-80px', left: '-80px', width: '400px', height: '400px', background: '#1e3a8a', filter: 'blur(120px)', opacity: 0.05 }} />
 
-      <div className="max-w-7xl mx-auto relative z-10">
-        {/* Header */}
-        <div className="mb-5 flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-8 h-8 rounded-[2px] bg-white/5 border border-white/10 flex items-center justify-center"><Layers className="w-4 h-4 text-white/40" /></div>
-              <div className="flex items-center gap-2 px-2.5 py-1 border border-white/10 rounded-[2px]"><div className="w-1.5 h-1.5 rounded-full bg-white/40" /><span className="text-[9px] font-bold uppercase tracking-wider text-white/40">Testnet</span></div>
+      {/* Page Wrapper */}
+      <div style={{ paddingTop: '80px', paddingLeft: '24px', paddingRight: '24px', maxWidth: '1400px', margin: '0 auto', position: 'relative', zIndex: 10, paddingBottom: '48px' }}>
+
+        {/* ═══ FIX 1: Page Header ═══ */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          style={{ marginBottom: '20px' }}
+        >
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-end', gap: '16px' }}>
+            <div>
+              <p className="font-inter" style={{ fontSize: '11px', letterSpacing: '4px', color: 'rgba(255,255,255,0.3)', marginBottom: '8px', textTransform: 'uppercase', fontWeight: '600' }}>
+                NETWORK INSIGHTS
+              </p>
+              <h1 className="font-clash" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.6rem)', fontWeight: '900', marginBottom: '6px', letterSpacing: '-0.02em', lineHeight: '1.1' }}>
+                {t('analytics.headerTitle')}
+              </h1>
+              <p className="font-inter" style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)' }}>
+                <Globe style={{ width: '14px', height: '14px', display: 'inline', verticalAlign: 'text-bottom', marginRight: '8px', opacity: 0.5 }} />
+                {t('analytics.headerSubtitle')}
+              </p>
             </div>
-            <h1 className="font-clash text-3xl md:text-4xl font-bold tracking-tighter mb-1.5">{t('analytics.headerTitle')}</h1>
-            <p className="text-white/25 text-sm font-inter flex items-center gap-2"><Globe className="w-3.5 h-3.5 text-white/20" /> {t('analytics.headerSubtitle')}</p>
-          </motion.div>
-
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.15 }} className="flex items-center gap-3">
-            <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-[2px] border border-white/[0.07] bg-white/[0.02]">
-              <Clock className="w-3.5 h-3.5 text-white/20" />
-              <span className="text-[10px] font-bold uppercase tracking-wider text-white/30 font-inter">{t('analytics.indexed')} <span className="text-white/50">{timeSinceIndex}</span></span>
-            </div>
-            <button onClick={() => loadData(true)} disabled={isRefreshing}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-[2px] font-bold text-[10px] uppercase tracking-wider border border-white/10 text-white/40 hover:text-white hover:border-white/30 transition-all disabled:opacity-40">
-              <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin' : ''}`} /> {t('analytics.indexNow')}
-            </button>
-          </motion.div>
-        </div>
-
-        {/* Metric Cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
-          <MetricCard title={t('analytics.statCreds')} value={metrics.totalCredentials} subtitle={t('analytics.contractIndex')} icon={ShieldCheck} delay={0} />
-          <MetricCard title={t('analytics.statTotalUsers')} value={metrics.activeWallets} subtitle={t('analytics.uniqueParticipants')} icon={Users} delay={1} />
-          <MetricCard title={t('analytics.txToday')} value={metrics.todayTx} subtitle={t('analytics.past24h')} icon={Zap} delay={2} trend={metrics.todayTx > 0 ? 12 : 0} />
-          <MetricCard title={t('analytics.networkStatus')} value="100%" subtitle={t('analytics.stellarOps')} icon={Globe} delay={3} />
-        </div>
-
-        {/* Chart + Feed */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-            className="lg:col-span-2 rounded-[2px] overflow-hidden flex flex-col h-full border border-white/[0.07] bg-white/[0.02]">
-            <div className="flex items-center justify-between p-5 pb-0">
-              <div className="flex items-center gap-3">
-                <div className="w-7 h-7 rounded-[2px] bg-white/5 border border-white/10 flex items-center justify-center"><TrendingUp className="w-3.5 h-3.5 text-white/30" /></div>
-                <div><h3 className="text-sm font-bold tracking-tight font-inter mb-0.5">{t('analytics.chartTitle')}</h3><p className="text-[9px] text-white/20 uppercase tracking-wider font-inter">{t('analytics.overview7d')}</p></div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 14px', border: '1px solid rgba(255,255,255,0.15)', backgroundColor: 'rgba(255,255,255,0.02)' }}>
+                <Clock style={{ width: '12px', height: '12px', color: 'rgba(255,255,255,0.2)' }} />
+                <span className="font-inter" style={{ fontSize: '10px', fontWeight: '700', letterSpacing: '2px', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase' }}>
+                  {t('analytics.indexed')} <span style={{ color: 'rgba(255,255,255,0.5)' }}>{timeSinceIndex}</span>
+                </span>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="flex items-center rounded-[2px] overflow-hidden border border-white/10">
-                  {['area','bar'].map(ct => (
-                    <button key={ct} onClick={() => setChartType(ct)} className={`px-3 py-1.5 text-[9px] font-bold uppercase tracking-wider transition-all ${chartType===ct ? 'bg-white text-black' : 'text-white/30 hover:text-white/50'}`}>{ct === 'area' ? 'Area' : 'Bar'}</button>
+              <button
+                onClick={() => loadData(true)}
+                disabled={isRefreshing}
+                className="hover:text-white hover:border-white/40"
+                style={{
+                  display: 'flex', alignItems: 'center', gap: '8px',
+                  padding: '6px 14px', border: '1px solid rgba(255,255,255,0.15)',
+                  background: 'transparent', color: 'rgba(255,255,255,0.4)',
+                  fontSize: '10px', fontWeight: '800', letterSpacing: '2px',
+                  textTransform: 'uppercase', cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  opacity: isRefreshing ? 0.4 : 1
+                }}
+              >
+                <RefreshCw style={{ width: '12px', height: '12px' }} className={isRefreshing ? 'animate-spin' : ''} />
+                {t('analytics.indexNow')}
+              </button>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* ═══ FIX 2: Stats Row ═══ */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px', marginBottom: '24px', alignItems: 'stretch' }}>
+          {statCards.map((card, idx) => {
+            const Icon = card.icon;
+            const isStr = typeof card.value === 'string';
+            return (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.05 + idx * 0.05, duration: 0.45 }}
+                style={{
+                  padding: '20px 20px',
+                  border: '1px solid rgba(255,255,255,0.08)',
+                  borderTop: '2px solid rgba(255,255,255,0.12)',
+                  backgroundColor: 'rgba(255,255,255,0.03)',
+                  cursor: 'default',
+                  transition: 'all 0.2s ease'
+                }}
+                className="group hover:border-white/[0.2] hover:bg-white/[0.05] hover:-translate-y-0.5"
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                  <p className="font-inter" style={{ fontSize: '9px', letterSpacing: '3px', color: 'rgba(255,255,255,0.35)', fontWeight: '700', textTransform: 'uppercase' }}>
+                    {card.title}
+                  </p>
+                  <div style={{ width: '28px', height: '28px', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Icon style={{ width: '14px', height: '14px', color: 'rgba(255,255,255,0.25)' }} />
+                  </div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                  <h2 className="font-clash" style={{ fontSize: 'clamp(2rem, 3.5vw, 2.8rem)', fontWeight: '900', lineHeight: '1', letterSpacing: '-0.02em', color: card.isGreen ? '#00dc6e' : '#ffffff' }}>
+                    {isStr ? card.value : card.value.toLocaleString()}
+                  </h2>
+                  {card.trend > 0 && (
+                    <span style={{
+                      fontSize: '11px', color: '#00dc6e',
+                      backgroundColor: 'rgba(0,220,110,0.1)',
+                      border: '1px solid rgba(0,220,110,0.2)',
+                      padding: '2px 8px', display: 'inline-flex', alignItems: 'center', gap: '4px',
+                      fontWeight: '700'
+                    }}>
+                      <TrendingUp style={{ width: '11px', height: '11px' }} />
+                      {card.trend}%
+                    </span>
+                  )}
+                </div>
+                <p className="font-inter" style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', letterSpacing: '1px', marginTop: '6px' }}>
+                  {card.subtitle}
+                </p>
+                {card.isGreen && (
+                  <span style={{
+                    fontSize: '10px', color: '#00dc6e',
+                    backgroundColor: 'rgba(0,220,110,0.1)',
+                    border: '1px solid rgba(0,220,110,0.25)',
+                    padding: '3px 10px', display: 'inline-block', marginTop: '6px',
+                    fontWeight: '600', letterSpacing: '1.5px'
+                  }}>
+                    Stellar Testnet Operational
+                  </span>
+                )}
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* ═══ FIX 3+4+5: Chart + Activity Feed Row ═══ */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '20px', alignItems: 'stretch' }}>
+
+          {/* ═══ FIX 4: Chart Panel ═══ */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+            style={{
+              padding: '20px 24px',
+              border: '1px solid rgba(255,255,255,0.08)',
+              backgroundColor: 'rgba(255,255,255,0.02)',
+            }}
+          >
+            {/* Chart Header */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{ width: '28px', height: '28px', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <TrendingUp style={{ width: '14px', height: '14px', color: 'rgba(255,255,255,0.3)' }} />
+                  </div>
+                  <h3 className="font-inter" style={{ fontSize: '15px', fontWeight: '700' }}>{t('analytics.chartTitle')}</h3>
+                </div>
+                <p className="font-inter" style={{ fontSize: '10px', letterSpacing: '3px', color: 'rgba(255,255,255,0.3)', marginTop: '4px', textTransform: 'uppercase' }}>
+                  {t('analytics.overview7d')}
+                </p>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ display: 'flex', overflow: 'hidden' }}>
+                  {['area', 'bar'].map(ct => (
+                    <button
+                      key={ct}
+                      onClick={() => setChartType(ct)}
+                      style={{
+                        padding: '4px 12px', height: '28px',
+                        border: '1px solid rgba(255,255,255,0.15)',
+                        fontSize: '10px', fontWeight: '800', letterSpacing: '1px',
+                        textTransform: 'uppercase', cursor: 'pointer',
+                        transition: 'all 0.15s ease',
+                        backgroundColor: chartType === ct ? '#ffffff' : 'transparent',
+                        color: chartType === ct ? '#000000' : 'rgba(255,255,255,0.3)',
+                        marginLeft: ct === 'bar' ? '-1px' : '0'
+                      }}
+                    >
+                      {ct === 'area' ? 'Area' : 'Bar'}
+                    </button>
                   ))}
                 </div>
-                <div className="px-3 py-1.5 rounded-[2px] border border-white/10">
-                  <span className="text-[10px] font-bold text-white/50 font-inter">{metrics.totalCredentials}</span>
-                  <span className="text-[9px] text-white/20 font-bold ml-1.5 uppercase tracking-wider">{t('analytics.total')}</span>
+                <div style={{ padding: '4px 12px', border: '1px solid rgba(255,255,255,0.1)', fontSize: '11px', letterSpacing: '1px', height: '28px', display: 'flex', alignItems: 'center' }}>
+                  <span className="font-inter" style={{ fontWeight: '700', color: 'rgba(255,255,255,0.4)' }}>{metrics.totalCredentials}</span>
+                  <span className="font-inter" style={{ fontWeight: '700', color: 'rgba(255,255,255,0.2)', marginLeft: '6px', textTransform: 'uppercase' }}>{t('analytics.total')}</span>
                 </div>
               </div>
             </div>
-            <div className="flex-1 w-full min-h-[240px] p-4 pt-2">
+
+            {/* Chart Canvas */}
+            <div style={{ marginTop: '16px', height: '280px' }}>
               {metrics.loading && !metrics.trendData.length ? (
-                <div className="w-full h-full flex flex-col items-center justify-center text-white/20 text-sm">
-                  <RefreshCw className="w-6 h-6 animate-spin mb-4 text-white/20" /><span className="text-xs uppercase tracking-widest font-bold font-inter">{t('analytics.indexingData')}</span>
+                <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                  <RefreshCw className="animate-spin" style={{ width: '24px', height: '24px', color: 'rgba(255,255,255,0.2)', marginBottom: '16px' }} />
+                  <span className="font-inter" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '3px', fontWeight: '700', color: 'rgba(255,255,255,0.2)' }}>{t('analytics.indexingData')}</span>
                 </div>
               ) : chartType === 'area' ? (
                 <ResponsiveContainer width="100%" height="100%">
@@ -133,9 +260,16 @@ const Analytics = () => {
             </div>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }} className="min-h-[340px]">
+          {/* ═══ FIX 5+6+7: Activity Feed Panel ═══ */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.35, duration: 0.5 }}
+            style={{ maxWidth: '100%', overflow: 'hidden' }}
+          >
             <ActivityFeed activities={metrics.recentActivity} loading={metrics.loading} />
           </motion.div>
+
         </div>
       </div>
     </div>

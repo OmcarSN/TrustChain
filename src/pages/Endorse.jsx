@@ -12,12 +12,6 @@ import { useWallet } from '../context/WalletContext';
 import { useToast } from '../context/ToastContext';
 import { useTranslation } from 'react-i18next';
 
-const STEPS = [
-  { icon: Search,  label: 'endorse.step1' },
-  { icon: PenLine, label: 'endorse.step2' },
-  { icon: Send,    label: 'endorse.step3' },
-];
-
 const Endorse = () => {
   const toast = useToast();
   const { walletAddress, isConnected, connect } = useWallet();
@@ -35,7 +29,6 @@ const Endorse = () => {
   const [txHash, setTxHash] = useState('');
   const [error, setError] = useState(null);
 
-  const currentStep = isSuccess ? 3 : (foundWorker ? 2 : 1);
   const ratingLabels = ['', t('endorse.ratingPoor'), t('endorse.ratingFair'), t('endorse.ratingGood'), t('endorse.ratingGreat'), t('endorse.ratingOutstanding')];
   const canSubmit = isConnected && foundWorker && rating > 0 && jobType && feedback.length >= 20;
   const activeStarValue = hoveredStar || rating;
@@ -86,309 +79,233 @@ const Endorse = () => {
   /* Not connected */
   if (!isConnected) {
     return (
-      <div className="min-h-screen bg-[#050505] pt-28 pb-12 px-6 lg:px-12 flex items-center justify-center relative overflow-hidden text-white">
+      <div className="min-h-screen bg-[#050505] relative overflow-hidden text-white" style={{ paddingTop: '100px', paddingBottom: '80px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', paddingLeft: '24px', paddingRight: '24px' }}>
         <div className="absolute rounded-full pointer-events-none" style={{ top: '-80px', left: '-80px', width: '400px', height: '400px', background: '#f97316', filter: 'blur(120px)', opacity: 0.04 }} />
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center max-w-md">
-          <div className="w-14 h-14 rounded-[2px] bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-6">
-            <Award className="w-7 h-7 text-white/30" />
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ textAlign: 'center', maxWidth: '400px' }}>
+          <div style={{ width: '56px', height: '56px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}>
+            <Award style={{ width: '24px', height: '24px', color: 'rgba(255,255,255,0.3)' }} />
           </div>
-          <h2 className="font-clash text-3xl font-bold mb-3 tracking-tighter">{t('endorse.headerTitle')}</h2>
-          <p className="text-white/30 mb-8 text-sm font-inter font-light">{t('endorse.headerSubtitle')}</p>
-          <button onClick={connect} className="w-full py-4 bg-white text-black rounded-[2px] font-bold uppercase tracking-[0.15em] text-[11px] hover:opacity-85 transition-opacity flex items-center justify-center gap-2">
-            <Wallet className="w-4 h-4" /> {t('dashboard.connectBtn')}
+          <h2 className="font-clash" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.6rem)', fontWeight: '900', marginBottom: '8px' }}>{t('endorse.headerTitle')}</h2>
+          <p className="font-inter" style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)', marginBottom: '32px' }}>{t('endorse.headerSubtitle')}</p>
+          <button onClick={connect} style={{ width: '100%', padding: '15px', backgroundColor: '#ffffff', color: '#000000', border: 'none', fontSize: '11px', letterSpacing: '3px', fontWeight: '800', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', textTransform: 'uppercase' }}>
+            <Wallet style={{ width: '14px', height: '14px' }} /> {t('dashboard.connectBtn')}
           </button>
         </motion.div>
       </div>
     );
   }
 
+  const labelStyle = { fontSize: '9px', letterSpacing: '3px', color: 'rgba(255,255,255,0.3)', fontWeight: '700', textTransform: 'uppercase', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' };
+  const inputStyle = { width: '100%', padding: '11px 14px', backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', color: '#ffffff', fontSize: '13px', outline: 'none' };
+
   return (
-    <div className="min-h-screen bg-[#050505] pt-28 pb-12 px-6 lg:px-12 relative overflow-hidden text-white">
-      {/* Light leaks */}
+    <div className="min-h-screen bg-[#050505] relative overflow-hidden text-white">
       <div className="absolute rounded-full pointer-events-none" style={{ top: '-80px', left: '20%', width: '400px', height: '400px', background: '#f97316', filter: 'blur(120px)', opacity: 0.04 }} />
       <div className="absolute rounded-full pointer-events-none" style={{ bottom: '-80px', right: '-80px', width: '400px', height: '400px', background: '#1e3a8a', filter: 'blur(120px)', opacity: 0.05 }} />
 
-      <div className="max-w-6xl mx-auto relative z-10">
-        {/* Header */}
-        <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="mb-4 border border-white/[0.07] rounded-[2px] p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-[2px] bg-white/5 border border-white/10 flex items-center justify-center">
-                <Award className="w-4 h-4 text-white/40" />
-              </div>
-              <div>
-                <h1 className="font-clash text-lg font-bold tracking-tighter">{t('endorse.headerTitle')}</h1>
-                <p className="text-[9px] text-white/25 font-inter hidden sm:block">{t('endorse.headerSubtitle')}</p>
-              </div>
+      <style>{`
+        @keyframes endFadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        .end-anim { opacity:0; animation: endFadeUp 0.4s ease forwards; }
+        .end-input:focus { border-color: rgba(255,255,255,0.3) !important; }
+        .end-input::placeholder { color: rgba(255,255,255,0.2); }
+        .end-star { transition: all 0.15s ease; cursor: pointer; }
+        .end-star:hover { transform: scale(1.15); }
+        .end-find-btn { transition: all 0.2s ease; }
+        .end-find-btn:hover { background-color: #e8e8e8 !important; }
+        .end-submit:hover:not(:disabled) { background-color: #e8e8e8 !important; transform: translateY(-1px); }
+        .end-submit { transition: all 0.2s ease; }
+      `}</style>
+
+      <div style={{ paddingTop: '100px', paddingBottom: '80px', display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh', paddingLeft: '24px', paddingRight: '24px', position: 'relative', zIndex: 10 }}>
+
+        {/* Page Header */}
+        <div className="end-anim" style={{ textAlign: 'center', marginBottom: '36px', animationDelay: '0s' }}>
+          <p className="font-inter" style={{ fontSize: '10px', letterSpacing: '4px', color: 'rgba(255,255,255,0.3)', marginBottom: '8px', textTransform: 'uppercase', fontWeight: '600' }}>{t('nav.workerPortal')}</p>
+          <h1 className="font-clash" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.6rem)', fontWeight: '900', color: '#ffffff', marginBottom: '6px' }}>{t('endorse.header')}</h1>
+          <p className="font-inter" style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)' }}>{t('endorse.headerSubtitle')}</p>
+        </div>
+
+        {/* Two Column Card */}
+        <div className="end-anim" style={{ width: '100%', maxWidth: '900px', display: 'grid', gridTemplateColumns: '300px 1fr', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.02)', borderTop: '2px solid rgba(255,255,255,0.12)', overflow: 'hidden', animationDelay: '0.15s', animationDuration: '0.5s' }}>
+
+          {/* ═══ LEFT PANEL — Find Worker ═══ */}
+          <div style={{ borderRight: '1px solid rgba(255,255,255,0.08)', padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {/* Panel header */}
+            <div style={{ ...labelStyle, marginBottom: '0' }}>
+              <Search style={{ width: '12px', height: '12px', color: 'rgba(255,255,255,0.2)' }} />
+              {t('endorse.findWorkerLabel')}
             </div>
 
-            {/* Steps */}
-            <div className="hidden md:flex items-center gap-0">
-              {STEPS.map((step, i) => {
-                const stepNum = i + 1;
-                const isActive = currentStep >= stepNum;
-                const isCurrent = currentStep === stepNum;
-                const Icon = step.icon;
-                return (
-                  <React.Fragment key={i}>
-                    {i > 0 && (
-                      <div className="w-8 h-px relative mx-0.5 bg-white/5">
-                        <motion.div className="absolute inset-y-0 left-0 bg-white/40" initial={{ width: '0%' }} animate={{ width: isActive ? '100%' : '0%' }} transition={{ duration: 0.4 }} />
-                      </div>
-                    )}
-                    <div className={`flex items-center gap-1 px-2.5 py-1.5 rounded-[2px] text-[8px] font-bold uppercase tracking-wider transition-all ${
-                      isCurrent ? 'bg-white text-black' : isActive ? 'text-white/40' : 'text-white/15'
-                    }`}>
-                      <div className={`w-4 h-4 rounded-[2px] flex items-center justify-center ${
-                        isCurrent ? 'bg-black text-white' : isActive ? 'bg-white/20 text-white/60' : 'bg-white/5 text-white/15'
-                      }`}>
-                        {isActive && !isCurrent ? <CheckCircle2 className="w-2.5 h-2.5" /> : <Icon className="w-2.5 h-2.5" />}
-                      </div>
-                      {t(step.label)}
-                    </div>
-                  </React.Fragment>
-                );
-              })}
-            </div>
+            {/* Search input */}
+            <input
+              type="text" placeholder={t('endorse.searchPlaceholder')} value={workerSearch}
+              onChange={(e) => setWorkerSearch(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+              className="end-input font-inter" style={inputStyle}
+            />
 
-            {/* Wallet badge */}
-            <div className="flex items-center gap-2 border border-white/10 px-3 py-1.5 rounded-[2px]">
-              <div className="w-1.5 h-1.5 rounded-full bg-green-400" />
-              <span className="font-mono text-[10px] text-white/40">{truncAddr(walletAddress)}</span>
-            </div>
-          </div>
-        </motion.div>
+            {/* Find Worker button */}
+            <button onClick={handleSearch} disabled={isSearching || !workerSearch} className="end-find-btn font-inter"
+              style={{ padding: '10px 16px', backgroundColor: '#ffffff', color: '#000000', border: 'none', fontSize: '11px', letterSpacing: '2px', fontWeight: '700', width: '100%', cursor: !workerSearch ? 'not-allowed' : 'pointer', opacity: !workerSearch ? 0.4 : 1, textTransform: 'uppercase', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+              {isSearching ? <Loader2 style={{ width: '14px', height: '14px' }} className="animate-spin" /> : <><Search style={{ width: '12px', height: '12px' }} /> {t('endorse.findWorkerLabel')}</>}
+            </button>
 
-        {/* Main Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 items-start">
-          {/* Left: Search + Worker Card */}
-          <div className="lg:col-span-4 space-y-3 lg:sticky lg:top-28">
-            {/* Search */}
-            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-              className="p-4 border border-white/[0.07] rounded-[2px] bg-white/[0.02]">
-              <label className="text-[9px] font-bold uppercase tracking-[0.15em] text-white/30 flex items-center gap-1 mb-3 font-inter">
-                <Search className="w-3 h-3" /> {t('endorse.findWorkerLabel')}
-              </label>
-              <div className="flex gap-2">
-                <input type="text" placeholder={t('dashboard.searchPlaceholder')} value={workerSearch}
-                  onChange={(e) => setWorkerSearch(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                  className="w-full bg-transparent border-0 border-b border-white/20 py-2.5 text-xs focus:outline-none focus:border-white/60 text-white placeholder:text-white/20 font-mono" />
-                <button onClick={handleSearch} disabled={isSearching || !workerSearch}
-                  className="px-3 bg-white text-black rounded-[2px] hover:opacity-85 transition-all disabled:opacity-30 shrink-0">
-                  {isSearching ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
-                </button>
-              </div>
-              {error && (
-                <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                  className="text-red-400/80 text-[10px] mt-2 font-bold flex items-center gap-1.5 border border-red-400/20 px-2.5 py-1.5 rounded-[2px] font-inter">
-                  <AlertCircle className="w-3 h-3 shrink-0" /> {error}
-                </motion.p>
-              )}
-            </motion.div>
+            {error && (
+              <p className="font-inter" style={{ color: 'rgba(255,80,80,0.8)', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <AlertCircle style={{ width: '12px', height: '12px', flexShrink: 0 }} /> {error}
+              </p>
+            )}
 
-            {/* Worker Card */}
+            {/* Worker card or empty state */}
             <AnimatePresence mode="wait">
               {foundWorker ? (
-                <motion.div key="worker-card" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-                  className="border border-white/[0.07] rounded-[2px] bg-white/[0.02] p-4">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 rounded-[2px] bg-white/5 border border-white/10 flex items-center justify-center relative shrink-0">
-                      <User className="w-5 h-5 text-white/30" />
-                      <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-green-400 border-2 border-[#050505] flex items-center justify-center">
-                        <CheckCircle2 className="w-2 h-2 text-black" />
-                      </div>
+                <motion.div key="found" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+                  style={{ padding: '16px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.03)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
+                    <div style={{ width: '36px', height: '36px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <User style={{ width: '16px', height: '16px', color: 'rgba(255,255,255,0.2)' }} />
                     </div>
-                    <div className="min-w-0">
-                      <h3 className="text-sm font-bold truncate">{foundWorker.name}</h3>
-                      <div className="flex items-center gap-1 text-white/30 text-[10px]"><MapPin className="w-2.5 h-2.5" /> {foundWorker.city}</div>
+                    <div style={{ minWidth: 0 }}>
+                      <p style={{ fontSize: '14px', fontWeight: '700', color: '#ffffff', marginBottom: '2px' }}>{foundWorker.name}</p>
+                      <p className="font-inter" style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)' }}>{foundWorker.skill} · {foundWorker.city}</p>
                     </div>
                   </div>
-                  <div className="space-y-1.5">
-                    <div className="flex justify-between items-center p-2.5 border border-white/5 rounded-[2px]">
-                      <span className="text-[8px] font-bold uppercase tracking-wider text-white/20 font-inter">{t('endorse.skillLabel')}</span>
-                      <span className="text-[11px] font-bold text-white/60">{foundWorker.skill}</span>
-                    </div>
-                    {foundWorker.experience && foundWorker.experience !== '—' && (
-                      <div className="flex justify-between items-center p-2.5 border border-white/5 rounded-[2px]">
-                        <span className="text-[8px] font-bold uppercase tracking-wider text-white/20 font-inter">{t('endorse.experienceLabel')}</span>
-                        <span className="text-[11px] font-bold text-white/60">{foundWorker.experience}</span>
-                      </div>
-                    )}
-                    {foundWorker.bio && (
-                      <div className="p-2.5 border border-white/5 rounded-[2px]">
-                        <p className="text-[8px] font-bold uppercase tracking-wider text-white/20 mb-1 font-inter">{t('endorse.bioLabel')}</p>
-                        <p className="text-[10px] text-white/30 leading-relaxed font-inter">{foundWorker.bio}</p>
-                      </div>
-                    )}
-                  </div>
-                  <div className="mt-3 pt-2 border-t border-white/5 flex items-center gap-1.5">
-                    <Hash className="w-2.5 h-2.5 text-white/10" />
-                    <span className="text-[8px] font-mono text-white/10 truncate">{foundWorker.address}</span>
-                  </div>
+                  <span style={{ fontSize: '9px', letterSpacing: '2px', color: '#00dc6e', backgroundColor: 'rgba(0,220,110,0.08)', border: '1px solid rgba(0,220,110,0.25)', padding: '3px 10px', fontWeight: '700', textTransform: 'uppercase' }} className="font-inter">● {t('discover.verified')}</span>
                 </motion.div>
               ) : (
-                <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}
-                  className="p-6 rounded-[2px] border border-dashed border-white/5 flex flex-col items-center justify-center text-center">
-                  <div className="w-10 h-10 rounded-[2px] bg-white/[0.03] flex items-center justify-center mb-2">
-                    <User className="w-5 h-5 text-white/10" />
+                <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}
+                  style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '32px 0' }}>
+                  <div style={{ width: '56px', height: '56px', border: '1px solid rgba(255,255,255,0.08)', backgroundColor: 'rgba(255,255,255,0.03)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '12px' }}>
+                    <User style={{ width: '22px', height: '22px', color: 'rgba(255,255,255,0.15)' }} />
                   </div>
-                  <p className="text-white/15 text-[10px] font-bold uppercase tracking-wider font-inter">{t('endorse.noWorkerSelected')}</p>
+                  <p className="font-inter" style={{ fontSize: '9px', letterSpacing: '3px', color: 'rgba(255,255,255,0.2)', textTransform: 'uppercase' }}>{t('endorse.noWorkerSelected')}</p>
                 </motion.div>
               )}
             </AnimatePresence>
           </div>
 
-          {/* Right: Form */}
-          <div className="lg:col-span-8">
-            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
-              className="relative border border-white/[0.07] rounded-[2px] bg-white/[0.02] overflow-hidden">
-              {/* Locked overlay */}
-              <AnimatePresence>
-                {!foundWorker && (
-                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                    className="absolute inset-0 bg-[#050505]/80 z-10 flex flex-col items-center justify-center rounded-[2px] gap-2">
-                    <div className="w-10 h-10 rounded-[2px] bg-white/5 border border-white/10 flex items-center justify-center">
-                      <Search className="w-5 h-5 text-white/15" />
+          {/* ═══ RIGHT PANEL — Form ═══ */}
+          <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px', position: 'relative' }}>
+            {/* Locked overlay */}
+            <AnimatePresence>
+              {!foundWorker && (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                  style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(5,5,5,0.8)', zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                  <Search style={{ width: '20px', height: '20px', color: 'rgba(255,255,255,0.15)' }} />
+                  <p className="font-inter" style={{ fontSize: '9px', letterSpacing: '3px', color: 'rgba(255,255,255,0.15)', textTransform: 'uppercase', fontWeight: '700' }}>{t('endorse.searchByAddress')}</p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Panel header */}
+            <div style={{ fontSize: '9px', letterSpacing: '4px', color: 'rgba(255,255,255,0.3)', paddingBottom: '16px', borderBottom: '1px solid rgba(255,255,255,0.06)', textTransform: 'uppercase', fontWeight: '700' }} className="font-inter">
+              {t('endorse.formTitle')}
+            </div>
+
+            {/* Rating */}
+            <div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                <label className="font-inter" style={labelStyle}><Star style={{ width: '12px', height: '12px' }} /> {t('endorse.ratingFieldLabel')}</label>
+                {activeStarValue > 0 && <span className="font-inter" style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', border: '1px solid rgba(255,255,255,0.1)', padding: '2px 8px' }}>{ratingLabels[activeStarValue]}</span>}
+              </div>
+              <div style={{ display: 'flex', gap: '4px' }}>
+                {[1,2,3,4,5].map(s => (
+                  <button key={s} onClick={() => setRating(s)} onMouseEnter={() => setHoveredStar(s)} onMouseLeave={() => setHoveredStar(0)}
+                    className="end-star" style={{ background: 'none', border: 'none', padding: '4px' }}>
+                    <Star style={{ width: '22px', height: '22px', color: activeStarValue >= s ? '#f5a623' : 'rgba(255,255,255,0.15)', fill: activeStarValue >= s ? '#f5a623' : 'transparent' }} />
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Job Type */}
+            <div>
+              <label className="font-inter" style={labelStyle}><Briefcase style={{ width: '12px', height: '12px' }} /> {t('jobTypes.label')}</label>
+              <div style={{ position: 'relative' }}>
+                <select value={jobType} onChange={(e) => setJobType(e.target.value)} className="end-input font-inter"
+                  style={{ ...inputStyle, appearance: 'none', cursor: 'pointer', paddingRight: '32px' }}>
+                  <option value="" disabled>{t('endorse.selectJobType')}</option>
+                  <option value="One-time Job" style={{ backgroundColor: '#0a0a0a' }}>{t('jobTypes.One-time Job')}</option>
+                  <option value="Recurring" style={{ backgroundColor: '#0a0a0a' }}>{t('jobTypes.Recurring')}</option>
+                  <option value="Contract" style={{ backgroundColor: '#0a0a0a' }}>{t('jobTypes.Contract')}</option>
+                  <option value="Freelance" style={{ backgroundColor: '#0a0a0a' }}>{t('jobTypes.Freelance')}</option>
+                  <option value="Full-time" style={{ backgroundColor: '#0a0a0a' }}>{t('jobTypes.Full-time')}</option>
+                </select>
+                <ChevronDown style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', width: '12px', height: '12px', color: 'rgba(255,255,255,0.3)', pointerEvents: 'none' }} />
+              </div>
+            </div>
+
+            {/* Review Textarea */}
+            <div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                <label className="font-inter" style={labelStyle}><PenLine style={{ width: '12px', height: '12px' }} /> {t('endorse.reviewLabel')}</label>
+                <span className="font-inter" style={{ fontSize: '10px', color: feedback.length >= 20 ? 'rgba(0,220,110,0.5)' : 'rgba(255,255,255,0.2)', fontVariantNumeric: 'tabular-nums' }}>{feedback.length}/300</span>
+              </div>
+              <textarea value={feedback} onChange={(e) => e.target.value.length <= 300 && setFeedback(e.target.value)}
+                placeholder={t('endorse.placeholderFeedback')}
+                className="end-input font-inter" style={{ ...inputStyle, minHeight: '100px', resize: 'none', lineHeight: '1.6' }} />
+              {feedback.length > 0 && feedback.length < 20 && (
+                <p className="font-inter" style={{ fontSize: '10px', color: 'rgba(255,255,255,0.3)', marginTop: '6px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <Zap style={{ width: '10px', height: '10px' }} /> {20 - feedback.length} {t('endorse.moreCharsNeeded', { count: 20 - feedback.length })}
+                </p>
+              )}
+            </div>
+
+            {/* Bottom Action Bar */}
+            <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '20px', display: 'flex', flexDirection: 'column', gap: '12px', marginTop: 'auto' }}>
+              {/* Feature tags */}
+              <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+                {[
+                  { icon: ShieldCheck, text: t('endorse.badgeOnChain') },
+                  { icon: Clock, text: t('endorse.badgePermanent') },
+                  { icon: Sparkles, text: t('endorse.badgeStellar') },
+                ].map((b, i) => (
+                  <span key={i} className="font-inter" style={{ fontSize: '9px', letterSpacing: '2px', color: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', gap: '5px', textTransform: 'uppercase' }}>
+                    <b.icon style={{ width: '10px', height: '10px', color: 'rgba(255,255,255,0.15)' }} /> {b.text}
+                  </span>
+                ))}
+              </div>
+
+              {/* Submit / Success */}
+              <AnimatePresence mode="wait">
+                {isSuccess ? (
+                  <motion.div key="success" initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                    style={{ border: '1px solid rgba(0,220,110,0.15)', backgroundColor: 'rgba(0,220,110,0.03)', padding: '16px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                      <CheckCircle2 style={{ width: '18px', height: '18px', color: '#00dc6e' }} />
+                      <div>
+                        <h4 style={{ fontSize: '14px', fontWeight: '700' }}>{t('endorse.endorsementRecorded')}</h4>
+                        <p className="font-inter" style={{ fontSize: '10px', color: 'rgba(0,220,110,0.5)' }}>{t('endorse.sealedOnStellar')}</p>
+                      </div>
                     </div>
-                    <p className="text-white/15 font-bold uppercase tracking-[0.2em] text-[8px] font-inter">{t('endorse.findWorkerLabel')}</p>
+                    <div style={{ border: '1px solid rgba(255,255,255,0.06)', padding: '10px 12px', marginBottom: '8px' }}>
+                      <span style={{ fontFamily: 'monospace', fontSize: '10px', color: 'rgba(255,255,255,0.25)' }}>{txHash}</span>
+                    </div>
+                    <a href={`https://stellar.expert/explorer/testnet/tx/${txHash}`} target="_blank" rel="noopener noreferrer"
+                      style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontSize: '10px', letterSpacing: '2px', color: 'rgba(255,255,255,0.4)', border: '1px solid rgba(255,255,255,0.1)', padding: '10px', textDecoration: 'none', textTransform: 'uppercase', fontWeight: '700' }} className="font-inter">
+                      <ExternalLink style={{ width: '12px', height: '12px' }} /> {t('endorse.viewOnExplorer')}
+                    </a>
                   </motion.div>
+                ) : (
+                  <motion.button key="submit" onClick={handleEndorse} disabled={!canSubmit || isSigning} className="end-submit font-inter"
+                    style={{
+                      width: '100%', padding: '15px',
+                      backgroundColor: canSubmit ? '#ffffff' : 'rgba(255,255,255,0.05)',
+                      color: canSubmit ? '#000000' : 'rgba(255,255,255,0.2)',
+                      fontSize: '11px', letterSpacing: '3px', fontWeight: canSubmit ? '800' : '600',
+                      border: canSubmit ? 'none' : '1px solid rgba(255,255,255,0.08)',
+                      cursor: canSubmit ? 'pointer' : 'not-allowed',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                      textTransform: 'uppercase',
+                    }}>
+                    {isSigning ? <><Loader2 style={{ width: '14px', height: '14px' }} className="animate-spin" /> {t('registration.btnMinting')}...</>
+                      : canSubmit ? <>{t('endorse.btnSubmit')} <ShieldCheck style={{ width: '14px', height: '14px' }} /></>
+                      : <span>{t('endorse.completeAllFields')}</span>}
+                  </motion.button>
                 )}
               </AnimatePresence>
-
-              <div className="p-5">
-                {/* Form Header */}
-                <div className="flex items-center gap-2.5 mb-4 pb-3 border-b border-white/5">
-                  <div className="w-7 h-7 rounded-[2px] bg-white/5 border border-white/10 flex items-center justify-center">
-                    <FileCheck className="w-3.5 h-3.5 text-white/40" />
-                  </div>
-                  <div>
-                    <h2 className="text-sm font-bold tracking-tight font-inter">{t('endorse.formTitle')}</h2>
-                    <p className="text-[9px] text-white/20 font-inter">{t('endorse.allFieldsRequired')}</p>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* Rating */}
-                  <div>
-                    <div className="flex items-center justify-between mb-2">
-                      <label className="text-[9px] font-bold uppercase tracking-[0.15em] text-white/30 flex items-center gap-1 font-inter">
-                        <Star className="w-3 h-3" /> {t('endorse.ratingFieldLabel')}
-                      </label>
-                      <AnimatePresence mode="wait">
-                        {activeStarValue > 0 && (
-                          <motion.span key={activeStarValue} initial={{ opacity: 0, y: -3 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-                            className="text-[9px] font-bold text-white/50 border border-white/10 px-2 py-0.5 rounded-[2px]">{ratingLabels[activeStarValue]}</motion.span>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                    <div className="flex gap-1 p-2.5 border border-white/5 rounded-[2px] w-fit">
-                      {[1,2,3,4,5].map((s) => (
-                        <button key={s} onClick={() => setRating(s)} onMouseEnter={() => setHoveredStar(s)} onMouseLeave={() => setHoveredStar(0)}
-                          className="p-1 rounded-[2px] hover:bg-white/5 transition-all">
-                          <Star className={`w-6 h-6 transition-all ${activeStarValue >= s ? 'text-white fill-white' : 'text-white/10'}`} />
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Job Type */}
-                  <div>
-                    <label className="text-[9px] font-bold uppercase tracking-[0.15em] text-white/30 flex items-center gap-1 mb-2 font-inter">
-                      <Briefcase className="w-3 h-3" /> {t('jobTypes.label')}
-                    </label>
-                    <div className="relative">
-                      <select value={jobType} onChange={(e) => setJobType(e.target.value)}
-                        className="w-full bg-transparent border-0 border-b border-white/20 py-2.5 pr-8 text-xs text-white appearance-none focus:outline-none focus:border-white/60 cursor-pointer font-inter">
-                        <option value="" disabled>{t('endorse.selectJobType')}</option>
-                        <option value="One-time Job" className="bg-[#0a0a0a]">{t('jobTypes.One-time Job')}</option>
-                        <option value="Recurring" className="bg-[#0a0a0a]">{t('jobTypes.Recurring')}</option>
-                        <option value="Contract" className="bg-[#0a0a0a]">{t('jobTypes.Contract')}</option>
-                        <option value="Freelance" className="bg-[#0a0a0a]">{t('jobTypes.Freelance')}</option>
-                        <option value="Full-time" className="bg-[#0a0a0a]">{t('jobTypes.Full-time')}</option>
-                      </select>
-                      <ChevronDown className="absolute right-1 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/15 pointer-events-none" />
-                    </div>
-                  </div>
-
-                  {/* Textarea */}
-                  <div className="sm:col-span-2">
-                    <div className="flex justify-between items-center mb-2">
-                      <label className="text-[9px] font-bold uppercase tracking-[0.15em] text-white/30 flex items-center gap-1 font-inter">
-                        <PenLine className="w-3 h-3" /> {t('endorse.reviewLabel')}
-                      </label>
-                      <span className={`text-[9px] font-bold tabular-nums font-inter ${feedback.length >= 20 ? 'text-green-400/50' : feedback.length > 0 ? 'text-white/30' : 'text-white/15'}`}>
-                        {feedback.length}/300
-                      </span>
-                    </div>
-                    <textarea value={feedback} onChange={(e) => e.target.value.length <= 300 && setFeedback(e.target.value)}
-                      placeholder={t('endorse.placeholderFeedback')}
-                      className="w-full bg-transparent border border-white/10 rounded-[2px] p-3 text-white text-xs focus:outline-none focus:border-white/30 transition-all min-h-[80px] resize-none placeholder:text-white/15 leading-relaxed font-inter" />
-                    {feedback.length > 0 && feedback.length < 20 && (
-                      <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-white/30 text-[9px] mt-1.5 flex items-center gap-1 font-inter">
-                        <Zap className="w-2.5 h-2.5" /> {20 - feedback.length} {t('endorse.moreCharsNeeded', { count: 20 - feedback.length })}
-                      </motion.p>
-                    )}
-                  </div>
-
-                  {/* Submit */}
-                  <div className="sm:col-span-2">
-                    <AnimatePresence mode="wait">
-                      {isSuccess ? (
-                        <motion.div key="success" initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                          className="border border-green-400/15 rounded-[2px] bg-green-400/[0.03] p-4">
-                          <div className="flex items-center gap-3 mb-3">
-                            <div className="w-8 h-8 rounded-[2px] bg-green-400/10 flex items-center justify-center">
-                              <CheckCircle2 className="w-4 h-4 text-green-400" />
-                            </div>
-                            <div>
-                              <h4 className="text-sm font-bold">{t('endorse.endorsementRecorded')}</h4>
-                              <p className="text-[9px] text-green-400/50 font-inter">{t('endorse.sealedOnStellar')}</p>
-                            </div>
-                          </div>
-                          <div className="border border-white/5 p-3 rounded-[2px] space-y-2">
-                            <div className="flex items-center gap-1.5">
-                              <Hash className="w-2.5 h-2.5 text-white/15" />
-                              <span className="text-[9px] font-mono text-white/25 truncate">{txHash}</span>
-                            </div>
-                            <a href={`https://stellar.expert/explorer/testnet/tx/${txHash}`} target="_blank" rel="noopener noreferrer"
-                              className="flex items-center justify-center gap-1.5 text-[9px] font-bold uppercase tracking-wider text-white/40 hover:text-white border border-white/10 py-2 rounded-[2px] transition-all">
-                              <ExternalLink className="w-3 h-3" /> {t('endorse.viewOnExplorer')}
-                            </a>
-                          </div>
-                        </motion.div>
-                      ) : (
-                        <motion.button key="submit" onClick={handleEndorse} disabled={!canSubmit || isSigning}
-                          className={`w-full py-4 rounded-[2px] font-bold uppercase tracking-[0.15em] text-[11px] transition-all flex items-center justify-center gap-2.5 ${
-                            canSubmit ? 'bg-white text-black hover:opacity-85' : 'bg-white/[0.03] border border-white/5 text-white/20 cursor-not-allowed'
-                          }`}>
-                          {isSigning ? <><Loader2 className="w-4 h-4 animate-spin" /> {t('registration.btnMinting')}...</>
-                            : canSubmit ? <>{t('endorse.btnSubmit')} <ShieldCheck className="w-4 h-4" /></>
-                            : <span>{t('endorse.completeAllFields')}</span>}
-                        </motion.button>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
+            </div>
           </div>
-        </div>
-
-        {/* Footer badges */}
-        <div className="mt-6 flex items-center justify-center gap-4 text-white/10">
-          {[
-            { icon: ShieldCheck, textKey: 'endorse.badgeOnChain' },
-            { icon: Clock, textKey: 'endorse.badgePermanent' },
-            { icon: Sparkles, textKey: 'endorse.badgeStellar' },
-          ].map((badge, i) => (
-            <React.Fragment key={i}>
-              {i > 0 && <div className="w-0.5 h-0.5 rounded-full bg-white/5" />}
-              <div className="flex items-center gap-1 text-[8px] font-bold uppercase tracking-wider font-inter">
-                <badge.icon className="w-2.5 h-2.5" /> {t(badge.textKey)}
-              </div>
-            </React.Fragment>
-          ))}
         </div>
       </div>
     </div>

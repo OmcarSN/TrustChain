@@ -61,7 +61,33 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 w-full z-50 bg-[#050505]/95 backdrop-blur-md border-b border-white/[0.05] transition-all duration-300">
+      <nav 
+        className="fixed top-0 left-0 w-full z-50 bg-[#050505]/95 backdrop-blur-md transition-all duration-300"
+        style={{ animation: 'navSlideDown 0.6s cubic-bezier(0.16,1,0.3,1) forwards' }}
+      >
+        <style>{`
+          @keyframes navSlideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to   { transform: translateY(0);     opacity: 1; }
+          }
+          @keyframes gradientSlide {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+          }
+          .navbar-border-bottom {
+            height: 1px;
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.1) 20%, rgba(0,220,110,0.3) 50%, rgba(255,255,255,0.1) 80%, transparent 100%);
+            background-size: 200% auto;
+            animation: gradientSlide 4s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+          }
+        `}</style>
+        <div className="navbar-border-bottom" />
         <div 
           className="h-[80px]"
           style={{ 

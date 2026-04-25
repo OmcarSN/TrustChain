@@ -38,6 +38,27 @@ const getAllWorkers = () => {
   return workers;
 };
 
+const useCounter = (target, duration = 1000, delay = 0) => {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    if (isNaN(target) || target === 0 || target === "—") {
+      setCount(target);
+      return;
+    }
+    const timeout = setTimeout(() => {
+      let start = 0;
+      const step = target / (duration / 16);
+      const timer = setInterval(() => {
+        start += step;
+        if (start >= target) { setCount(target); clearInterval(timer); }
+        else setCount(Math.floor(start * 10) / 10);
+      }, 16);
+    }, delay);
+    return () => clearTimeout(timeout);
+  }, [target, duration, delay]);
+  return count;
+};
+
 const SKILL_OPTIONS = [
   'All', 'AC Technician', 'Agriculture', 'Babysitting', 'Carpenter',
   'Cleaning', 'Construction', 'Cooking', 'Domestic Work',
@@ -56,71 +77,61 @@ const RATING_OPTIONS = [
 const WorkerCard = ({ worker, index }) => {
   const { t } = useTranslation();
   return (
-      <Link
-        to={`/profile/${worker.address}`}
-        className="worker-card group flex flex-col h-full"
-        style={{ 
-          padding: '18px', 
-          border: '1px solid rgba(255,255,255,0.08)', 
-          backgroundColor: '#111111', 
-          borderRadius: '0px',
-          gap: '0',
-          animationDelay: `${(index + 1) * 0.05}s`
-        }}
-      >
-        {/* Avatar + Info */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
-          <div className="flex items-center justify-center shrink-0" style={{ width: '44px', height: '44px', backgroundColor: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '4px' }}>
-            <User style={{ color: 'rgba(255,255,255,0.2)', width: '24px', height: '24px' }} />
-          </div>
-          <div className="min-w-0 flex-1">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '3px' }}>
-              <h3 style={{ fontSize: '13px', fontWeight: '700', color: '#ffffff', letterSpacing: '0.01em', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} className="group-hover:text-white transition-colors">{worker.name}</h3>
-              {worker.totalEndorsements > 0 && (
-                <span style={{ fontSize: '8px', letterSpacing: '1px', color: '#00dc6e', backgroundColor: 'rgba(0,220,110,0.08)', border: '1px solid rgba(0,220,110,0.2)', padding: '2px 6px', borderRadius: '2px', whiteSpace: 'nowrap', display: 'inline-block' }}>
-                  ● VERIFIED
-                </span>
-              )}
-            </div>
-            <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.4)', display: 'flex', alignItems: 'center', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-              <MapPin className="w-3 h-3 mr-1 shrink-0" /> <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{worker.city}</span> <span style={{ opacity: 0.5, margin: '0 6px' }}>•</span> <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{worker.skill ? (t(`jobs.${worker.skill.replace(/\s+/g, '')}`) || worker.skill) : ''}</span>
-            </div>
+    <Link
+      to={`/profile/${worker.address}`}
+      className="dw-card group"
+      style={{
+        display: 'block', textDecoration: 'none', color: 'inherit',
+        padding: '20px',
+        border: '1px solid rgba(255,255,255,0.08)',
+        backgroundColor: 'rgba(255,255,255,0.02)',
+        cursor: 'pointer',
+        opacity: 0,
+        animation: `cardIn 0.5s ease forwards`,
+        animationDelay: `${index * 0.08}s`,
+      }}
+    >
+      {/* Avatar + Name */}
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px' }}>
+        <div style={{ width: '40px', height: '40px', flexShrink: 0, backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <User style={{ color: 'rgba(255,255,255,0.2)', width: '18px', height: '18px' }} />
+        </div>
+        <div style={{ minWidth: 0, flex: 1 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px', flexWrap: 'wrap' }}>
+            <span style={{ fontSize: '14px', fontWeight: '700', color: '#ffffff', textTransform: 'capitalize', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{worker.name}</span>
+            {worker.totalEndorsements > 0 && (
+              <span className="verified-badge" style={{ fontSize: '9px', letterSpacing: '2px', color: '#00dc6e', backgroundColor: 'rgba(0,220,110,0.08)', border: '1px solid rgba(0,220,110,0.2)', padding: '2px 7px', display: 'inline-block', whiteSpace: 'nowrap' }}>● {t('discover.verified')}</span>
+            )}
           </div>
         </div>
+      </div>
 
-        {/* Rating */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '14px', paddingBottom: '12px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-          <div className="flex items-center">
-            <div className="flex" style={{ gap: '2px' }}>
-              {[1, 2, 3, 4, 5].map(s => (
-                <Star key={s} style={{ width: '12px', height: '12px', color: s <= Math.round(worker.rating) ? '#f5c518' : 'rgba(255,255,255,0.15)', fill: s <= Math.round(worker.rating) ? '#f5c518' : 'transparent' }} />
-              ))}
-            </div>
-            {worker.rating > 0 && <span style={{ fontSize: '13px', fontWeight: '800', marginLeft: '6px', color: '#fff' }}>{worker.rating}</span>}
+      {/* Location + Skill */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: 'rgba(255,255,255,0.3)', marginBottom: '16px' }}>
+        <MapPin style={{ width: '10px', height: '10px', color: 'rgba(255,255,255,0.2)', flexShrink: 0 }} />
+        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{worker.city}</span>
+        <span style={{ color: 'rgba(255,255,255,0.15)' }}>·</span>
+        <span style={{ color: 'rgba(255,255,255,0.4)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{worker.skill ? (t(`jobs.${worker.skill.replace(/\s+/g, '')}`) || worker.skill) : ''}</span>
+      </div>
+
+      {/* Divider */}
+      <div style={{ height: '1px', backgroundColor: 'rgba(255,255,255,0.05)', marginBottom: '14px' }} />
+
+      {/* Stars + Reviews */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '2px' }}>
+            {[1, 2, 3, 4, 5].map(s => (
+              <Star key={s} style={{ width: '13px', height: '13px', color: s <= Math.round(worker.rating) ? '#f5a623' : 'rgba(255,255,255,0.15)', fill: s <= Math.round(worker.rating) ? '#f5a623' : 'transparent' }} />
+            ))}
           </div>
-          <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.25)', letterSpacing: '1px', textTransform: 'uppercase', fontWeight: 'bold' }}>
-            {worker.totalEndorsements} {worker.totalEndorsements === 1 ? t('discover.review') : t('discover.reviews')}
-          </span>
+          {worker.rating > 0 && <span style={{ fontSize: '13px', fontWeight: '700', color: '#ffffff', marginLeft: '6px' }}>{worker.rating}</span>}
         </div>
-
-        {/* Tags */}
-        <div style={{ display: 'flex', gap: '8px', flexWrap: 'nowrap', marginTop: '12px', marginBottom: '0', overflow: 'hidden' }}>
-          <span style={{ padding: '3px 10px', backgroundColor: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', fontSize: '10px', color: 'rgba(255,255,255,0.6)', letterSpacing: '0.5px', borderRadius: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-            {worker.skill ? (t(`jobs.${worker.skill.replace(/\s+/g, '')}`) || worker.skill) : 'Skilled Worker'}
-          </span>
-          {worker.experience > 0 && (
-            <span style={{ padding: '3px 10px', backgroundColor: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', fontSize: '10px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.5px', borderRadius: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', flexShrink: 0 }}>
-              {worker.experience}{t('discover.yrExp')}
-            </span>
-          )}
-        </div>
-
-        {/* View Profile */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '12px', fontSize: '9px', fontWeight: '700', letterSpacing: '3px', marginTop: 'auto', transition: 'all 0.25s ease' }} className="uppercase text-[rgba(255,255,255,0.35)] group-hover:text-white">
-          {t('discover.viewProfile')}
-          <ArrowRight style={{ width: '18px', height: '18px', transition: 'all 0.25s ease' }} className="text-[rgba(255,255,255,0.35)] group-hover:text-white group-hover:translate-x-[5px]" />
-        </div>
-      </Link>
+        <span style={{ fontSize: '10px', letterSpacing: '1px', color: 'rgba(255,255,255,0.25)', textTransform: 'uppercase', fontWeight: '700' }}>
+          {worker.totalEndorsements} {worker.totalEndorsements === 1 ? t('discover.review') : t('discover.reviews')}
+        </span>
+      </div>
+    </Link>
   );
 };
 
@@ -162,179 +173,215 @@ const DiscoverWorkers = () => {
   const clearFilters = () => { setSearchQuery(''); setSelectedSkill('All'); setSelectedCity(''); setMinRating(0); };
   const hasActiveFilters = searchQuery || selectedSkill !== 'All' || (selectedCity && selectedCity !== 'All Cities') || minRating > 0;
 
-  const totalWorkers = workers.length;
-  const calculated = workers.length > 0 ? (workers.reduce((s, w) => s + parseFloat(w.rating || 0), 0) / workers.length) : 0;
-  const avgRating = (!calculated || isNaN(calculated)) ? "—" : calculated.toFixed(1);
-  const totalEndorsements = workers.reduce((s, w) => s + parseInt(w.totalEndorsements || 0, 10), 0);
+  const totalWorkersBase = workers.length;
+  const calculatedBase = workers.length > 0 ? (workers.reduce((s, w) => s + parseFloat(w.rating || 0), 0) / workers.length) : 0;
+  const totalEndorsementsBase = workers.reduce((s, w) => s + parseInt(w.totalEndorsements || 0, 10), 0);
+
+  const totalWorkers = useCounter(totalWorkersBase, 800, 300);
+  const animRatingRaw = useCounter(calculatedBase, 1000, 400);
+  const totalEndorsements = useCounter(totalEndorsementsBase, 1200, 500);
+
+  const avgRating = (!calculatedBase || isNaN(calculatedBase)) ? "—" : 
+    (animRatingRaw === calculatedBase ? calculatedBase.toFixed(1) : animRatingRaw.toFixed(1));
 
   return (
-    <div className="min-h-screen bg-[#050505] pb-12 relative overflow-hidden text-white" style={{ paddingTop: '100px' }}>
-      {/* Light leaks */}
-      <div className="absolute rounded-full pointer-events-none" style={{ top: '-80px', left: '-80px', width: '400px', height: '400px', background: '#f97316', filter: 'blur(120px)', opacity: 0.04 }} />
-      <div className="absolute rounded-full pointer-events-none" style={{ bottom: '-80px', right: '-80px', width: '400px', height: '400px', background: '#1e3a8a', filter: 'blur(120px)', opacity: 0.05 }} />
+    <div className="min-h-screen bg-[#050505] relative overflow-hidden text-white">
+      {/* Light leaks / Background Orbs */}
+      <div style={{ position: 'fixed', top: '-200px', right: '-200px', width: '600px', height: '600px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,80,200,0.04) 0%, transparent 70%)', pointerEvents: 'none', zIndex: 0 }} />
+      <div style={{ position: 'fixed', bottom: '-100px', left: '-100px', width: '400px', height: '400px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,220,110,0.03) 0%, transparent 70%)', pointerEvents: 'none', zIndex: 0 }} />
 
-      <div style={{ maxWidth: '1400px', margin: '0 auto', paddingLeft: '3vw', paddingRight: '3vw' }}>
-        {/* Header */}
-        <div className="reveal" style={{ paddingTop: '16px', marginBottom: '0px' }}>
-          <p style={{ fontSize: '10px', letterSpacing: '4px', color: 'rgba(255,255,255,0.3)', marginBottom: '10px', textTransform: 'uppercase', fontFamily: 'Inter, sans-serif' }}>
-            {t('discover.subtitle', 'BROWSE THE DECENTRALIZED REGISTRY...')}
-          </p>
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-            <h1 className="font-clash text-white" style={{ fontSize: 'clamp(2.2rem, 4.5vw, 3.2rem)', fontWeight: '800', letterSpacing: '0.02em', marginBottom: '20px', lineHeight: '1.1' }}>
-              {t('discover.title', 'Discover Verified Workers')}
-            </h1>
-            {/* Stats */}
-            <div className="flex items-center" style={{ marginBottom: '20px', gap: '48px', borderLeft: '1px solid rgba(255,255,255,0.1)', paddingLeft: '40px', paddingBottom: '8px' }}>
-              {[
-                { label: t('discover.workers', 'Workers'), value: totalWorkers },
-                { label: t('discover.avgRatingLabel', 'Avg Rating'), value: avgRating },
-                { label: t('discover.reviewsLabel', 'Reviews'), value: totalEndorsements },
-              ].map((s, i) => (
-                <div key={i} className="text-right">
-                  <p className="font-clash" style={{ fontSize: '2.2rem', fontWeight: '900', lineHeight: '1' }}>{s.value}</p>
-                  <p style={{ fontSize: '9px', letterSpacing: '3px', color: 'rgba(255,255,255,0.3)', marginTop: '6px', textTransform: 'uppercase' }}>{s.label}</p>
-                </div>
-              ))}
-            </div>
+      <style>{`
+        @keyframes fadeSlideUp {
+          from { opacity: 0; transform: translateY(24px); filter: blur(3px); }
+          to   { opacity: 1; transform: translateY(0);    filter: blur(0); }
+        }
+        @keyframes dwFadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes searchGlow {
+          0%, 100% { box-shadow: 0 0 0 1px rgba(255,255,255,0.1); }
+          50%       { box-shadow: 0 0 20px rgba(255,255,255,0.06), 0 0 0 1px rgba(255,255,255,0.3); }
+        }
+        @keyframes scanLine {
+          from { transform: translateX(-100%); }
+          to   { transform: translateX(400%); }
+        }
+        @keyframes cardIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes verifiedPulse {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(0,220,110,0.3); }
+          50%       { box-shadow: 0 0 8px 2px rgba(0,220,110,0.1); }
+        }
+        .verified-badge { animation: verifiedPulse 2.5s ease infinite; }
+        .dw-anim { opacity:0; animation: dwFadeUp 0.4s ease forwards; }
+        .dw-card { transition: all 0.2s ease; }
+        .dw-card:hover { border-color: rgba(255,255,255,0.2) !important; background-color: rgba(255,255,255,0.04) !important; transform: translateY(-2px); }
+        .dw-search { transition: all 0.2s ease; }
+        .dw-search:focus { border-color: rgba(255,255,255,0.3) !important; outline: none; animation: searchGlow 2s ease infinite; }
+        .dw-search::placeholder { color: rgba(255,255,255,0.2); }
+        .dw-search-container { position: relative; overflow: hidden; }
+        .dw-search-container:focus-within .search-scan::after {
+          content: ''; position: absolute; top: 0; left: 0; width: 20%; height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+          animation: scanLine 2s ease infinite; pointer-events: none;
+        }
+        .dw-select { transition: border-color 0.2s ease; appearance: none; cursor: pointer; }
+        .dw-select:hover { border-color: rgba(255,255,255,0.25) !important; }
+        .dw-rating-btn { transition: all 0.2s ease; }
+        .dw-rating-btn:hover { border-color: rgba(255,255,255,0.3) !important; color: #ffffff !important; transform: translateY(-1px); }
+        .dw-sort:hover { color: #ffffff !important; }
+        @media (max-width: 900px) { .dw-grid { grid-template-columns: repeat(2, 1fr) !important; } .dw-hero { flex-direction: column !important; align-items: flex-start !important; } .dw-filters-row { flex-wrap: wrap !important; } }
+        @media (max-width: 540px) { .dw-grid { grid-template-columns: 1fr !important; } }
+      `}</style>
+
+      {/* Page Wrapper */}
+      <div style={{ paddingTop: '100px', paddingBottom: '80px', paddingLeft: '48px', paddingRight: '48px', maxWidth: '1400px', margin: '0 auto', position: 'relative', zIndex: 10 }}>
+
+        {/* ═══ SECTION A: Hero Header ═══ */}
+        <div className="dw-hero" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '48px' }}>
+          {/* Left text block */}
+          <div>
+            <p className="font-inter" style={{ fontSize: '10px', letterSpacing: '4px', color: 'rgba(255,255,255,0.3)', marginBottom: '12px', textTransform: 'uppercase', fontWeight: '600', opacity: 0, animation: 'fadeSlideUp 0.8s cubic-bezier(0.16,1,0.3,1) forwards', animationDelay: '0.05s' }}>{t('discover.eyebrow')}</p>
+            <h1 className="font-clash" style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)', fontWeight: '900', lineHeight: '1.05', marginBottom: '12px', letterSpacing: '-0.02em', opacity: 0, animation: 'fadeSlideUp 0.8s cubic-bezier(0.16,1,0.3,1) forwards', animationDelay: '0.15s' }}>{t('discover.title', 'Discover Verified Workers')}</h1>
+            <p className="font-inter" style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)', maxWidth: '500px', lineHeight: '1.6', opacity: 0, animation: 'fadeSlideUp 0.8s cubic-bezier(0.16,1,0.3,1) forwards', animationDelay: '0.25s' }}>
+              {t('discover.subtitle')}
+            </p>
+          </div>
+          {/* Right stats block */}
+          <div style={{ display: 'flex', gap: '0', alignItems: 'stretch', border: '1px solid rgba(255,255,255,0.08)', backgroundColor: 'rgba(255,255,255,0.02)', flexShrink: 0, opacity: 0, animation: 'fadeSlideUp 0.8s cubic-bezier(0.16,1,0.3,1) forwards', animationDelay: '0.3s' }}>
+            {[
+              { value: totalWorkers, label: t('discover.workers', 'WORKERS') },
+              { value: avgRating, label: t('discover.avgRatingLabel', 'AVG RATING') },
+              { value: totalEndorsements, label: t('discover.reviewsLabel', 'REVIEWS') },
+            ].map((s, i, arr) => (
+              <div key={i} style={{ padding: '16px 28px', textAlign: 'center', borderRight: i < arr.length - 1 ? '1px solid rgba(255,255,255,0.08)' : 'none' }}>
+                <p className="font-clash" style={{ fontSize: '2rem', fontWeight: '900', color: '#ffffff', lineHeight: '1', marginBottom: '4px' }}>{s.value}</p>
+                <p className="font-inter" style={{ fontSize: '9px', letterSpacing: '3px', color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase' }}>{s.label}</p>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Search + Filters */}
-        <div className="mb-6 pb-5 reveal reveal-d1" style={{ marginTop: '0px' }}>
-          <div className="flex flex-col mb-4">
-            {/* Search Bar */}
-            <div className="relative w-full group" style={{ marginBottom: '20px' }}>
-              <input
-                type="text"
-                placeholder={t('discover.searchPlaceholder')}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '14px 48px 14px 20px',
-                  backgroundColor: 'rgba(255,255,255,0.04)',
-                  border: '1px solid rgba(255,255,255,0.15)',
-                  color: '#fff',
-                  fontSize: '15px',
-                  outline: 'none',
-                  transition: 'all 0.3s ease',
-                }}
-                onFocus={(e) => {
-                  e.currentTarget.style.border = '1px solid rgba(255,255,255,0.4)';
-                  e.currentTarget.style.boxShadow = '0 0 20px rgba(255,255,255,0.04)';
-                }}
-                onBlur={(e) => {
-                  e.currentTarget.style.border = '1px solid rgba(255,255,255,0.15)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
-              />
-              <Search className="absolute right-6 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: 'rgba(255,255,255,0.3)' }} />
-            </div>
+        {/* ═══ SECTION B: Search + Filters ═══ */}
+        {/* Search Bar */}
+        <div className="dw-search-container" style={{ marginBottom: '24px', opacity: 0, animation: 'fadeSlideUp 0.8s cubic-bezier(0.16,1,0.3,1) forwards', animationDelay: '0.4s' }}>
+          <input
+            type="text"
+            placeholder={t('discover.searchPlaceholder')}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="dw-search"
+            style={{
+              width: '100%', padding: '16px 52px 16px 20px',
+              backgroundColor: 'rgba(255,255,255,0.03)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              borderRadius: '0', color: '#ffffff', fontSize: '14px',
+            }}
+          />
+          <div className="search-scan" />
+          <Search style={{ position: 'absolute', right: '18px', top: '50%', transform: 'translateY(-50%)', width: '16px', height: '16px', color: 'rgba(255,255,255,0.25)' }} />
+        </div>
 
-            <div className="flex" style={{ marginBottom: showFilters ? '0' : '24px' }}>
-              <button
-                onClick={() => setShowFilters(!showFilters)}
-                className={`flex items-center gap-2 px-4 py-2 border rounded-[2px] text-[10px] font-bold uppercase tracking-wider transition-all ${
-                  showFilters ? 'border-white/30 text-white' : 'border-white/10 text-white/30 hover:text-white/50'
-                }`}
-              >
-                <SlidersHorizontal className="w-3.5 h-3.5" />
-                {t('discover.filters')}
-                {hasActiveFilters && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
-              </button>
+        {/* Filters Row */}
+        <div className="dw-filters-row" style={{
+          display: 'flex', alignItems: 'flex-end', gap: '16px',
+          paddingBottom: '24px', borderBottom: '1px solid rgba(255,255,255,0.06)',
+          marginBottom: '28px', flexWrap: 'wrap',
+          opacity: 0, animation: 'fadeSlideUp 0.8s cubic-bezier(0.16,1,0.3,1) forwards', animationDelay: '0.5s'
+        }}>
+          {/* FILTERS label */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', paddingRight: '16px', borderRight: '1px solid rgba(255,255,255,0.08)', paddingBottom: '8px' }}>
+            <SlidersHorizontal style={{ width: '12px', height: '12px', color: 'rgba(255,255,255,0.25)' }} />
+            <span className="font-inter" style={{ fontSize: '9px', letterSpacing: '3px', color: 'rgba(255,255,255,0.3)', fontWeight: '700', textTransform: 'uppercase' }}>{t('discover.filters')}</span>
+          </div>
+
+          {/* Skill dropdown */}
+          <div>
+            <label className="font-inter" style={{ fontSize: '9px', letterSpacing: '2px', color: 'rgba(255,255,255,0.25)', marginBottom: '6px', display: 'block', textTransform: 'uppercase', fontWeight: '700' }}>{t('discover.filterSkill', 'SKILL')}</label>
+            <div style={{ position: 'relative' }}>
+              <select value={selectedSkill} onChange={(e) => setSelectedSkill(e.target.value)} className="dw-select"
+                style={{ padding: '8px 32px 8px 12px', backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', color: '#ffffff', fontSize: '12px', letterSpacing: '0.5px', minWidth: '160px' }}>
+                <option value="All" style={{ backgroundColor: '#0a0a0a' }}>{t('discover.allCategories', 'All Categories')}</option>
+                {SKILL_OPTIONS.map(s => (<option key={s} value={s} style={{ backgroundColor: '#0a0a0a' }}>{t('jobs.' + s.replace(/\s+/g, ''))}</option>))}
+              </select>
+              <ChevronDown style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', width: '12px', height: '12px', color: 'rgba(255,255,255,0.3)', pointerEvents: 'none' }} />
             </div>
           </div>
 
-          <AnimatePresence>
-            {showFilters && (
-              <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }} className="overflow-hidden">
-                <div style={{ paddingTop: '20px', paddingBottom: '24px', borderTop: '1px solid rgba(255,255,255,0.07)', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
-                  <div style={{ display: 'flex', alignItems: 'flex-end', gap: '40px', flexWrap: 'wrap' }}>
-                    <div>
-                      <label style={{ fontSize: '11px', letterSpacing: '2px', color: 'rgba(255,255,255,0.4)', marginBottom: '12px', display: 'block', textTransform: 'uppercase', fontWeight: 'bold' }}>{t('discover.filterSkill', 'SKILL')}</label>
-                      <div className="relative">
-                        <select value={selectedSkill} onChange={(e) => setSelectedSkill(e.target.value)}
-                          style={{ padding: '8px 40px 8px 18px', height: '36px', border: '1px solid rgba(255,255,255,0.18)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.7)', fontSize: '12px', letterSpacing: '1px', cursor: 'pointer', appearance: 'none', borderRadius: '4px', transition: 'all 0.3s' }}
-                          onMouseOver={(e) => { e.currentTarget.style.border = '1px solid rgba(255,255,255,0.4)'; e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.08)'; }}
-                          onMouseOut={(e) => { e.currentTarget.style.border = '1px solid rgba(255,255,255,0.18)'; e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; }}>
-                          <option value="All Categories" className="bg-[#0a0a0a]">{t('discover.allCategories', 'All Categories')}</option>
-                          {SKILL_OPTIONS.map(s => (<option key={s} value={s} className="bg-[#0a0a0a]">{t('jobs.' + s.replace(/\s+/g, ''))}</option>))}
-                        </select>
-                        <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: 'rgba(255,255,255,0.7)' }} />
-                      </div>
-                    </div>
-                    <div>
-                      <label style={{ fontSize: '11px', letterSpacing: '2px', color: 'rgba(255,255,255,0.4)', marginBottom: '12px', display: 'block', textTransform: 'uppercase', fontWeight: 'bold' }}>{t('discover.filterCity', 'CITY')}</label>
-                      <div className="relative">
-                        <select value={selectedCity || 'All Cities'} onChange={(e) => setSelectedCity(e.target.value === 'All Cities' ? '' : e.target.value)}
-                          style={{ padding: '8px 40px 8px 18px', height: '36px', border: '1px solid rgba(255,255,255,0.18)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.7)', fontSize: '12px', letterSpacing: '1px', cursor: 'pointer', appearance: 'none', borderRadius: '4px', transition: 'all 0.3s' }}
-                          onMouseOver={(e) => { e.currentTarget.style.border = '1px solid rgba(255,255,255,0.4)'; e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.08)'; }}
-                          onMouseOut={(e) => { e.currentTarget.style.border = '1px solid rgba(255,255,255,0.18)'; e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; }}>
-                          <option value="All Cities" className="bg-[#0a0a0a]">{t('discover.allCities', 'All Cities')}</option>
-                          {cities.map(c => (<option key={c} value={c} className="bg-[#0a0a0a]">{c}</option>))}
-                        </select>
-                        <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: 'rgba(255,255,255,0.7)' }} />
-                      </div>
-                    </div>
-                    <div>
-                      <label style={{ fontSize: '11px', letterSpacing: '2px', color: 'rgba(255,255,255,0.4)', marginBottom: '12px', display: 'block', textTransform: 'uppercase', fontWeight: 'bold' }}>{t('discover.filterRating', 'MINIMUM RATING')}</label>
-                      <div className="flex" style={{ gap: '8px' }}>
-                        {RATING_OPTIONS.map(opt => {
-                          const isActive = minRating === opt.value;
-                          return (
-                            <button key={opt.value} onClick={() => setMinRating(opt.value)}
-                              style={{
-                                padding: '8px 18px', height: '36px', border: isActive ? '1px solid #ffffff' : '1px solid rgba(255,255,255,0.18)', fontSize: '12px', letterSpacing: '1px',
-                                backgroundColor: isActive ? '#ffffff' : 'transparent',
-                                color: isActive ? '#000000' : 'inherit',
-                                fontWeight: isActive ? '700' : 'normal',
-                                transition: 'all 0.3s ease',
-                                borderRadius: '4px',
-                                display: 'flex', alignItems: 'center'
-                              }}
-                              onMouseOver={(e) => { if (!isActive) e.currentTarget.style.borderColor = 'rgba(255,255,255,0.5)'; }}
-                              onMouseOut={(e) => { if (!isActive) e.currentTarget.style.borderColor = 'rgba(255,255,255,0.18)'; }}
-                            >
-                              {t('ratings.' + opt.labelKey)}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-                    {hasActiveFilters && (
-                      <button onClick={clearFilters} className="transition-all flex items-center justify-center gap-1" style={{ padding: '8px 18px', height: '36px', borderRadius: '4px', fontSize: '12px', letterSpacing: '1px', fontWeight: 'bold', border: '1px solid rgba(255,80,80,0.4)', color: 'rgba(255,100,100,0.8)', marginBottom: '1px', backgroundColor: 'transparent' }}>
-                        <X className="w-3 h-3" /> {t('discover.clearFilters')}
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {/* City dropdown */}
+          <div>
+            <label className="font-inter" style={{ fontSize: '9px', letterSpacing: '2px', color: 'rgba(255,255,255,0.25)', marginBottom: '6px', display: 'block', textTransform: 'uppercase', fontWeight: '700' }}>{t('discover.filterCity', 'CITY')}</label>
+            <div style={{ position: 'relative' }}>
+              <select value={selectedCity || 'All Cities'} onChange={(e) => setSelectedCity(e.target.value === 'All Cities' ? '' : e.target.value)} className="dw-select"
+                style={{ padding: '8px 32px 8px 12px', backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', color: '#ffffff', fontSize: '12px', letterSpacing: '0.5px', minWidth: '160px' }}>
+                <option value="All Cities" style={{ backgroundColor: '#0a0a0a' }}>{t('discover.allCities', 'All Cities')}</option>
+                {cities.filter(c => c !== 'All Cities').map(c => (<option key={c} value={c} style={{ backgroundColor: '#0a0a0a' }}>{c}</option>))}
+              </select>
+              <ChevronDown style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', width: '12px', height: '12px', color: 'rgba(255,255,255,0.3)', pointerEvents: 'none' }} />
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div style={{ width: '1px', height: '32px', backgroundColor: 'rgba(255,255,255,0.08)', alignSelf: 'center' }} />
+
+          {/* Minimum Rating buttons */}
+          <div>
+            <label className="font-inter" style={{ fontSize: '9px', letterSpacing: '2px', color: 'rgba(255,255,255,0.25)', marginBottom: '6px', display: 'block', textTransform: 'uppercase', fontWeight: '700' }}>{t('discover.filterRating', 'MINIMUM RATING')}</label>
+            <div style={{ display: 'flex', gap: '6px' }}>
+              {RATING_OPTIONS.map((opt, i) => {
+                const isActive = minRating === opt.value;
+                return (
+                  <button key={opt.value} onClick={() => setMinRating(opt.value)} className={isActive ? '' : 'dw-rating-btn'}
+                    style={{
+                      padding: '7px 14px', fontSize: '11px', letterSpacing: '1px',
+                      border: isActive ? '1px solid #ffffff' : '1px solid rgba(255,255,255,0.1)',
+                      backgroundColor: isActive ? '#ffffff' : 'transparent',
+                      color: isActive ? '#000000' : 'rgba(255,255,255,0.45)',
+                      fontWeight: isActive ? '700' : '400',
+                      cursor: 'pointer',
+                      boxShadow: isActive ? '0 0 12px rgba(255,255,255,0.15)' : 'none',
+                      transition: 'all 0.2s ease',
+                      opacity: 0,
+                      animation: 'fadeSlideUp 0.8s cubic-bezier(0.16,1,0.3,1) forwards',
+                      animationDelay: `${0.6 + (i * 0.05)}s`,
+                    }}>
+                    {t('ratings.' + opt.labelKey)}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Clear filters */}
+          {hasActiveFilters && (
+            <button onClick={clearFilters} style={{ padding: '7px 14px', fontSize: '11px', letterSpacing: '1px', border: '1px solid rgba(255,80,80,0.3)', color: 'rgba(255,100,100,0.7)', backgroundColor: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <X style={{ width: '10px', height: '10px' }} /> {t('discover.clearFilters')}
+            </button>
+          )}
         </div>
 
-        {/* Results header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '24px', paddingBottom: '16px' }} className="reveal reveal-d2">
-          <p style={{ fontSize: '11px', letterSpacing: '3px', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', fontWeight: 'bold' }}>
+        {/* ═══ SECTION C: Results Header ═══ */}
+        <div className="dw-anim" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', animationDelay: '0.2s' }}>
+          <span className="font-inter" style={{ fontSize: '10px', letterSpacing: '3px', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', fontWeight: '700' }}>
             {filtered.length} {t('discover.results')}
-            {hasActiveFilters && <span style={{ color: 'rgba(255,200,50,0.6)', fontSize: '10px', letterSpacing: '2px' }}> ({t('discover.filtered')})</span>}
-          </p>
-          <div style={{ fontSize: '11px', letterSpacing: '3px', color: 'rgba(255,255,255,0.4)', display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase', fontWeight: 'bold' }}>
+            {hasActiveFilters && <span style={{ color: 'rgba(255,200,50,0.6)', fontSize: '10px', letterSpacing: '2px', marginLeft: '8px' }}>({t('discover.filtered')})</span>}
+          </span>
+          <span className="font-inter dw-sort" style={{ fontSize: '10px', letterSpacing: '2px', color: 'rgba(255,255,255,0.25)', cursor: 'pointer', textTransform: 'uppercase', fontWeight: '700', transition: 'color 0.2s' }}>
             ↑ {t('discover.sortedByRating')}
-          </div>
+          </span>
         </div>
 
-        {/* Worker Grid */}
+        {/* ═══ SECTION D: Worker Cards Grid ═══ */}
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <div className="w-6 h-6 border border-white/20 border-t-white/60 rounded-full animate-spin" />
           </div>
         ) : filtered.length > 0 ? (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginTop: '8px', marginBottom: '80px', alignItems: 'stretch' }}>
+          <div className="dw-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
             {filtered.map((worker, i) => (<WorkerCard key={worker.address} worker={worker} index={i} />))}
           </div>
         ) : workers.length === 0 ? (
-          <div className="py-20 flex flex-col items-center text-center reveal">
+          <div className="py-20 flex flex-col items-center text-center">
             <div className="w-16 h-16 rounded-[2px] bg-white/[0.03] border border-white/[0.06] flex items-center justify-center mb-6">
               <Users className="w-7 h-7 text-white/15" />
             </div>
@@ -345,7 +392,7 @@ const DiscoverWorkers = () => {
             </Link>
           </div>
         ) : (
-          <div className="py-16 flex flex-col items-center text-center reveal">
+          <div className="py-16 flex flex-col items-center text-center">
             <div className="w-14 h-14 rounded-[2px] bg-white/[0.03] border border-white/[0.06] flex items-center justify-center mb-4">
               <Search className="w-6 h-6 text-white/10" />
             </div>

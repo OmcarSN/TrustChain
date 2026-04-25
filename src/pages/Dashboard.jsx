@@ -1,32 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  LayoutDashboard, ShieldCheck, Award, Search, UserCheck,
-  Wallet, ArrowRight, ExternalLink, Clock, Star,
-  Briefcase, MapPin, Hash, TrendingUp, Activity,
-  ChevronRight, Zap, Users, Copy, Check,
-  Sparkles, ArrowUpRight, BarChart3, Target,
-  FileCheck, PenLine, Eye, Globe, Link2, Inbox
-} from 'lucide-react';
+import { LayoutDashboard, ShieldCheck, Award, Search, UserCheck, Wallet, ArrowRight, ExternalLink, Clock, Star, Briefcase, MapPin, Hash, TrendingUp, Activity, ChevronRight, Zap, Users, Copy, Check, Sparkles, ArrowUpRight, BarChart3, Target, FileCheck, PenLine, Eye, Globe, Link2, Inbox } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useWallet } from '../context/WalletContext';
 import { fetchWorkerCredential } from '../lib/stellar';
 import { calculateScore } from '../lib/reputation';
-
-/* ── Quick Action Link ────────────────────────────────────────── */
-const QuickAction = ({ to, icon: Icon, label, sublabel }) => (
-  <Link to={to} className="flex items-center gap-3 p-3 border border-white/[0.05] rounded-[2px] bg-white/[0.02] hover:border-white/[0.18] hover:bg-white/[0.05] transition-all group">
-    <div className="w-8 h-8 rounded-[2px] bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
-      <Icon className="w-3.5 h-3.5 text-white/40" />
-    </div>
-    <div className="flex-1 min-w-0">
-      <p className="text-xs font-bold text-white/70 group-hover:text-white transition-colors font-inter">{label}</p>
-      <p className="text-[9px] text-white/20 font-inter">{sublabel}</p>
-    </div>
-    <ArrowUpRight className="w-3.5 h-3.5 text-white/10 group-hover:text-white/40 transition-all shrink-0" />
-  </Link>
-);
 
 const Dashboard = () => {
   const { walletAddress, isConnected, connect } = useWallet();
@@ -61,13 +40,7 @@ const Dashboard = () => {
       } catch {
         const localWorkerData = JSON.parse(localStorage.getItem(`trustchain_worker_${walletAddress}`) || 'null');
         if (localWorkerData) {
-          setCredential({
-            name: localWorkerData.name || localWorkerData.fullName || 'Worker',
-            skill: localWorkerData.skill || localWorkerData.skillCategory || '—',
-            city: localWorkerData.city || 'Unknown',
-            experience: localWorkerData.experience || '—',
-            bio: localWorkerData.bio || '',
-          });
+          setCredential({ name: localWorkerData.name || localWorkerData.fullName || 'Worker', skill: localWorkerData.skill || localWorkerData.skillCategory || '—', city: localWorkerData.city || 'Unknown', experience: localWorkerData.experience || '—', bio: localWorkerData.bio || '' });
         } else { setCredential(null); }
       }
       const given = [];
@@ -88,199 +61,233 @@ const Dashboard = () => {
   const truncAddr = (a) => a ? `${a.slice(0,6)}…${a.slice(-6)}` : '';
   const copyAddress = () => { navigator.clipboard.writeText(walletAddress); setCopied(true); setTimeout(() => setCopied(false), 2000); };
 
-  /* ── Not connected ─────────────────────────────────────────── */
   if (!isConnected) {
     return (
-      <div className="min-h-screen bg-[#050505] pt-28 pb-12 px-6 lg:px-12 flex flex-col justify-center relative overflow-hidden text-white">
-        <div className="absolute rounded-full pointer-events-none" style={{ top: '-80px', left: '-80px', width: '400px', height: '400px', background: '#f97316', filter: 'blur(120px)', opacity: 0.04 }} />
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center max-w-md">
-          <div className="w-14 h-14 rounded-[2px] bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-6">
-            <LayoutDashboard className="w-7 h-7 text-white/30" />
+      <div className="min-h-screen bg-[#050505] relative overflow-hidden text-white" style={{ paddingTop:'100px', display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center' }}>
+        <div className="absolute rounded-full pointer-events-none" style={{ top:'-80px', left:'-80px', width:'400px', height:'400px', background:'#f97316', filter:'blur(120px)', opacity:0.04 }} />
+        <motion.div initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }} className="text-center max-w-md" style={{ padding:'0 24px' }}>
+          <div style={{ width:'56px', height:'56px', border:'1px solid rgba(255,255,255,0.1)', backgroundColor:'rgba(255,255,255,0.05)', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 24px' }}>
+            <LayoutDashboard style={{ width:'28px', height:'28px', color:'rgba(255,255,255,0.3)' }} />
           </div>
-          <h2 className="font-clash text-3xl font-bold mb-3 tracking-tight">{t('dashboard.commandCenter')}</h2>
-          <p className="text-white/30 mb-8 text-sm font-inter font-light leading-relaxed">{t('dashboard.connectPrompt')}</p>
-          <button onClick={connect} className="w-full py-4 bg-white text-black rounded-[2px] font-bold uppercase tracking-[0.15em] text-[11px] hover:opacity-85 transition-opacity flex items-center justify-center gap-2">
-            <Wallet className="w-4 h-4" /> {t('dashboard.connectBtn')}
+          <h2 className="font-clash" style={{ fontSize:'1.8rem', fontWeight:'900', marginBottom:'12px' }}>{t('dashboard.commandCenter')}</h2>
+          <p className="font-inter" style={{ color:'rgba(255,255,255,0.3)', marginBottom:'32px', fontSize:'14px', lineHeight:'1.6' }}>{t('dashboard.connectPrompt')}</p>
+          <button onClick={connect} style={{ width:'100%', padding:'16px', backgroundColor:'#fff', color:'#000', border:'none', fontWeight:'800', fontSize:'11px', letterSpacing:'3px', textTransform:'uppercase', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', gap:'8px' }}>
+            <Wallet style={{ width:'16px', height:'16px' }} /> {t('dashboard.connectBtn')}
           </button>
         </motion.div>
       </div>
     );
   }
 
-  /* ── Activity data ─────────────────────────────────────────── */
-  const allEvents = [
-    ...endorsementsReceived.map(e => ({ ...e, type: 'received' })),
-    ...endorsementsGiven.map(e => ({ ...e, type: 'given' }))
-  ].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+  const allEvents = [...endorsementsReceived.map(e => ({ ...e, type:'received' })), ...endorsementsGiven.map(e => ({ ...e, type:'given' }))].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
   const filteredEvents = activeTab === 'all' ? allEvents : allEvents.filter(e => e.type === activeTab);
 
+  const quickActions = [
+    { to:'/worker', icon: credential ? FileCheck : ShieldCheck, label: credential ? t('dashboard.updateCred') : t('dashboard.mintCred'), sub: t('dashboard.workerPortal') },
+    { to:'/discover', icon: Users, label: t('dashboard.findWorkers'), sub: t('dashboard.browseHire') },
+    { to:'/endorse', icon: Award, label: t('dashboard.endorseWorker'), sub: t('dashboard.writeReview') },
+    { to:'/verify', icon: Search, label: t('dashboard.verifyWorker'), sub: t('dashboard.auditReputation') },
+    ...(credential ? [{ to:`/profile/${walletAddress}`, icon: Eye, label: t('dashboard.myProfile'), sub: t('dashboard.publicPage') }] : []),
+  ];
+
   return (
-    <div className="min-h-screen bg-[#050505] pt-28 pb-12 px-6 lg:px-12 relative overflow-hidden text-white">
-      {/* Light leaks */}
-      <div className="absolute rounded-full pointer-events-none" style={{ top: '-80px', left: '20%', width: '400px', height: '400px', background: '#f97316', filter: 'blur(120px)', opacity: 0.04 }} />
-      <div className="absolute rounded-full pointer-events-none" style={{ bottom: '-80px', right: '-80px', width: '400px', height: '400px', background: '#1e3a8a', filter: 'blur(120px)', opacity: 0.05 }} />
+    <div className="min-h-screen bg-[#050505] relative overflow-hidden text-white">
+      <div className="absolute rounded-full pointer-events-none" style={{ top:'-80px', left:'20%', width:'400px', height:'400px', background:'#f97316', filter:'blur(120px)', opacity:0.04 }} />
+      <div className="absolute rounded-full pointer-events-none" style={{ bottom:'-80px', right:'-80px', width:'400px', height:'400px', background:'#1e3a8a', filter:'blur(120px)', opacity:0.05 }} />
 
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-6 flex flex-col md:flex-row md:items-end justify-between gap-4 reveal">
-          <div>
-            <p className="text-[10px] uppercase tracking-[0.25em] text-white/30 font-inter mb-2">{t('dashboard.identityHub', 'Identity Hub')}</p>
-            <h1 className="font-clash text-3xl lg:text-4xl font-bold tracking-tight">
-              {t('dashboard.welcome', 'Welcome')}
-              {credential && credential.name && credential.name !== 'Worker' && <span className="text-white/40">, {credential.name.split(' ')[0]}</span>}
+      <style>{`
+        @keyframes dbFadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+        .db-anim { opacity:0; animation: dbFadeUp 0.4s ease forwards; }
+        .db-qa { transition: all 0.15s ease; cursor:pointer; text-decoration:none; color:inherit; display:flex; align-items:center; gap:14px; padding:12px 20px; border-bottom:1px solid rgba(255,255,255,0.04); }
+        .db-qa:hover { background-color: rgba(255,255,255,0.03); }
+        .db-tab { transition: all 0.15s ease; cursor:pointer; border:none; }
+        .db-tab:hover { background-color: rgba(255,255,255,0.04); }
+        @media (max-width:900px) { .db-layout { flex-direction:column !important; } .db-sidebar { width:100% !important; border-right:none !important; border-bottom:1px solid rgba(255,255,255,0.06); } }
+      `}</style>
+
+      {/* Two-column layout */}
+      <div className="db-layout" style={{ display:'flex', paddingTop:'100px', minHeight:'100vh', position:'relative', zIndex:10 }}>
+
+        {/* ═══ LEFT SIDEBAR ═══ */}
+        <div className="db-sidebar" style={{ width:'280px', flexShrink:0, borderRight:'1px solid rgba(255,255,255,0.06)', display:'flex', flexDirection:'column', overflowY:'auto', paddingBottom:'40px' }}>
+
+          {/* Stats Row */}
+          <div className="db-anim" style={{ padding:'24px 20px', borderBottom:'1px solid rgba(255,255,255,0.06)', display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:'0', animationDelay:'0s' }}>
+            {[
+              { val: credential?.skill || '—', label: t('dashboard.credential'), isSkill:true },
+              { val: reputation?.average || '0.0', label: t('dashboard.avgRating') },
+              { val: endorsementsReceived.length, label: t('dashboard.received') },
+            ].map((s, i, arr) => (
+              <div key={i} style={{ textAlign:'center', padding:'0 8px', borderRight: i < arr.length-1 ? '1px solid rgba(255,255,255,0.06)' : 'none' }}>
+                {s.isSkill ? (
+                  <span style={{ display:'inline-block', padding:'3px 10px', border:'1px solid rgba(255,255,255,0.12)', fontSize:'10px', letterSpacing:'2px', color:'rgba(255,255,255,0.6)', backgroundColor:'rgba(255,255,255,0.04)', marginBottom:'4px' }}>{s.val}</span>
+                ) : (
+                  <p className="font-clash" style={{ fontSize:'1.4rem', fontWeight:'900', color:'#fff', lineHeight:'1', marginBottom:'4px' }}>{s.val}</p>
+                )}
+                <p className="font-inter" style={{ fontSize:'9px', letterSpacing:'3px', color:'rgba(255,255,255,0.25)', textTransform:'uppercase' }}>{s.label}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Quick Actions */}
+          <div className="db-anim" style={{ animationDelay:'0.05s' }}>
+            <p className="font-inter" style={{ padding:'20px 20px 10px 20px', fontSize:'9px', letterSpacing:'4px', color:'rgba(255,255,255,0.25)', textTransform:'uppercase', fontWeight:'700' }}>{t('dashboard.quickActions')}</p>
+            {quickActions.map((a, i) => (
+              <Link key={i} to={a.to} className="db-qa">
+                <div style={{ width:'32px', height:'32px', flexShrink:0, border:'1px solid rgba(255,255,255,0.08)', backgroundColor:'rgba(255,255,255,0.03)', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                  <a.icon style={{ width:'14px', height:'14px', color:'rgba(255,255,255,0.35)' }} />
+                </div>
+                <div style={{ flex:1, minWidth:0 }}>
+                  <p className="font-inter" style={{ fontSize:'13px', fontWeight:'600', color:'#fff', marginBottom:'2px' }}>{a.label}</p>
+                  <p className="font-inter" style={{ fontSize:'11px', color:'rgba(255,255,255,0.3)' }}>{a.sub}</p>
+                </div>
+                <ArrowUpRight style={{ width:'11px', height:'11px', color:'rgba(255,255,255,0.2)', flexShrink:0 }} />
+              </Link>
+            ))}
+          </div>
+
+          {/* My Credential */}
+          {credential && (
+            <div className="db-anim" style={{ animationDelay:'0.1s' }}>
+              <p className="font-inter" style={{ padding:'20px 20px 10px 20px', fontSize:'9px', letterSpacing:'4px', color:'rgba(255,255,255,0.25)', textTransform:'uppercase', fontWeight:'700' }}>{t('dashboard.myCredential')}</p>
+              <div style={{ margin:'0 12px', padding:'16px', border:'1px solid rgba(255,255,255,0.08)', backgroundColor:'rgba(255,255,255,0.02)', borderTop:'2px solid rgba(255,255,255,0.12)' }}>
+                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'12px' }}>
+                  <span className="font-inter" style={{ fontSize:'15px', fontWeight:'800', color:'#fff' }}>{credential.name}</span>
+                  <span style={{ fontSize:'9px', letterSpacing:'2px', color:'#00dc6e', backgroundColor:'rgba(0,220,110,0.08)', border:'1px solid rgba(0,220,110,0.2)', padding:'3px 8px' }}>● {t('dashboard.onChain')}</span>
+                </div>
+                <div style={{ display:'flex', gap:'12px', alignItems:'center', marginBottom:'10px' }}>
+                  <span style={{ display:'flex', alignItems:'center', gap:'5px' }}><Briefcase style={{ width:'11px', height:'11px', color:'rgba(255,255,255,0.2)' }} /><span className="font-inter" style={{ fontSize:'12px', color:'rgba(255,255,255,0.45)' }}>{credential.skill}</span></span>
+                  <span style={{ display:'flex', alignItems:'center', gap:'5px' }}><MapPin style={{ width:'11px', height:'11px', color:'rgba(255,255,255,0.2)' }} /><span className="font-inter" style={{ fontSize:'12px', color:'rgba(255,255,255,0.45)' }}>{credential.city}</span></span>
+                </div>
+                {credential.bio && <p className="font-inter" style={{ fontSize:'12px', color:'rgba(255,255,255,0.3)', fontStyle:'italic', lineHeight:'1.5', borderTop:'1px solid rgba(255,255,255,0.06)', paddingTop:'10px', marginTop:'4px' }}>"{credential.bio}"</p>}
+              </div>
+            </div>
+          )}
+
+          {/* Reputation */}
+          {reputation && endorsementsReceived.length > 0 && (
+            <div className="db-anim" style={{ margin:'12px 12px 0', padding:'16px', border:'1px solid rgba(255,255,255,0.08)', backgroundColor:'rgba(255,255,255,0.02)', animationDelay:'0.15s' }}>
+              <p className="font-inter" style={{ fontSize:'9px', letterSpacing:'4px', color:'rgba(255,255,255,0.25)', marginBottom:'10px', textTransform:'uppercase', fontWeight:'700' }}>{t('dashboard.reputation')}</p>
+              <div style={{ display:'flex', alignItems:'center', gap:'12px' }}>
+                <span className="font-clash" style={{ fontSize:'2rem', fontWeight:'900' }}>{reputation.average}</span>
+                <div>
+                  <div style={{ display:'flex', gap:'2px', marginBottom:'4px' }}>
+                    {[1,2,3,4,5].map(s => (<Star key={s} style={{ width:'12px', height:'12px', color: s <= Math.round(reputation.average) ? '#f5a623' : 'rgba(255,255,255,0.1)', fill: s <= Math.round(reputation.average) ? '#f5a623' : 'transparent' }} />))}
+                  </div>
+                  <p className="font-inter" style={{ fontSize:'10px', color:'rgba(255,255,255,0.25)' }}>{endorsementsReceived.length} {endorsementsReceived.length !== 1 ? t('dashboard.reviews') : t('dashboard.review')}</p>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* ═══ RIGHT MAIN AREA ═══ */}
+        <div style={{ flex:1, padding:'32px 40px', overflowY:'auto' }}>
+
+          {/* Page Header */}
+          <div className="db-anim" style={{ marginBottom:'32px', animationDelay:'0s' }}>
+            <p className="font-inter" style={{ fontSize:'10px', letterSpacing:'4px', color:'rgba(255,255,255,0.3)', marginBottom:'6px', textTransform:'uppercase', fontWeight:'600' }}>{t('dashboard.eyebrow')}</p>
+            <h1 className="font-clash" style={{ fontSize:'clamp(1.6rem,3vw,2.4rem)', fontWeight:'900', color:'#fff', marginBottom:'4px' }}>
+              {t('dashboard.overview')}
+              {credential && credential.name && credential.name !== 'Worker' && <span style={{ color:'rgba(255,255,255,0.4)' }}>, {credential.name.split(' ')[0]}</span>}
             </h1>
+            <p className="font-inter" style={{ fontSize:'13px', color:'rgba(255,255,255,0.35)' }}>{t('dashboard.overviewSub')}</p>
           </div>
-          <div className="flex items-center gap-2 border border-white/10 rounded-[2px] px-4 py-2">
-            <span className="w-1.5 h-1.5 bg-green-400 rounded-full" />
-            <span className="font-mono text-[10px] text-white/50">{truncAddr(walletAddress)}</span>
-            <button onClick={copyAddress} className="text-white/20 hover:text-white transition-colors">
-              {copied ? <Check className="w-3 h-3 text-green-400" /> : <Copy className="w-3 h-3" />}
-            </button>
-            <a href={`https://stellar.expert/explorer/testnet/address/${walletAddress}`} target="_blank" rel="noopener noreferrer" className="text-white/20 hover:text-white transition-colors">
-              <ExternalLink className="w-3 h-3" />
-            </a>
-          </div>
-        </div>
 
-        {/* Stats Strip */}
-        <div className="border-t border-b border-white/5 grid grid-cols-2 md:grid-cols-4 mb-6 reveal reveal-d1">
-          {[
-            { icon: ShieldCheck, label: t('dashboard.credential'), value: credential?.skill || '—' },
-            { icon: Star, label: t('dashboard.avgRating'), value: reputation?.average || '0.0' },
-            { icon: Award, label: t('dashboard.received'), value: endorsementsReceived.length },
-            { icon: UserCheck, label: t('dashboard.given'), value: endorsementsGiven.length },
-          ].map((stat, i, arr) => (
-            <div key={stat.label} className={`px-6 py-6 ${i < arr.length - 1 ? 'border-r border-white/5' : ''}`}>
-              <p className="text-[8px] font-bold uppercase tracking-[0.2em] text-white/25 mb-1 font-inter">{stat.label}</p>
-              <p className="font-clash text-xl font-bold">{stat.value}</p>
+          {/* Wallet bar */}
+          <div className="db-anim" style={{ display:'flex', alignItems:'center', gap:'8px', marginBottom:'28px', animationDelay:'0.05s' }}>
+            <div style={{ display:'flex', alignItems:'center', gap:'8px', border:'1px solid rgba(255,255,255,0.1)', padding:'8px 14px' }}>
+              <span style={{ width:'6px', height:'6px', backgroundColor:'#00dc6e', borderRadius:'50%' }} />
+              <span style={{ fontFamily:'monospace', fontSize:'11px', color:'rgba(255,255,255,0.5)' }}>{truncAddr(walletAddress)}</span>
+              <button onClick={copyAddress} style={{ background:'none', border:'none', cursor:'pointer', color:'rgba(255,255,255,0.2)', display:'flex', padding:'2px' }}>
+                {copied ? <Check style={{ width:'12px', height:'12px', color:'#00dc6e' }} /> : <Copy style={{ width:'12px', height:'12px' }} />}
+              </button>
+              <a href={`https://stellar.expert/explorer/testnet/address/${walletAddress}`} target="_blank" rel="noopener noreferrer" style={{ color:'rgba(255,255,255,0.2)', display:'flex' }}>
+                <ExternalLink style={{ width:'12px', height:'12px' }} />
+              </a>
             </div>
-          ))}
-        </div>
+          </div>
 
-        {/* Main Content: 3-col */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-          {/* Left: Quick Actions + Credential */}
-          <div className="lg:col-span-3 space-y-4 reveal reveal-d2">
-            <div className="border border-white/[0.05] rounded-[2px] p-4">
-              <h3 className="text-[10px] font-bold uppercase tracking-[0.15em] text-white/30 mb-3 font-inter">{t('dashboard.quickActions')}</h3>
-              <div className="space-y-1.5">
-                <QuickAction to="/worker" icon={credential ? FileCheck : ShieldCheck} label={credential ? t('dashboard.updateCred') : t('dashboard.mintCred')} sublabel={t('dashboard.workerPortal')} />
-                <QuickAction to="/discover" icon={Users} label={t('dashboard.findWorkers')} sublabel={t('dashboard.browseHire')} />
-                <QuickAction to="/endorse" icon={Award} label={t('dashboard.endorseWorker')} sublabel={t('dashboard.writeReview')} />
-                <QuickAction to="/verify" icon={Search} label={t('dashboard.verifyWorker')} sublabel={t('dashboard.auditReputation')} />
-                {credential && <QuickAction to={`/profile/${walletAddress}`} icon={Eye} label={t('dashboard.myProfile')} sublabel={t('dashboard.publicPage')} />}
+          {/* Stats Cards Row */}
+          <div className="db-anim" style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:'12px', marginBottom:'36px', animationDelay:'0.1s' }}>
+            {[
+              { label: t('dashboard.avgRating'), val: reputation?.average || '0.0' },
+              { label: t('dashboard.received'), val: endorsementsReceived.length },
+              { label: t('dashboard.given'), val: endorsementsGiven.length },
+            ].map((s, i) => (
+              <div key={i} style={{ padding:'20px 24px', border:'1px solid rgba(255,255,255,0.08)', backgroundColor:'rgba(255,255,255,0.02)' }}>
+                <p className="font-inter" style={{ fontSize:'9px', letterSpacing:'3px', color:'rgba(255,255,255,0.3)', marginBottom:'10px', textTransform:'uppercase', fontWeight:'700' }}>{s.label}</p>
+                <p className="font-clash" style={{ fontSize:'2.2rem', fontWeight:'900', color:'#fff', lineHeight:'1' }}>{s.val}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Activity Feed */}
+          <div className="db-anim" style={{ animationDelay:'0.25s' }}>
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'16px' }}>
+              <span className="font-inter" style={{ fontSize:'10px', letterSpacing:'4px', color:'rgba(255,255,255,0.3)', fontWeight:'700', textTransform:'uppercase' }}>{t('dashboard.activityFeed')}</span>
+              <div style={{ display:'flex', gap:'0' }}>
+                {[
+                  { key:'all', label: t('dashboard.tabAll') },
+                  { key:'received', label: t('dashboard.tabReceived') },
+                  { key:'given', label: t('dashboard.tabGiven') },
+                ].map(tab => (
+                  <button key={tab.key} onClick={() => setActiveTab(tab.key)} className="db-tab font-inter"
+                    style={{
+                      padding:'5px 14px', fontSize:'10px', letterSpacing:'2px', textTransform:'uppercase',
+                      border:'1px solid rgba(255,255,255,0.1)',
+                      backgroundColor: activeTab === tab.key ? '#fff' : 'transparent',
+                      color: activeTab === tab.key ? '#000' : 'rgba(255,255,255,0.3)',
+                      fontWeight: activeTab === tab.key ? '700' : '400',
+                    }}>
+                    {tab.label}
+                  </button>
+                ))}
               </div>
             </div>
 
-            {/* Credential Card */}
-            {credential && (
-              <div className="border border-white/[0.07] rounded-[2px] p-4 bg-white/[0.02]">
-                <div className="flex items-center justify-between mb-3">
-                  <p className="text-[8px] font-bold uppercase tracking-[0.18em] text-white/30 font-inter">{t('dashboard.myCredential')}</p>
-                  <div className="flex items-center gap-1 px-1.5 py-0.5 border border-green-400/20 rounded-[2px]">
-                    <div className="w-1 h-1 rounded-full bg-green-400" />
-                    <span className="text-[7px] font-bold uppercase text-green-400/70">{t('dashboard.onChain')}</span>
-                  </div>
-                </div>
-                <h4 className="text-sm font-bold mb-1.5 font-inter">{credential.name}</h4>
-                <div className="flex items-center gap-2.5 mb-2 text-white/30 text-[10px] font-inter">
-                  <span className="flex items-center gap-1"><Briefcase className="w-2.5 h-2.5" /> {credential.skill}</span>
-                  <span className="flex items-center gap-1"><MapPin className="w-2.5 h-2.5" /> {credential.city}</span>
-                </div>
-                {credential.bio && <p className="text-[10px] text-white/20 italic leading-relaxed border-t border-white/5 pt-2 mt-2 line-clamp-2 font-inter">"{credential.bio}"</p>}
+            {loading ? (
+              <div style={{ display:'flex', flexDirection:'column', gap:'4px' }}>{[1,2,3].map(i => (<div key={i} style={{ padding:'16px', backgroundColor:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.03)', height:'56px' }} className="animate-pulse" />))}</div>
+            ) : filteredEvents.length === 0 ? (
+              <div style={{ padding:'48px 0', textAlign:'center' }}>
+                <Inbox style={{ width:'32px', height:'32px', color:'rgba(255,255,255,0.1)', margin:'0 auto 12px' }} />
+                <p className="font-inter" style={{ fontSize:'13px', color:'rgba(255,255,255,0.2)' }}>{t('dashboard.noActivity')}</p>
+                <p className="font-inter" style={{ fontSize:'11px', color:'rgba(255,255,255,0.15)', marginTop:'4px' }}>{t('dashboard.noActivitySub')}</p>
               </div>
-            )}
-
-            {/* Reputation */}
-            {reputation && endorsementsReceived.length > 0 && (
-              <div className="border border-white/[0.07] rounded-[2px] p-4 bg-white/[0.02]">
-                <p className="text-[8px] font-bold uppercase tracking-[0.2em] text-white/25 mb-3 font-inter">{t('dashboard.reputation')}</p>
-                <div className="flex items-center gap-3">
-                  <span className="font-clash text-3xl font-bold">{reputation.average}</span>
-                  <div>
-                    <div className="flex gap-0.5 mb-1">
-                      {[1,2,3,4,5].map(s => (<Star key={s} className={`w-3 h-3 ${s <= Math.round(reputation.average) ? 'text-white fill-white' : 'text-white/10'}`} />))}
-                    </div>
-                    <p className="text-[9px] text-white/25 font-inter">{endorsementsReceived.length} {endorsementsReceived.length !== 1 ? t('dashboard.reviews') : t('dashboard.review')}</p>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Right: Activity Feed */}
-          <div className="lg:col-span-9 border border-white/[0.05] rounded-[2px] reveal reveal-d3">
-            <div className="p-5">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-bold tracking-tight font-inter">{t('dashboard.activityFeed')}</h3>
-                <div className="flex gap-px">
-                  {[
-                    { key: 'all', label: t('dashboard.tabAll') },
-                    { key: 'received', label: t('dashboard.tabReceived') },
-                    { key: 'given', label: t('dashboard.tabGiven') },
-                  ].map(tab => (
-                    <button key={tab.key} onClick={() => setActiveTab(tab.key)}
-                      className={`px-3 py-1.5 text-[9px] font-bold uppercase tracking-wider transition-all ${
-                        activeTab === tab.key ? 'bg-white text-black' : 'text-white/25 hover:text-white/50 bg-white/[0.02]'
-                      }`}>
-                      {tab.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {loading ? (
-                <div className="space-y-2">{[1,2,3].map(i => (<div key={i} className="p-4 bg-white/[0.02] border border-white/[0.03] animate-pulse h-14 rounded-[2px]" />))}</div>
-              ) : filteredEvents.length === 0 ? (
-                <div className="text-center py-12">
-                  <div className="w-12 h-12 rounded-[2px] bg-white/[0.03] border border-white/[0.05] flex items-center justify-center mx-auto mb-4">
-                    <Inbox className="w-5 h-5 text-white/10" />
-                  </div>
-                  <p className="text-white/20 font-bold uppercase tracking-[0.18em] text-[10px] mb-1 font-inter">{t('dashboard.noActivity')}</p>
-                  <p className="text-white/25 text-[11px] font-inter max-w-xs mx-auto">{t('dashboard.noActivitySub')}</p>
-                </div>
-              ) : (
-                <div className="space-y-px max-h-[420px] overflow-y-auto" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.05) transparent' }}>
-                  <AnimatePresence>
-                    {filteredEvents.slice(0, 20).map((event, idx) => (
-                      <motion.div key={`${event.txHash}-${idx}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: idx * 0.03 }}
-                        className="group p-3.5 border-b border-white/[0.04] hover:bg-white/[0.03] transition-all">
-                        <div className="flex items-start gap-3">
-                          <div className={`w-7 h-7 rounded-[2px] flex items-center justify-center shrink-0 ${
-                            event.type === 'received' ? 'bg-white/5 border border-white/10' : 'bg-white/5 border border-white/10'
-                          }`}>
-                            {event.type === 'received' ? <Award className="w-3.5 h-3.5 text-white/40" /> : <UserCheck className="w-3.5 h-3.5 text-white/40" />}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center justify-between mb-1">
-                              <div className="flex items-center gap-2">
-                                <p className="text-xs font-bold font-inter">{event.type === 'received' ? t('dashboard.endorsementReceived') : t('dashboard.endorsementGiven')}</p>
-                                <span className="px-1.5 py-0.5 border border-white/10 rounded-[2px] text-[7px] font-bold uppercase text-white/40">{event.jobType}</span>
-                              </div>
-                              <div className="flex gap-0.5 shrink-0">
-                                {[1,2,3,4,5].map(s => (<Star key={s} className={`w-2.5 h-2.5 ${s <= event.rating ? 'text-white fill-white' : 'text-white/5'}`} />))}
-                              </div>
-                            </div>
-                            <p className="text-[10px] text-white/25 truncate mb-1.5 font-inter">"{event.feedback}"</p>
-                            <div className="flex items-center gap-3">
-                              <span className="text-[8px] text-white/15 flex items-center gap-1 font-inter">
-                                <Clock className="w-2.5 h-2.5" />{new Date(event.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                              </span>
-                              {event.txHash && (
-                                <a href={`https://stellar.expert/explorer/testnet/tx/${event.txHash}`} target="_blank" rel="noopener noreferrer"
-                                  className="text-[8px] font-mono text-white/10 hover:text-white/40 transition-colors flex items-center gap-1">
-                                  <Hash className="w-2 h-2" /> {event.txHash.slice(0,8)}…
-                                </a>
-                              )}
-                            </div>
-                          </div>
+            ) : (
+              <div style={{ maxHeight:'500px', overflowY:'auto', scrollbarWidth:'thin', scrollbarColor:'rgba(255,255,255,0.05) transparent' }}>
+                <AnimatePresence>
+                  {filteredEvents.slice(0,20).map((event, idx) => (
+                    <motion.div key={`${event.txHash}-${idx}`} initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ delay: idx * 0.03 }}
+                      style={{ padding:'16px 0', borderBottom:'1px solid rgba(255,255,255,0.05)', display:'flex', gap:'14px', alignItems:'flex-start' }}>
+                      <div style={{ width:'36px', height:'36px', flexShrink:0, border:'1px solid rgba(255,255,255,0.1)', backgroundColor:'rgba(255,255,255,0.03)', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                        {event.type === 'received' ? <Award style={{ width:'14px', height:'14px', color:'rgba(255,255,255,0.25)' }} /> : <UserCheck style={{ width:'14px', height:'14px', color:'rgba(255,255,255,0.25)' }} />}
+                      </div>
+                      <div style={{ flex:1, minWidth:0 }}>
+                        <div style={{ display:'flex', alignItems:'center', gap:'10px', marginBottom:'4px' }}>
+                          <span className="font-inter" style={{ fontSize:'13px', fontWeight:'700', color:'#fff' }}>{event.type === 'received' ? t('dashboard.endorsementReceived') : t('dashboard.endorsementGiven')}</span>
+                          <span style={{ fontSize:'9px', letterSpacing:'2px', color:'rgba(255,255,255,0.4)', border:'1px solid rgba(255,255,255,0.1)', padding:'2px 8px', textTransform:'uppercase' }}>{event.jobType}</span>
                         </div>
-                      </motion.div>
-                    ))}
-                  </AnimatePresence>
-                </div>
-              )}
-            </div>
+                        <p className="font-inter" style={{ fontSize:'13px', color:'rgba(255,255,255,0.45)', fontStyle:'italic', marginBottom:'6px' }}>"{event.feedback}"</p>
+                        <div style={{ display:'flex', gap:'12px' }}>
+                          <span className="font-inter" style={{ fontSize:'11px', color:'rgba(255,255,255,0.25)', display:'flex', alignItems:'center', gap:'4px' }}>
+                            <Clock style={{ width:'10px', height:'10px' }} />{new Date(event.timestamp).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' })}
+                          </span>
+                          {event.txHash && (
+                            <a href={`https://stellar.expert/explorer/testnet/tx/${event.txHash}`} target="_blank" rel="noopener noreferrer" style={{ fontSize:'11px', fontFamily:'monospace', color:'rgba(255,255,255,0.15)', display:'flex', alignItems:'center', gap:'4px', textDecoration:'none' }}>
+                              <Hash style={{ width:'10px', height:'10px' }} />{event.txHash.slice(0,8)}…
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                      <div style={{ display:'flex', gap:'2px', alignItems:'center', flexShrink:0 }}>
+                        {[1,2,3,4,5].map(s => (<Star key={s} style={{ width:'13px', height:'13px', color: s <= event.rating ? '#f5a623' : 'rgba(255,255,255,0.1)', fill: s <= event.rating ? '#f5a623' : 'transparent' }} />))}
+                      </div>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </div>
+            )}
           </div>
         </div>
       </div>

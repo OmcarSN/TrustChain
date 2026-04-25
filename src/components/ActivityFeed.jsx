@@ -3,73 +3,282 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Activity, ExternalLink, Clock, CheckCircle2, XCircle, Zap } from 'lucide-react';
 
+const feedItemStyle = `
+@keyframes livePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+@keyframes feedItemIn {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+`;
+
 const ActivityFeed = ({ activities, loading }) => {
   const { t } = useTranslation();
   const truncate = (addr) => (addr ? `${addr.slice(0, 6)}…${addr.slice(-4)}` : '');
 
   if (loading && (!activities || activities.length === 0)) {
     return (
-      <div className="rounded-[2px] p-5 h-full flex flex-col border border-white/[0.07] bg-white/[0.02]">
-        <div className="flex items-center gap-2.5 mb-6">
-          <div className="w-7 h-7 rounded-[2px] bg-white/5 border border-white/10 flex items-center justify-center"><Zap className="w-3.5 h-3.5 text-white/30" /></div>
-          <h3 className="text-sm font-bold text-white tracking-tight font-inter">{t("dashboard.activityFeed")}</h3>
+      <div style={{
+        backgroundColor: '#0a0a0a',
+        border: '1px solid rgba(255,255,255,0.1)',
+        overflow: 'hidden',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column'
+      }}>
+        <style>{feedItemStyle}</style>
+        <div style={{
+          padding: '14px 16px',
+          borderBottom: '1px solid rgba(255,255,255,0.08)',
+          backgroundColor: 'rgba(255,255,255,0.03)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px'
+        }}>
+          <div style={{
+            width: '28px', height: '28px',
+            border: '1px solid rgba(255,255,255,0.1)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            flexShrink: '0'
+          }}>
+            <Zap style={{ width: '12px', height: '12px', color: 'rgba(255,255,255,0.4)' }} />
+          </div>
+          <span style={{ fontSize: '13px', fontWeight: '700', color: '#ffffff', letterSpacing: '0.01em' }}>
+            {t("dashboard.activityFeed")}
+          </span>
         </div>
-        <div className="space-y-2.5 flex-1">
-          {[1,2,3,4,5].map((i) => (<div key={i} className="h-[56px] bg-white/[0.03] rounded-[2px] animate-pulse" style={{ animationDelay: `${i*120}ms` }} />))}
+        <div style={{ padding: '16px', flex: 1 }}>
+          {[1,2,3,4,5].map((i) => (
+            <div key={i} style={{
+              height: '48px',
+              backgroundColor: 'rgba(255,255,255,0.03)',
+              marginBottom: '6px',
+              animation: `livePulse 1.5s ease infinite`,
+              animationDelay: `${i * 120}ms`
+            }} />
+          ))}
         </div>
       </div>
     );
   }
 
   return (
-    <div className="rounded-[2px] p-5 h-full flex flex-col border border-white/[0.07] bg-white/[0.02]">
-      <div className="flex items-center justify-between mb-5 pb-4 border-b border-white/5">
-        <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-[2px] bg-white/5 border border-white/10 flex items-center justify-center"><Zap className="w-3.5 h-3.5 text-white/30" /></div>
+    <div style={{
+      backgroundColor: '#0a0a0a',
+      border: '1px solid rgba(255,255,255,0.1)',
+      padding: '0',
+      borderRadius: '0',
+      overflow: 'hidden',
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column'
+    }}>
+      <style>{feedItemStyle}</style>
+
+      {/* ═══ Header ═══ */}
+      <div style={{
+        padding: '14px 16px',
+        borderBottom: '1px solid rgba(255,255,255,0.08)',
+        backgroundColor: 'rgba(255,255,255,0.03)',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        flexShrink: 0
+      }}>
+        {/* Left zone */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div style={{
+            width: '28px', height: '28px',
+            border: '1px solid rgba(255,255,255,0.1)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            flexShrink: '0'
+          }}>
+            <Zap style={{ width: '12px', height: '12px', color: 'rgba(255,255,255,0.4)' }} />
+          </div>
           <div>
-            <h3 className="text-sm font-bold text-white tracking-tight leading-none mb-0.5 font-inter">{t("dashboard.activityFeed")}</h3>
-            <p className="text-[9px] text-white/20 uppercase tracking-wider font-inter">{t("dashboard.realTimeEvents")}</p>
+            <div style={{ fontSize: '13px', fontWeight: '700', letterSpacing: '0.01em', color: '#ffffff', lineHeight: 1 }}>
+              {t("dashboard.activityFeed")}
+            </div>
+            <div className="font-inter" style={{
+              fontSize: '9px', letterSpacing: '3px',
+              color: 'rgba(255,255,255,0.3)', marginTop: '2px',
+              textTransform: 'uppercase'
+            }}>
+              {t("dashboard.realTimeEvents")}
+            </div>
           </div>
         </div>
-        <div className="flex items-center gap-2 px-2.5 py-1.5 border border-green-400/15 rounded-[2px]">
-          <div className="relative flex items-center justify-center"><div className="w-1.5 h-1.5 rounded-full bg-green-400" /><div className="absolute w-1.5 h-1.5 rounded-full bg-green-400 animate-ping" /></div>
-          <span className="text-[9px] uppercase font-bold text-green-400/80 tracking-wider">{t("dashboard.live")}</span>
+
+        {/* Right zone — LIVE */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <div style={{
+            width: '6px', height: '6px', borderRadius: '50%',
+            backgroundColor: '#00dc6e',
+            animation: 'livePulse 1.5s ease infinite'
+          }} />
+          <span style={{
+            fontSize: '10px', fontWeight: '700',
+            letterSpacing: '2px', color: '#00dc6e'
+          }}>
+            LIVE
+          </span>
         </div>
       </div>
 
-      <div className="space-y-1.5 overflow-y-auto flex-1 pr-1" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.05) transparent', maxHeight: '380px' }}>
-        {activities.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="w-10 h-10 rounded-[2px] bg-white/5 border border-white/5 flex items-center justify-center mb-3"><Activity className="w-5 h-5 text-white/15" /></div>
-            <p className="text-xs font-bold text-white/25 mb-1 font-inter">{t("dashboard.noActivity")}</p>
-            <p className="text-[10px] text-white/10 max-w-[180px] font-inter">{t("dashboard.noActivitySubFeed")}</p>
-          </div>
-        ) : (
-          <AnimatePresence>
-            {activities.map((activity, idx) => (
-              <motion.div key={`${activity.hash}-${idx}`} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ delay: idx * 0.04 }}
-                className="flex items-center justify-between p-3 rounded-[2px] border border-white/[0.04] hover:border-white/[0.1] transition-all bg-white/[0.01]">
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className={`w-7 h-7 rounded-[2px] flex items-center justify-center shrink-0 ${activity.successful ? 'bg-green-400/8 border border-green-400/15' : 'bg-red-400/8 border border-red-400/15'}`}>
-                    {activity.successful ? <CheckCircle2 className="w-3.5 h-3.5 text-green-400" /> : <XCircle className="w-3.5 h-3.5 text-red-400" />}
+      {/* ═══ Feed List ═══ */}
+      <div style={{ position: 'relative', flex: 1, minHeight: 0 }}>
+        <div style={{
+          maxHeight: '380px',
+          overflowY: 'auto',
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none',
+        }}
+        className="feed-scroll-hide"
+        >
+          <style>{`.feed-scroll-hide::-webkit-scrollbar { display: none; }`}</style>
+
+          {activities.length === 0 ? (
+            <div style={{
+              display: 'flex', flexDirection: 'column',
+              alignItems: 'center', justifyContent: 'center',
+              padding: '48px 16px', textAlign: 'center'
+            }}>
+              <div style={{
+                width: '36px', height: '36px',
+                border: '1px solid rgba(255,255,255,0.06)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                marginBottom: '12px'
+              }}>
+                <Activity style={{ width: '16px', height: '16px', color: 'rgba(255,255,255,0.15)' }} />
+              </div>
+              <p className="font-inter" style={{ fontSize: '12px', fontWeight: '700', color: 'rgba(255,255,255,0.25)', marginBottom: '4px' }}>
+                {t("dashboard.noActivity")}
+              </p>
+              <p className="font-inter" style={{ fontSize: '10px', color: 'rgba(255,255,255,0.1)', maxWidth: '180px' }}>
+                {t("dashboard.noActivitySubFeed")}
+              </p>
+            </div>
+          ) : (
+            activities.map((activity, idx) => {
+              const isEndorsement = activity.operationType?.toLowerCase().includes('endorsement');
+              return (
+                <a
+                  key={`${activity.hash}-${idx}`}
+                  href={`https://stellar.expert/explorer/testnet/tx/${activity.hash}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: '28px 1fr auto',
+                    gap: '12px',
+                    alignItems: 'center',
+                    padding: '10px 16px',
+                    borderBottom: '1px solid rgba(255,255,255,0.05)',
+                    backgroundColor: isEndorsement
+                      ? 'rgba(255,190,50,0.03)'
+                      : idx % 2 === 1 ? 'rgba(255,255,255,0.01)' : 'transparent',
+                    borderLeft: isEndorsement ? '2px solid rgba(255,190,50,0.4)' : '2px solid transparent',
+                    cursor: 'pointer',
+                    textDecoration: 'none',
+                    color: 'inherit',
+                    transition: 'background 0.15s ease',
+                    animation: 'feedItemIn 0.3s ease forwards',
+                    animationDelay: `${idx * 0.04}s`,
+                    opacity: 0
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.03)'; }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = isEndorsement
+                      ? 'rgba(255,190,50,0.03)'
+                      : idx % 2 === 1 ? 'rgba(255,255,255,0.01)' : 'transparent';
+                  }}
+                >
+                  {/* Status Icon */}
+                  <div style={{
+                    width: '28px', height: '28px', borderRadius: '50%',
+                    border: activity.successful !== false
+                      ? '1.5px solid rgba(0,220,110,0.4)'
+                      : '1.5px solid rgba(239,68,68,0.4)',
+                    backgroundColor: activity.successful !== false
+                      ? 'rgba(0,220,110,0.07)'
+                      : 'rgba(239,68,68,0.07)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    flexShrink: '0'
+                  }}>
+                    {activity.successful !== false
+                      ? <CheckCircle2 style={{ width: '11px', height: '11px', color: '#00dc6e' }} />
+                      : <XCircle style={{ width: '11px', height: '11px', color: '#ef4444' }} />
+                    }
                   </div>
-                  <div className="min-w-0">
-                    <span className="block text-xs font-bold font-mono text-white/60 tracking-tight truncate">{truncate(activity.walletAddress)}</span>
-                    <div className="flex items-center gap-1.5 mt-0.5">
-                      <Clock className="w-2.5 h-2.5 text-white/15 shrink-0" />
-                      <span className="text-[10px] text-white/25 font-inter">{activity.timeAgo}</span>
-                      <span className="text-white/10 text-[10px]">•</span>
-                      <span className="text-[10px] text-white/30 font-inter truncate">{activity.operationType}</span>
+
+                  {/* Address + Meta */}
+                  <div style={{ minWidth: 0 }}>
+                    <div style={{
+                      fontSize: '12px', fontWeight: '700',
+                      fontFamily: 'monospace', color: '#ffffff',
+                      letterSpacing: '0.02em', marginBottom: '3px',
+                      overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'
+                    }}>
+                      {truncate(activity.walletAddress)}
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <Clock style={{ width: '10px', height: '10px', color: 'rgba(255,255,255,0.2)', flexShrink: 0 }} />
+                      <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.3)' }}>
+                        {activity.timeAgo}
+                      </span>
+                      <span style={{ color: 'rgba(255,255,255,0.15)', fontSize: '10px' }}>•</span>
+                      {isEndorsement ? (
+                        <span style={{
+                          fontSize: '10px', color: 'rgba(255,190,50,0.8)',
+                          backgroundColor: 'rgba(255,190,50,0.08)',
+                          border: '1px solid rgba(255,190,50,0.2)',
+                          padding: '1px 6px', letterSpacing: '0.5px',
+                          lineHeight: '1.4'
+                        }}>
+                          {activity.operationType}
+                        </span>
+                      ) : (
+                        <span style={{
+                          fontSize: '10px', color: 'rgba(255,255,255,0.4)',
+                          letterSpacing: '0.5px',
+                          overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'
+                        }}>
+                          {activity.operationType}
+                        </span>
+                      )}
                     </div>
                   </div>
-                </div>
-                <a href={`https://stellar.expert/explorer/testnet/tx/${activity.hash}`} target="_blank" rel="noopener noreferrer"
-                  className="p-2 rounded-[2px] text-white/15 hover:text-white/50 border border-white/5 hover:border-white/15 transition-all shrink-0 ml-2">
-                  <ExternalLink className="w-3 h-3" />
+
+                  {/* External Link */}
+                  <div
+                    style={{
+                      color: 'rgba(255,255,255,0.15)',
+                      transition: 'color 0.15s ease',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      flexShrink: 0
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.6)'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.15)'; }}
+                  >
+                    <ExternalLink style={{ width: '11px', height: '11px' }} />
+                  </div>
                 </a>
-              </motion.div>
-            ))}
-          </AnimatePresence>
+              );
+            })
+          )}
+        </div>
+
+        {/* Bottom fade gradient */}
+        {activities.length > 0 && (
+          <div style={{
+            position: 'absolute',
+            bottom: 0, left: 0, right: 0,
+            height: '48px',
+            background: 'linear-gradient(to bottom, transparent, #0a0a0a)',
+            pointerEvents: 'none'
+          }} />
         )}
       </div>
     </div>
