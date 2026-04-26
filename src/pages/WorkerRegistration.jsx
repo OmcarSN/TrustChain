@@ -364,8 +364,8 @@ const WorkerRegistration = () => {
           </div>
 
           {/* Form Fields */}
-          <div style={{ padding:'24px 32px' }}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8" style={{ marginBottom:'14px' }}>
+          <div className="px-4 py-4 sm:px-8 sm:py-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-8" style={{ marginBottom:'14px' }}>
               <FormField icon={User} label={t('registration.labelName')} error={errors.fullName} completed={(formData.fullName||'').length>=2}>
                 <input name="fullName" value={formData.fullName} onChange={handleInputChange} placeholder="e.g. Raj Kumar" className={`reg-input w-full px-3 py-2.5 text-sm ${errors.fullName ? 'reg-input-err' : ''}`} />
               </FormField>

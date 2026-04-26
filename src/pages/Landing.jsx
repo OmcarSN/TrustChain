@@ -145,14 +145,35 @@ const Landing = () => {
           transition: all 0.2s ease;
         }
         .hero-btn-primary:hover {
-          background-color: #e0e0e0 !important;
+          background-color: #e5e5e5 !important;
         }
         .hero-btn-secondary {
           transition: all 0.2s ease;
         }
         .hero-btn-secondary:hover {
-          border-color: #ffffff !important;
-          background-color: rgba(255,255,255,0.06) !important;
+          border-color: rgba(255,255,255,0.8) !important;
+          background-color: rgba(255,255,255,0.05) !important;
+        }
+        @keyframes borderRotate {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        .animated-cta-border {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          padding: 1px;
+          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor;
+          mask-composite: exclude;
+          z-index: 10;
+        }
+        .animated-cta-border::before {
+          content: '';
+          position: absolute;
+          top: -50%; left: -50%; width: 200%; height: 200%;
+          background: conic-gradient(from 0deg, transparent 70%, rgba(255,255,255,0.8) 80%, transparent 100%);
+          animation: borderRotate 4s linear infinite;
         }
         .btn-arrow {
           display: inline-block;
@@ -220,12 +241,65 @@ const Landing = () => {
          ══════════════════════════════════════════════════════════ */}
       <section style={{
         position: 'relative',
-        minHeight: '100vh', boxSizing: 'border-box',
-        display: 'flex', flexDirection: 'column', justifyContent: 'center',
-        paddingTop: '80px', paddingBottom: '0px',
-        paddingLeft: '48px', paddingRight: '48px',
         backgroundColor: '#080808',
       }}>
+        <style>{`
+          .hero-inner {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 100px 24px 40px 24px;
+            overflow: hidden;
+          }
+          .hero-left {
+            width: 100%;
+            max-width: 680px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+          }
+          .hero-badge {
+            margin-bottom: 20px;
+          }
+          .hero-headline-block {
+            margin-bottom: 12px;
+          }
+          .hero-subtext {
+            margin-bottom: 36px;
+            line-height: 1.6;
+          }
+          .hero-cta-row {
+            gap: 12px;
+            align-items: center;
+          }
+          .hero-headline {
+            font-size: clamp(36px, 9vw, 56px);
+            white-space: normal;
+            overflow: hidden;
+            line-height: 1.1;
+          }
+          .hero-ghost {
+            font-size: clamp(28px, 8vw, 50px);
+            white-space: normal;
+            overflow: hidden;
+            margin-bottom: 28px;
+          }
+          @media (min-width: 768px) {
+            .hero-inner {
+              padding: 120px 80px 60px 80px;
+            }
+            .hero-headline {
+              font-size: clamp(32px, 4.5vw, 72px);
+              white-space: nowrap;
+            }
+            .hero-ghost {
+              font-size: clamp(28px, 4vw, 64px);
+              white-space: nowrap;
+            }
+          }
+        `}</style>
 
         {/* Grid lines background */}
         <div style={{
@@ -272,7 +346,7 @@ const Landing = () => {
         {/* Watermark logo */}
         <img src="/trustchain-logo.png" alt="" style={{
           position: 'absolute',
-          top: '48%', left: '58%',
+          top: '48%', left: '50%',
           transform: 'translate(-50%, -50%)',
           width: '420px', height: '420px',
           opacity: 0.07, zIndex: 0,
@@ -282,88 +356,127 @@ const Landing = () => {
           animation: 'slowRotate 60s linear infinite',
         }} />
 
-        {/* Hero text block */}
-        <div style={{ position: 'relative', zIndex: 1, marginBottom: '24px', paddingTop: '60px', paddingLeft: '24px', width: '100%' }}>
+        <div className="hero-inner relative z-10">
+          {/* Left Column */}
+          <div className="hero-left justify-center">
+            {/* Hero text block */}
+            <div style={{
+              position: 'relative', zIndex: 1, width: '100%',
+              display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'flex-start'
+            }}>
 
-          {/* Line 1 — YOUR WORK. */}
-          <div className="font-clash hero-line-1 text-4xl md:text-6xl lg:text-8xl font-black" style={{
-            fontWeight: '900',
-            letterSpacing: '0.04em', lineHeight: '1.05',
-            marginBottom: '0', display: 'block',
-            whiteSpace: 'normal', wordBreak: 'break-word', width: '100%',
-          }}>
-            <span>{t('landing.titleLine1')}</span>
+              <div className="font-inter hero-badge" style={{
+                color: '#22c55e', fontSize: '11px', letterSpacing: '0.15em', fontWeight: '600',
+                textTransform: 'uppercase'
+              }}>
+                ✦ {t('landing.hero_badge', 'VERIFIED ON-CHAIN')}
+              </div>
+
+              <div className="hero-headline-block">
+                {/* Line 1 — YOUR WORK. */}
+                <div className="font-clash hero-line-1 hero-headline font-black" style={{
+                  fontWeight: '900',
+                  letterSpacing: '0.04em',
+                  marginBottom: '0', wordBreak: 'break-word',
+                }}>
+                  <span>{t('landing.titleLine1')}</span>
+                </div>
+
+                {/* Line 2 — YOUR REPUTATION. */}
+                <div className="font-clash hero-line-2 hero-headline font-black" style={{
+                  fontWeight: '900',
+                  letterSpacing: '0.04em',
+                  marginBottom: '0', wordBreak: 'break-word',
+                }}>
+                  {t('landing.titleLine2')}
+                </div>
+              </div>
+
+              {/* Line 3 — ON-CHAIN FOREVER. */}
+              <div className="font-clash hero-line-3 hero-ghost font-black" style={{
+                fontWeight: '900',
+                letterSpacing: '0.04em', lineHeight: '1.05',
+                wordBreak: 'break-word'
+              }}>
+                {t('landing.titleLine3')}
+              </div>
+
+              <p className="font-inter hero-subtext" style={{
+                color: '#e5e5e5',
+                fontSize: '16px', fontWeight: '400', letterSpacing: '0.02em',
+                maxWidth: '520px',
+                animation: 'fadeSlideUp 0.8s ease forwards', opacity: 0, animationDelay: '0.5s'
+              }}>
+                {t('landing.hero_subtext', 'Decentralized credentials for informal economy workers — verified on Stellar blockchain.')}
+              </p>
+            </div>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-row flex-nowrap w-full sm:w-auto overflow-x-auto sm:overflow-visible hero-cta-row" style={{
+              position: 'relative', zIndex: 1,
+              opacity: 0, animation: 'fadeSlideUp 0.6s ease forwards',
+              animationDelay: '0.6s', paddingBottom: '32px'
+            }}>
+              <style>{`
+                .hero-btn-primary-new {
+                  background-color: #ffffff; color: #000000; border: 2px solid #ffffff; padding: 12px 28px;
+                  font-size: 12px; font-weight: 700; letter-spacing: 0.1em; border-radius: 0;
+                  min-width: 170px; white-space: nowrap; transition: all 0.2s ease;
+                  text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
+                }
+                .hero-btn-primary-new:hover { background-color: #e5e5e5; }
+                .hero-btn-primary-new .btn-arrow { display: inline-block; transition: transform 0.2s ease; margin-left: 8px; }
+                .hero-btn-primary-new:hover .btn-arrow { transform: translateX(4px); }
+                
+                .hero-btn-secondary-new {
+                  background-color: transparent; color: #cccccc; border: 2px solid rgba(255,255,255,0.4); padding: 12px 28px;
+                  font-size: 12px; font-weight: 700; letter-spacing: 0.1em; border-radius: 0;
+                  min-width: 150px; white-space: nowrap; transition: all 0.2s ease;
+                  text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
+                }
+                .hero-btn-secondary-new:hover { color: #ffffff; border-color: #ffffff; background-color: rgba(255,255,255,0.05); }
+              `}</style>
+              <Link to="/worker" className="hero-btn-primary-new font-inter">
+                <span>{t('landing.hero_cta_worker', "I'M A WORKER")}</span>
+                <span className="btn-arrow">→</span>
+              </Link>
+              <Link to="/discover" className="hero-btn-secondary-new font-inter">
+                {t('landing.hero_cta_find', 'FIND WORKERS')}
+              </Link>
+            </div>
           </div>
 
-          {/* Line 2 — YOUR REPUTATION. */}
-          <div className="font-clash hero-line-2 text-4xl md:text-6xl lg:text-8xl font-black" style={{
-            fontWeight: '900',
-            letterSpacing: '0.04em', lineHeight: '1.05',
-            marginBottom: '0', display: 'block',
-            whiteSpace: 'normal', wordBreak: 'break-word', width: '100%',
-          }}>
-            {t('landing.titleLine2')}
-          </div>
 
-          {/* Line 3 — ON-CHAIN FOREVER. */}
-          <div className="font-clash hero-line-3 text-4xl md:text-6xl lg:text-8xl font-black" style={{
-            fontWeight: '900',
-            letterSpacing: '0.04em', lineHeight: '1.05',
-            display: 'block',
-            whiteSpace: 'normal', wordBreak: 'break-word', width: '100%', overflow: 'visible'
-          }}>
-            {t('landing.titleLine3')}
-          </div>
         </div>
 
-        {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto" style={{
-          alignItems: 'center', marginTop: '40px',
-          position: 'relative', zIndex: 1,
-          opacity: 0, animation: 'fadeSlideUp 0.6s ease forwards',
-          animationDelay: '0.6s', flexWrap: 'wrap', paddingBottom: '32px'
-        }}>
-          <Link to="/worker" className="hero-btn-primary font-inter w-full sm:w-auto px-6 py-3" style={{
-            backgroundColor: '#ffffff', color: '#000000',
-            letterSpacing: '3px', fontWeight: '800',
-            border: 'none', cursor: 'pointer', textDecoration: 'none',
-            borderRadius: '0', textTransform: 'uppercase',
-            display: 'inline-flex', alignItems: 'center', justifyContent: 'center'
-          }}>
-            <span>{t('landing.btnWorker', "I'M A WORKER")}</span>
-            <span className="btn-arrow">→</span>
-          </Link>
-          <Link to="/discover" className="hero-btn-secondary font-inter w-full sm:w-auto px-6 py-3" style={{
-            backgroundColor: 'transparent', color: '#ffffff',
-            letterSpacing: '3px', fontWeight: '700',
-            border: '1px solid rgba(255,255,255,0.3)', cursor: 'pointer',
-            borderRadius: '0', textDecoration: 'none', textTransform: 'uppercase',
-            display: 'inline-flex', alignItems: 'center', justifyContent: 'center'
-          }}>
-            {t('landing.btnFind', 'FIND WORKERS')}
-          </Link>
-        </div>
 
-        {/* Scroll indicator */}
-        <div style={{
-          position: 'absolute', bottom: '32px', left: '50%',
-          transform: 'translateX(-50%)',
-          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px',
-          zIndex: 1,
-          opacity: 0, animation: 'fadeSlideUp 0.6s ease forwards',
-          animationDelay: '0.8s',
-        }}>
-          <span className="font-inter" style={{
-            fontSize: '11px', letterSpacing: '4px', color: 'rgba(255,255,255,0.3)',
-            fontWeight: '400', textTransform: 'uppercase',
-          }}>
-            {t('landing.scrollDown')}
-          </span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ animation: 'arrowPulse 1.8s ease-in-out infinite' }}>
-              <path d="M12 5v14M19 12l-7 7-7-7" />
-            </svg>
-        </div>
       </section>
+
+      {/* ══════════════════════════════════════════════════════════
+          TRUST BAR
+         ══════════════════════════════════════════════════════════ */}
+      <div style={{
+        width: '100%', background: '#0a0a0a', borderTop: '1px solid #1a1a1a', borderBottom: '1px solid #1a1a1a',
+      }}>
+        <div className="flex flex-row md:justify-center justify-start overflow-x-auto whitespace-nowrap hide-scrollbar" style={{
+          gap: '40px', padding: '14px 24px', alignItems: 'center'
+        }}>
+          <style>{`
+            .trust-item { color: #333; font-size: 11px; letter-spacing: 0.14em; font-weight: 500; text-transform: uppercase; transition: color 0.2s ease; cursor: default; }
+            .trust-item:hover { color: #555; }
+            .trust-bullet { color: #22c55e; font-size: 11px; }
+            .hide-scrollbar::-webkit-scrollbar { display: none; }
+            .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+          `}</style>
+          <span className="trust-item">✦ {t('landing.trust_stellar', 'BUILT ON STELLAR TESTNET')}</span>
+          <span className="trust-bullet">✦</span>
+          <span className="trust-item">{t('landing.trust_gasless', '100% GASLESS')}</span>
+          <span className="trust-bullet">✦</span>
+          <span className="trust-item">{t('landing.trust_soulbound', 'SOULBOUND CREDENTIALS')}</span>
+          <span className="trust-bullet">✦</span>
+          <span className="trust-item">{t('landing.trust_opensource', 'OPEN SOURCE')}</span>
+        </div>
+      </div>
 
       {/* ══════════════════════════════════════════════════════════
           SECTION B — STATS BAR
@@ -422,7 +535,7 @@ const Landing = () => {
       {/* ══════════════════════════════════════════════════════════
           SECTION C — HOW IT WORKS
          ══════════════════════════════════════════════════════════ */}
-      <section ref={howRef} style={{ paddingTop: '80px', paddingBottom: '0px', paddingRight: '64px', paddingLeft: '24px', marginTop: '0px' }}>
+      <section id="how-it-works" ref={howRef} style={{ paddingTop: '80px', paddingBottom: '0px', paddingRight: '64px', paddingLeft: '24px', marginTop: '0px' }}>
         {/* Section header */}
         <div style={{
           marginBottom: '48px',
@@ -430,17 +543,44 @@ const Landing = () => {
           opacity: howVisible ? 1 : 0,
           transform: howVisible ? 'translateY(0)' : 'translateY(24px)',
           transition: 'opacity 0.6s ease, transform 0.6s cubic-bezier(0.22,1,0.36,1)',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'flex-end',
+          flexWrap: 'wrap',
+          gap: '24px'
         }}>
-          <p className="font-inter" style={{
-            fontSize: '10px', letterSpacing: '4px', color: 'rgba(255,255,255,0.3)',
-            marginBottom: '12px', textTransform: 'uppercase',
-          }}>
-            {t('landing.howItWorks', 'How It Works')}
-          </p>
-          <h2 className="font-clash" style={{ fontSize: '2rem', fontWeight: '900', color: '#ffffff' }}>
-            {t('landing.stepsTitleP1', 'Three Steps to')}{' '}
-            {t('landing.stepsTitleP2', 'Trust')}
-          </h2>
+          <div>
+            <p className="font-inter" style={{
+              fontSize: '10px', letterSpacing: '4px', color: 'rgba(255,255,255,0.3)',
+              marginBottom: '12px', textTransform: 'uppercase',
+            }}>
+              {t('landing.howItWorks', 'How It Works')}
+            </p>
+            <h2 className="font-clash" style={{ fontSize: '2rem', fontWeight: '900', color: '#ffffff' }}>
+              {t('landing.stepsTitleP1', 'Three Steps to')}{' '}
+              {t('landing.stepsTitleP2', 'Trust')}
+            </h2>
+          </div>
+          <Link to="/how-it-works" className="font-inter" style={{
+            fontSize: '11px',
+            fontWeight: '700',
+            letterSpacing: '2px',
+            color: '#00dc6e',
+            textTransform: 'uppercase',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            textDecoration: 'none',
+            border: '1px solid rgba(0, 220, 110, 0.3)',
+            padding: '10px 20px',
+            transition: 'all 0.3s ease',
+            backgroundColor: 'rgba(0, 220, 110, 0.05)'
+          }}
+          onMouseOver={(e) => { e.currentTarget.style.backgroundColor = 'rgba(0, 220, 110, 0.15)'; e.currentTarget.style.borderColor = '#00dc6e'; }}
+          onMouseOut={(e) => { e.currentTarget.style.backgroundColor = 'rgba(0, 220, 110, 0.05)'; e.currentTarget.style.borderColor = 'rgba(0, 220, 110, 0.3)'; }}
+          >
+            {t('landing.viewDetailedGuide', 'VIEW DETAILED GUIDE')} <span>→</span>
+          </Link>
         </div>
 
         {/* Steps grid */}
@@ -512,12 +652,13 @@ const Landing = () => {
         opacity: 0, animation: 'ctaFadeUp 0.6s ease forwards', animationDelay: '0.4s',
         marginTop: '60px',
       }}>
+        <div className="animated-cta-border" />
         <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 50%, rgba(0,100,255,0.06) 0%, transparent 60%)', pointerEvents: 'none', zIndex: 0 }} />
         <div style={{ position: 'absolute', top: 16, left: 16, width: 28, height: 28, borderTop: '2px solid rgba(255,255,255,0.25)', borderLeft: '2px solid rgba(255,255,255,0.25)' }} />
         <div style={{ position: 'absolute', bottom: 16, right: 16, width: 28, height: 28, borderBottom: '2px solid rgba(255,255,255,0.25)', borderRight: '2px solid rgba(255,255,255,0.25)' }} />
         
         <div style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
-          <h2 className="font-clash text-2xl md:text-4xl font-black text-center" style={{ color: '#fff', marginBottom: '8px' }}>
+          <h2 className="font-clash text-2xl sm:text-3xl md:text-4xl font-black text-center" style={{ color: '#fff', marginBottom: '8px' }}>
             {t('landing.ctaTitle')}
           </h2>
           <p className="font-inter" style={{ fontSize: '14px', color: 'rgba(255,255,255,0.4)', marginBottom: '32px' }}>
@@ -550,7 +691,7 @@ const Landing = () => {
           fontSize: '100px', fontWeight: '900',
           color: 'rgba(255,255,255,1)', opacity: 0.015,
           animation: 'ticker 25s linear infinite',
-          top: '50%', transform: 'translateY(-50%)',
+          top: '40%', transform: 'translateY(-50%)',
           zIndex: 0, pointerEvents: 'none', userSelect: 'none',
         }}>
           STELLAR · SOROBAN · REACT · FREIGHTER · RUST · STELLAR · SOROBAN · REACT · FREIGHTER · RUST ·
@@ -570,7 +711,7 @@ const Landing = () => {
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px' }}>
+        <div className="flex overflow-x-auto md:grid md:grid-cols-5 gap-4 pb-2 md:pb-0" style={{ gap: '16px' }}>
           {[
             { name: 'Stellar', abbr: 'ST', desc: t('landing.techBlockchain', 'Blockchain') },
             { name: 'Soroban', abbr: 'SR', desc: t('landing.techSmartContracts', 'Smart Contracts') },
@@ -578,7 +719,7 @@ const Landing = () => {
             { name: 'Freighter', abbr: 'FR', desc: t('landing.techWallet', 'Wallet') },
             { name: 'Rust', abbr: 'RS', desc: t('landing.techBackend', 'Backend') },
           ].map((tech, i) => (
-            <div key={i} className="tech-card-new" style={{
+            <div key={i} className="tech-card-new min-w-[160px] md:min-w-0" style={{
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
               padding: '24px 16px', textAlign: 'center',
               border: '1px solid rgba(255,255,255,0.07)',

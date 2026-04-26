@@ -1,4 +1,13 @@
 {
+  "nav_dashboard": "Dashboard",
+  "nav_worker_portal": "Worker Portal",
+  "nav_analytics": "Analytics",
+  "nav_explorer": "Explorer",
+  "nav_disconnect": "Disconnect",
+  "nav_find_workers": "Find Workers",
+  "footer_tagline": "Verified reputation for the informal economy, on Stellar.",
+  "footer_testnet": "ON STELLAR TESTNET",
+  "footer_platform": "PLATFORM",
   "about_trustchain": "About TrustChain",
   "about_description": "TrustChain is a decentralized credential and reputation platform for the informal economy, built on Stellar Soroban blockchain.",
   "our_mission": "Our Mission",
@@ -19,6 +28,7 @@
   "mission": "Mission",
   "contact": "Contact",
   "community": "Community",
+  "resources": "Resources",
   "nav": {
     "home": "Home",
     "discover": "Find Workers",
@@ -32,7 +42,8 @@
     "connectWallet": "Connect Wallet",
     "connectFreighter": "Connect Freighter",
     "navigationMenu": "Navigation Menu",
-    "disconnectWallet": "Disconnect Wallet"
+    "disconnectWallet": "Disconnect Wallet",
+    "howItWorks": "How It Works"
   },
   "footer": {
     "desc": "Revolutionizing informal economy credentials through on-chain verified identity.",
@@ -49,7 +60,13 @@
     "titleLine2": "YOUR REPUTATION.",
     "titleLine3": "ON-CHAIN FOREVER.",
     "desc": "A sovereign, portable credential system for informal economy workers — built on Stellar.",
-    "scrollDown": "SCROLL DOWN",
+    "trust_stellar": "BUILT ON STELLAR TESTNET",
+    "trust_gasless": "100% GASLESS",
+    "trust_soulbound": "SOULBOUND CREDENTIALS",
+    "trust_opensource": "OPEN SOURCE",
+    "hero_badge": "VERIFIED ON-CHAIN",
+    "hero_cta_worker": "I'M A WORKER",
+    "hero_cta_find": "FIND WORKERS",
     "networkLabel": "NETWORK",
     "networkValue": "STELLAR TESTNET",
     "stepLabel": "STEP",
@@ -100,6 +117,7 @@
     "techBackend": "Backend",
     "heroEyebrow": "TRUSTCHAIN PROTOCOL · STELLAR SOROBAN · V1.0",
     "heroDesc": "Mint your skills on Stellar. Build trust. Get hired.",
+    "hero_subtext": "Decentralized credentials for informal economy workers — verified on Stellar blockchain.",
     "heroRightLabel": "DECENTRALIZED · VERIFIED · PERMANENT",
     "learnMore": "LEARN MORE",
     "statVerifiedWorkers": "VERIFIED WORKERS",
@@ -481,5 +499,68 @@
     "Freelance": "Freelance",
     "Full-time": "Full-time",
     "label": "Job Type"
+  },
+  "hiw": {
+    "eyebrow": "SIMPLE GUIDE",
+    "title": "HOW IT WORKS",
+    "subtitle1": "Think of TrustChain as an unfakeable digital report card.",
+    "subtitle2": "Usually, if a plumber or electrician does a great job, only the person who hired them knows. With TrustChain, every good job gets a \"gold star\" review that is locked in a public digital notebook (called a blockchain). No one can delete it, and no one can fake it.",
+    "workers": {
+      "title": "01. FOR WORKERS (BUILDING YOUR RESUME)",
+      "step1": {
+        "title": "Get Your Digital Key",
+        "desc": "You don't need an email or a password. You just download a digital wallet (like Freighter). This wallet acts as your unique key to log into TrustChain."
+      },
+      "step2": {
+        "title": "Do Great Work",
+        "desc": "Go out and do your job in the real world just like you normally do. Fix the pipe, build the wall, or paint the house."
+      },
+      "step3": {
+        "title": "Collect Your Stars",
+        "desc": "After the job, the person who hired you gives you a rating. This rating is permanently glued to your digital profile so future customers can see how amazing you are."
+      }
+    },
+    "verifiers": {
+      "title": "02. FOR EMPLOYERS (HIRING PEOPLE)",
+      "step1": {
+        "title": "Find The Best People",
+        "desc": "Search through our list of workers. You can see what kind of jobs they do and what their overall score is."
+      },
+      "step2": {
+        "title": "Trust The Reviews",
+        "desc": "Unlike normal websites where anyone can write fake 5-star reviews, every review on TrustChain is verified and locked. You know you are looking at real work history."
+      },
+      "step3": {
+        "title": "Leave Your Review",
+        "desc": "When the worker finishes your job, you leave a review. This rewards them for their hard work and helps the next person know they are reliable."
+      }
+    },
+    "pages": {
+      "title": "03. WHAT DOES EACH PAGE DO?",
+      "findWorkers": {
+        "title": "Find Workers",
+        "desc": "The main directory. Go here to search for plumbers, electricians, or builders, and read their verified reviews."
+      },
+      "workerPortal": {
+        "title": "Worker Portal",
+        "desc": "Your personal setup page. If you are a worker, you go here to register your skills and update your profile."
+      },
+      "dashboard": {
+        "title": "Dashboard",
+        "desc": "Your private control center. View your wallet status, recent activity, and reputation score all in one place."
+      },
+      "analytics": {
+        "title": "Analytics",
+        "desc": "The big picture. Look here to see platform-wide stats like how many workers are registered and how many total reviews exist."
+      },
+      "explorer": {
+        "title": "Explorer",
+        "desc": "The raw blockchain notebook. If you want to dive deep and verify the actual transaction records stored on Stellar, you search here."
+      }
+    },
+    "tech": {
+      "title": "Why is this safe and free?",
+      "desc": "TrustChain is built on top of a powerful computer network called Stellar. Think of Stellar as a giant, unbreakable digital safe. Once a review is put into the safe, nobody can change it or cheat the system. Best of all, we made it completely free to use—workers never have to pay money to collect their well-earned reviews."
+    }
   }
 }

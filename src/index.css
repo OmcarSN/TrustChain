@@ -287,3 +287,38 @@
   color: #ffffff;
   text-shadow: 0 0 20px rgba(255,255,255,0.2);
 }
+
+/* ── Global Ambient Background ────────────────────────────── */
+.global-bg-container {
+  position: fixed;
+  inset: 0;
+  z-index: -10;
+  background-color: #050505;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.global-bg-gradient {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.015) 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(0,220,110,0.025) 0%, transparent 40%);
+  animation: bgSlowRotate 40s linear infinite;
+}
+
+@keyframes bgSlowRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.global-bg-noise {
+  position: absolute;
+  inset: 0;
+  opacity: 0.15;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+}

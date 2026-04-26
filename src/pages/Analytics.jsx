@@ -119,7 +119,8 @@ const Analytics = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05 + idx * 0.05, duration: 0.45 }}
                 style={{
-                  padding: '20px 20px',
+                  padding: '16px 20px',
+                  minHeight: 0,
                   border: '1px solid rgba(255,255,255,0.08)',
                   borderTop: '2px solid rgba(255,255,255,0.12)',
                   backgroundColor: 'rgba(255,255,255,0.03)',
@@ -128,16 +129,16 @@ const Analytics = () => {
                 }}
                 className="group hover:border-white/[0.2] hover:bg-white/[0.05] hover:-translate-y-0.5"
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                  <p className="font-inter" style={{ fontSize: '9px', letterSpacing: '3px', color: 'rgba(255,255,255,0.35)', fontWeight: '700', textTransform: 'uppercase' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                  <p className="font-inter" style={{ fontSize: '10px', letterSpacing: '0.12em', color: 'rgba(255,255,255,0.35)', fontWeight: '700', textTransform: 'uppercase' }}>
                     {card.title}
                   </p>
                   <div style={{ width: '28px', height: '28px', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Icon style={{ width: '14px', height: '14px', color: 'rgba(255,255,255,0.25)' }} />
+                    <Icon style={{ width: '13px', height: '13px', color: 'rgba(255,255,255,0.25)' }} />
                   </div>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-                  <h2 className="font-clash" style={{ fontSize: 'clamp(2rem, 3.5vw, 2.8rem)', fontWeight: '900', lineHeight: '1', letterSpacing: '-0.02em', color: card.isGreen ? '#00dc6e' : '#ffffff' }}>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '6px' }}>
+                  <h2 className="font-clash" style={{ fontSize: '42px', fontWeight: '900', lineHeight: '1', letterSpacing: '-0.02em', color: card.isGreen ? '#00dc6e' : '#ffffff' }}>
                     {isStr ? card.value : card.value.toLocaleString()}
                   </h2>
                   {card.trend > 0 && (
@@ -153,7 +154,7 @@ const Analytics = () => {
                     </span>
                   )}
                 </div>
-                <p className="font-inter" style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', letterSpacing: '1px', marginTop: '6px' }}>
+                <p className="font-inter" style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', letterSpacing: '1px', marginTop: '4px' }}>
                   {card.subtitle}
                 </p>
                 {card.isGreen && (
@@ -161,7 +162,7 @@ const Analytics = () => {
                     fontSize: '10px', color: '#00dc6e',
                     backgroundColor: 'rgba(0,220,110,0.1)',
                     border: '1px solid rgba(0,220,110,0.25)',
-                    padding: '3px 10px', display: 'inline-block', marginTop: '6px',
+                    padding: '3px 8px', display: 'inline-block', marginTop: '8px',
                     fontWeight: '600', letterSpacing: '1.5px'
                   }}>
                     Stellar Testnet Operational

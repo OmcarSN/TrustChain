@@ -84,39 +84,44 @@ const WorkerCard = ({ worker, index }) => {
     ? (nameParts[0][0] + nameParts[nameParts.length - 1][0]).toUpperCase()
     : nameParts[0].substring(0, 2).toUpperCase();
 
-  const avatarGradient =
-    index === 0 ? 'from-yellow-500 to-orange-500' :
-    index === 1 ? 'from-slate-400 to-slate-500' :
-    index === 2 ? 'from-amber-700 to-amber-800' :
-    'from-zinc-600 to-zinc-700';
+  const getAvatarColor = (name) => {
+    const colors = ['bg-orange-500', 'bg-emerald-600', 'bg-blue-600', 'bg-purple-600', 'bg-rose-600', 'bg-amber-500', 'bg-cyan-600', 'bg-indigo-600'];
+    const index = (name || 'W').charCodeAt(0) % colors.length;
+    return colors[index];
+  };
+
+  const avatarColor = getAvatarColor(worker.name);
 
   return (
     <Link
       to={`/profile/${worker.address}`}
-      className="group block relative transition-colors duration-150 hover:bg-zinc-800/40 cursor-pointer bg-zinc-900/60 border border-zinc-800/60 rounded-lg"
+      className="worker-row loaded"
       style={{
-        textDecoration: 'none', color: 'inherit',
-        borderLeft: index === 0 ? '2px solid rgba(234, 179, 8, 0.5)' : undefined,
-        animation: 'fadeSlideUp 0.4s ease both',
-        animationDelay: `${index * 60}ms`,
+        animation: 'contentFade 0.4s ease both',
+        animationDelay: `${index * 80}ms`,
+        padding: '14px 20px',
+        minHeight: '70px'
       }}
     >
-      <div className="px-5 py-3 flex items-center gap-4 w-full worker-card-inner group-hover:opacity-100" style={{
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full worker-card-inner" style={{
         opacity: isVerified ? 1 : 0.5,
         transition: 'opacity 0.2s ease'
       }}>
-        {/* Avatar */}
-        <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${avatarGradient} flex items-center justify-center text-sm font-bold text-white shrink-0`}>
-          {initials}
-        </div>
-        
-        {/* Info */}
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-white break-words">{worker.name}</p>
-          <div className="flex items-center gap-1.5 text-xs text-zinc-500 truncate mt-0.5">
-            <span>📍 {worker.city}</span>
-            <span>·</span>
-            <span>{worker.skill ? (t(`jobs.${worker.skill.replace(/\s+/g, '')}`) || worker.skill) : ''}</span>
+        {/* Top row / Left section */}
+        <div className="flex items-center gap-4 w-full sm:w-auto flex-1 min-w-0">
+          {/* Avatar */}
+          <div className={`avatar w-10 h-10 rounded-full ${avatarColor} flex items-center justify-center text-sm font-bold text-white shrink-0`}>
+            {initials}
+          </div>
+          
+          {/* Info */}
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold text-white break-words capitalize">{worker.name}</p>
+            <div className="flex items-center gap-1.5 text-xs text-zinc-500 truncate mt-0.5">
+              <span>📍 {worker.city}</span>
+              <span>·</span>
+              <span>{worker.skill ? (t(`jobs.${worker.skill.replace(/\s+/g, '')}`) || worker.skill) : ''}</span>
+            </div>
           </div>
         </div>
 
@@ -127,14 +132,14 @@ const WorkerCard = ({ worker, index }) => {
               VERIFIED
             </span>
           ) : (
-            <span className="text-[10px] font-bold tracking-widest px-2 py-0.5 rounded-full border border-zinc-700 text-zinc-600">
+            <span style={{ fontSize: '10px', fontWeight: 'bold', letterSpacing: '0.1em', color: '#2a2a2a' }}>
               UNVERIFIED
             </span>
           )}
         </div>
 
         {/* Right: Rating */}
-        <div className="text-right shrink-0 min-w-[64px]">
+        <div className="text-left sm:text-right shrink-0 min-w-[64px] mt-2 sm:mt-0 w-full sm:w-auto flex justify-between sm:block items-center">
           {isVerified ? (
             <>
               <p className="text-sm font-bold text-white">{Number(worker.rating || 0).toFixed(1)}</p>
@@ -143,12 +148,13 @@ const WorkerCard = ({ worker, index }) => {
               </p>
             </>
           ) : (
-            <span className="text-xs text-zinc-600 italic">
+            <span style={{ color: '#2a2a2a', fontStyle: 'italic', fontSize: '11px' }}>
               No reviews yet
             </span>
           )}
         </div>
       </div>
+      <div className="row-arrow">→</div>
     </Link>
   );
 };
@@ -161,13 +167,16 @@ const DiscoverWorkers = () => {
   const [selectedSkill, setSelectedSkill] = useState('All');
   const [selectedCity, setSelectedCity] = useState('');
   const [minRating, setMinRating] = useState(0);
+  const [sortBy, setSortBy] = useState('Rating');
   const [showFilters, setShowFilters] = useState(true);
   const { t } = useTranslation();
 
   useEffect(() => {
     const data = getAllWorkers();
     setWorkers(data);
-    setLoading(false);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1500);
   }, []);
 
   const cities = useMemo(() => {
@@ -185,8 +194,13 @@ const DiscoverWorkers = () => {
         if (!w.name.toLowerCase().includes(q) && !w.skill.toLowerCase().includes(q) && !w.city.toLowerCase().includes(q)) return false;
       }
       return true;
-    }).sort((a, b) => b.rating - a.rating || b.totalEndorsements - a.totalEndorsements);
-  }, [workers, selectedSkill, selectedCity, minRating, searchQuery]);
+    }).sort((a, b) => {
+      if (sortBy === 'Rating') return b.rating - a.rating || b.totalEndorsements - a.totalEndorsements;
+      if (sortBy === 'Reviews') return b.totalEndorsements - a.totalEndorsements || b.rating - a.rating;
+      if (sortBy === 'Name') return a.name.localeCompare(b.name);
+      return 0;
+    });
+  }, [workers, selectedSkill, selectedCity, minRating, searchQuery, sortBy]);
 
   const clearFilters = () => { setSearchQuery(''); setSelectedSkill('All'); setSelectedCity(''); setMinRating(0); };
   const hasActiveFilters = searchQuery || selectedSkill !== 'All' || (selectedCity && selectedCity !== 'All Cities') || minRating > 0;
@@ -202,9 +216,9 @@ const DiscoverWorkers = () => {
   // "Reviews" = number of workers who have received at least one endorsement
   const totalEndorsementsBase = workers.filter(w => parseInt(w.totalEndorsements || 0, 10) > 0).length;
 
-  const totalWorkers = useCounter(totalWorkersBase, 800, 300);
-  const animRatingRaw = useCounter(calculatedBase, 1000, 400);
-  const totalEndorsements = useCounter(totalEndorsementsBase, 1200, 500);
+  const totalWorkers = useCounter(totalWorkersBase, 1000, 200);
+  const animRatingRaw = useCounter(calculatedBase, 1000, 200);
+  const totalEndorsements = useCounter(totalEndorsementsBase, 1000, 200);
 
   const avgRating = (!calculatedBase || isNaN(calculatedBase)) ? "—" : 
     (animRatingRaw === calculatedBase ? calculatedBase.toFixed(1) : animRatingRaw.toFixed(1));
@@ -220,6 +234,11 @@ const DiscoverWorkers = () => {
           from { opacity: 0; transform: translateY(24px); filter: blur(3px); }
           to   { opacity: 1; transform: translateY(0);    filter: blur(0); }
         }
+        @keyframes fadeSlideRight { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes wordUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUpFade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeSlideLeft { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes simpleFade { from { opacity: 0; } to { opacity: 1; } }
         @keyframes dwFadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
         @keyframes searchGlow {
           0%, 100% { box-shadow: 0 0 0 1px rgba(255,255,255,0.1); }
@@ -255,6 +274,54 @@ const DiscoverWorkers = () => {
         .dw-rating-btn { transition: all 0.2s ease; }
         .dw-rating-btn:hover { border-color: rgba(255,255,255,0.3) !important; color: #ffffff !important; transform: translateY(-1px); }
         .dw-sort:hover { color: #ffffff !important; }
+        @keyframes shimmer {
+          0%   { background-position: -700px 0; }
+          100% { background-position:  700px 0; }
+        }
+        .skeleton {
+          background: linear-gradient(90deg, #1a1a1a 25%, #242424 50%, #1a1a1a 75%);
+          background-size: 700px 100%;
+          animation: shimmer 1.4s ease-in-out infinite;
+          border-radius: 4px;
+        }
+        @keyframes contentFade {
+          from { opacity: 0; transform: translateY(4px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .worker-row {
+          transition: background 0.18s ease, padding-left 0.25s cubic-bezier(.25,.8,.25,1);
+          border-bottom: 1px solid #181818;
+          display: flex;
+          align-items: center;
+          text-decoration: none;
+          color: inherit;
+        }
+        .worker-row:last-child {
+          border-bottom: none;
+        }
+        .worker-row.loaded:hover {
+          background: #161616;
+          padding-left: 26px;
+        }
+        .row-arrow {
+          font-size: 13px;
+          color: #1e1e1e;
+          transition: color 0.2s ease, transform 0.25s cubic-bezier(.34,1.56,.64,1);
+          flex-shrink: 0;
+          margin-left: 4px;
+          opacity: 0;
+        }
+        .worker-row.loaded:hover .row-arrow {
+          color: #555555;
+          transform: translateX(5px);
+          opacity: 1;
+        }
+        .worker-row .avatar {
+          transition: transform 0.25s cubic-bezier(.34,1.56,.64,1);
+        }
+        .worker-row.loaded:hover .avatar {
+          transform: scale(1.08);
+        }
         @media (max-width: 900px) { .dw-grid { grid-template-columns: 1fr !important; } .dw-hero { flex-direction: column !important; align-items: flex-start !important; } .dw-filters-row { flex-wrap: wrap !important; } }
         @media (max-width: 768px) { .worker-card-inner { flex-direction: column; align-items: flex-start !important; gap: 16px; } .worker-card-inner > div { width: 100%; flex: none !important; } .worker-card-inner > div:nth-child(2) { justify-content: flex-start !important; } .worker-card-inner > div:nth-child(3) { align-items: flex-start !important; } }
         @media (max-width: 540px) { .dw-grid { grid-template-columns: 1fr !important; } }
@@ -267,14 +334,18 @@ const DiscoverWorkers = () => {
         <div className="dw-hero" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '48px' }}>
           {/* Left text block */}
           <div>
-            <p className="font-inter" style={{ fontSize: '10px', letterSpacing: '4px', color: 'rgba(255,255,255,0.3)', marginBottom: '12px', textTransform: 'uppercase', fontWeight: '600', opacity: 0, animation: 'fadeSlideUp 0.8s cubic-bezier(0.16,1,0.3,1) forwards', animationDelay: '0.05s' }}>{t('discover.eyebrow')}</p>
-            <h1 className="font-clash" style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)', fontWeight: '900', lineHeight: '1.05', marginBottom: '12px', letterSpacing: '-0.02em', opacity: 0, animation: 'fadeSlideUp 0.8s cubic-bezier(0.16,1,0.3,1) forwards', animationDelay: '0.15s' }}>{t('discover.title', 'Discover Verified Workers')}</h1>
-            <p className="font-inter" style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)', maxWidth: '500px', lineHeight: '1.6', opacity: 0, animation: 'fadeSlideUp 0.8s cubic-bezier(0.16,1,0.3,1) forwards', animationDelay: '0.25s' }}>
+            <p className="font-inter" style={{ fontSize: '10px', letterSpacing: '4px', color: 'rgba(255,255,255,0.3)', marginBottom: '12px', textTransform: 'uppercase', fontWeight: '600', animation: 'fadeSlideRight 0.5s ease both', animationDelay: '0ms' }}>{t('discover.eyebrow')}</p>
+            <h1 className="font-clash" style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)', fontWeight: '900', lineHeight: '1.05', marginBottom: '12px', letterSpacing: '-0.02em' }}>
+              {t('discover.title', 'Discover Verified Workers').split(' ').map((word, i) => (
+                <span key={i} style={{ display: 'inline-block', marginRight: '0.25em', animation: 'wordUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both', animationDelay: `${i * 80}ms` }}>{word}</span>
+              ))}
+            </h1>
+            <p className="font-inter" style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)', maxWidth: '500px', lineHeight: '1.6', animation: 'slideUpFade 0.5s ease both', animationDelay: '400ms' }}>
               {t('discover.subtitle')}
             </p>
           </div>
           {/* Right stats block */}
-          <div className="grid grid-cols-3 gap-2 md:gap-4" style={{ alignItems: 'stretch', border: '1px solid rgba(255,255,255,0.08)', backgroundColor: 'rgba(255,255,255,0.02)', flexShrink: 0, opacity: 0, animation: 'fadeSlideUp 0.8s cubic-bezier(0.16,1,0.3,1) forwards', animationDelay: '0.3s' }}>
+          <div className="grid grid-cols-3 gap-2 md:gap-4" style={{ alignItems: 'stretch', border: '1px solid rgba(255,255,255,0.08)', backgroundColor: 'rgba(255,255,255,0.02)', flexShrink: 0, animation: 'fadeSlideLeft 0.6s ease both', animationDelay: '200ms' }}>
             {[
               { value: totalWorkers, label: t('discover.workers', 'WORKERS') },
               { value: avgRating, label: t('discover.avgRatingLabel', 'AVG RATING') },
@@ -290,7 +361,7 @@ const DiscoverWorkers = () => {
 
         {/* ═══ SECTION B: Search + Filters ═══ */}
         {/* Search Bar */}
-        <div className="dw-search-container" style={{ marginBottom: '24px', opacity: 0, animation: 'fadeSlideUp 0.8s cubic-bezier(0.16,1,0.3,1) forwards', animationDelay: '0.4s' }}>
+        <div className="dw-search-container" style={{ marginBottom: '24px', animation: 'slideUpFade 0.5s ease both', animationDelay: '500ms' }}>
           <input
             type="text"
             placeholder={t('discover.searchPlaceholder')}
@@ -313,7 +384,7 @@ const DiscoverWorkers = () => {
           alignItems: 'flex-end',
           paddingBottom: '24px', borderBottom: '1px solid rgba(255,255,255,0.06)',
           marginBottom: '28px',
-          opacity: 0, animation: 'fadeSlideUp 0.8s cubic-bezier(0.16,1,0.3,1) forwards', animationDelay: '0.5s'
+          animation: 'simpleFade 0.4s ease both', animationDelay: '650ms'
         }}>
           {/* FILTERS label */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', paddingRight: '16px', borderRight: '1px solid rgba(255,255,255,0.08)', paddingBottom: '8px' }}>
@@ -366,10 +437,7 @@ const DiscoverWorkers = () => {
                       fontWeight: isActive ? '700' : '400',
                       cursor: 'pointer',
                       boxShadow: isActive ? '0 0 12px rgba(255,255,255,0.15)' : 'none',
-                      transition: 'all 0.2s ease',
-                      opacity: 0,
-                      animation: 'fadeSlideUp 0.8s cubic-bezier(0.16,1,0.3,1) forwards',
-                      animationDelay: `${0.6 + (i * 0.05)}s`,
+                      transition: 'all 0.2s ease'
                     }}>
                     {t('ratings.' + opt.labelKey)}
                   </button>
@@ -388,22 +456,52 @@ const DiscoverWorkers = () => {
 
         {/* ═══ SECTION C: Results Header ═══ */}
         <div className="dw-anim" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', animationDelay: '0.2s' }}>
-          <span className="font-inter" style={{ fontSize: '10px', letterSpacing: '3px', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', fontWeight: '700' }}>
-            {filtered.length} {t('discover.results')}
-            {hasActiveFilters && <span style={{ color: 'rgba(255,200,50,0.6)', fontSize: '10px', letterSpacing: '2px', marginLeft: '8px' }}>({t('discover.filtered')})</span>}
+          <span style={{ color: loading ? '#333' : '#555', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+            {loading ? 'loading workers...' : `${filtered.length} workers found`}
           </span>
-          <span className="font-inter dw-sort" style={{ fontSize: '10px', letterSpacing: '2px', color: 'rgba(255,255,255,0.25)', cursor: 'pointer', textTransform: 'uppercase', fontWeight: '700', transition: 'color 0.2s' }}>
-            ↑ {t('discover.sortedByRating')}
-          </span>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            {['Rating', 'Reviews', 'Name'].map(tab => (
+              <button
+                key={tab}
+                onClick={() => setSortBy(tab)}
+                style={{
+                  border: '1px solid #1e1e1e',
+                  borderRadius: '20px',
+                  padding: '4px 12px',
+                  fontSize: '11px',
+                  backgroundColor: 'transparent',
+                  color: sortBy === tab ? '#e5e5e5' : '#555',
+                  borderColor: sortBy === tab ? '#2e2e2e' : '#1e1e1e',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* ═══ SECTION D: Worker Cards Grid ═══ */}
         {loading ? (
-          <div className="flex items-center justify-center py-20">
-            <div className="w-6 h-6 border border-white/20 border-t-white/60 rounded-full animate-spin" />
+          <div style={{ borderRadius: '16px', overflow: 'hidden', border: '1px solid #1a1a1a', backgroundColor: 'transparent' }}>
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} style={{ minHeight: '70px', padding: '14px 20px', borderBottom: i === 4 ? 'none' : '1px solid #181818', display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <div className="skeleton" style={{ width: '40px', height: '40px', borderRadius: '50%', flexShrink: 0 }} />
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <div className="skeleton" style={{ width: '120px', height: '14px' }} />
+                  <div className="skeleton" style={{ width: '80px', height: '10px' }} />
+                </div>
+                <div className="skeleton" style={{ width: '70px', height: '20px', borderRadius: '12px' }} />
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '6px', minWidth: '60px' }}>
+                  <div className="skeleton" style={{ width: '30px', height: '16px' }} />
+                  <div className="skeleton" style={{ width: '50px', height: '10px' }} />
+                </div>
+              </div>
+            ))}
           </div>
         ) : filtered.length > 0 ? (
-          <div className="flex flex-col gap-2.5">
+          <div style={{ borderRadius: '16px', overflow: 'hidden', border: '1px solid #1a1a1a' }}>
             {filtered.map((worker, i) => (<WorkerCard key={worker.address} worker={worker} index={i} />))}
           </div>
         ) : workers.length === 0 ? (

@@ -34,7 +34,7 @@ const Footer = () => {
       `}</style>
 
       {/* Top Section: 4 Columns */}
-      <div style={{ maxWidth: '1400px', margin: '0 auto', display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: '48px', padding: '64px 24px 48px' }} className="font-inter">
+      <div style={{ maxWidth: '1400px', margin: '0 auto', gap: '48px', padding: '64px 24px 48px' }} className="font-inter grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
         
         {/* Col 1: Brand */}
         <div>
@@ -45,33 +45,33 @@ const Footer = () => {
             </span>
           </div>
           <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', lineHeight: '1.7', maxWidth: '260px' }}>
-            Verified reputation for the informal economy, on Stellar.
+            {t('footer_tagline')}
           </p>
           <div style={{
             fontSize: '10px', color: '#00dc6e', letterSpacing: '1.5px', marginTop: '16px',
             backgroundColor: 'rgba(0,220,110,0.08)', border: '1px solid rgba(0,220,110,0.2)',
             padding: '4px 10px', display: 'inline-block', fontWeight: 'bold'
           }}>
-            ● ON STELLAR TESTNET
+            ● {t('footer_testnet')}
           </div>
         </div>
 
         {/* Col 2: Platform */}
         <div>
           <h4 className="font-clash" style={{ fontSize: '10px', letterSpacing: '3px', color: 'rgba(255,255,255,0.25)', marginBottom: '16px', textTransform: 'uppercase' }}>
-            Platform
+            {t('footer_platform')}
           </h4>
-          <Link to="/discover" className="footer-link">Find Workers</Link>
-          <Link to="/explorer" className="footer-link">Explorer</Link>
-          <Link to="/analytics" className="footer-link">Analytics</Link>
-          <Link to="/dashboard" className="footer-link">Dashboard</Link>
-          <Link to="/worker" className="footer-link">Worker Portal</Link>
+          <Link to="/discover" className="footer-link">{t('nav_find_workers')}</Link>
+          <Link to="/explorer" className="footer-link">{t('nav_explorer')}</Link>
+          <Link to="/analytics" className="footer-link">{t('nav_analytics')}</Link>
+          <Link to="/dashboard" className="footer-link">{t('nav_dashboard')}</Link>
+          <Link to="/worker" className="footer-link">{t('nav_worker_portal')}</Link>
         </div>
 
         {/* Col 3: Resources */}
         <div>
           <h4 className="font-clash" style={{ fontSize: '10px', letterSpacing: '3px', color: 'rgba(255,255,255,0.25)', marginBottom: '16px', textTransform: 'uppercase' }}>
-            Resources
+            {t('resources', 'Resources')}
           </h4>
           <a href="https://github.com/OmcarSN/TrustChain" target="_blank" rel="noopener noreferrer" className="footer-link">GitHub</a>
           <a href="https://developers.stellar.org/docs" target="_blank" rel="noopener noreferrer" className="footer-link">Stellar Docs</a>
@@ -98,17 +98,16 @@ const Footer = () => {
         paddingLeft: '24px',
         paddingRight: '24px',
         display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginTop: '48px',
-      }}>
+        flexDirection: 'column',
+        gap: '24px',
+      }} className="sm:flex-row">
         <span style={{ fontSize:'11px', color:'rgba(255,255,255,0.2)', letterSpacing:'1px' }}>
           © 2026 TRUSTCHAIN PROTOCOL · STELLAR SOROBAN
         </span>
         <div style={{ display:'flex', gap:'24px' }}>
-          <a style={{ fontSize:'11px', letterSpacing:'2px', color:'rgba(255,255,255,0.3)' }}>GH</a>
-          <a style={{ fontSize:'11px', letterSpacing:'2px', color:'rgba(255,255,255,0.3)' }}>ST</a>
-          <a style={{ fontSize:'11px', letterSpacing:'2px', color:'rgba(255,255,255,0.3)' }}>FR</a>
+          <a href="https://github.com/OmcarSN/TrustChain" target="_blank" rel="noopener noreferrer" className="footer-social">GH</a>
+          <a href="https://stellar.org" target="_blank" rel="noopener noreferrer" className="footer-social">ST</a>
+          <a href="https://www.freighter.app/" target="_blank" rel="noopener noreferrer" className="footer-social">FR</a>
         </div>
       </div>
     </footer>

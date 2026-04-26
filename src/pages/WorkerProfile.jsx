@@ -102,10 +102,10 @@ const WorkerProfile = () => {
     );
   }
 
-  const statAvgRating = reputation?.avgRating || 0;
-  const statTotalReviews = reputation?.totalReviews || endorsements.length || 0;
+  const statAvgRating = reputation?.average || 0;
+  const statTotalReviews = reputation?.total || endorsements.length || 0;
   const statHighestScore = reputation?.highestScore || (endorsements.length > 0 ? Math.max(...endorsements.map(e => e.rating || 0)) : statAvgRating);
-  const statWeightedScore = reputation?.weightedScore || (statAvgRating * statTotalReviews).toFixed(1);
+  const statWeightedScore = reputation?.weightedScore || (Number(statAvgRating) * statTotalReviews).toFixed(1);
   const renderStatValue = (val, isFloat) => {
     if (val === undefined || val === null || val === '—' || isNaN(val)) {
       return <span style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.2)' }}>N/A</span>;
@@ -239,15 +239,13 @@ const WorkerProfile = () => {
               { value: statWeightedScore, label: 'Weighted Score', isFloat: true },
             ].map((stat, i, arr) => (
               <div key={i} className="prof-stat" style={{ padding: '20px 24px', textAlign: 'center', borderRight: i < arr.length - 1 ? '1px solid rgba(255,255,255,0.08)' : 'none' }}>
-                {stat.showStars && (
-                  <div style={{ display: 'flex', justifyContent: 'center', gap: '2px', marginBottom: '8px' }}>
-                    {[1,2,3,4,5].map(s => (
-                      <Star key={s} style={{ width: '14px', height: '14px', color: s <= Math.round(statAvgRating) ? '#f5a623' : 'rgba(255,255,255,0.1)', fill: s <= Math.round(statAvgRating) ? '#f5a623' : 'transparent' }} />
-                    ))}
-                  </div>
-                )}
-                <p className="font-clash" style={{ fontSize: '2rem', fontWeight: '900', color: '#ffffff', lineHeight: '1', marginBottom: '8px' }}>{renderStatValue(stat.value, stat.isFloat)}</p>
-                <p className="font-inter" style={{ fontSize: '9px', letterSpacing: '3px', color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase' }}>{stat.label}</p>
+                <div style={{ height: '14px', marginBottom: '8px', display: 'flex', justifyContent: 'center', gap: '2px' }}>
+                  {stat.showStars && [1,2,3,4,5].map(s => (
+                    <Star key={s} style={{ width: '14px', height: '14px', color: s <= Math.round(statAvgRating) ? '#f5a623' : 'rgba(255,255,255,0.1)', fill: s <= Math.round(statAvgRating) ? '#f5a623' : 'transparent' }} />
+                  ))}
+                </div>
+                <p className="font-clash" style={{ fontSize: '2rem', fontWeight: '900', color: '#ffffff', lineHeight: '1', margin: '0 0 8px 0' }}>{renderStatValue(stat.value, stat.isFloat)}</p>
+                <p className="font-inter" style={{ fontSize: '9px', letterSpacing: '3px', color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase', margin: 0 }}>{stat.label}</p>
               </div>
             ))}
           </div>

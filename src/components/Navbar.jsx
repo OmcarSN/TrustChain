@@ -50,13 +50,13 @@ const Navbar = () => {
   const truncate = (addr) =>
     addr ? `${addr.slice(0, 6)}...${addr.slice(-4)}` : "";
 
-  const navLinks = [
+  const navLinks = isConnected ? [
     { name: t('nav.home', 'Home'), path: '/' },
     { name: t('nav.discover', 'Find Workers'), path: '/discover' },
-    { name: t('nav.explorer', 'Explorer'), path: '/explorer' },
-    { name: t('nav.analytics', 'Analytics'), path: '/analytics' },
-    { name: t('nav.dashboard', 'Dashboard'), path: '/dashboard' },
-    { name: t('nav.workerPortal', 'Worker Portal'), path: '/worker' },
+  ] : [
+    { name: t('nav.home', 'Home'), path: '/' },
+    { name: t('nav.discover', 'Find Workers'), path: '/discover' },
+    { name: t('nav.howItWorks', 'How It Works'), path: '/how-it-works' },
   ];
 
   return (
@@ -119,29 +119,34 @@ const Navbar = () => {
           {/* Center Nav Links (Desktop) */}
           <div className="hidden md:flex items-center h-full" style={{ gap: '32px' }}>
             {navLinks.map((link) => {
-              const isActive = location.pathname === link.path;
+              const isActive = location.pathname === link.path && !link.path.includes('#');
+              const isHash = link.path.includes('#');
+              const LinkComp = isHash ? 'a' : Link;
+              const linkProps = isHash ? { href: link.path } : { to: link.path };
+              
               return (
-                <Link
+                <LinkComp
                   key={link.path}
-                  to={link.path}
-                  className="font-inter uppercase transition-all duration-300 hover:text-white"
+                  {...linkProps}
+                  className="font-inter uppercase nav-link transition-all"
                   style={{
                     fontSize: '13px',
                     fontWeight: '500',
                     letterSpacing: '1.5px',
-                    color: isActive ? '#ffffff' : 'rgba(255,255,255,0.6)',
+                    color: isActive ? '#ffffff' : '#666666',
                     borderBottom: isActive ? '1px solid #ffffff' : '1px solid transparent',
-                    paddingBottom: '4px'
+                    paddingBottom: '4px',
+                    textDecoration: 'none'
                   }}
                 >
                   {link.name}
-                </Link>
+                </LinkComp>
               );
             })}
           </div>
 
           {/* Right: Actions */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }} className="relative h-full">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }} className="relative h-full">
             {/* Language toggle */}
             <style>{`
               .lang-btn:hover { border-color: rgba(255,255,255,0.5) !important; color: #fff !important; }
@@ -159,8 +164,18 @@ const Navbar = () => {
                 from { opacity: 0; transform: translateY(-6px); }
                 to   { opacity: 1; transform: translateY(0); }
               }
-              .dropdown-item:hover { background-color: rgba(255,255,255,0.05) !important; color: #fff !important; }
-              .dropdown-disconnect:hover { background-color: rgba(255,50,50,0.08) !important; color: #ff5555 !important; }
+              .nav-link:hover { color: #aaaaaa !important; }
+              .dropdown-item { 
+                padding: 10px 16px; 
+                color: #aaaaaa; 
+                font-size: 13px; 
+                text-decoration: none; 
+                display: block; 
+                transition: all 0.2s ease; 
+              }
+              .dropdown-item:hover { background-color: #1a1a1a !important; color: #ffffff !important; }
+              .dropdown-disconnect { color: #ef4444 !important; border-top: 1px solid #222222; }
+              .dropdown-disconnect:hover { background-color: rgba(239,68,68,0.08) !important; color: #ff5555 !important; }
             `}</style>
             <button
               onClick={toggleLanguage}
@@ -239,71 +254,52 @@ const Navbar = () => {
                         top: '100%',
                         right: '0',
                         minWidth: '200px',
-                        backgroundColor: '#0d0d0d',
-                        border: '1px solid rgba(255,255,255,0.12)',
+                        backgroundColor: '#111111',
+                        border: '1px solid #222222',
+                        borderRadius: '8px',
                         boxShadow: '0 20px 60px rgba(0,0,0,0.8)',
                         zIndex: 1000,
                         overflow: 'hidden',
-                        paddingTop: '4px',
+                        padding: '8px 0',
                         animation: 'dropdownOpen 0.15s ease forwards',
                       }}
                     >
                       <div style={{
-                        padding: '12px 16px',
-                        borderBottom: '1px solid rgba(255,255,255,0.08)',
-                        fontSize: '10px',
-                        letterSpacing: '2px',
-                        color: 'rgba(255,255,255,0.25)',
-                        fontFamily: 'monospace'
+                        padding: '10px 16px',
+                        fontSize: '13px',
+                        color: '#aaaaaa',
+                        fontFamily: 'monospace',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px'
                       }}>
+                        <span style={{ color: '#00dc6e', fontSize: '8px' }}>●</span>
                         {truncate(walletAddress)}
                       </div>
-                      <Link
-                        to="/dashboard"
-                        onClick={() => setIsDropdownOpen(false)}
-                        className="dropdown-item font-inter uppercase transition-all"
-                        style={{
-                          padding: '11px 16px',
-                          fontSize: '11px',
-                          fontWeight: '600',
-                          letterSpacing: '2px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '10px',
-                          cursor: 'pointer',
-                          color: 'rgba(255,255,255,0.65)',
-                          textDecoration: 'none',
-                          transition: 'all 0.15s ease'
-                        }}
-                      >
-                        <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)' }}>⊞</span>
-                        {t('nav.dashboardBtn', 'Dashboard')}
+                      <Link to="/dashboard" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter">
+                        {t('nav_dashboard')}
+                      </Link>
+                      <Link to="/worker" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter">
+                        {t('nav_worker_portal')}
+                      </Link>
+                      <Link to="/how-it-works" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter">
+                        {t('nav.howItWorks', 'How It Works')}
+                      </Link>
+                      <Link to="/analytics" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter">
+                        {t('nav_analytics')}
+                      </Link>
+                      <Link to="/explorer" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter">
+                        {t('nav_explorer')}
                       </Link>
                       <button
                         onClick={() => {
                           disconnect();
                           setIsDropdownOpen(false);
                         }}
-                        className="dropdown-disconnect font-inter uppercase transition-all w-full"
-                        style={{
-                          padding: '11px 16px',
-                          fontSize: '11px',
-                          fontWeight: '600',
-                          letterSpacing: '2px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '10px',
-                          cursor: 'pointer',
-                          color: 'rgba(220,60,60,0.75)',
-                          textAlign: 'left',
-                          border: 'none',
-                          background: 'none',
-                          borderTop: '1px solid rgba(255,255,255,0.06)',
-                          transition: 'all 0.15s ease'
-                        }}
+                        className="dropdown-item dropdown-disconnect font-inter w-full text-left"
+                        style={{ border: 'none', background: 'none', cursor: 'pointer' }}
                       >
-                        <span style={{ fontSize: '13px', color: 'rgba(220,60,60,0.5)' }}>⏻</span>
-                        {t('nav.disconnect', 'Disconnect')}
+                        {t('nav_disconnect')}
                       </button>
                     </div>
                   )}
@@ -424,9 +420,17 @@ const Navbar = () => {
                     <Link
                       to="/dashboard"
                       className="w-full py-3.5 bg-white/5 border border-white/10 text-white rounded-[2px] font-bold uppercase tracking-[0.15em] text-[10px] transition-all flex items-center justify-center gap-2 hover:bg-white/10"
+                      onClick={() => setIsMobileMenuOpen(false)}
                     >
                       <LayoutDashboard className="w-4 h-4" />
                       {t('nav.dashboardBtn', 'Dashboard')}
+                    </Link>
+                    <Link
+                      to="/how-it-works"
+                      className="w-full py-3.5 bg-transparent border border-white/10 text-white/70 rounded-[2px] font-bold uppercase tracking-[0.15em] text-[10px] transition-all flex items-center justify-center gap-2 hover:bg-white/5 hover:text-white"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {t('nav.howItWorks', 'How It Works')}
                     </Link>
                     <button
                       onClick={() => {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ToastProvider } from './context/ToastContext';
@@ -18,6 +18,21 @@ import AdminLogs from './pages/AdminLogs';
 import About from './pages/About';
 import Mission from './pages/Mission';
 import Contact from './pages/Contact';
+import HowItWorks from './pages/HowItWorks';
+
+// Scroll to top on route change
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  
+  useEffect(() => {
+    // Don't scroll if there's a hash (like #how-it-works)
+    if (!window.location.hash) {
+      window.scrollTo(0, 0);
+    }
+  }, [pathname]);
+  
+  return null;
+};
 
 // Page Transition Wrapper
 const PageWrapper = ({ children }) => (
@@ -36,6 +51,13 @@ const App = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
+      <ScrollToTop />
+      {/* Global Animated Background */}
+      <div className="global-bg-container">
+        <div className="global-bg-gradient" />
+        <div className="global-bg-noise" />
+      </div>
+
       <Navbar />
       <main className="flex-grow">
         <AnimatePresence mode="wait">
@@ -54,6 +76,7 @@ const App = () => {
             <Route path="/about" element={<PageWrapper><About /></PageWrapper>} />
             <Route path="/mission" element={<PageWrapper><Mission /></PageWrapper>} />
             <Route path="/contact" element={<PageWrapper><Contact /></PageWrapper>} />
+            <Route path="/how-it-works" element={<PageWrapper><HowItWorks /></PageWrapper>} />
 
             {/* Hidden Admin Route */}
             <Route path="/admin/logs" element={<PageWrapper><AdminLogs /></PageWrapper>} />
