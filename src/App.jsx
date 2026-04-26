@@ -19,6 +19,7 @@ import About from './pages/About';
 import Mission from './pages/Mission';
 import Contact from './pages/Contact';
 import HowItWorks from './pages/HowItWorks';
+import GlobalBackground from './components/GlobalBackground';
 
 // Scroll to top on route change
 const ScrollToTop = () => {
@@ -50,13 +51,10 @@ const App = () => {
   const location = useLocation();
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-[#050505]">
       <ScrollToTop />
       {/* Global Animated Background */}
-      <div className="global-bg-container">
-        <div className="global-bg-gradient" />
-        <div className="global-bg-noise" />
-      </div>
+      <GlobalBackground />
 
       <Navbar />
       <main className="flex-grow">

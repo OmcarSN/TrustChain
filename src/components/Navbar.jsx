@@ -105,12 +105,14 @@ const Navbar = () => {
           
           {/* Logo + Brand */}
           <Link to="/" className="flex items-center gap-3 group">
-            <TrustChainLogo size={36} />
-            <div className="flex flex-col leading-none">
+            <div className="transition-transform duration-500 cubic-bezier(0.16, 1, 0.3, 1) group-hover:scale-110 group-hover:rotate-6">
+              <TrustChainLogo size={36} />
+            </div>
+            <div className="flex flex-col leading-none transition-all duration-300 group-hover:opacity-80 group-hover:translate-x-1">
               <span className="font-clash font-bold text-white text-lg tracking-widest uppercase">
                 TRUSTCHAIN
               </span>
-              <span className="text-[9px] uppercase tracking-[0.25em] text-white/30 font-inter mt-0.5">
+              <span className="text-[9px] uppercase tracking-[0.25em] text-white/30 font-inter mt-0.5 group-hover:text-[#00dc6e] transition-colors duration-300">
                 {t('nav.verifiedEconomy', 'Verified Economy')}
               </span>
             </div>
@@ -128,14 +130,11 @@ const Navbar = () => {
                 <LinkComp
                   key={link.path}
                   {...linkProps}
-                  className="font-inter uppercase nav-link transition-all"
+                  className={`font-inter uppercase nav-link ${isActive ? 'active-link' : ''}`}
                   style={{
-                    fontSize: '13px',
-                    fontWeight: '500',
+                    fontSize: '12px',
+                    fontWeight: isActive ? '700' : '600',
                     letterSpacing: '1.5px',
-                    color: isActive ? '#ffffff' : '#666666',
-                    borderBottom: isActive ? '1px solid #ffffff' : '1px solid transparent',
-                    paddingBottom: '4px',
                     textDecoration: 'none'
                   }}
                 >
@@ -149,33 +148,51 @@ const Navbar = () => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }} className="relative h-full">
             {/* Language toggle */}
             <style>{`
-              .lang-btn:hover { border-color: rgba(255,255,255,0.5) !important; color: #fff !important; }
-              .wallet-btn:hover { background-color: rgba(255,255,255,0.08) !important; border-color: rgba(255,255,255,0.3) !important; }
+              .lang-btn { transition: all 0.3s cubic-bezier(0.16,1,0.3,1); }
+              .lang-btn:hover { border-color: rgba(255,255,255,0.5) !important; color: #fff !important; transform: translateY(-1px); }
+              .wallet-btn { transition: all 0.3s cubic-bezier(0.16,1,0.3,1); }
+              .wallet-btn:hover { background-color: rgba(255,255,255,0.08) !important; border-color: rgba(255,255,255,0.4) !important; transform: translateY(-1px); }
+              .connect-btn-refine { transition: all 0.3s cubic-bezier(0.16,1,0.3,1); }
               .connect-btn-refine:hover { 
-                background-color: rgba(255,255,255,0.06) !important; 
-                border-color: rgba(255,255,255,0.5) !important; 
-                color: #fff !important; 
+                background-color: #ffffff !important; 
+                border-color: #ffffff !important; 
+                color: #000000 !important; 
+                transform: translateY(-1px);
+                box-shadow: 0 4px 14px rgba(255,255,255,0.25);
               }
               @keyframes verifiedPulse {
                 0%, 100% { box-shadow: 0 0 0 0 rgba(0,220,110,0.4); }
                 50%       { box-shadow: 0 0 0 6px rgba(0,220,110,0); }
               }
               @keyframes dropdownOpen {
-                from { opacity: 0; transform: translateY(-6px); }
-                to   { opacity: 1; transform: translateY(0); }
+                from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+                to   { opacity: 1; transform: translateY(0) scale(1); }
               }
-              .nav-link:hover { color: #aaaaaa !important; }
+              .nav-link { position: relative; color: rgba(255,255,255,0.5); transition: color 0.3s ease; }
+              .nav-link:hover { color: #ffffff; }
+              .nav-link.active-link { color: #ffffff; }
+              .nav-link::after {
+                content: ''; position: absolute; bottom: -6px; left: 0; width: 100%; height: 2px;
+                background-color: #00dc6e; transform: scaleX(0); transform-origin: right; transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+              }
+              .nav-link:hover::after { transform: scaleX(1); transform-origin: left; }
+              .nav-link.active-link::after { transform: scaleX(1); transform-origin: left; background-color: #ffffff; }
+              
               .dropdown-item { 
-                padding: 10px 16px; 
-                color: #aaaaaa; 
-                font-size: 13px; 
+                padding: 12px 20px; 
+                color: rgba(255,255,255,0.6); 
+                font-size: 11px; 
+                letter-spacing: 1.5px;
+                font-weight: 600;
+                text-transform: uppercase;
                 text-decoration: none; 
                 display: block; 
-                transition: all 0.2s ease; 
+                border-left: 2px solid transparent;
+                transition: all 0.25s cubic-bezier(0.16,1,0.3,1); 
               }
-              .dropdown-item:hover { background-color: #1a1a1a !important; color: #ffffff !important; }
-              .dropdown-disconnect { color: #ef4444 !important; border-top: 1px solid #222222; }
-              .dropdown-disconnect:hover { background-color: rgba(239,68,68,0.08) !important; color: #ff5555 !important; }
+              .dropdown-item:hover { background-color: rgba(255,255,255,0.04) !important; color: #ffffff !important; padding-left: 26px; border-left: 2px solid #00dc6e; }
+              .dropdown-disconnect { color: #ef4444 !important; border-top: 1px solid rgba(255,255,255,0.06); margin-top: 4px; padding-top: 14px; }
+              .dropdown-disconnect:hover { background-color: rgba(239,68,68,0.05) !important; color: #ff5555 !important; border-left: 2px solid #ef4444; }
             `}</style>
             <button
               onClick={toggleLanguage}
@@ -187,15 +204,14 @@ const Navbar = () => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 padding: '7px 12px',
-                backgroundColor: 'transparent',
-                border: '1px solid rgba(255,255,255,0.2)',
-                color: 'rgba(255,255,255,0.6)',
+                backgroundColor: 'rgba(255,255,255,0.02)',
+                border: '1px solid rgba(255,255,255,0.15)',
+                color: 'rgba(255,255,255,0.7)',
                 fontSize: '11px',
                 fontWeight: '600',
                 letterSpacing: '1.5px',
                 cursor: 'pointer',
-                borderRadius: '0',
-                transition: 'all 0.2s ease',
+                borderRadius: '2px',
               }}
             >
               {i18n.language === 'en' ? 'EN ▾' : 'HI ▾'}
@@ -210,19 +226,18 @@ const Navbar = () => {
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '8px',
+                    gap: '10px',
                     height: '36px',
                     padding: '0 16px',
-                    backgroundColor: isDropdownOpen ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.05)',
-                    border: isDropdownOpen ? '1px solid rgba(255,255,255,0.3)' : '1px solid rgba(255,255,255,0.15)',
-                    color: 'rgba(255,255,255,0.8)',
+                    backgroundColor: isDropdownOpen ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.03)',
+                    border: isDropdownOpen ? '1px solid rgba(255,255,255,0.4)' : '1px solid rgba(255,255,255,0.15)',
+                    color: isDropdownOpen ? '#ffffff' : 'rgba(255,255,255,0.85)',
                     fontSize: '12px',
                     fontWeight: '600',
                     letterSpacing: '1px',
                     fontFamily: 'monospace',
                     cursor: 'pointer',
-                    borderRadius: '0',
-                    transition: 'all 0.2s ease',
+                    borderRadius: '2px',
                   }}
                 >
                   <span style={{
@@ -230,17 +245,18 @@ const Navbar = () => {
                     height: '8px',
                     borderRadius: '50%',
                     backgroundColor: '#00dc6e',
-                    boxShadow: '0 0 6px rgba(0,220,110,0.6)',
+                    boxShadow: '0 0 8px rgba(0,220,110,0.6)',
                     flexShrink: 0,
-                    animation: 'verifiedPulse 2s ease infinite',
+                    animation: 'verifiedPulse 2.5s ease-in-out infinite',
                   }} />
                   {truncate(walletAddress)}
                   <span style={{ 
                     fontSize: '10px', 
-                    marginLeft: '4px',
+                    marginLeft: '2px',
                     transform: isDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                    transition: 'transform 0.2s ease',
-                    display: 'inline-block'
+                    transition: 'transform 0.3s cubic-bezier(0.16,1,0.3,1)',
+                    display: 'inline-block',
+                    opacity: 0.6
                   }}>
                     ▾
                   </span>
@@ -251,45 +267,50 @@ const Navbar = () => {
                     <div
                       style={{
                         position: 'absolute',
-                        top: '100%',
+                        top: 'calc(100% + 8px)',
                         right: '0',
-                        minWidth: '200px',
-                        backgroundColor: '#111111',
-                        border: '1px solid #222222',
-                        borderRadius: '8px',
-                        boxShadow: '0 20px 60px rgba(0,0,0,0.8)',
+                        minWidth: '220px',
+                        backgroundColor: 'rgba(10, 10, 10, 0.85)',
+                        backdropFilter: 'blur(20px)',
+                        WebkitBackdropFilter: 'blur(20px)',
+                        border: '1px solid rgba(255,255,255,0.1)',
+                        borderRadius: '2px',
+                        boxShadow: '0 24px 60px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.1)',
                         zIndex: 1000,
                         overflow: 'hidden',
-                        padding: '8px 0',
-                        animation: 'dropdownOpen 0.15s ease forwards',
+                        padding: '12px 0',
+                        animation: 'dropdownOpen 0.2s cubic-bezier(0.16,1,0.3,1) forwards',
+                        transformOrigin: 'top right'
                       }}
                     >
                       <div style={{
-                        padding: '10px 16px',
-                        fontSize: '13px',
-                        color: '#aaaaaa',
+                        padding: '8px 20px 16px 20px',
+                        fontSize: '12px',
+                        color: 'rgba(255,255,255,0.4)',
                         fontFamily: 'monospace',
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '8px'
+                        gap: '10px',
+                        borderBottom: '1px solid rgba(255,255,255,0.06)',
+                        marginBottom: '8px'
                       }}>
-                        <span style={{ color: '#00dc6e', fontSize: '8px' }}>●</span>
+                        <span style={{ color: '#00dc6e', fontSize: '10px', textShadow: '0 0 5px rgba(0,220,110,0.5)' }}>●</span>
                         {truncate(walletAddress)}
                       </div>
                       <Link to="/dashboard" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter">
-                        {t('nav_dashboard')}
+                        {t('nav_dashboard', 'Dashboard')}
                       </Link>
                       <Link to="/worker" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter">
-                        {t('nav_worker_portal')}
+                        {t('nav_worker_portal', 'Worker Portal')}
                       </Link>
                       <Link to="/how-it-works" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter">
                         {t('nav.howItWorks', 'How It Works')}
                       </Link>
                       <Link to="/analytics" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter">
-                        {t('nav_analytics')}
+                        {t('nav_analytics', 'Analytics')}
                       </Link>
                       <Link to="/explorer" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter">
-                        {t('nav_explorer')}
+                        {t('nav_explorer', 'Explorer')}
                       </Link>
                       <button
                         onClick={() => {
@@ -297,9 +318,9 @@ const Navbar = () => {
                           setIsDropdownOpen(false);
                         }}
                         className="dropdown-item dropdown-disconnect font-inter w-full text-left"
-                        style={{ border: 'none', background: 'none', cursor: 'pointer' }}
+                        style={{ background: 'none', cursor: 'pointer' }}
                       >
-                        {t('nav_disconnect')}
+                        {t('nav_disconnect', 'Disconnect Wallet')}
                       </button>
                     </div>
                   )}
@@ -310,22 +331,21 @@ const Navbar = () => {
                 onClick={connect}
                 className="hidden sm:flex items-center justify-center gap-2 connect-btn-refine"
                 style={{ 
-                  height: '34px',
-                  padding: '8px 18px',
+                  height: '36px',
+                  padding: '0 20px',
                   fontSize: '11px',
-                  fontWeight: '600',
+                  fontWeight: '700',
                   letterSpacing: '1.5px',
-                  border: '1px solid rgba(255,255,255,0.25)',
-                  backgroundColor: 'transparent',
-                  color: 'rgba(255,255,255,0.8)',
-                  borderRadius: '0',
-                  transition: 'all 0.2s ease',
+                  border: '1px solid rgba(255,255,255,0.3)',
+                  backgroundColor: 'rgba(255,255,255,0.03)',
+                  color: '#ffffff',
+                  borderRadius: '2px',
                   cursor: 'pointer',
                   textTransform: 'uppercase',
                   fontFamily: 'Inter, sans-serif'
                 }}
               >
-                <Wallet style={{ width: '12px', height: '12px' }} />
+                <Wallet style={{ width: '14px', height: '14px' }} />
                 {t('nav.connectWallet', 'Connect Wallet')}
               </button>
             )}
@@ -383,29 +403,41 @@ const Navbar = () => {
 
               {/* Nav Links */}
               <div className="flex-1 overflow-y-auto px-6 py-6" style={{ scrollbarWidth: 'none' }}>
-                <div className="space-y-1">
-                  {navLinks.map((link, idx) => (
-                    <motion.div
-                      key={link.path}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: idx * 0.05 }}
-                    >
-                      <Link
-                        to={link.path}
-                        className={`flex items-center gap-4 px-4 py-4 rounded-[2px] font-inter font-bold uppercase tracking-[0.15em] text-[11px] transition-all ${
-                          location.pathname === link.path
-                            ? 'bg-white text-black'
-                            : 'text-white/40 hover:text-white hover:bg-white/5'
-                        }`}
+                <style>{`
+                  .mobile-nav-item { transition: all 0.25s cubic-bezier(0.16,1,0.3,1); border-left: 2px solid transparent; }
+                  .mobile-nav-item:hover:not(.active-mobile-link) { 
+                    background-color: rgba(255,255,255,0.04); 
+                    color: #ffffff !important; 
+                    padding-left: 24px; 
+                    border-left: 2px solid #00dc6e; 
+                  }
+                  .active-mobile-link { background-color: #ffffff; color: #000000; border-left: 2px solid #000000; }
+                `}</style>
+                <div className="space-y-2">
+                  {navLinks.map((link, idx) => {
+                    const isActive = location.pathname === link.path;
+                    return (
+                      <motion.div
+                        key={link.path}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: idx * 0.05 }}
                       >
-                        {link.name}
-                        {location.pathname === link.path && (
-                          <div className="ml-auto w-1.5 h-1.5 rounded-full bg-black" />
-                        )}
-                      </Link>
-                    </motion.div>
-                  ))}
+                        <Link
+                          to={link.path}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className={`mobile-nav-item flex items-center gap-4 px-4 py-4 rounded-[2px] font-inter font-bold uppercase tracking-[0.15em] text-[11px] ${
+                            isActive ? 'active-mobile-link' : 'text-white/40'
+                          }`}
+                        >
+                          {link.name}
+                          {isActive && (
+                            <div className="ml-auto w-1.5 h-1.5 rounded-full bg-black" />
+                          )}
+                        </Link>
+                      </motion.div>
+                    );
+                  })}
                 </div>
               </div>
 

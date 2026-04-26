@@ -51,13 +51,10 @@ const Analytics = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#050505] relative overflow-hidden text-white">
-      {/* Ambient glow */}
-      <div className="absolute rounded-full pointer-events-none" style={{ top: '-80px', right: '-80px', width: '400px', height: '400px', background: '#f97316', filter: 'blur(120px)', opacity: 0.04 }} />
-      <div className="absolute rounded-full pointer-events-none" style={{ bottom: '-80px', left: '-80px', width: '400px', height: '400px', background: '#1e3a8a', filter: 'blur(120px)', opacity: 0.05 }} />
+    <div className="relative overflow-hidden text-white min-h-screen">
 
       {/* Page Wrapper */}
-      <div style={{ paddingTop: '80px', paddingLeft: '24px', paddingRight: '24px', maxWidth: '1400px', margin: '0 auto', position: 'relative', zIndex: 10, paddingBottom: '48px' }}>
+      <div style={{ paddingTop: '120px', paddingLeft: '24px', paddingRight: '24px', maxWidth: '1400px', margin: '0 auto', position: 'relative', zIndex: 10, paddingBottom: '48px' }}>
 
         {/* ═══ FIX 1: Page Header ═══ */}
         <motion.div
@@ -119,7 +116,7 @@ const Analytics = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05 + idx * 0.05, duration: 0.45 }}
                 style={{
-                  padding: '16px 20px',
+                  padding: '14px 16px',
                   minHeight: 0,
                   border: '1px solid rgba(255,255,255,0.08)',
                   borderTop: '2px solid rgba(255,255,255,0.12)',
@@ -138,7 +135,7 @@ const Analytics = () => {
                   </div>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '6px' }}>
-                  <h2 className="font-clash" style={{ fontSize: '42px', fontWeight: '900', lineHeight: '1', letterSpacing: '-0.02em', color: card.isGreen ? '#00dc6e' : '#ffffff' }}>
+                  <h2 className="font-clash" style={{ fontSize: '32px', fontWeight: '900', lineHeight: '1', letterSpacing: '-0.02em', color: card.isGreen ? '#00dc6e' : '#ffffff' }}>
                     {isStr ? card.value : card.value.toLocaleString()}
                   </h2>
                   {card.trend > 0 && (

@@ -224,11 +224,7 @@ const DiscoverWorkers = () => {
     (animRatingRaw === calculatedBase ? calculatedBase.toFixed(1) : animRatingRaw.toFixed(1));
 
   return (
-    <div className="min-h-screen bg-[#050505] relative overflow-hidden text-white">
-      {/* Light leaks / Background Orbs */}
-      <div style={{ position: 'fixed', top: '-200px', right: '-200px', width: '600px', height: '600px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,80,200,0.04) 0%, transparent 70%)', pointerEvents: 'none', zIndex: 0 }} />
-      <div style={{ position: 'fixed', bottom: '-100px', left: '-100px', width: '400px', height: '400px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,220,110,0.03) 0%, transparent 70%)', pointerEvents: 'none', zIndex: 0 }} />
-
+    <div className="relative overflow-hidden text-white min-h-screen">
       <style>{`
         @keyframes fadeSlideUp {
           from { opacity: 0; transform: translateY(24px); filter: blur(3px); }
@@ -379,85 +375,109 @@ const DiscoverWorkers = () => {
           <Search style={{ position: 'absolute', right: '18px', top: '50%', transform: 'translateY(-50%)', width: '16px', height: '16px', color: 'rgba(255,255,255,0.25)' }} />
         </div>
 
-        {/* Filters Row */}
-        <div className="dw-filters-row flex flex-col sm:flex-row gap-3 flex-wrap" style={{
-          alignItems: 'flex-end',
-          paddingBottom: '24px', borderBottom: '1px solid rgba(255,255,255,0.06)',
-          marginBottom: '28px',
-          animation: 'simpleFade 0.4s ease both', animationDelay: '650ms'
-        }}>
-          {/* FILTERS label */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', paddingRight: '16px', borderRight: '1px solid rgba(255,255,255,0.08)', paddingBottom: '8px' }}>
-            <SlidersHorizontal style={{ width: '12px', height: '12px', color: 'rgba(255,255,255,0.25)' }} />
-            <span className="font-inter" style={{ fontSize: '9px', letterSpacing: '3px', color: 'rgba(255,255,255,0.3)', fontWeight: '700', textTransform: 'uppercase' }}>{t('discover.filters')}</span>
-          </div>
-
-          {/* Skill dropdown */}
-          <div className="w-full sm:w-auto">
-            <label className="font-inter" style={{ fontSize: '9px', letterSpacing: '2px', color: 'rgba(255,255,255,0.25)', marginBottom: '6px', display: 'block', textTransform: 'uppercase', fontWeight: '700' }}>{t('discover.filterSkill', 'SKILL')}</label>
-            <div style={{ position: 'relative' }}>
-              <select value={selectedSkill} onChange={(e) => setSelectedSkill(e.target.value)} className="dw-select"
-                style={{ padding: '8px 32px 8px 12px', backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', color: '#ffffff', fontSize: '12px', letterSpacing: '0.5px', minWidth: '160px' }}>
-                <option value="All" style={{ backgroundColor: '#0a0a0a' }}>{t('discover.allCategories', 'All Categories')}</option>
-                {SKILL_OPTIONS.map(s => (<option key={s} value={s} style={{ backgroundColor: '#0a0a0a' }}>{t('jobs.' + s.replace(/\s+/g, ''))}</option>))}
-              </select>
-              <ChevronDown style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', width: '12px', height: '12px', color: 'rgba(255,255,255,0.3)', pointerEvents: 'none' }} />
+        {/* Filters Toggle & Row */}
+        <div style={{ animation: 'simpleFade 0.4s ease both', animationDelay: '650ms', marginBottom: showFilters ? '16px' : '28px', transition: 'margin 0.3s ease' }}>
+          <button 
+            onClick={() => setShowFilters(!showFilters)}
+            className="group flex items-center gap-3 transition-all"
+            style={{ cursor: 'pointer', background: 'transparent', border: 'none', padding: 0 }}
+          >
+            <div className={`flex items-center justify-center w-8 h-8 rounded-[2px] border transition-all duration-300 ${showFilters ? 'bg-white border-white text-black' : 'bg-[#0a0a0a] border-white/10 text-white/40 group-hover:border-[#00dc6e]/50 group-hover:text-[#00dc6e]'}`}>
+              <SlidersHorizontal className="w-4 h-4" />
             </div>
-          </div>
-
-          {/* City dropdown */}
-          <div className="w-full sm:w-auto">
-            <label className="font-inter" style={{ fontSize: '9px', letterSpacing: '2px', color: 'rgba(255,255,255,0.25)', marginBottom: '6px', display: 'block', textTransform: 'uppercase', fontWeight: '700' }}>{t('discover.filterCity', 'CITY')}</label>
-            <div style={{ position: 'relative' }}>
-              <select value={selectedCity || 'All Cities'} onChange={(e) => setSelectedCity(e.target.value === 'All Cities' ? '' : e.target.value)} className="dw-select"
-                style={{ padding: '8px 32px 8px 12px', backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', color: '#ffffff', fontSize: '12px', letterSpacing: '0.5px', minWidth: '160px' }}>
-                <option value="All Cities" style={{ backgroundColor: '#0a0a0a' }}>{t('discover.allCities', 'All Cities')}</option>
-                {cities.filter(c => c !== 'All Cities').map(c => (<option key={c} value={c} style={{ backgroundColor: '#0a0a0a' }}>{c}</option>))}
-              </select>
-              <ChevronDown style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', width: '12px', height: '12px', color: 'rgba(255,255,255,0.3)', pointerEvents: 'none' }} />
+            <div className="flex flex-col items-start leading-none">
+              <span className={`font-inter text-[10px] tracking-[0.2em] font-bold uppercase transition-colors duration-300 ${showFilters ? 'text-white' : 'text-white/40 group-hover:text-white'}`}>
+                {t('discover.filters')}
+              </span>
+              {!showFilters && hasActiveFilters && (
+                <span className="text-[8px] font-bold tracking-widest text-[#00dc6e] mt-1 uppercase">Active</span>
+              )}
             </div>
-          </div>
-
-          {/* Divider */}
-          <div style={{ width: '1px', height: '32px', backgroundColor: 'rgba(255,255,255,0.08)', alignSelf: 'center' }} />
-
-          {/* Minimum Rating buttons */}
-          <div className="w-full sm:w-auto">
-            <label className="font-inter" style={{ fontSize: '9px', letterSpacing: '2px', color: 'rgba(255,255,255,0.25)', marginBottom: '6px', display: 'block', textTransform: 'uppercase', fontWeight: '700' }}>{t('discover.filterRating', 'MINIMUM RATING')}</label>
-            <div className="flex flex-wrap gap-2">
-              {RATING_OPTIONS.map((opt, i) => {
-                const isActive = minRating === opt.value;
-                return (
-                  <button key={opt.value} onClick={() => setMinRating(opt.value)} className={isActive ? '' : 'dw-rating-btn'}
-                    style={{
-                      padding: '7px 14px', fontSize: '11px', letterSpacing: '1px',
-                      border: isActive ? '1px solid #ffffff' : '1px solid rgba(255,255,255,0.1)',
-                      backgroundColor: isActive ? '#ffffff' : 'transparent',
-                      color: isActive ? '#000000' : 'rgba(255,255,255,0.45)',
-                      fontWeight: isActive ? '700' : '400',
-                      cursor: 'pointer',
-                      boxShadow: isActive ? '0 0 12px rgba(255,255,255,0.15)' : 'none',
-                      transition: 'all 0.2s ease'
-                    }}>
-                    {t('ratings.' + opt.labelKey)}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Clear filters */}
-          {hasActiveFilters && (
-            <button onClick={clearFilters} style={{ padding: '7px 14px', fontSize: '11px', letterSpacing: '1px', border: '1px solid rgba(255,80,80,0.3)', color: 'rgba(255,100,100,0.7)', backgroundColor: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <X style={{ width: '10px', height: '10px' }} /> {t('discover.clearFilters')}
-            </button>
-          )}
+          </button>
         </div>
+
+        <AnimatePresence>
+          {showFilters && (
+            <motion.div 
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="dw-filters-row flex flex-col sm:flex-row gap-4 flex-wrap overflow-hidden" 
+              style={{
+                alignItems: 'flex-end',
+                paddingBottom: '24px', 
+                borderBottom: '1px solid rgba(255,255,255,0.06)',
+                marginBottom: '28px'
+              }}
+            >
+              {/* Skill dropdown */}
+              <div className="w-full sm:w-auto">
+                <label className="font-inter" style={{ fontSize: '9px', letterSpacing: '2px', color: 'rgba(255,255,255,0.25)', marginBottom: '8px', display: 'block', textTransform: 'uppercase', fontWeight: '700' }}>{t('discover.filterSkill', 'SKILL')}</label>
+                <div style={{ position: 'relative' }}>
+                  <select value={selectedSkill} onChange={(e) => setSelectedSkill(e.target.value)} className="dw-select"
+                    style={{ padding: '10px 36px 10px 14px', backgroundColor: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.1)', color: '#ffffff', fontSize: '13px', letterSpacing: '0.5px', minWidth: '180px', borderRadius: '2px' }}>
+                    <option value="All" style={{ backgroundColor: '#0a0a0a' }}>{t('discover.allCategories', 'All Categories')}</option>
+                    {SKILL_OPTIONS.map(s => (<option key={s} value={s} style={{ backgroundColor: '#0a0a0a' }}>{t('jobs.' + s.replace(/\s+/g, ''))}</option>))}
+                  </select>
+                  <ChevronDown style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', width: '14px', height: '14px', color: 'rgba(255,255,255,0.4)', pointerEvents: 'none' }} />
+                </div>
+              </div>
+
+              {/* City dropdown */}
+              <div className="w-full sm:w-auto">
+                <label className="font-inter" style={{ fontSize: '9px', letterSpacing: '2px', color: 'rgba(255,255,255,0.25)', marginBottom: '8px', display: 'block', textTransform: 'uppercase', fontWeight: '700' }}>{t('discover.filterCity', 'CITY')}</label>
+                <div style={{ position: 'relative' }}>
+                  <select value={selectedCity || 'All Cities'} onChange={(e) => setSelectedCity(e.target.value === 'All Cities' ? '' : e.target.value)} className="dw-select"
+                    style={{ padding: '10px 36px 10px 14px', backgroundColor: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.1)', color: '#ffffff', fontSize: '13px', letterSpacing: '0.5px', minWidth: '180px', borderRadius: '2px' }}>
+                    <option value="All Cities" style={{ backgroundColor: '#0a0a0a' }}>{t('discover.allCities', 'All Cities')}</option>
+                    {cities.filter(c => c !== 'All Cities').map(c => (<option key={c} value={c} style={{ backgroundColor: '#0a0a0a' }}>{c}</option>))}
+                  </select>
+                  <ChevronDown style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', width: '14px', height: '14px', color: 'rgba(255,255,255,0.4)', pointerEvents: 'none' }} />
+                </div>
+              </div>
+
+              {/* Divider */}
+              <div className="hidden sm:block" style={{ width: '1px', height: '36px', backgroundColor: 'rgba(255,255,255,0.08)', alignSelf: 'center', margin: '0 8px' }} />
+
+              {/* Minimum Rating buttons */}
+              <div className="w-full sm:w-auto">
+                <label className="font-inter" style={{ fontSize: '9px', letterSpacing: '2px', color: 'rgba(255,255,255,0.25)', marginBottom: '8px', display: 'block', textTransform: 'uppercase', fontWeight: '700' }}>{t('discover.filterRating', 'MINIMUM RATING')}</label>
+                <div className="flex flex-wrap gap-2">
+                  {RATING_OPTIONS.map((opt, i) => {
+                    const isActive = minRating === opt.value;
+                    return (
+                      <button key={opt.value} onClick={() => setMinRating(opt.value)} className={isActive ? '' : 'dw-rating-btn'}
+                        style={{
+                          padding: '9px 16px', fontSize: '12px', letterSpacing: '0.5px',
+                          border: isActive ? '1px solid #00dc6e' : '1px solid rgba(255,255,255,0.1)',
+                          backgroundColor: isActive ? 'rgba(0,220,110,0.1)' : 'rgba(255,255,255,0.02)',
+                          color: isActive ? '#00dc6e' : 'rgba(255,255,255,0.5)',
+                          fontWeight: isActive ? '600' : '400',
+                          cursor: 'pointer',
+                          borderRadius: '2px',
+                          transition: 'all 0.25s ease'
+                        }}>
+                        {t('ratings.' + opt.labelKey)}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Clear filters */}
+              {hasActiveFilters && (
+                <button onClick={clearFilters} className="ml-auto mt-4 sm:mt-0" style={{ padding: '9px 16px', fontSize: '11px', letterSpacing: '1px', border: '1px solid rgba(255,80,80,0.3)', color: 'rgba(255,100,100,0.8)', backgroundColor: 'rgba(255,80,80,0.05)', borderRadius: '2px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', transition: 'all 0.2s ease' }}>
+                  <X style={{ width: '12px', height: '12px' }} /> {t('discover.clearFilters')}
+                </button>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* ═══ SECTION C: Results Header ═══ */}
         <div className="dw-anim" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', animationDelay: '0.2s' }}>
           <span style={{ color: loading ? '#333' : '#555', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.12em' }}>
-            {loading ? 'loading workers...' : `${filtered.length} workers found`}
+            {loading ? t('discover.loadingWorkers', 'loading workers...') : t('discover.workersFound', '{{count}} workers found', { count: filtered.length })}
           </span>
           <div style={{ display: 'flex', gap: '8px' }}>
             {['Rating', 'Reviews', 'Name'].map(tab => (

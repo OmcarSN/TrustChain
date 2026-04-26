@@ -47,10 +47,7 @@ const Explorer = () => {
   const truncate = (addr) => (addr ? `${addr.slice(0, 8)}...${addr.slice(-6)}` : '');
 
   return (
-    <div className="bg-[#050505] relative overflow-hidden text-white" style={{ minHeight: '100vh' }}>
-      {/* Light leaks */}
-      <div className="absolute rounded-full pointer-events-none" style={{ top: '-80px', right: '-80px', width: '400px', height: '400px', background: '#f97316', filter: 'blur(120px)', opacity: 0.04 }} />
-      <div className="absolute rounded-full pointer-events-none" style={{ bottom: '-80px', left: '-80px', width: '400px', height: '400px', background: '#1e3a8a', filter: 'blur(120px)', opacity: 0.05 }} />
+    <div className="relative overflow-hidden text-white" style={{ minHeight: '100vh' }}>
 
       <style>{`
         @keyframes exFadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }

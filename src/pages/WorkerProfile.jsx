@@ -85,8 +85,13 @@ const WorkerProfile = () => {
 
   if (!profile) {
     return (
-      <div className="min-h-screen bg-[#050505] flex items-center justify-center relative overflow-hidden text-white" style={{ paddingTop: '100px', paddingBottom: '80px', paddingLeft: '48px', paddingRight: '48px' }}>
-        <div className="absolute rounded-full pointer-events-none" style={{ top: '-80px', left: '-80px', width: '400px', height: '400px', background: '#f97316', filter: 'blur(120px)', opacity: 0.04 }} />
+      <div className="min-h-screen bg-[#050505] flex items-center justify-center relative text-white" style={{ paddingTop: '100px', paddingBottom: '80px', paddingLeft: '48px', paddingRight: '48px', overflow: 'clip' }}>
+        {/* Background Graphics (Grid & Orbs) */}
+        <div style={{ position: 'fixed', inset: 0, backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)', backgroundSize: '60px 60px', pointerEvents: 'none', zIndex: 0 }} />
+        <div style={{ position: 'fixed', top: '-150px', right: '-150px', width: '500px', height: '500px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,80,200,0.07) 0%, transparent 70%)', pointerEvents: 'none', zIndex: 0 }} />
+        <div style={{ position: 'fixed', bottom: '-100px', left: '-100px', width: '400px', height: '400px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,220,110,0.04) 0%, transparent 70%)', pointerEvents: 'none', zIndex: 0 }} />
+        
+        <div className="rounded-full pointer-events-none" style={{ position: 'fixed', top: '-80px', left: '-80px', width: '400px', height: '400px', background: '#f97316', filter: 'blur(120px)', opacity: 0.04, zIndex: 0 }} />
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center max-w-sm">
           <div style={{ width: '56px', height: '56px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}>
             <User style={{ color: 'rgba(255,255,255,0.2)', width: '24px', height: '24px' }} />
@@ -114,10 +119,15 @@ const WorkerProfile = () => {
   };
 
   return (
-    <div className="bg-[#050505] text-white" style={{ overflowX: 'hidden', position: 'relative', minHeight: '100vh' }}>
+    <div className="bg-[#050505] text-white" style={{ overflow: 'clip', position: 'relative', minHeight: '100vh' }}>
+      {/* Background Graphics (Grid & Orbs) */}
+      <div style={{ position: 'fixed', inset: 0, backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)', backgroundSize: '60px 60px', pointerEvents: 'none', zIndex: 0 }} />
+      <div style={{ position: 'fixed', top: '-150px', right: '-150px', width: '500px', height: '500px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,80,200,0.07) 0%, transparent 70%)', pointerEvents: 'none', zIndex: 0 }} />
+      <div style={{ position: 'fixed', bottom: '-100px', left: '-100px', width: '400px', height: '400px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,220,110,0.04) 0%, transparent 70%)', pointerEvents: 'none', zIndex: 0 }} />
+      
       {/* Light leaks */}
-      <div className="absolute rounded-full pointer-events-none" style={{ top: '-80px', right: '-80px', width: '400px', height: '400px', background: '#f97316', filter: 'blur(120px)', opacity: 0.04 }} />
-      <div className="absolute rounded-full pointer-events-none" style={{ bottom: '-80px', left: '-80px', width: '400px', height: '400px', background: '#1e3a8a', filter: 'blur(120px)', opacity: 0.05 }} />
+      <div className="rounded-full pointer-events-none" style={{ position: 'fixed', top: '-80px', right: '-80px', width: '400px', height: '400px', background: '#f97316', filter: 'blur(120px)', opacity: 0.04, zIndex: 0 }} />
+      <div className="rounded-full pointer-events-none" style={{ position: 'fixed', bottom: '-80px', left: '-80px', width: '400px', height: '400px', background: '#1e3a8a', filter: 'blur(120px)', opacity: 0.05, zIndex: 0 }} />
 
       <style>{`
         @keyframes profFadeUp {
@@ -147,7 +157,7 @@ const WorkerProfile = () => {
       <div style={{ paddingTop: '100px', paddingBottom: '80px', paddingLeft: '48px', paddingRight: '48px', maxWidth: '1400px', margin: '0 auto', display: 'flex', gap: '0', minHeight: '100vh', position: 'relative', zIndex: 10 }}>
 
         {/* ═══ LEFT SIDEBAR (320px) ═══ */}
-        <div className="prof-anim" style={{ width: '320px', flexShrink: 0, paddingRight: '40px', animationDelay: '0s' }}>
+        <div className="prof-anim" style={{ width: '320px', flexShrink: 0, paddingRight: '40px', animationDelay: '0s', position: 'sticky', top: '100px', height: 'max-content' }}>
 
           {/* Avatar */}
           <div style={{ width: '80px', height: '80px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
@@ -162,7 +172,31 @@ const WorkerProfile = () => {
           )}
 
           {/* Worker Name */}
-          <h2 className="font-clash" style={{ fontSize: 'clamp(1.4rem, 2.5vw, 2rem)', fontWeight: '900', color: '#ffffff', marginBottom: '14px', textTransform: 'capitalize' }}>{profile.name}</h2>
+          <h2 className="font-clash" style={{ fontSize: 'clamp(1.4rem, 2.5vw, 2rem)', fontWeight: '900', color: '#ffffff', marginBottom: '16px', textTransform: 'capitalize' }}>{profile.name}</h2>
+
+          {/* Primary Action: Endorse */}
+          <Link to={`/endorse?worker=${address}`} className="prof-endorse-btn font-inter" style={{ width: '100%', padding: '15px 20px', backgroundColor: '#ffffff', color: '#000000', border: 'none', fontSize: '11px', letterSpacing: '3px', fontWeight: '800', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', textDecoration: 'none', textTransform: 'uppercase', marginBottom: '24px' }}>
+            <Award style={{ width: '14px', height: '14px' }} /> {t('profile.endorseBtn')}
+          </Link>
+
+          {/* Wallet Address block */}
+          <div style={{ marginBottom: '10px' }}>
+            <p className="font-inter" style={{ fontSize: '9px', letterSpacing: '3px', color: 'rgba(255,255,255,0.25)', marginBottom: '8px', textTransform: 'uppercase', fontWeight: '700' }}>{t('profile.stellarAddress')}</p>
+            <div style={{ padding: '12px 14px', border: '1px solid rgba(255,255,255,0.08)', backgroundColor: 'rgba(255,255,255,0.02)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontFamily: 'monospace', fontSize: '11px', color: 'rgba(255,255,255,0.4)', wordBreak: 'break-all', lineHeight: '1.5', flex: 1 }}>{address}</span>
+              <button onClick={copyAddr} className="prof-copy" style={{ color: 'rgba(255,255,255,0.2)', cursor: 'pointer', background: 'none', border: 'none', padding: '4px', flexShrink: 0, marginLeft: '8px' }}>
+                {copiedAddr ? <Check style={{ width: '12px', height: '12px', color: '#00dc6e' }} /> : <Copy style={{ width: '12px', height: '12px' }} />}
+              </button>
+            </div>
+          </div>
+
+          {/* View on Stellar */}
+          <a href={`https://stellar.expert/explorer/testnet/account/${address}`} target="_blank" rel="noopener noreferrer" className="prof-stellar font-inter" style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', letterSpacing: '2px', color: 'rgba(255,255,255,0.3)', textDecoration: 'none', marginBottom: '24px', textTransform: 'uppercase' }}>
+            <ExternalLink style={{ width: '11px', height: '11px' }} /> View on Stellar
+          </a>
+
+          {/* Divider */}
+          <div style={{ height: '1px', backgroundColor: 'rgba(255,255,255,0.06)', marginBottom: '24px' }} />
 
           {/* Meta: Skill + City */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
@@ -191,34 +225,10 @@ const WorkerProfile = () => {
             </p>
           )}
 
-          {/* Divider */}
-          <div style={{ height: '1px', backgroundColor: 'rgba(255,255,255,0.06)', marginBottom: '20px' }} />
-
-          {/* Wallet Address block */}
-          <div style={{ marginBottom: '10px' }}>
-            <p className="font-inter" style={{ fontSize: '9px', letterSpacing: '3px', color: 'rgba(255,255,255,0.25)', marginBottom: '8px', textTransform: 'uppercase', fontWeight: '700' }}>{t('profile.stellarAddress')}</p>
-            <div style={{ padding: '12px 14px', border: '1px solid rgba(255,255,255,0.08)', backgroundColor: 'rgba(255,255,255,0.02)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontFamily: 'monospace', fontSize: '11px', color: 'rgba(255,255,255,0.4)', wordBreak: 'break-all', lineHeight: '1.5', flex: 1 }}>{address}</span>
-              <button onClick={copyAddr} className="prof-copy" style={{ color: 'rgba(255,255,255,0.2)', cursor: 'pointer', background: 'none', border: 'none', padding: '4px', flexShrink: 0, marginLeft: '8px' }}>
-                {copiedAddr ? <Check style={{ width: '12px', height: '12px', color: '#00dc6e' }} /> : <Copy style={{ width: '12px', height: '12px' }} />}
-              </button>
-            </div>
-          </div>
-
-          {/* View on Stellar */}
-          <a href={`https://stellar.expert/explorer/testnet/account/${address}`} target="_blank" rel="noopener noreferrer" className="prof-stellar font-inter" style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', letterSpacing: '2px', color: 'rgba(255,255,255,0.3)', textDecoration: 'none', marginBottom: '28px', textTransform: 'uppercase' }}>
-            <ExternalLink style={{ width: '11px', height: '11px' }} /> View on Stellar
-          </a>
-
           {/* Share Profile Button */}
-          <button onClick={shareProfile} className="prof-share-btn font-inter" style={{ width: '100%', padding: '13px 20px', border: '1px solid rgba(255,255,255,0.12)', backgroundColor: 'transparent', color: '#ffffff', fontSize: '11px', letterSpacing: '3px', fontWeight: '700', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', marginBottom: '10px', textTransform: 'uppercase' }}>
+          <button onClick={shareProfile} className="prof-share-btn font-inter" style={{ width: '100%', padding: '13px 20px', border: '1px solid rgba(255,255,255,0.12)', backgroundColor: 'transparent', color: '#ffffff', fontSize: '11px', letterSpacing: '3px', fontWeight: '700', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', textTransform: 'uppercase' }}>
             {copiedShare ? <><Check style={{ width: '14px', height: '14px', color: '#00dc6e' }} /> {t('profile.copied')}</> : <><Share2 style={{ width: '14px', height: '14px' }} /> {t('profile.shareProfile')}</>}
           </button>
-
-          {/* Endorse Worker Button */}
-          <Link to={`/endorse?worker=${address}`} className="prof-endorse-btn font-inter" style={{ width: '100%', padding: '15px 20px', backgroundColor: '#ffffff', color: '#000000', border: 'none', fontSize: '11px', letterSpacing: '3px', fontWeight: '800', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', textDecoration: 'none', textTransform: 'uppercase' }}>
-            <Award style={{ width: '14px', height: '14px' }} /> {t('profile.endorseBtn')}
-          </Link>
         </div>
 
         {/* ═══ RIGHT MAIN AREA ═══ */}
