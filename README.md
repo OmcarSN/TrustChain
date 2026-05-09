@@ -311,8 +311,7 @@ TrustChain has been upgraded to **Level 6 Black Belt** with production-grade fea
 
 ### 🌍 Community Contribution
 
-<!-- TODO: Replace with your actual Twitter/X post link after posting -->
-> 📢 **Twitter/X Post:** (https://x.com/i/status/2042962447297057275)
+> 📢 **Twitter/X Post:** [View on X/Twitter](https://x.com/i/status/2042962447297057275)
 >
 > Posted about TrustChain's mission with screenshots of Analytics dashboard + homepage to empower 2B+ informal economy workers with decentralized, verifiable credentials on Stellar.
 
@@ -474,17 +473,17 @@ The analytics dashboard provides real-time network metrics by querying the Stell
 
 ### Screenshots
 
-![Landing Page](./docs/screenshots/landing.png)
+![Landing Page](https://github.com/user-attachments/assets/12b378c8-4e24-4e61-a776-e58f46efb306)
 
-![Analytics Dashboard](./docs/screenshots/analytics.png)
+![Analytics Dashboard](https://github.com/user-attachments/assets/0c1d0dc3-efdc-4693-8a2d-b1ac0daaf135)
 
-![Discover Workers](./docs/screenshots/discover.png)
+![Discover Workers](https://github.com/user-attachments/assets/f00c9419-3e2a-4e09-b332-bd7036363d0a)
 
-![Credential Explorer](./docs/screenshots/explorer.png)
+![Credential Explorer](https://github.com/user-attachments/assets/b1826d39-c564-4690-91b1-1b5705ed466f)
 
-![System Logs Monitoring](./docs/screenshots/admin-logs.png)
+![Dashboard](https://github.com/user-attachments/assets/a59bc5b6-08f4-4048-8151-c152f9f86a7a)
 
-
+![Worker Credential](https://github.com/user-attachments/assets/807f62f7-8604-4f04-8091-3c87d04b1f25)
 ---
 
 ## 🔍 Monitoring Dashboard
