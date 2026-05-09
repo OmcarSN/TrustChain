@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import logoSrc from '../assets/trustchain-logo.png';
 
 /**
@@ -28,6 +29,20 @@ const TrustChainLogo = ({ size = 40, className = '', variant = 'full', style = {
       draggable={false}
     />
   );
+};
+
+TrustChainLogo.propTypes = {
+  size: PropTypes.number,
+  className: PropTypes.string,
+  variant: PropTypes.oneOf(['full', 'icon']),
+  style: PropTypes.object,
+};
+
+TrustChainLogo.defaultProps = {
+  size: 40,
+  className: '',
+  variant: 'full',
+  style: {},
 };
 
 export default TrustChainLogo;

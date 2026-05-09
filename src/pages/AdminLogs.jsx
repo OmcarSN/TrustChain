@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Trash2, AlertTriangle, Activity, Database, Clock, RefreshCcw } from 'lucide-react';
 import { getErrorLog, getTxLog, clearLogs } from '../utils/monitor';
@@ -9,8 +9,9 @@ const AdminLogs = () => {
   const [errors, setErrors] = useState([]);
   const [txs, setTxs] = useState([]);
 
-  const loadData = () => { setErrors(getErrorLog()); setTxs(getTxLog()); };
-  useEffect(() => { loadData(); const iv = setInterval(loadData, 5000); return () => clearInterval(iv); }, []);
+  const loadData = useCallback(() => { setErrors(getErrorLog()); setTxs(getTxLog()); }, []);
+   
+  useEffect(() => { loadData(); const iv = setInterval(loadData, 5000); return () => clearInterval(iv); }, [loadData]);
   const handleClear = () => { if (window.confirm("Clear all logs?")) { clearLogs(); loadData(); } };
 
   return (

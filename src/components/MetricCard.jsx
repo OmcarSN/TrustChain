@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
 
@@ -75,6 +76,24 @@ const MetricCard = ({ title, value, subtitle, icon: Icon, trend, sparkData, dela
       </div>
     </motion.div>
   );
+};
+
+MetricCard.propTypes = {
+  title: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  subtitle: PropTypes.string,
+  icon: PropTypes.elementType,
+  trend: PropTypes.number,
+  sparkData: PropTypes.arrayOf(PropTypes.number),
+  delay: PropTypes.number,
+};
+
+MetricCard.defaultProps = {
+  subtitle: null,
+  icon: null,
+  trend: null,
+  sparkData: null,
+  delay: 0,
 };
 
 export default MetricCard;

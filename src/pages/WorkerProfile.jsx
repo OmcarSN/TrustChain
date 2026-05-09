@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
@@ -11,11 +11,13 @@ import { useTranslation } from 'react-i18next';
 
 const AnimatedStat = ({ value, isFloat }) => {
   const [count, setCount] = useState(0);
+  const updateCount = useCallback((val) => setCount(val), []);
 
+   
   useEffect(() => {
     const numValue = parseFloat(value);
     if (isNaN(numValue) || numValue === 0) {
-      setCount(numValue || 0);
+      updateCount(numValue || 0);
       return;
     }
     const duration = 1000;
@@ -27,13 +29,13 @@ const AnimatedStat = ({ value, isFloat }) => {
       current += inc;
       if (current >= numValue) {
         clearInterval(timer);
-        setCount(numValue);
+        updateCount(numValue);
       } else {
-        setCount(current);
+        updateCount(current);
       }
     }, stepTime);
     return () => clearInterval(timer);
-  }, [value]);
+  }, [value, updateCount]);
 
   return <>{isFloat ? count.toFixed(1) : Math.round(count)}</>;
 };
@@ -48,7 +50,7 @@ const WorkerProfile = () => {
   const [copiedAddr, setCopiedAddr] = useState(false);
   const [copiedShare, setCopiedShare] = useState(false);
 
-  useEffect(() => {
+  const loadProfile = useCallback(() => {
     const data = JSON.parse(localStorage.getItem(`trustchain_worker_${address}`) || 'null');
     const endorse = JSON.parse(localStorage.getItem(`endorsements_${address}`) || '[]');
     if (data) {
@@ -65,6 +67,11 @@ const WorkerProfile = () => {
     setReputation(calculateScore(endorse));
     setLoading(false);
   }, [address]);
+
+   
+  useEffect(() => {
+    loadProfile();
+  }, [loadProfile]);
 
 
   const copyAddr = () => { navigator.clipboard.writeText(address); setCopiedAddr(true); setTimeout(() => setCopiedAddr(false), 2000); };

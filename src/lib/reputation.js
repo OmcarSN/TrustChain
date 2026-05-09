@@ -1,8 +1,28 @@
 /**
+ * @typedef {Object} Endorsement
+ * @property {number} rating - Numeric rating from 1-5
+ * @property {string} [feedback] - Optional text feedback
+ * @property {string} [endorser] - Wallet address of the endorser
+ * @property {string} [worker] - Wallet address of the worker
+ * @property {string} [timestamp] - ISO 8601 timestamp
+ * @property {string} [txHash] - Stellar transaction hash
+ */
+
+/**
+ * @typedef {Object} ReputationScore
+ * @property {string} average - Average rating as a string (e.g. "4.2")
+ * @property {number} total - Total number of valid endorsements
+ * @property {Object<number, number>} breakdown - Percentage distribution by star rating (keys 1-5)
+ */
+
+/**
  * Calculate a reputation score from an array of endorsements.
  * Each endorsement should have a numeric `rating` field (1-5).
- * 
- * Returns: { average: string, total: number, breakdown: { 1-5: percentage } }
+ * Invalid ratings are filtered out; remaining ratings are clamped to 1-5.
+ * Breakdown values are percentages of total valid endorsements.
+ *
+ * @param {Endorsement[]} endorsements - Array of endorsement objects
+ * @returns {ReputationScore} Computed reputation score with average, total, and breakdown
  */
 export const calculateScore = (endorsements = []) => {
   if (!Array.isArray(endorsements) || endorsements.length === 0) {
@@ -35,6 +55,7 @@ export const calculateScore = (endorsements = []) => {
   const sum = clampedRatings.reduce((acc, r) => acc + r, 0);
   const average = (sum / total).toFixed(1);
 
+  /** @type {Object<number, number>} */
   const breakdown = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
   clampedRatings.forEach((r) => {
     breakdown[r] = (breakdown[r] || 0) + 1;

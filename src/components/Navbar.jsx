@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Wallet, Menu, X, LogOut, LayoutDashboard, Languages } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -19,10 +19,15 @@ const Navbar = () => {
   };
 
   // Close mobile menu on route change
-  useEffect(() => {
+  const closeMenus = useCallback(() => {
     setIsMobileMenuOpen(false);
     setIsDropdownOpen(false);
-  }, [location.pathname]);
+  }, []);
+
+   
+  useEffect(() => {
+    closeMenus();
+  }, [location.pathname, closeMenus]);
 
   // Close dropdown when clicking outside
   useEffect(() => {

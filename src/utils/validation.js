@@ -1,7 +1,17 @@
 import { StrKey } from '@stellar/stellar-sdk';
 
 /**
+ * @typedef {Object} ValidationResult
+ * @property {boolean} isValid - Whether all fields passed validation
+ * @property {Object<string, string>} errors - Map of field name to error message
+ */
+
+/**
  * Validates if the given string is a valid Stellar ED25519 public key.
+ * Uses the official Stellar SDK StrKey validator.
+ *
+ * @param {string} address - The wallet address to validate
+ * @returns {boolean} True if the address is a valid ED25519 public key
  */
 export const validateWalletAddress = (address) => {
   if (!address || typeof address !== 'string') return false;
@@ -10,6 +20,10 @@ export const validateWalletAddress = (address) => {
 
 /**
  * Strips HTML tags and trims whitespace from a string.
+ * Used to sanitize user input before storage or display.
+ *
+ * @param {string} str - The input string to sanitize
+ * @returns {string} The sanitized string with HTML tags removed and whitespace trimmed
  */
 export const sanitizeString = (str) => {
   if (!str || typeof str !== 'string') return '';
@@ -17,9 +31,11 @@ export const sanitizeString = (str) => {
 };
 
 /**
- * Validates that credential fields are non-empty strings, max 500 chars each, 
+ * Validates that credential fields are non-empty strings, max 500 chars each,
  * and contain no script injection vectors.
- * Returns an object with { isValid: boolean, errors: Object }
+ *
+ * @param {Object<string, string>} data - Key-value pairs of credential field names and values
+ * @returns {ValidationResult} Object with isValid boolean and errors map
  */
 export const validateCredentialInput = (data) => {
   const errors = {};

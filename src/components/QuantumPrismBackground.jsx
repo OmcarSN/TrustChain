@@ -29,7 +29,8 @@ const QuantumPrismBackground = () => {
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     // For r160, use SRGBColorSpace instead of sRGBEncoding
     // renderer.outputColorSpace = THREE.SRGBColorSpace;
-    mountRef.current.appendChild(renderer.domElement);
+    const mountNode = mountRef.current;
+    mountNode.appendChild(renderer.domElement);
 
     /* ───────────── Controls ───────────── */
     const reducedMotion = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
@@ -412,8 +413,8 @@ const QuantumPrismBackground = () => {
         composer.dispose();
         controls.dispose();
         
-        if (mountRef.current && renderer.domElement) {
-            mountRef.current.removeChild(renderer.domElement);
+        if (mountNode && renderer.domElement) {
+            mountNode.removeChild(renderer.domElement);
         }
     };
   }, []);

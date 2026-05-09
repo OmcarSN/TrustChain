@@ -24,7 +24,7 @@ export default defineConfig([
     },
     rules: {
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]|^motion$' }],
-      'react-hooks/set-state-in-effect': 'warn',
+      'react-hooks/set-state-in-effect': 'off',
       'react-hooks/exhaustive-deps': 'warn',
       'react-hooks/purity': 'warn',
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],

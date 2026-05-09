@@ -210,6 +210,8 @@ Verifier searches → Indexer queries Horizon → Parses ManageData → Displays
 | Animations | Framer Motion |
 | Charts | Recharts |
 | Routing | React Router v7 |
+| Type Safety | PropTypes (runtime) + JSDoc (IDE) |
+| Testing | Vitest + @testing-library/react (35 tests) |
 | Blockchain | Stellar Testnet + Horizon API |
 | Wallet | Freighter API v6 |
 | Smart Contracts | Soroban SDK + Rust |
@@ -323,6 +325,49 @@ TrustChain has been upgraded to **Level 6 Black Belt** with production-grade fea
 | `.github/workflows/ci.yml` | Production 6-job CI/CD Pipeline |
 | `contracts/credential/src/lib.rs` | Upgraded to Level 6 Advanced (14 tests) |
 | `contracts/reputation/src/lib.rs` | Upgraded to Level 6 Advanced (13 tests) |
+
+### 🧪 Code Quality & Production Readiness
+
+TrustChain's codebase has been hardened to **production-grade** standards through four key improvements:
+
+#### Component Decomposition
+All monolithic page components (400+ LOC) have been decomposed into focused, reusable sub-components:
+
+| Page | Before | After | Extracted Components |
+|------|--------|-------|---------------------|
+| `Landing.jsx` | 756 LOC | ~130 LOC | `HeroSection`, `StatsBar`, `HowItWorks`, `TechStack` |
+| `Dashboard.jsx` | 423 LOC | ~170 LOC | `ConnectPrompt`, `DashboardSidebar`, `DashboardActivityFeed` |
+| `DiscoverWorkers.jsx` | 563 LOC | ~200 LOC | `WorkerCard`, `FilterBar` |
+
+#### Runtime PropTypes Validation
+All 13 reusable components now have mandatory `PropTypes` declarations ensuring runtime type safety:
+- Core: `MetricCard`, `ErrorBoundary`, `TrustChainLogo`
+- Landing: `HeroSection`, `StatsBar`, `HowItWorks`, `TechStack`
+- Dashboard: `ConnectPrompt`, `DashboardSidebar`, `DashboardActivityFeed`
+- Discover: `WorkerCard`, `FilterBar`
+
+#### JSDoc Type Annotations
+Professional-grade `@typedef`, `@param`, and `@returns` annotations added to all utility and library modules:
+- `utils/monitor.js` — `ErrorLogEntry`, `TransactionLogEntry`
+- `utils/feeBump.js` — Full parameter/return type docs
+- `utils/validation.js` — `ValidationResult` typedef
+- `lib/reputation.js` — `Endorsement`, `ReputationScore` typedefs
+
+#### Test Coverage (35 Tests, 5 Suites)
+
+| Suite | Tests | Coverage Area |
+|-------|-------|--------------|
+| `validation.test.js` | 16 | Input sanitization, XSS, wallet address |
+| `reputation.test.js` | 7 | Score calculation, edge cases, breakdown |
+| `monitor.test.js` | 5 | Error/TX logging, log capping |
+| `components.test.jsx` | 4 | ErrorBoundary, TrustChainLogo smoke tests |
+| `feeBump.test.js` | 3 | Fee bump transaction building |
+
+```bash
+# Run all tests
+npx vitest run
+# ✅ 35/35 passing — 0 failures
+```
 
 ### 🗺️ Improvement Roadmap — Based on Level 6 User Feedback
 
@@ -567,29 +612,43 @@ trustchain/
 │       └── src/
 │           └── lib.rs      # Credential issuance & retrieval logic
 ├── src/
-│   ├── components/         # Reusable UI components
+│   ├── components/         # Reusable UI components (all have PropTypes)
 │   │   ├── Navbar.jsx      # Navigation with wallet state
 │   │   ├── Footer.jsx      # Footer with external links
 │   │   ├── MetricCard.jsx  # Animated metric display
 │   │   ├── ActivityFeed.jsx # Real-time event feed
-│   │   └── ErrorBoundary.jsx # Global React error handler
+│   │   ├── ErrorBoundary.jsx # Global React error handler
+│   │   ├── TrustChainLogo.jsx # Brand logo component
+│   │   ├── landing/        # Landing page sub-components
+│   │   │   ├── HeroSection.jsx   # Hero with animated headlines + CTAs
+│   │   │   ├── StatsBar.jsx      # Animated platform metrics bar
+│   │   │   ├── HowItWorks.jsx    # 3-step feature cards
+│   │   │   └── TechStack.jsx     # Technology showcase section
+│   │   ├── dashboard/      # Dashboard sub-components
+│   │   │   ├── ConnectPrompt.jsx  # Wallet connection CTA
+│   │   │   ├── DashboardSidebar.jsx # Credential + quick actions
+│   │   │   └── DashboardActivityFeed.jsx # Endorsement timeline
+│   │   └── discover/       # Discover Workers sub-components
+│   │       ├── WorkerCard.jsx    # Individual worker row card
+│   │       └── FilterBar.jsx     # Skill/city/rating filters
 │   ├── context/            # React Context providers
 │   │   ├── WalletContext.jsx # Wallet state management
 │   │   └── ToastContext.jsx  # Toast notification system
 │   ├── hooks/              # Custom React hooks
-│   │   └── useHorizonMetrics.js # Horizon API polling hook
-│   ├── lib/                # Core business logic
+│   │   ├── useHorizonMetrics.js # Horizon API polling hook
+│   │   └── usePlatformStats.js  # Real-time platform stats
+│   ├── lib/                # Core business logic (JSDoc annotated)
 │   │   ├── stellar.js      # Stellar SDK interactions
 │   │   ├── freighter.js    # Freighter wallet integration
-│   │   ├── reputation.js   # Reputation score calculation
+│   │   ├── reputation.js   # Reputation score calculation (JSDoc typed)
 │   │   └── toast.js        # Toast bridge for non-React code
 │   ├── pages/              # Route-level page components
-│   │   ├── Landing.jsx     # Home page with hero + how-it-works
+│   │   ├── Landing.jsx     # Composed from landing/ sub-components
 │   │   ├── WorkerRegistration.jsx # 3-step credential minting
 │   │   ├── Endorse.jsx     # Endorsement submission
 │   │   ├── Verify.jsx      # Credential verification
-│   │   ├── Dashboard.jsx   # Personal dashboard
-│   │   ├── DiscoverWorkers.jsx # Worker directory
+│   │   ├── Dashboard.jsx   # Composed from dashboard/ sub-components
+│   │   ├── DiscoverWorkers.jsx # Composed from discover/ sub-components
 │   │   ├── WorkerProfile.jsx # Individual worker profile
 │   │   ├── Analytics.jsx   # Network metrics dashboard
 │   │   ├── Explorer.jsx    # On-chain credential explorer
@@ -597,10 +656,16 @@ trustchain/
 │   │   └── NotFound.jsx    # 404 page
 │   ├── services/           # External service integrations
 │   │   └── indexer.js      # Horizon-based data indexer
-│   ├── utils/              # Utility functions
+│   ├── utils/              # Utility functions (JSDoc annotated)
 │   │   ├── validation.js   # Input validation & sanitization
 │   │   ├── feeBump.js      # Fee bump transaction builder
 │   │   └── monitor.js      # Error & transaction logging
+│   ├── test/               # Vitest test suites (35 tests)
+│   │   ├── components.test.jsx  # Component smoke tests
+│   │   ├── reputation.test.js   # Reputation scoring tests
+│   │   ├── validation.test.js   # Input validation tests
+│   │   ├── monitor.test.js      # Logging utility tests
+│   │   └── feeBump.test.js      # Fee bump transaction tests
 │   ├── App.jsx             # Route definitions
 │   ├── main.jsx            # Entry point with providers
 │   └── index.css           # Global styles & Tailwind config
@@ -663,6 +728,12 @@ npm run dev
 ```
 
 App runs at `http://localhost:5173`
+
+### Run Tests
+```bash
+npx vitest run
+# ✅ 35 tests across 5 suites
+```
 
 ### Environment Setup
 ```bash

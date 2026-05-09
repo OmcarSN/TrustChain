@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search, Star, MapPin, Briefcase, ShieldCheck, ExternalLink,
@@ -24,11 +24,7 @@ const Verify = () => {
   const [error, setError] = useState(null);
   const [copied, setCopied] = useState(false);
 
-  useEffect(() => {
-    if (searchParams.get('address')) performSearch(searchParams.get('address'));
-  }, []);
-
-  const performSearch = async (address) => {
+  const performSearch = useCallback(async (address) => {
     if (!address) return;
     setIsSearching(true); setError(null);
     try {
@@ -42,7 +38,12 @@ const Verify = () => {
       toast.error(t('verify.failedResult'));
       setProfile(null);
     } finally { setIsSearching(false); }
-  };
+  }, [toast, t]);
+
+   
+  useEffect(() => {
+    if (searchParams.get('address')) performSearch(searchParams.get('address'));
+  }, [searchParams, performSearch]);
 
   const handleSearchSubmit = (e) => { e.preventDefault(); performSearch(workerSearch); };
   const handleShare = () => {
