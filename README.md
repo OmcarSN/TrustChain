@@ -474,15 +474,21 @@ The analytics dashboard provides real-time network metrics by querying the Stell
 
 ### Screenshots
 
-![Landing Page](./docs/screenshots/landing.png)
+[Landing Page]<img width="1920" height="1080" alt="Screenshot 2026-05-09 234859" src="https://github.com/user-attachments/assets/12b378c8-4e24-4e61-a776-e58f46efb306" />
 
-![Analytics Dashboard](./docs/screenshots/analytics.png)
+[Analytics Dashboard]<img width="1920" height="1080" alt="Screenshot 2026-05-09 234642" src="https://github.com/user-attachments/assets/0c1d0dc3-efdc-4693-8a2d-b1ac0daaf135" />
 
-![Discover Workers](./docs/screenshots/discover.png)
 
-![Credential Explorer](./docs/screenshots/explorer.png)
+[Discover Workers]<img width="1920" height="1080" alt="Screenshot 2026-05-09 234748" src="https://github.com/user-attachments/assets/f00c9419-3e2a-4e09-b332-bd7036363d0a" />
 
-![System Logs Monitoring](./docs/screenshots/admin-logs.png)
+
+[Credential Explorer]<img width="1920" height="1080" alt="Screenshot 2026-05-09 234800" src="https://github.com/user-attachments/assets/b1826d39-c564-4690-91b1-1b5705ed466f" />
+
+
+[Dashboard]<img width="1920" height="1080" alt="Screenshot 2026-05-09 234810" src="https://github.com/user-attachments/assets/a59bc5b6-08f4-4048-8151-c152f9f86a7a" />
+
+[Worker credential] <img width="1920" height="1080" alt="Screenshot 2026-05-09 234822" src="https://github.com/user-attachments/assets/807f62f7-8604-4f04-8091-3c87d04b1f25" />
+
 
 
 ---
