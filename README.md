@@ -10,7 +10,7 @@
 
 **TrustChain** is a decentralized, soulbound credential and reputation platform built on the **Stellar network**. It enables informal economy workers (construction, domestic work, transport, agriculture, etc.) to create portable, tamper-proof digital identities and build verifiable on-chain reputations through employer endorsements.
 
-[🚀 Live Demo](https://trust-chain-mocha.vercel.app/) · [📹 Demo Video](#-demo-video) · [📊 Metrics Dashboard](#-metrics-dashboard) · [🔒 Security Checklist](./SECURITY.md) · [📖 User Guide](#-user-guide)
+[🚀 Live Demo](https://trust-chain-mocha.vercel.app/) · [📊 Metrics Dashboard](#-metrics-dashboard) · [🔒 Security Checklist](./SECURITY.md) · [📖 User Guide](#-user-guide)
 
 ---
 
@@ -19,7 +19,6 @@
 - [Solution](#-solution)
 - [Key Features](#-key-features)
 - [Live Demo & Links](#-live-demo--links)
-- [Demo Video](#-demo-video)
 - [Architecture](#️-architecture)
 - [Tech Stack](#️-tech-stack)
 - [Smart Contracts](#-smart-contracts)
@@ -133,18 +132,6 @@ Traditional credential systems (LinkedIn, certificates) are inaccessible to this
 > **Note:** The app requires the [Freighter Wallet](https://www.freighter.app/) browser extension set to **Testnet** mode.
 
 ---
-
-## 📹 Demo Video
-
-> 🎬 **Full MVP Demo Video:** [Watch Here](https://youtu.be/BbL7pydFVwg)
->
-> The demo covers:
-> 1. Connecting Freighter wallet
-> 2. Registering as a worker and minting credentials
-> 3. Endorsing a worker with star rating and feedback
-> 4. Verifying a worker's on-chain reputation
-> 5. Using the Dashboard and Discover pages
-
 ---
 
 ## 🏗️ Architecture
