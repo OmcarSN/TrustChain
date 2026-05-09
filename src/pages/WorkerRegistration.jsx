@@ -73,8 +73,7 @@ const WorkerRegistration = () => {
   const trunc = (a) => a ? `${a.slice(0,6)}...${a.slice(-6)}` : '';
   const copyAddr = () => { navigator.clipboard.writeText(walletAddress); setCopiedAddr(true); setTimeout(() => setCopiedAddr(false), 2000); };
   const filled = [formData.fullName, formData.skillCategory, formData.experience, formData.city, (formData.bio||'').length >= 10].filter(Boolean).length;
-  const curStep = txResult ? 3 : isMinting ? 2 : 1;
-  const iCls = (f) => `w-full bg-transparent border-0 border-b ${errors[f] ? 'border-red-400/40' : 'border-white/20'} py-2.5 text-white text-xs focus:outline-none focus:border-white/60 transition-all font-inter placeholder:text-white/20`;
+
 
   if (!isConnected) {
     return (

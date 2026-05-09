@@ -123,7 +123,7 @@ export async function getWalletAddress() {
     // If neither silent method worked, wallet is likely locked — return null
     // Do NOT call requestAccess() here to avoid opening a popup
     return null;
-  } catch (error) {
+  } catch {
     return null;
   }
 }

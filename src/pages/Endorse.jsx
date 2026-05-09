@@ -33,7 +33,7 @@ const Endorse = () => {
   const ratingLabels = ['', t('endorse.ratingPoor'), t('endorse.ratingFair'), t('endorse.ratingGood'), t('endorse.ratingGreat'), t('endorse.ratingOutstanding')];
   const canSubmit = isConnected && foundWorker && rating > 0 && jobType && feedback.length >= 20;
   const activeStarValue = hoveredStar || rating;
-  const truncAddr = (addr) => addr ? `${addr.slice(0, 6)}…${addr.slice(-6)}` : "";
+
 
   const handleSearch = async () => {
     if (!workerSearch) return;

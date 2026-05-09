@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { Search, Loader2, Database, Hash, Clock, ExternalLink, UserCheck, FileSearch, ShieldCheck } from 'lucide-react';
 import { fetchCredentialsByWallet } from '../services/indexer';
-import { validateWalletAddress } from '../utils/validation';
 import { useTranslation } from 'react-i18next';
 
 const Explorer = () => {

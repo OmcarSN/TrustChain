@@ -66,7 +66,7 @@ const WorkerProfile = () => {
     setLoading(false);
   }, [address]);
 
-  const truncate = (a) => a ? `${a.slice(0,6)}…${a.slice(-6)}` : '';
+
   const copyAddr = () => { navigator.clipboard.writeText(address); setCopiedAddr(true); setTimeout(() => setCopiedAddr(false), 2000); };
   const shareProfile = () => { navigator.clipboard.writeText(window.location.href); setCopiedShare(true); setTimeout(() => setCopiedShare(false), 2000); };
 

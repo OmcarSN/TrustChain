@@ -13,17 +13,18 @@ export const useToast = () => {
 
 export const ToastProvider = ({ children }) => {
   const [toasts, setToasts] = useState([]);
+  // eslint-disable-next-line react-hooks/purity
   const showToast = (message, type = 'success') => { const id = Date.now(); setToasts(p => [...p, { id, message, type }]); setTimeout(() => removeToast(id), 4000); };
   const removeToast = (id) => setToasts(p => p.filter(t => t.id !== id));
   const success = (msg) => showToast(msg, 'success');
-  const error = (msg) => showToast(msg, 'error');
+  const showError = (msg) => showToast(msg, 'error');
   const info = (msg) => showToast(msg, 'info');
-  const toastRef = useRef({ success, error, info });
-  toastRef.current = { success, error, info };
+  const toastRef = useRef({ success, error: showError, info });
+  toastRef.current = { success, error: showError, info };
   useEffect(() => { registerToastInstance({ success: (msg) => toastRef.current.success(msg), error: (msg) => toastRef.current.error(msg), info: (msg) => toastRef.current.info(msg) }); }, []);
 
   return (
-    <ToastContext.Provider value={{ success, error, info }}>
+    <ToastContext.Provider value={{ success, error: showError, info }}>
       {children}
       <div className="fixed top-8 right-8 z-[9999] flex flex-col gap-3 max-w-sm w-full pointer-events-none">
         <AnimatePresence>

@@ -8,7 +8,7 @@ import ActivityFeed from '../components/ActivityFeed';
 import { useTranslation } from 'react-i18next';
 
 const Analytics = () => {
-  const { isConnected, connect } = useWallet();
+  useWallet();
   const { t } = useTranslation();
   const [metrics, setMetrics] = useState({ totalCredentials: 0, activeWallets: 0, todayTx: 0, recentActivity: [], trendData: [], loading: true, error: null });
   const [chartType, setChartType] = useState('area');

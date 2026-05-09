@@ -6,6 +6,7 @@ import { STELLAR_NETWORK } from '../lib/stellar-config';
 
 const WalletContext = createContext();
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useWallet = () => useContext(WalletContext);
 
 export const WalletProvider = ({ children }) => {

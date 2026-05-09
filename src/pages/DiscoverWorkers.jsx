@@ -86,8 +86,8 @@ const WorkerCard = ({ worker, index }) => {
 
   const getAvatarColor = (name) => {
     const colors = ['bg-orange-500', 'bg-emerald-600', 'bg-blue-600', 'bg-purple-600', 'bg-rose-600', 'bg-amber-500', 'bg-cyan-600', 'bg-indigo-600'];
-    const index = (name || 'W').charCodeAt(0) % colors.length;
-    return colors[index];
+    const idx = (name || 'W').charCodeAt(0) % colors.length;
+    return colors[idx];
   };
 
   const avatarColor = getAvatarColor(worker.name);
@@ -443,7 +443,7 @@ const DiscoverWorkers = () => {
               <div className="w-full sm:w-auto">
                 <label className="font-inter" style={{ fontSize: '9px', letterSpacing: '2px', color: 'rgba(255,255,255,0.25)', marginBottom: '8px', display: 'block', textTransform: 'uppercase', fontWeight: '700' }}>{t('discover.filterRating', 'MINIMUM RATING')}</label>
                 <div className="flex flex-wrap gap-2">
-                  {RATING_OPTIONS.map((opt, i) => {
+                  {RATING_OPTIONS.map((opt) => {
                     const isActive = minRating === opt.value;
                     return (
                       <button key={opt.value} onClick={() => setMinRating(opt.value)} className={isActive ? '' : 'dw-rating-btn'}

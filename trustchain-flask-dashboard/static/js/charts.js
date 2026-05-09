@@ -1,3 +1,4 @@
+/* global Chart */
 document.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('growthChart').getContext('2d');
     

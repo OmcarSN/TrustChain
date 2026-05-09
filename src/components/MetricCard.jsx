@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
 
-const MetricCard = ({ title, value, subtitle, icon: Icon, color = 'purple', trend, sparkData, delay = 0 }) => {
+const MetricCard = ({ title, value, subtitle, icon: Icon, trend, sparkData, delay = 0 }) => {
   const [displayValue, setDisplayValue] = useState(0);
   const isStr = typeof value === 'string' && isNaN(parseInt(value, 10));
   const canvasRef = useRef(null);

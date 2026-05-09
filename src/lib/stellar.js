@@ -51,7 +51,7 @@ export async function waitForTransaction(txHash, maxRetries = 10) {
       if (tx && tx.successful) {
         return tx;
       }
-    } catch (e) {
+    } catch {
       // 404 means not indexed yet
     }
     await new Promise(resolve => setTimeout(resolve, 2000));
@@ -144,7 +144,7 @@ export async function mintWorkerCredential(publicKey, data) {
         const feeBumpXdr = buildFeeBumpTransaction(signedXdr, sponsorKeypair, networkPassphrase);
         if (feeBumpXdr) finalXdr = feeBumpXdr;
       }
-    } catch (feeErr) {
+    } catch {
       // Log sanitized error — never expose sponsor key material
       logError({ message: 'Fee bump failed, submitting without sponsorship.' }, 'feeBumpAttempt');
     }
@@ -171,7 +171,7 @@ export async function fetchWorkerCredential(publicKey) {
 
     if (data[`tc_${publicKey.slice(0, 8)}`]) {
       const val = data[`tc_${publicKey.slice(0, 8)}`];
-      const onChainSkill = Buffer.from(val, 'base64').toString('utf-8');
+      const onChainSkill = atob(val);
 
       let localData = {};
       try {
@@ -179,7 +179,7 @@ export async function fetchWorkerCredential(publicKey) {
         if (stored) {
           localData = JSON.parse(stored);
         }
-      } catch (e) {}
+      } catch { /* ignore parse errors */ }
 
       return {
         name: localData.name || "Worker",
@@ -192,7 +192,8 @@ export async function fetchWorkerCredential(publicKey) {
     }
     throw new Error('No TrustChain credential found.');
   } catch (error) {
-    throw error;
+    if (error.message === 'No TrustChain credential found.') throw error;
+    throw new Error(`Failed to fetch credential: ${error.message}`);
   }
 }
 
@@ -221,6 +222,7 @@ export async function submitWorkerEndorsement(endorsementData, endorserAddress) 
     logTransaction(response.hash, "Worker Endorsement", endorserAddress);
     return response;
   } catch (error) {
+    logError({ message: error.message, stack: error.stack }, `submitWorkerEndorsement(${endorserAddress})`);
     throw error;
   }
 }
