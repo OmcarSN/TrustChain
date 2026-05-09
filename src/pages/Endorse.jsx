@@ -104,7 +104,7 @@ const Endorse = () => {
 
         <div className="text-center" style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '0 24px' }}>
           
-          <div className="conn-anim" style={{ width: '72px', height: '72px', border: '1px solid rgba(255,255,255,0.12)', backgroundColor: 'rgba(255,255,255,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px', animation: 'iconPulse 3s ease infinite, fadeSlideUp 0.6s ease forwards', animationDelay: '0s, 0.1s', borderRadius: '2px' }}>
+          <div className="conn-anim" style={{ width: '72px', height: '72px', border: '1px solid rgba(255,255,255,0.12)', backgroundColor: 'rgba(255,255,255,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px', animation: 'iconPulse 3s ease infinite, fadeSlideUp 0.6s ease forwards', animationDelay: '0s, 0.1s', borderRadius: '14px' }}>
             <Award style={{ width: '28px', height: '28px', color: 'rgba(255,255,255,0.5)' }} />
           </div>
 
@@ -113,7 +113,7 @@ const Endorse = () => {
           <p className="font-inter conn-anim" style={{ fontSize: '15px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.5px', marginBottom: '32px', maxWidth: '400px', textAlign: 'center', lineHeight: '1.6', animationDelay: '0.3s' }}>{t('endorse.headerSubtitle')}</p>
           
           <div className="conn-anim" style={{ animationDelay: '0.4s' }}>
-            <button onClick={connect} className="conn-btn font-inter" style={{ padding: '14px 40px', backgroundColor: '#ffffff', color: '#000000', border: 'none', fontWeight: '800', fontSize: '13px', letterSpacing: '2px', cursor: 'pointer', borderRadius: '0', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', textTransform: 'uppercase' }}>
+            <button onClick={connect} className="conn-btn font-inter" style={{ padding: '14px 40px', backgroundColor: '#ffffff', color: '#000000', border: 'none', fontWeight: '800', fontSize: '13px', letterSpacing: '2px', cursor: 'pointer', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', textTransform: 'uppercase' }}>
               <Wallet style={{ width: '16px', height: '16px' }} /> {t('dashboard.connectBtn')}
             </button>
           </div>
@@ -152,10 +152,10 @@ const Endorse = () => {
         @keyframes btnPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.15); } 50% { box-shadow: 0 0 0 8px rgba(255,255,255,0); } }
         .end-anim { opacity: 0; animation: fadeSlideUp 0.6s ease forwards; }
         .end-panel-anim { opacity: 0; animation: fadeSlideUp 0.5s 0.2s ease forwards; }
-        .end-input { transition: all 0.2s ease; border: 1px solid rgba(255,255,255,0.15); background-color: rgba(255,255,255,0.03); color: #ffffff; }
+        .end-input { transition: all 0.2s ease; border: 1px solid rgba(255,255,255,0.15); background-color: rgba(255,255,255,0.03); color: #ffffff; border-radius: 8px; }
         .end-input:focus { border-color: rgba(255,255,255,0.3) !important; box-shadow: 0 0 16px rgba(255,255,255,0.04) !important; }
-        .end-input-dropdown { border: 1px solid rgba(255,255,255,0.12) !important; background-color: rgba(255,255,255,0.04) !important; color: rgba(255,255,255,0.6) !important; }
-        .end-input-textarea { border: 1px solid rgba(255,255,255,0.1) !important; background-color: rgba(255,255,255,0.03) !important; color: #ffffff !important; line-height: 1.6; resize: vertical !important; min-height: 120px !important; }
+        .end-input-dropdown { border: 1px solid rgba(255,255,255,0.12) !important; background-color: rgba(255,255,255,0.04) !important; color: rgba(255,255,255,0.6) !important; border-radius: 8px !important; }
+        .end-input-textarea { border: 1px solid rgba(255,255,255,0.1) !important; background-color: rgba(255,255,255,0.03) !important; color: #ffffff !important; line-height: 1.6; resize: vertical !important; min-height: 120px !important; border-radius: 8px !important; }
         .end-input-textarea:focus { box-shadow: 0 0 20px rgba(255,255,255,0.03) !important; }
         .end-input::placeholder { color: rgba(255,255,255,0.2); }
         .end-star { transition: 0.15s ease; cursor: pointer; color: rgba(255,255,255,0.15); font-size: 28px; }
@@ -184,10 +184,10 @@ const Endorse = () => {
         </div>
 
         {/* Two Column Card */}
-        <div className="end-panel-anim w-full max-w-5xl mx-auto flex flex-col md:grid md:grid-cols-[1fr_2fr]" style={{ gap: '0', border: '1px solid rgba(255,255,255,0.08)', backgroundColor: 'rgba(255,255,255,0.02)', borderTop: '2px solid rgba(255,255,255,0.15)', position: 'relative', zIndex: 1 }}>
+        <div className="end-panel-anim w-full max-w-5xl mx-auto flex flex-col md:grid md:grid-cols-[1fr_2fr]" style={{ gap: '0', border: '1px solid rgba(255,255,255,0.08)', backgroundColor: 'rgba(255,255,255,0.02)', borderTop: '2px solid rgba(255,255,255,0.15)', position: 'relative', zIndex: 1, borderRadius: '12px', overflow: 'hidden' }}>
 
           {/* ═══ LEFT PANEL — Find Worker ═══ */}
-          <div style={{ padding: '32px 24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div style={{ padding: '32px 28px', display: 'flex', flexDirection: 'column', gap: '18px' }}>
             {/* Panel header */}
             <div style={{ ...labelStyle, marginBottom: '0' }}>
               <Search style={{ width: '12px', height: '12px', color: 'rgba(255,255,255,0.2)' }} />
@@ -199,12 +199,12 @@ const Endorse = () => {
               type="text" placeholder={t('endorse.searchPlaceholder')} value={workerSearch}
               onChange={(e) => setWorkerSearch(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-              className="end-input font-inter w-full px-3 py-2.5 text-sm" style={inputStyle}
+              className="end-input font-inter w-full px-4 py-3 text-sm" style={inputStyle}
             />
 
             {/* Find Worker button */}
             <button onClick={handleSearch} disabled={isSearching || !workerSearch} className="end-find-btn font-inter"
-              style={{ padding: '10px 16px', backgroundColor: '#ffffff', color: '#000000', border: 'none', fontSize: '11px', letterSpacing: '2px', fontWeight: '700', width: '100%', cursor: !workerSearch ? 'not-allowed' : 'pointer', opacity: !workerSearch ? 0.4 : 1, textTransform: 'uppercase', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+              style={{ padding: '12px 16px', backgroundColor: '#ffffff', color: '#000000', border: 'none', fontSize: '11px', letterSpacing: '2px', fontWeight: '700', width: '100%', cursor: !workerSearch ? 'not-allowed' : 'pointer', opacity: !workerSearch ? 0.4 : 1, textTransform: 'uppercase', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', borderRadius: '8px' }}>
               {isSearching ? <Loader2 style={{ width: '14px', height: '14px' }} className="animate-spin" /> : <><Search style={{ width: '12px', height: '12px' }} /> {t('endorse.findWorkerLabel')}</>}
             </button>
 
@@ -218,9 +218,9 @@ const Endorse = () => {
             <AnimatePresence mode="wait">
               {foundWorker ? (
                 <motion.div key="found" className="worker-card-anim" exit={{ opacity: 0 }}
-                  style={{ padding: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.03)' }}>
+                  style={{ padding: '16px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.03)', borderRadius: '10px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
-                    <div style={{ width: '36px', height: '36px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <div style={{ width: '40px', height: '40px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, borderRadius: '8px' }}>
                       <User style={{ width: '16px', height: '16px', color: 'rgba(255,255,255,0.2)' }} />
                     </div>
                     <div style={{ minWidth: 0 }}>
@@ -228,7 +228,7 @@ const Endorse = () => {
                       <p className="font-inter" style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)' }}>{foundWorker.skill} · {foundWorker.city}</p>
                     </div>
                   </div>
-                  <span className="font-inter pulse-glow" style={{ display: 'inline-block', fontSize: '9px', letterSpacing: '2px', color: '#00dc6e', backgroundColor: 'rgba(0,220,110,0.08)', border: '1px solid rgba(0,220,110,0.25)', padding: '3px 10px', fontWeight: '700', textTransform: 'uppercase' }}>● {t('discover.verified')}</span>
+                  <span className="font-inter pulse-glow" style={{ display: 'inline-block', fontSize: '9px', letterSpacing: '2px', color: '#00dc6e', backgroundColor: 'rgba(0,220,110,0.08)', border: '1px solid rgba(0,220,110,0.25)', padding: '4px 12px', fontWeight: '700', textTransform: 'uppercase', borderRadius: '6px' }}>● {t('discover.verified')}</span>
                   
                   {/* Add below the VERIFIED badge in the left column */}
 
@@ -245,23 +245,24 @@ const Endorse = () => {
                       WHY THIS MATTERS
                     </p>
 
-                    {/* 3 info points */}
+                    {/* 3 info points — inline */}
+                    <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
                     {[
-                      { icon: '🔒', text: 'Stored on Stellar blockchain' },
-                      { icon: '✓',  text: 'Tamper-proof record' },
-                      { icon: '⚡', text: 'Gasless via Soroban' },
+                      { icon: '🔒', text: 'Stellar' },
+                      { icon: '✓',  text: 'Tamper-proof' },
+                      { icon: '⚡', text: 'Gasless' },
                     ].map((item, i) => (
                       <div key={i} style={{
-                        display: 'flex', gap: '10px', alignItems: 'flex-start',
-                        marginBottom: '8px'
+                        display: 'flex', gap: '6px', alignItems: 'center',
                       }}>
-                        <span style={{ fontSize:'14px', flexShrink:0, marginTop:'1px' }}>{item.icon}</span>
+                        <span style={{ fontSize:'12px', flexShrink:0 }}>{item.icon}</span>
                         <span className="font-inter" style={{
-                          fontSize: '11px', color: 'rgba(255,255,255,0.4)',
-                          lineHeight: '1.5'
+                          fontSize: '10px', color: 'rgba(255,255,255,0.4)',
+                          letterSpacing: '0.5px', whiteSpace: 'nowrap'
                         }}>{item.text}</span>
                       </div>
                     ))}
+                    </div>
 
                     {/* Divider */}
                     <div style={{ borderTop:'1px solid rgba(255,255,255,0.06)', margin:'16px 0' }} />
@@ -269,9 +270,10 @@ const Endorse = () => {
                     {/* On-chain badge */}
                     <div style={{
                       display: 'flex', alignItems: 'center', gap: '8px',
-                      padding: '10px 12px',
+                      padding: '10px 14px',
                       border: '1px solid rgba(0,220,110,0.15)',
                       backgroundColor: 'rgba(0,220,110,0.04)',
+                      borderRadius: '8px',
                     }}>
                       <div style={{
                         width: '6px', height: '6px', borderRadius: '50%',
@@ -293,7 +295,7 @@ const Endorse = () => {
               ) : (
                 <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}
                   style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '32px 0' }}>
-                  <div style={{ width: '56px', height: '56px', border: '1px solid rgba(255,255,255,0.08)', backgroundColor: 'rgba(255,255,255,0.03)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '12px' }}>
+                  <div style={{ width: '56px', height: '56px', border: '1px solid rgba(255,255,255,0.08)', backgroundColor: 'rgba(255,255,255,0.03)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '12px', borderRadius: '10px' }}>
                     <User style={{ width: '22px', height: '22px', color: 'rgba(255,255,255,0.15)' }} />
                   </div>
                   <p className="font-inter" style={{ fontSize: '9px', letterSpacing: '3px', color: 'rgba(255,255,255,0.2)', textTransform: 'uppercase' }}>{t('endorse.noWorkerSelected')}</p>
@@ -303,7 +305,7 @@ const Endorse = () => {
           </div>
 
           {/* ═══ RIGHT PANEL — Form ═══ */}
-          <div style={{ padding: '32px 32px', display: 'flex', flexDirection: 'column', gap: '12px', position: 'relative', borderLeft: '1px solid rgba(255,255,255,0.06)' }}>
+          <div style={{ padding: '36px 36px', display: 'flex', flexDirection: 'column', gap: '16px', position: 'relative', borderLeft: '1px solid rgba(255,255,255,0.06)' }}>
             {/* Locked overlay */}
             <AnimatePresence>
               {!foundWorker && (
@@ -344,8 +346,8 @@ const Endorse = () => {
             <div>
               <label className="font-inter" style={labelStyle}><Briefcase style={{ width: '12px', height: '12px' }} /> {t('jobTypes.label')}</label>
               <div style={{ position: 'relative' }}>
-                <select value={jobType} onChange={(e) => setJobType(e.target.value)} className="end-input end-input-dropdown font-inter w-full px-3 py-2.5 text-sm"
-                  style={{ ...inputStyle, appearance: 'none', cursor: 'pointer', paddingRight: '32px' }}>
+                <select value={jobType} onChange={(e) => setJobType(e.target.value)} className="end-input end-input-dropdown font-inter w-full px-4 py-3 text-sm"
+                  style={{ ...inputStyle, appearance: 'none', cursor: 'pointer', paddingRight: '36px' }}>
                   <option value="" disabled>{t('endorse.selectJobType')}</option>
                   <option value="One-time Job" style={{ backgroundColor: '#0a0a0a' }}>{t('jobTypes.One-time Job')}</option>
                   <option value="Recurring" style={{ backgroundColor: '#0a0a0a' }}>{t('jobTypes.Recurring')}</option>
@@ -365,7 +367,7 @@ const Endorse = () => {
               </div>
               <textarea value={feedback} onChange={(e) => e.target.value.length <= 300 && setFeedback(e.target.value)}
                 placeholder={t('endorse.placeholderFeedback')}
-                className="end-input end-input-textarea font-inter w-full px-3 py-2.5 text-sm" style={{ ...inputStyle }} />
+                className="end-input end-input-textarea font-inter w-full px-4 py-3 text-sm" style={{ ...inputStyle }} />
               {feedback.length > 0 && feedback.length < 20 && (
                 <p className="font-inter" style={{ fontSize: '10px', color: 'rgba(255,255,255,0.3)', marginTop: '6px', display: 'flex', alignItems: 'center', gap: '4px' }}>
                   <Zap style={{ width: '10px', height: '10px' }} /> {20 - feedback.length} {t('endorse.moreCharsNeeded', { count: 20 - feedback.length })}
@@ -395,7 +397,7 @@ const Endorse = () => {
               <AnimatePresence mode="wait">
                 {isSuccess ? (
                   <motion.div key="success" initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                    style={{ border: '1px solid rgba(0,220,110,0.15)', backgroundColor: 'rgba(0,220,110,0.03)', padding: '16px' }}>
+                    style={{ border: '1px solid rgba(0,220,110,0.15)', backgroundColor: 'rgba(0,220,110,0.03)', padding: '20px', borderRadius: '10px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
                       <CheckCircle2 style={{ width: '18px', height: '18px', color: '#00dc6e' }} />
                       <div>
@@ -403,11 +405,11 @@ const Endorse = () => {
                         <p className="font-inter" style={{ fontSize: '10px', color: 'rgba(0,220,110,0.5)' }}>{t('endorse.sealedOnStellar')}</p>
                       </div>
                     </div>
-                    <div style={{ border: '1px solid rgba(255,255,255,0.06)', padding: '10px 12px', marginBottom: '8px' }}>
+                    <div style={{ border: '1px solid rgba(255,255,255,0.06)', padding: '10px 14px', marginBottom: '8px', borderRadius: '6px' }}>
                       <span style={{ fontFamily: 'monospace', fontSize: '10px', color: 'rgba(255,255,255,0.25)' }}>{txHash}</span>
                     </div>
                     <a href={`https://stellar.expert/explorer/testnet/tx/${txHash}`} target="_blank" rel="noopener noreferrer"
-                      style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontSize: '10px', letterSpacing: '2px', color: 'rgba(255,255,255,0.4)', border: '1px solid rgba(255,255,255,0.1)', padding: '10px', textDecoration: 'none', textTransform: 'uppercase', fontWeight: '700' }} className="font-inter">
+                      style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontSize: '10px', letterSpacing: '2px', color: 'rgba(255,255,255,0.4)', border: '1px solid rgba(255,255,255,0.1)', padding: '10px 14px', textDecoration: 'none', textTransform: 'uppercase', fontWeight: '700', borderRadius: '8px' }} className="font-inter">
                       <ExternalLink style={{ width: '12px', height: '12px' }} /> {t('endorse.viewOnExplorer')}
                     </a>
                   </motion.div>
@@ -422,6 +424,7 @@ const Endorse = () => {
                       cursor: canSubmit ? 'pointer' : 'not-allowed',
                       transition: 'all 0.3s ease',
                       marginTop: '20px',
+                      borderRadius: '10px',
                       animation: canSubmit ? 'btnPulse 2.5s ease infinite' : 'none'
                     }}>
                     {isSigning ? <><Loader2 style={{ width: '14px', height: '14px', display: 'inline', verticalAlign: 'text-bottom' }} className="spinner" /> SUBMITTING...</>

@@ -474,9 +474,15 @@ The analytics dashboard provides real-time network metrics by querying the Stell
 
 ### Screenshots
 
-![Analytics Dashboard]<img width="1920" height="1080" alt="Screenshot 2026-04-11 190606" src="https://github.com/user-attachments/assets/5cfe2383-ac36-4fe1-be87-4857f2cef702" />
+![Landing Page](./docs/screenshots/landing.png)
 
-![System Logs Monitoring]<img width="1920" height="1080" alt="Screenshot 2026-04-11 192222" src="https://github.com/user-attachments/assets/deec2889-4e12-4723-a3dd-f563871cb497" />
+![Analytics Dashboard](./docs/screenshots/analytics.png)
+
+![Discover Workers](./docs/screenshots/discover.png)
+
+![Credential Explorer](./docs/screenshots/explorer.png)
+
+![System Logs Monitoring](./docs/screenshots/admin-logs.png)
 
 
 ---
@@ -795,10 +801,9 @@ npm run build
 
 ## 🐦 Community Contribution
 
-<!-- TODO: Replace with your actual Twitter/X post link after posting -->
-> 📢 **Twitter Post:** [View on X/Twitter](https://twitter.com/YOUR_HANDLE/status/YOUR_POST_ID)
+> 📢 **Twitter/X Post:** [View on X/Twitter](https://x.com/i/status/2042962447297057275)
 >
-> Posted about TrustChain's mission to empower 2B+ informal economy workers with decentralized, verifiable credentials on Stellar.
+> Posted about TrustChain's mission with screenshots of Analytics dashboard + homepage to empower 2B+ informal economy workers with decentralized, verifiable credentials on Stellar.
 
 ---
 
