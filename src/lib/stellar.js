@@ -4,11 +4,9 @@ import {
   Networks,
   Operation,
   BASE_FEE,
-  Keypair,
   rpc
 } from "@stellar/stellar-sdk";
 import * as freighter from "./freighter";
-import { buildFeeBumpTransaction } from "../utils/feeBump";
 import { logError, logTransaction } from "../utils/monitor";
 import { HORIZON_URL, SOROBAN_URL, NETWORK_PASSPHRASE } from "./stellar-config";
 
@@ -17,14 +15,32 @@ export const server = new Horizon.Server(HORIZON_URL);
 export const sorobanServer = new rpc.Server(SOROBAN_URL);
 export const networkPassphrase = NETWORK_PASSPHRASE;
 
-// Cache sponsor public key for the indexer to discover
-try {
-  const sponsorSecret = import.meta.env.VITE_SPONSOR_SECRET;
-  if (sponsorSecret) {
-    const sponsorPub = Keypair.fromSecret(sponsorSecret).publicKey();
-    sessionStorage.setItem('trustchain_sponsor_pubkey', sponsorPub);
+/**
+ * Requests a fee-bumped transaction from the server-side API.
+ * The sponsor secret key is stored server-side only (never in the browser).
+ *
+ * @param {string} signedXdr - The base64-encoded signed inner transaction XDR
+ * @returns {Promise<string|null>} The fee-bumped XDR, or null on failure
+ */
+async function requestFeeBump(signedXdr) {
+  try {
+    const response = await fetch('/api/fee-bump', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ innerTxXDR: signedXdr }),
+    });
+    if (!response.ok) {
+      const errData = await response.json().catch(() => ({}));
+      console.warn('Fee bump API error:', errData.error || response.statusText);
+      return null;
+    }
+    const { feeBumpXDR } = await response.json();
+    return feeBumpXDR || null;
+  } catch (err) {
+    console.warn('Fee bump request failed, submitting without sponsorship:', err.message);
+    return null;
   }
-} catch { /* ignore if invalid key */ }
+}
 
 /**
  * Loads account details from the Horizon server.
@@ -135,18 +151,13 @@ export async function mintWorkerCredential(publicKey, data) {
     const xdr = transaction.toEnvelope().toXDR('base64');
     const signedXdr = await freighter.signTransaction(xdr, networkPassphrase);
     
-    // Attempt Fee Bump — isolated try/catch to prevent sponsor secret leaks
+    // Attempt Fee Bump via server-side API (sponsor key never in browser)
     let finalXdr = signedXdr;
     try {
-      const sponsorSecret = import.meta.env.VITE_SPONSOR_SECRET;
-      if (sponsorSecret) {
-        const sponsorKeypair = Keypair.fromSecret(sponsorSecret);
-        const feeBumpXdr = buildFeeBumpTransaction(signedXdr, sponsorKeypair, networkPassphrase);
-        if (feeBumpXdr) finalXdr = feeBumpXdr;
-      }
+      const feeBumpXdr = await requestFeeBump(signedXdr);
+      if (feeBumpXdr) finalXdr = feeBumpXdr;
     } catch {
-      // Log sanitized error — never expose sponsor key material
-      logError({ message: 'Fee bump failed, submitting without sponsorship.' }, 'feeBumpAttempt');
+      logError({ message: 'Fee bump request failed, submitting without sponsorship.' }, 'feeBumpAttempt');
     }
 
     const response = await submitTransaction(finalXdr);

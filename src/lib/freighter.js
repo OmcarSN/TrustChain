@@ -176,8 +176,10 @@ export async function signTransaction(transactionXDR, networkPassphrase = "Test 
     const api = await getFreighterApi();
     if (!api) throw new Error("Freighter not available");
 
-    console.log("[TrustChain] Requesting Freighter signature...");
-    console.log("[TrustChain] XDR length:", transactionXDR?.length);
+    if (import.meta.env.DEV) {
+      console.log("[TrustChain] Requesting Freighter signature...");
+      console.log("[TrustChain] XDR length:", transactionXDR?.length);
+    }
 
     let response;
     
@@ -203,7 +205,9 @@ export async function signTransaction(transactionXDR, networkPassphrase = "Test 
       }
     }
 
-    console.log("[TrustChain] Freighter signTransaction raw response:", typeof response === 'object' ? JSON.stringify(response) : response);
+    if (import.meta.env.DEV) {
+      console.log("[TrustChain] Freighter signTransaction raw response:", typeof response === 'object' ? JSON.stringify(response) : response);
+    }
 
     // If it literally returned a public key instead of an XDR, something is deeply wrong with Freighter plugin
     if (typeof response === 'string' && response.startsWith('G') && response.length === 56) {

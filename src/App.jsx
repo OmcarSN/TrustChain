@@ -6,6 +6,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import GlobalBackground from './components/GlobalBackground';
 import SkipToContent from './components/SkipToContent';
+import ErrorBoundary from './components/ErrorBoundary';
 
 // ── Route-based Code Splitting ─────────────────────────────────
 // Each page is lazy-loaded, reducing initial bundle size significantly.
@@ -70,6 +71,7 @@ const App = () => {
 
       <Navbar />
       <main id="main-content" className="flex-grow">
+        <ErrorBoundary>
         <Suspense fallback={<PageLoader />}>
           <AnimatePresence mode="wait">
             <Routes location={location} key={location.pathname}>
@@ -96,6 +98,7 @@ const App = () => {
             </Routes>
           </AnimatePresence>
         </Suspense>
+        </ErrorBoundary>
       </main>
       <Footer />
     </div>

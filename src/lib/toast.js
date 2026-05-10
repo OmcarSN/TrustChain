@@ -13,7 +13,7 @@ export const registerToastInstance = (instance) => {
 export const toast = {
     success: (msg) => {
         if (toastInstance) toastInstance.success(msg);
-        else console.log("SUCCESS:", msg);
+        else console.warn("Toast not ready — SUCCESS:", msg);
     },
     error: (msg) => {
         if (toastInstance) toastInstance.error(msg);

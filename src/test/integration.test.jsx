@@ -3,9 +3,9 @@
  * Tests multi-step user interactions using fireEvent/userEvent.
  * No source code changes — only new test file.
  */
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '../i18n';
@@ -190,7 +190,7 @@ describe('Integration: Verify search interaction', () => {
 describe('Integration: Keyboard accessibility', () => {
   it('Escape key is handled on focusable elements', async () => {
     const { default: Explorer } = await import('../pages/Explorer');
-    const { container } = renderPage(<Explorer />, '/explorer');
+    renderPage(<Explorer />, '/explorer');
     
     const inputs = screen.getAllByRole('textbox');
     // Focus on input and press Escape — should not crash

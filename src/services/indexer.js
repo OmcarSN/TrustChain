@@ -21,17 +21,10 @@ function getIndexableAccounts() {
     accounts.push(CONTRACT_ID);
   }
   
-  // Try sponsor wallet (the key that signs fee bumps — its public key has associated txs)
-  const sponsorSecret = import.meta.env.VITE_SPONSOR_SECRET;
-  if (sponsorSecret) {
-    try {
-      // Derive public key from the sponsor secret
-      // We store it to avoid importing the full SDK here
-      const cachedSponsorPub = sessionStorage.getItem('trustchain_sponsor_pubkey');
-      if (cachedSponsorPub) {
-        accounts.push(cachedSponsorPub);
-      }
-    } catch { /* ignore */ }
+  // Try sponsor wallet (public key only — safe for client bundle)
+  const sponsorPubKey = import.meta.env.VITE_SPONSOR_PUBLIC_KEY;
+  if (sponsorPubKey && sponsorPubKey.startsWith('G') && !accounts.includes(sponsorPubKey)) {
+    accounts.push(sponsorPubKey);
   }
   
   // Also check local worker registry for known wallet addresses

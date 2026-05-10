@@ -1,7 +1,7 @@
 # 🔒 TrustChain Security Checklist
 
 > Security audit completed for Level 6 Black Belt submission.  
-> Last updated: April 2026
+> Last updated: May 2026
 
 ---
 
@@ -47,11 +47,13 @@
 
 | Check | Status | Implementation |
 |-------|--------|---------------|
-| Sponsor key stored in environment variable | ✅ Pass | `.env` — `VITE_SPONSOR_SECRET` (not committed) |
-| Sponsor key isolated in try/catch | ✅ Pass | `lib/stellar.js` — inner try/catch for fee bump |
-| Error messages sanitized (secret regex strip) | ✅ Pass | `lib/stellar.js` — `/S[A-Z0-9]{55}/g` → `[REDACTED_SECRET]` |
-| Fee bump graceful fallback | ✅ Pass | If fee bump fails → submits without sponsorship |
-| `.env` in `.gitignore` | ✅ Pass | `.gitignore` includes `.env` |
+| Sponsor secret key stored server-side only | ✅ Pass | `SPONSOR_SECRET` env var (NO `VITE_` prefix) — set in Vercel Dashboard |
+| Fee bump signing via serverless API | ✅ Pass | `api/fee-bump.js` — Vercel serverless function |
+| Client never accesses secret key | ✅ Pass | `lib/stellar.js` — calls `POST /api/fee-bump` instead |
+| Error messages sanitized (secret regex strip) | ✅ Pass | `api/fee-bump.js` + `lib/stellar.js` — `/S[A-Z0-9]{55}/g` → `[REDACTED]` |
+| Fee bump graceful fallback | ✅ Pass | If API unavailable → submits without sponsorship |
+| Request body size limit | ✅ Pass | `api/fee-bump.js` — 10 KB max |
+| `.env` contains only public keys | ✅ Pass | `VITE_SPONSOR_PUBLIC_KEY` (G...) — safe for client bundle |
 
 ---
 
@@ -88,7 +90,7 @@
 |-------|--------|---------------|
 | No PII stored on-chain | ✅ Pass | Only skill type stored in ManageData; name/bio in localStorage |
 | localStorage data scoped to wallet | ✅ Pass | Keys use `trustchain_worker_{address}` pattern |
-| Sponsor public key in sessionStorage (not secret) | ✅ Pass | Only `publicKey()` cached for indexer |
+| Sponsor public key in env (not secret) | ✅ Pass | `VITE_SPONSOR_PUBLIC_KEY` — only public key in client bundle |
 | No analytics/tracking scripts | ✅ Pass | Zero third-party tracking |
 
 ---
@@ -97,8 +99,8 @@
 
 - All security measures have been verified against OWASP Web Application Security guidelines
 - The application operates on Stellar **Testnet** — no real funds are at risk
+- Sponsor secret key management uses server-side Vercel serverless functions (`api/fee-bump.js`)
 - Future mainnet deployment would require additional security measures including:
   - Hardware wallet support
   - Multi-signature authorization
-  - Rate limiting on the sponsor key
-  - Server-side sponsor key management (never in frontend env vars)
+  - Rate limiting on the sponsor API endpoint

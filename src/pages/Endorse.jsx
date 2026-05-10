@@ -115,10 +115,10 @@ const Endorse = () => {
         @keyframes btnPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.15); } 50% { box-shadow: 0 0 0 8px rgba(255,255,255,0); } }
         .end-anim { opacity: 0; animation: fadeSlideUp 0.6s ease forwards; }
         .end-panel-anim { opacity: 0; animation: fadeSlideUp 0.5s 0.2s ease forwards; }
-        .end-input { transition: all 0.2s ease; border: 1px solid rgba(255,255,255,0.15); background-color: rgba(255,255,255,0.03); color: #ffffff; border-radius: 8px; }
+        .end-input { transition: all 0.2s ease; border: 1px solid rgba(255,255,255,0.15); background-color: rgba(255,255,255,0.03); color: #ffffff; border-radius: 8px; padding: 14px 16px; font-size: 14px; }
         .end-input:focus { border-color: rgba(255,255,255,0.3) !important; box-shadow: 0 0 16px rgba(255,255,255,0.04) !important; }
-        .end-input-dropdown { border: 1px solid rgba(255,255,255,0.12) !important; background-color: rgba(255,255,255,0.04) !important; color: rgba(255,255,255,0.6) !important; border-radius: 8px !important; }
-        .end-input-textarea { border: 1px solid rgba(255,255,255,0.1) !important; background-color: rgba(255,255,255,0.03) !important; color: #ffffff !important; line-height: 1.6; resize: vertical !important; min-height: 120px !important; border-radius: 8px !important; }
+        .end-input-dropdown { border: 1px solid rgba(255,255,255,0.12) !important; background-color: rgba(255,255,255,0.04) !important; color: rgba(255,255,255,0.6) !important; border-radius: 8px !important; padding: 14px 16px !important; }
+        .end-input-textarea { border: 1px solid rgba(255,255,255,0.1) !important; background-color: rgba(255,255,255,0.03) !important; color: #ffffff !important; line-height: 1.6; resize: vertical !important; min-height: 120px !important; border-radius: 8px !important; padding: 14px 16px !important; }
         .end-input-textarea:focus { box-shadow: 0 0 20px rgba(255,255,255,0.03) !important; }
         .end-input::placeholder { color: rgba(255,255,255,0.2); }
         .end-star { transition: 0.15s ease; cursor: pointer; color: rgba(255,255,255,0.15); font-size: 28px; }

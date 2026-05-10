@@ -3,7 +3,7 @@
  * Verifies that every page component renders without crashing
  * under the required provider context (Router, I18n, Wallet, Toast).
  */
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';

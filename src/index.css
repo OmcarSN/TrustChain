@@ -576,3 +576,42 @@
 .tc-card-container  { border-radius: 16px; overflow: hidden; border: 1px solid #1a1a1a; }
 .tc-page-padded     { padding-top: 100px; padding-bottom: 80px; padding-left: 48px; padding-right: 48px; max-width: 1400px; position: relative; z-index: 10; }
 .tc-search-icon-pos { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); }
+
+/* ── Explorer Page Animations ────────────────────────────────── */
+@keyframes exFadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.ex-anim            { opacity: 0; animation: exFadeUp 0.4s ease forwards; }
+.ex-search-input    { transition: border 0.2s ease; }
+.ex-search-input:focus { border-color: rgba(255,255,255,0.3) !important; outline: none; }
+.ex-search-input::placeholder { color: rgba(255,255,255,0.2); }
+.ex-search-btn      { transition: all 0.2s ease; }
+.ex-search-btn:hover:not(:disabled) { background-color: #e8e8e8 !important; }
+.ex-step            { transition: all 0.2s ease; position: relative; }
+.ex-step:hover      { background-color: rgba(255,255,255,0.04) !important; }
+@keyframes rowFadeIn {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.result-row         { opacity: 0; animation: rowFadeIn 0.4s ease forwards; }
+@keyframes securityPulse {
+  0%, 100% { border-left-color: rgba(0,220,110,0.3); }
+  50%      { border-left-color: rgba(0,220,110,0.7); }
+}
+
+/* ── Dashboard Page Animations ───────────────────────────────── */
+@keyframes dbFadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.db-anim            { opacity: 0; animation: dbFadeUp 0.4s ease forwards; }
+.db-qa              { transition: all 0.15s ease; cursor: pointer; text-decoration: none; color: inherit; display: flex; align-items: center; gap: 14px; padding: 12px 20px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.db-qa:hover        { background-color: rgba(255,255,255,0.03); }
+.db-tab             { transition: all 0.15s ease; cursor: pointer; border: none; }
+.db-tab:hover       { background-color: rgba(255,255,255,0.04); }
+@media (max-width: 900px) {
+  .db-layout        { flex-direction: column !important; }
+  .db-sidebar       { width: 100% !important; border-right: none !important; border-bottom: 1px solid rgba(255,255,255,0.06); }
+}
+

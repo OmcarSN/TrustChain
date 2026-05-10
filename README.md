@@ -132,7 +132,7 @@ Traditional credential systems (LinkedIn, certificates) are inaccessible to this
 > **Note:** The app requires the [Freighter Wallet](https://www.freighter.app/) browser extension set to **Testnet** mode.
 
 ---
----
+
 
 ## 🏗️ Architecture
 
@@ -160,6 +160,13 @@ Traditional credential systems (LinkedIn, certificates) are inaccessible to this
                         │ Sign Transactions
                         ▼
 ┌─────────────────────────────────────────────────────────────┐
+│         VERCEL SERVERLESS (api/fee-bump.js)                  │
+│  Signed TX XDR → Fee Bump wrap → Sponsor signs → Return     │
+│  SPONSOR_SECRET stored server-side only (not in browser)     │
+└───────────────────────┬─────────────────────────────────────┘
+                        │
+                        ▼
+┌─────────────────────────────────────────────────────────────┐
 │            STELLAR BLOCKCHAIN (Testnet)                     │
 │                                                             │
 │  ┌─────────────────────────────────────────────────────┐    │
@@ -178,18 +185,12 @@ Traditional credential systems (LinkedIn, certificates) are inaccessible to this
 │  │  Soroban Smart Contracts (Rust)                     │    │
 │  │  credential-contract  · reputation-contract         │    │
 │  └─────────────────────────────────────────────────────┘    │
-│                                                             │
-│  ┌─────────────────────────────────────────────────────┐    │
-│  │  Fee Sponsorship Layer                              │    │
-│  │  Sponsor Key → buildFeeBumpTransaction() → Sign     │    │
-│  │  Workers pay ZERO gas fees                          │    │
-│  └─────────────────────────────────────────────────────┘    │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 ### Data Flow
 ```
-Worker fills form → Freighter signs → Fee Bump wraps → Horizon submits → ManageData stored
+Worker fills form → Freighter signs → /api/fee-bump wraps → Horizon submits → ManageData stored
 Endorser rates → Freighter signs → Horizon submits → ManageData stored → Reputation calculated
 Verifier searches → Indexer queries Horizon → Parses ManageData → Displays reputation
 ```
@@ -211,7 +212,7 @@ Verifier searches → Indexer queries Horizon → Parses ManageData → Displays
 | Charts | Recharts |
 | Routing | React Router v7 |
 | Type Safety | PropTypes (runtime) + JSDoc (IDE) |
-| Testing | Vitest + @testing-library/react (35 tests) |
+| Testing | Vitest + @testing-library/react (93 tests) |
 | Blockchain | Stellar Testnet + Horizon API |
 | Wallet | Freighter API v6 |
 | Smart Contracts | Soroban SDK + Rust |
@@ -247,14 +248,14 @@ TrustChain has been upgraded to **Level 6 Black Belt** with production-grade fea
 - **Reputation Contract:** Rewritten with robust duplicate endorsement prevention, time-decay weighted scores (newer reviews weigh more), and total trust tiers. Protected by 13 comprehensive unit tests.
 
 ### 🔄 Production CI/CD Pipeline
-- **Automated Workflow (`.github/workflows/ci.yml`)**: 6-stage professional pipeline triggering on push to main.
-- **Stages**: Frontend linting, Frontend bundling, `cargo test` for smart contracts, WASM artifact builds, NPM security auditing, and automated Vercel preview/production deployments.
+- **Automated Workflow (`.github/workflows/ci.yml`)**: 8-stage professional pipeline triggering on push to main.
+- **Stages**: Frontend linting, Frontend unit/integration testing, Frontend bundling, `cargo clippy` linting, `cargo test` for smart contracts, WASM artifact builds, NPM security auditing, and automated Vercel preview/production deployments.
 
 ### ⚡ Gasless Transactions (Fee Bump)
-- **File:** `src/utils/feeBump.js`
-- **Function:** `buildFeeBumpTransaction(innerTxXDR, sponsorKeypair, networkPassphrase)`
+- **Shared Logic:** `src/utils/feeBump.js` — `buildFeeBumpTransaction(innerTxXDR, sponsorKeypair, networkPassphrase)`
+- **Server-Side API:** `api/fee-bump.js` — Vercel serverless function that wraps the shared utility with secret key access
 - **Why:** Informal economy workers should never need XLM to receive credentials
-- **How:** Sponsor account wraps every mint transaction in a fee bump envelope and pays all fees
+- **How:** Client sends the signed inner transaction XDR to `/api/fee-bump`; the server wraps it in a `FeeBumpTransaction` using a secret stored in Vercel env vars (never exposed to browser)
 - **UI:** "⚡ GASLESS TRANSACTION" badge shown on Worker Portal before signing
 - **Fallback:** If fee bump fails, transaction submits normally — minting never breaks
 
@@ -308,6 +309,7 @@ TrustChain has been upgraded to **Level 6 Black Belt** with production-grade fea
 
 | File | Purpose |
 |------|--------|
+| `api/fee-bump.js` | Server-side fee bump signing (Vercel serverless function) |
 | `src/utils/feeBump.js` | Gasless fee bump transactions |
 | `src/hooks/useHorizonMetrics.js` | Live Horizon metrics hook |
 | `src/components/MetricCard.jsx` | Animated analytics cards |
@@ -322,7 +324,7 @@ TrustChain has been upgraded to **Level 6 Black Belt** with production-grade fea
 | `vercel.json` | Security headers + SPA rewrites |
 | `SECURITY.md` | Comprehensive security checklist |
 | `user-feedback.xlsx` | 30 user feedback responses |
-| `.github/workflows/ci.yml` | Production 6-job CI/CD Pipeline |
+| `.github/workflows/ci.yml` | Production 8-job CI/CD Pipeline |
 | `contracts/credential/src/lib.rs` | Upgraded to Level 6 Advanced (14 tests) |
 | `contracts/reputation/src/lib.rs` | Upgraded to Level 6 Advanced (13 tests) |
 
@@ -353,20 +355,26 @@ Professional-grade `@typedef`, `@param`, and `@returns` annotations added to all
 - `utils/validation.js` — `ValidationResult` typedef
 - `lib/reputation.js` — `Endorsement`, `ReputationScore` typedefs
 
-#### Test Coverage (35 Tests, 5 Suites)
+#### Test Coverage (93 Tests, 11 Suites)
 
 | Suite | Tests | Coverage Area |
 |-------|-------|--------------|
 | `validation.test.js` | 16 | Input sanitization, XSS, wallet address |
+| `shared-components.test.jsx` | 14 | StatsBar, HowItWorks, MetricCard, Footer |
+| `integration.test.jsx` | 10 | Multi-step user flows (search, endorse, verify) |
+| `accessibility.test.jsx` | 9 | ARIA, keyboard nav, screen reader, color contrast |
+| `pages.test.jsx` | 9 | Page smoke tests (all 7 routes render) |
 | `reputation.test.js` | 7 | Score calculation, edge cases, breakdown |
+| `hooks.test.jsx` | 7 | Custom hook isolation tests |
 | `monitor.test.js` | 5 | Error/TX logging, log capping |
 | `components.test.jsx` | 4 | ErrorBoundary, TrustChainLogo smoke tests |
 | `feeBump.test.js` | 3 | Fee bump transaction building |
+| `navigation.test.jsx` | 9 | Route rendering, 404 handling, link behavior |
 
 ```bash
 # Run all tests
 npx vitest run
-# ✅ 35/35 passing — 0 failures
+# ✅ 93/93 passing — 0 failures
 ```
 
 ### 🗺️ Improvement Roadmap — Based on Level 6 User Feedback
@@ -412,17 +420,19 @@ return feeBumpTx.toXDR();
 
 ### Security Measures
 
-- Sponsor secret key stored in environment variable (`VITE_SPONSOR_SECRET`)
-- Key usage isolated in try/catch — errors never expose the secret
-- Error messages sanitized with regex: `/S[A-Z0-9]{55}/g → [REDACTED_SECRET]`
-- Graceful fallback: if fee bump fails, transaction submits directly
+- Sponsor secret key stored **server-side only** in Vercel env vars (`SPONSOR_SECRET` — no `VITE_` prefix)
+- Fee bump signing performed via Vercel serverless function (`/api/fee-bump`)
+- Client never has access to the sponsor secret — only sends signed XDR to API
+- Error messages sanitized with regex: `/S[A-Z0-9]{55}/g → [REDACTED]`
+- Graceful fallback: if API is unavailable, transaction submits without sponsorship
 
 ### Files Involved
 | File | Purpose |
 |------|---------|
-| [`src/utils/feeBump.js`](./src/utils/feeBump.js) | Fee bump transaction builder |
-| [`src/lib/stellar.js`](./src/lib/stellar.js) | Integration with credential/endorsement minting |
-| `.env` | `VITE_SPONSOR_SECRET` — sponsor key (not committed) |
+| [`api/fee-bump.js`](./api/fee-bump.js) | Server-side fee bump signing (Vercel serverless function) |
+| [`src/utils/feeBump.js`](./src/utils/feeBump.js) | Fee bump transaction builder (used by API) |
+| [`src/lib/stellar.js`](./src/lib/stellar.js) | Client calls `/api/fee-bump` for sponsorship |
+| Vercel Dashboard | `SPONSOR_SECRET` env var (server-side only) |
 
 ---
 
@@ -553,11 +563,11 @@ Internal monitoring dashboard capturing all application events:
 | Input Validation & Sanitization | 7 checks | ✅ All Pass |
 | Authentication & Wallet Security | 5 checks | ✅ All Pass |
 | Smart Contract Security | 5 checks | ✅ All Pass |
-| Fee Sponsorship Security | 5 checks | ✅ All Pass |
+| Fee Sponsorship Security | 7 checks | ✅ All Pass |
 | Network & Transport Security | 7 checks | ✅ All Pass |
 | Error Handling & Monitoring | 6 checks | ✅ All Pass |
 | Data Privacy | 4 checks | ✅ All Pass |
-| **Total** | **39 checks** | **✅ All Pass** |
+| **Total** | **41 checks** | **✅ All Pass** |
 
 ---
 
@@ -607,6 +617,8 @@ Internal monitoring dashboard capturing all application events:
 
 ```
 trustchain/
+├── api/                    # Vercel serverless functions (server-side)
+│   └── fee-bump.js         # Fee bump signing — SPONSOR_SECRET stays here
 ├── contracts/              # Soroban smart contracts (Rust)
 │   └── credential/
 │       └── src/
@@ -638,7 +650,7 @@ trustchain/
 │   │   ├── useHorizonMetrics.js # Horizon API polling hook
 │   │   └── usePlatformStats.js  # Real-time platform stats
 │   ├── lib/                # Core business logic (JSDoc annotated)
-│   │   ├── stellar.js      # Stellar SDK interactions
+│   │   ├── stellar.js      # Stellar SDK interactions + /api/fee-bump client
 │   │   ├── freighter.js    # Freighter wallet integration
 │   │   ├── reputation.js   # Reputation score calculation (JSDoc typed)
 │   │   └── toast.js        # Toast bridge for non-React code
@@ -660,7 +672,7 @@ trustchain/
 │   │   ├── validation.js   # Input validation & sanitization
 │   │   ├── feeBump.js      # Fee bump transaction builder
 │   │   └── monitor.js      # Error & transaction logging
-│   ├── test/               # Vitest test suites (35 tests)
+│   ├── test/               # Vitest test suites (93 tests)
 │   │   ├── components.test.jsx  # Component smoke tests
 │   │   ├── reputation.test.js   # Reputation scoring tests
 │   │   ├── validation.test.js   # Input validation tests
@@ -670,9 +682,9 @@ trustchain/
 │   ├── main.jsx            # Entry point with providers
 │   └── index.css           # Global styles & Tailwind config
 ├── public/                 # Static assets
-├── SECURITY.md             # Security checklist
+├── SECURITY.md             # Security checklist (41 checks)
 ├── vercel.json             # Deployment config with security headers
-├── .env                    # Environment variables (not committed)
+├── .env                    # Client env vars only (no secrets)
 └── package.json            # Dependencies
 ```
 
@@ -704,11 +716,14 @@ trustchain/
 
 ### Environment Variables
 
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `VITE_CREDENTIAL_CONTRACT_ID` | Soroban credential contract address | Yes |
-| `VITE_REPUTATION_CONTRACT_ID` | Soroban reputation contract address | Yes |
-| `VITE_SPONSOR_SECRET` | Stellar secret key for fee sponsorship | Yes |
+| Variable | Location | Description | Required |
+|----------|----------|-------------|----------|
+| `VITE_CREDENTIAL_CONTRACT_ID` | `.env` (client) | Soroban credential contract address | Yes |
+| `VITE_REPUTATION_CONTRACT_ID` | `.env` (client) | Soroban reputation contract address | Yes |
+| `VITE_SPONSOR_PUBLIC_KEY` | `.env` (client) | Sponsor public key for indexer queries | Yes |
+| `SPONSOR_SECRET` | Vercel Dashboard (server-side only) | Stellar secret key for fee sponsorship | Yes |
+
+> ⚠️ **Security:** `SPONSOR_SECRET` must **never** be prefixed with `VITE_`. Any `VITE_`-prefixed variable is embedded in the client-side JavaScript bundle and visible to anyone.
 
 ---
 
@@ -732,13 +747,14 @@ App runs at `http://localhost:5173`
 ### Run Tests
 ```bash
 npx vitest run
-# ✅ 35 tests across 5 suites
+# ✅ 93 tests across 11 suites
 ```
 
 ### Environment Setup
 ```bash
 cp .env.example .env
-# Edit .env with your contract IDs and sponsor secret
+# Edit .env with your contract IDs and sponsor public key
+# Set SPONSOR_SECRET in Vercel Dashboard → Settings → Environment Variables
 ```
 
 ### Build for Production

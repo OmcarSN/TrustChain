@@ -143,15 +143,6 @@ const Dashboard = () => {
       <div className="tc-leak-orange" />
       <div className="tc-leak-blue" />
 
-      <style>{`
-        @keyframes dbFadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
-        .db-anim { opacity:0; animation: dbFadeUp 0.4s ease forwards; }
-        .db-qa { transition: all 0.15s ease; cursor:pointer; text-decoration:none; color:inherit; display:flex; align-items:center; gap:14px; padding:12px 20px; border-bottom:1px solid rgba(255,255,255,0.04); }
-        .db-qa:hover { background-color: rgba(255,255,255,0.03); }
-        .db-tab { transition: all 0.15s ease; cursor:pointer; border:none; }
-        .db-tab:hover { background-color: rgba(255,255,255,0.04); }
-        @media (max-width:900px) { .db-layout { flex-direction:column !important; } .db-sidebar { width:100% !important; border-right:none !important; border-bottom:1px solid rgba(255,255,255,0.06); } }
-      `}</style>
 
       <div className="db-layout" style={{ display: 'flex', paddingTop: '100px', paddingLeft: '24px', paddingRight: '24px', minHeight: '100vh', position: 'relative', zIndex: 10 }}>
 
@@ -183,7 +174,7 @@ const Dashboard = () => {
               <span style={{ width: '6px', height: '6px', backgroundColor: '#00dc6e', borderRadius: '50%' }} />
               <span style={{ fontFamily: 'monospace', fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>{truncAddr(walletAddress)}</span>
               <button onClick={copyAddress} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.2)', display: 'flex', padding: '2px' }}>
-              <Copy className="tc-icon-sm" />
+              {copied ? <Check className="tc-icon-sm" /> : <Copy className="tc-icon-sm" />}
               </button>
               <a href={`https://stellar.expert/explorer/testnet/account/${walletAddress}`} target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(255,255,255,0.2)', display: 'flex' }}>
                 <ExternalLink className="tc-icon-sm" />

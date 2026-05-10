@@ -58,21 +58,6 @@ const Explorer = () => {
   return (
     <div className="relative overflow-hidden text-white" style={{ minHeight: '100vh' }}>
 
-      <style>{`
-        @keyframes exFadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
-        .ex-anim { opacity:0; animation: exFadeUp 0.4s ease forwards; }
-        .ex-search-input { transition: border 0.2s ease; }
-        .ex-search-input:focus { border-color: rgba(255,255,255,0.3) !important; outline: none; }
-        .ex-search-input::placeholder { color: rgba(255,255,255,0.2); }
-        .ex-search-btn { transition: all 0.2s ease; }
-        .ex-search-btn:hover:not(:disabled) { background-color: #e8e8e8 !important; }
-        .ex-step { transition: all 0.2s ease; position: relative; }
-        .ex-step:hover { background-color: rgba(255,255,255,0.04) !important; }
-        @keyframes rowFadeIn { from { opacity:0; transform:translateX(-8px); } to { opacity:1; transform:translateX(0); } }
-        .result-row { opacity:0; animation: rowFadeIn 0.4s ease forwards; }
-        @keyframes securityPulse { 0%,100% { border-left-color: rgba(0,220,110,0.3); } 50% { border-left-color: rgba(0,220,110,0.7); } }
-      `}</style>
-
       {/* Page Wrapper */}
       <div style={{
         paddingTop: '120px', paddingBottom: '80px',
