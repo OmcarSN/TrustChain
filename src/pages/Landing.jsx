@@ -109,7 +109,7 @@ const Landing = () => {
 
       {/* ═══ CTA BANNER ═══ */}
       <section className="px-4 py-12 md:px-16 md:py-24" style={{
-        margin: '0 24px', border: '1px solid rgba(255,255,255,0.1)', borderTop: '1px solid rgba(255,255,255,0.06)',
+        margin: '0 24px', padding: '48px 24px', border: '1px solid rgba(255,255,255,0.1)', borderTop: '1px solid rgba(255,255,255,0.06)',
         backgroundColor: 'rgba(255,255,255,0.02)', position: 'relative', overflow: 'hidden',
         opacity: 0, animation: 'ctaFadeUp 0.6s ease forwards', animationDelay: '0.4s', marginTop: '60px',
       }}>
@@ -118,11 +118,11 @@ const Landing = () => {
         <div style={{ position: 'absolute', top: 16, left: 16, width: 28, height: 28, borderTop: '2px solid rgba(255,255,255,0.25)', borderLeft: '2px solid rgba(255,255,255,0.25)' }} />
         <div style={{ position: 'absolute', bottom: 16, right: 16, width: 28, height: 28, borderBottom: '2px solid rgba(255,255,255,0.25)', borderRight: '2px solid rgba(255,255,255,0.25)' }} />
         <div style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
-          <h2 className="font-clash text-2xl sm:text-3xl md:text-4xl font-black text-center" style={{ color: '#fff', marginBottom: '8px' }}>{t('landing.ctaTitle')}</h2>
-          <p className="font-inter" style={{ fontSize: '14px', color: 'rgba(255,255,255,0.4)', marginBottom: '32px' }}>{t('landing.ctaSubtitle', { count: workerCount })}</p>
+          <h2 className="font-clash text-2xl sm:text-3xl md:text-4xl font-black text-center" style={{ color: '#fff', marginBottom: '16px' }}>{t('landing.ctaTitle')}</h2>
+          <p className="font-inter" style={{ fontSize: '15px', color: 'rgba(255,255,255,0.4)', marginBottom: '40px' }}>{t('landing.ctaSubtitle', { count: workerCount })}</p>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <Link to="/discover" className="font-inter w-full sm:w-auto px-8 py-4" style={{
-              backgroundColor: '#fff', color: '#000', border: 'none', letterSpacing: '2px', fontWeight: '800',
+              backgroundColor: '#fff', color: '#000', border: 'none', letterSpacing: '2px', fontWeight: '800', padding: '16px 32px',
               textTransform: 'uppercase', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto', transition: 'all 0.2s ease',
             }}>{t('landing.ctaButton')}</Link>
           </div>
