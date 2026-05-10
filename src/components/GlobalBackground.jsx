@@ -1,5 +1,13 @@
 import React from 'react';
 
+/**
+ * GlobalBackground — Animated global background layer.
+ * Renders a CSS grid overlay with parallax drift, floating light-leak
+ * orbs, and a noise-texture overlay. All elements are fixed-positioned,
+ * non-interactive, and z-index 0.
+ *
+ * @returns {React.ReactElement} The GlobalBackground component.
+ */
 const GlobalBackground = () => {
   return (
     <>

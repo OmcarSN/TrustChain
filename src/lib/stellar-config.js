@@ -1,3 +1,9 @@
+/**
+ * @module stellar-config
+ * Centralized Stellar network configuration.
+ * Reads from env vars (VITE_*) with sensible defaults for TESTNET.
+ * Exports network URLs, passphrase, and boolean flags for each network.
+ */
 import { Networks } from "@stellar/stellar-sdk";
 
 const networkEnv = import.meta.env.VITE_STELLAR_NETWORK || 'TESTNET';

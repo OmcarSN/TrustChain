@@ -5,13 +5,31 @@ import { ChevronDown, SlidersHorizontal, X } from 'lucide-react';
 
 /**
  * @typedef {Object} RatingOption
- * @property {string} labelKey - i18n key for the label
- * @property {number} value - Minimum rating value
+ * @property {string} labelKey - i18n key for the rating label (e.g., "3Stars").
+ * @property {number} value - Minimum rating threshold value.
  */
 
 /**
- * Collapsible filter bar for the Discover Workers page.
- * Contains skill, city, and minimum rating filters.
+ * FilterBar — Collapsible multi-filter panel for the Discover Workers page.
+ * Contains a skill category dropdown, city dropdown, minimum rating toggle
+ * buttons, and a "clear filters" action. Animates open/closed with Framer Motion.
+ *
+ * @param {Object} props
+ * @param {boolean} props.showFilters - Whether the filter panel is expanded.
+ * @param {Function} props.setShowFilters - Toggle callback for panel visibility.
+ * @param {boolean} props.hasActiveFilters - Whether any filter is currently applied.
+ * @param {string} props.selectedSkill - Currently selected skill category.
+ * @param {Function} props.setSelectedSkill - Setter for the skill filter.
+ * @param {Array<string>} props.skillOptions - Available skill categories.
+ * @param {string} props.selectedCity - Currently selected city filter.
+ * @param {Function} props.setSelectedCity - Setter for the city filter.
+ * @param {Array<string>} props.cities - Available city options.
+ * @param {number} props.minRating - Minimum rating threshold (0 = any).
+ * @param {Function} props.setMinRating - Setter for the rating filter.
+ * @param {Array<RatingOption>} props.ratingOptions - Rating filter presets.
+ * @param {Function} props.clearFilters - Handler to reset all filters.
+ * @param {Function} props.t - i18next translation function.
+ * @returns {React.ReactElement} The FilterBar component.
  */
 const FilterBar = ({
   showFilters, setShowFilters, hasActiveFilters,
@@ -52,27 +70,27 @@ const FilterBar = ({
         >
           {/* Skill dropdown */}
           <div className="w-full sm:w-auto">
-            <label className="font-inter" style={{ fontSize: '9px', letterSpacing: '2px', color: 'rgba(255,255,255,0.25)', marginBottom: '8px', display: 'block', textTransform: 'uppercase', fontWeight: '700' }}>{t('discover.filterSkill', 'SKILL')}</label>
+            <label className="font-inter tc-label tc-text-xs tc-ls-wide tc-fw-bold tc-mb-xs" style={{ display: 'block', textTransform: 'uppercase' }}>{t('discover.filterSkill', 'SKILL')}</label>
             <div style={{ position: 'relative' }}>
               <select value={selectedSkill} onChange={(e) => setSelectedSkill(e.target.value)} className="dw-select"
                 style={{ padding: '10px 36px 10px 14px', backgroundColor: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.1)', color: '#ffffff', fontSize: '13px', letterSpacing: '0.5px', minWidth: '180px', borderRadius: '2px' }}>
-                <option value="All" style={{ backgroundColor: '#0a0a0a' }}>{t('discover.allCategories', 'All Categories')}</option>
-                {skillOptions.map(s => (<option key={s} value={s} style={{ backgroundColor: '#0a0a0a' }}>{t('jobs.' + s.replace(/\s+/g, ''))}</option>))}
+                <option value="All" className="tc-option-dark">{t('discover.allCategories', 'All Categories')}</option>
+                {skillOptions.map(s => (<option key={s} value={s} className="tc-option-dark">{t('jobs.' + s.replace(/\s+/g, ''))}</option>))}
               </select>
-              <ChevronDown style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', width: '14px', height: '14px', color: 'rgba(255,255,255,0.4)', pointerEvents: 'none' }} />
+              <ChevronDown className="tc-icon-md" style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', color: 'rgba(255,255,255,0.4)', pointerEvents: 'none' }} />
             </div>
           </div>
 
           {/* City dropdown */}
           <div className="w-full sm:w-auto">
-            <label className="font-inter" style={{ fontSize: '9px', letterSpacing: '2px', color: 'rgba(255,255,255,0.25)', marginBottom: '8px', display: 'block', textTransform: 'uppercase', fontWeight: '700' }}>{t('discover.filterCity', 'CITY')}</label>
+            <label className="font-inter tc-label tc-text-xs tc-ls-wide tc-fw-bold tc-mb-xs" style={{ display: 'block', textTransform: 'uppercase' }}>{t('discover.filterCity', 'CITY')}</label>
             <div style={{ position: 'relative' }}>
               <select value={selectedCity || 'All Cities'} onChange={(e) => setSelectedCity(e.target.value === 'All Cities' ? '' : e.target.value)} className="dw-select"
                 style={{ padding: '10px 36px 10px 14px', backgroundColor: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.1)', color: '#ffffff', fontSize: '13px', letterSpacing: '0.5px', minWidth: '180px', borderRadius: '2px' }}>
-                <option value="All Cities" style={{ backgroundColor: '#0a0a0a' }}>{t('discover.allCities', 'All Cities')}</option>
-                {cities.filter(c => c !== 'All Cities').map(c => (<option key={c} value={c} style={{ backgroundColor: '#0a0a0a' }}>{c}</option>))}
+                <option value="All Cities" className="tc-option-dark">{t('discover.allCities', 'All Cities')}</option>
+                {cities.filter(c => c !== 'All Cities').map(c => (<option key={c} value={c} className="tc-option-dark">{c}</option>))}
               </select>
-              <ChevronDown style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', width: '14px', height: '14px', color: 'rgba(255,255,255,0.4)', pointerEvents: 'none' }} />
+              <ChevronDown className="tc-icon-md" style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', color: 'rgba(255,255,255,0.4)', pointerEvents: 'none' }} />
             </div>
           </div>
 
@@ -81,7 +99,7 @@ const FilterBar = ({
 
           {/* Minimum Rating buttons */}
           <div className="w-full sm:w-auto">
-            <label className="font-inter" style={{ fontSize: '9px', letterSpacing: '2px', color: 'rgba(255,255,255,0.25)', marginBottom: '8px', display: 'block', textTransform: 'uppercase', fontWeight: '700' }}>{t('discover.filterRating', 'MINIMUM RATING')}</label>
+            <label className="font-inter tc-label tc-text-xs tc-ls-wide tc-fw-bold tc-mb-xs" style={{ display: 'block', textTransform: 'uppercase' }}>{t('discover.filterRating', 'MINIMUM RATING')}</label>
             <div className="flex flex-wrap gap-2">
               {ratingOptions.map((opt) => {
                 const isActive = minRating === opt.value;
@@ -104,7 +122,7 @@ const FilterBar = ({
           {/* Clear filters */}
           {hasActiveFilters && (
             <button onClick={clearFilters} className="ml-auto mt-4 sm:mt-0" style={{ padding: '9px 16px', fontSize: '11px', letterSpacing: '1px', border: '1px solid rgba(255,80,80,0.3)', color: 'rgba(255,100,100,0.8)', backgroundColor: 'rgba(255,80,80,0.05)', borderRadius: '2px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', transition: 'all 0.2s ease' }}>
-              <X style={{ width: '12px', height: '12px' }} /> {t('discover.clearFilters')}
+              <X className="tc-icon-sm" /> {t('discover.clearFilters')}
             </button>
           )}
         </motion.div>
@@ -114,22 +132,38 @@ const FilterBar = ({
 );
 
 FilterBar.propTypes = {
+  /** Whether the filter panel is currently expanded. */
   showFilters: PropTypes.bool.isRequired,
+  /** Toggle callback for filter panel visibility. */
   setShowFilters: PropTypes.func.isRequired,
+  /** Whether any filter (skill, city, rating) is currently active. */
   hasActiveFilters: PropTypes.bool.isRequired,
+  /** Currently selected skill category string. */
   selectedSkill: PropTypes.string.isRequired,
+  /** Setter callback for the skill category filter. */
   setSelectedSkill: PropTypes.func.isRequired,
+  /** Array of available skill category strings. */
   skillOptions: PropTypes.arrayOf(PropTypes.string).isRequired,
+  /** Currently selected city filter string. */
   selectedCity: PropTypes.string.isRequired,
+  /** Setter callback for the city filter. */
   setSelectedCity: PropTypes.func.isRequired,
+  /** Array of available city strings (including 'All Cities'). */
   cities: PropTypes.arrayOf(PropTypes.string).isRequired,
+  /** Minimum rating threshold (0 = any rating). */
   minRating: PropTypes.number.isRequired,
+  /** Setter callback for the minimum rating filter. */
   setMinRating: PropTypes.func.isRequired,
+  /** Rating filter preset configurations. */
   ratingOptions: PropTypes.arrayOf(PropTypes.shape({
+    /** i18n key for the rating option label. */
     labelKey: PropTypes.string.isRequired,
+    /** Minimum rating value for this preset. */
     value: PropTypes.number.isRequired,
   })).isRequired,
+  /** Handler to reset all filters to defaults. */
   clearFilters: PropTypes.func.isRequired,
+  /** i18next translation function. */
   t: PropTypes.func.isRequired,
 };
 

@@ -2,13 +2,33 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import { getWalletAddress, getFreighterNetwork, connectWallet } from '../lib/freighter';
 import { ShieldAlert, AlertCircle, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import PropTypes from 'prop-types';
 import { STELLAR_NETWORK } from '../lib/stellar-config';
 
+/**
+ * WalletContext — React context for Freighter wallet state.
+ * Provides wallet address, connection status, network info,
+ * and connect/disconnect actions to the entire component tree.
+ */
 const WalletContext = createContext();
 
+/**
+ * useWallet — Convenience hook for consuming WalletContext.
+ *
+ * @returns {{walletAddress: string|null, isConnected: boolean, connect: Function, disconnect: Function, network: string|null, isWrongNetwork: boolean}}
+ */
 // eslint-disable-next-line react-refresh/only-export-components
 export const useWallet = () => useContext(WalletContext);
 
+/**
+ * WalletProvider — Context provider that manages Freighter wallet
+ * connection lifecycle. Handles auto-reconnect on mount, periodic
+ * network checking, and renders a global wrong-network warning banner.
+ *
+ * @param {Object} props
+ * @param {React.ReactNode} props.children - Child component tree.
+ * @returns {React.ReactElement} The WalletProvider component.
+ */
 export const WalletProvider = ({ children }) => {
   const [walletAddress, setWalletAddress] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
@@ -105,4 +125,9 @@ export const WalletProvider = ({ children }) => {
       </AnimatePresence>
     </WalletContext.Provider>
   );
+};
+
+WalletProvider.propTypes = {
+  /** Child component tree to wrap with wallet context. */
+  children: PropTypes.node.isRequired,
 };

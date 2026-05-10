@@ -2,12 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 /**
- * @typedef {Object} StatItem
- * @property {string} value - Display value (e.g. "39", "4.2")
- * @property {string} label - Label text
+ * StatsBar — Animated platform metrics bar on the Landing page.
+ * Displays a 4-column grid of stat cards (workers, rating, endorsements,
+ * gasless) with staggered scroll-reveal animations, accent color coding,
+ * and a noise-texture overlay.
+ *
+ * @param {Object} props
+ * @param {Array<{value: string, label: string}>} props.stats - Stat items to display.
+ * @param {boolean} props.visible - Whether the section has scrolled into view.
+ * @returns {React.ReactElement} The StatsBar component.
  */
-
-/** Animated stats bar showing platform metrics with staggered reveal. */
 const StatsBar = ({ stats, visible }) => (
   <section className="grid grid-cols-2 md:grid-cols-4 divide-x-0 md:divide-x divide-y md:divide-y-0 divide-zinc-800" style={{
     borderTop: '1px solid rgba(255,255,255,0.08)', borderBottom: '1px solid rgba(255,255,255,0.06)',
@@ -35,7 +39,7 @@ const StatsBar = ({ stats, visible }) => (
           {stat.value === '2.5' && (
             <p style={{ color: '#f5c518', fontSize: '12px', marginBottom: '4px', marginTop: 0 }}>★★½☆☆</p>
           )}
-          <p className="font-inter" style={{ fontSize: '9px', letterSpacing: '3px', color: 'rgba(255,255,255,0.25)', textTransform: 'uppercase', marginTop: stat.value === '2.5' ? '0' : '4px', marginBottom: 0 }}>
+          <p className="font-inter tc-eyebrow" style={{ marginTop: stat.value === '2.5' ? '0' : '4px', marginBottom: 0 }}>
             {stat.label}
           </p>
         </div>
@@ -45,10 +49,14 @@ const StatsBar = ({ stats, visible }) => (
 );
 
 StatsBar.propTypes = {
+  /** Array of stat item objects with value and label. */
   stats: PropTypes.arrayOf(PropTypes.shape({
+    /** Display value string. */
     value: PropTypes.string.isRequired,
+    /** Label text. */
     label: PropTypes.string.isRequired,
   })).isRequired,
+  /** Whether the section is visible (from IntersectionObserver). */
   visible: PropTypes.bool.isRequired,
 };
 

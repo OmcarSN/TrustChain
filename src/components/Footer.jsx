@@ -3,6 +3,13 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import TrustChainLogo from './TrustChainLogo';
 
+/**
+ * Footer — Global site footer.
+ * Renders a 4-column layout with branding, platform links, resources,
+ * and community links, plus a bottom copyright bar with social links.
+ *
+ * @returns {React.ReactElement} The Footer component.
+ */
 const Footer = () => {
   const { t } = useTranslation();
   return (
@@ -44,7 +51,7 @@ const Footer = () => {
               TRUSTCHAIN
             </span>
           </div>
-          <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', lineHeight: '1.7', maxWidth: '260px' }}>
+          <p className="tc-text-dim" style={{ fontSize: '13px', lineHeight: '1.7', maxWidth: '260px' }}>
             {t('footer_tagline')}
           </p>
           <div style={{
@@ -58,7 +65,7 @@ const Footer = () => {
 
         {/* Col 2: Platform */}
         <div>
-          <h4 className="font-clash" style={{ fontSize: '10px', letterSpacing: '3px', color: 'rgba(255,255,255,0.25)', marginBottom: '16px', textTransform: 'uppercase' }}>
+          <h4 className="font-clash tc-eyebrow tc-mb-md">
             {t('footer_platform')}
           </h4>
           <Link to="/discover" className="footer-link">{t('nav_find_workers')}</Link>
@@ -70,7 +77,7 @@ const Footer = () => {
 
         {/* Col 3: Resources */}
         <div>
-          <h4 className="font-clash" style={{ fontSize: '10px', letterSpacing: '3px', color: 'rgba(255,255,255,0.25)', marginBottom: '16px', textTransform: 'uppercase' }}>
+          <h4 className="font-clash tc-eyebrow tc-mb-md">
             {t('resources', 'Resources')}
           </h4>
           <a href="https://github.com/OmcarSN/TrustChain" target="_blank" rel="noopener noreferrer" className="footer-link">GitHub</a>
@@ -81,7 +88,7 @@ const Footer = () => {
 
         {/* Col 4: Community */}
         <div>
-          <h4 className="font-clash" style={{ fontSize: '10px', letterSpacing: '3px', color: 'rgba(255,255,255,0.25)', marginBottom: '16px', textTransform: 'uppercase' }}>
+          <h4 className="font-clash tc-eyebrow tc-mb-md">
             {t('community', 'Community')}
           </h4>
           <Link to="/about" className="footer-link">{t('about', 'About')}</Link>
@@ -101,7 +108,7 @@ const Footer = () => {
         flexDirection: 'column',
         gap: '24px',
       }} className="sm:flex-row">
-        <span style={{ fontSize:'11px', color:'rgba(255,255,255,0.2)', letterSpacing:'1px' }}>
+        <span className="tc-text-sm tc-text-dim tc-ls-wide">
           © 2026 TRUSTCHAIN PROTOCOL · STELLAR SOROBAN
         </span>
         <div style={{ display:'flex', gap:'24px' }}>

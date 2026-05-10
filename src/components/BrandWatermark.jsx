@@ -1,9 +1,16 @@
 import React from 'react';
 import TrustChainLogo from './TrustChainLogo';
 
+import PropTypes from 'prop-types';
+
 /**
- * BrandWatermark — Subtle brand presence on page backgrounds
- * Shows the logo as a ghosted watermark
+ * BrandWatermark — Subtle brand presence on page backgrounds.
+ * Renders the TrustChain logo as a ghosted, fixed-position watermark.
+ *
+ * @param {Object} props
+ * @param {string} [props.position='bottom-right'] - Position preset.
+ * @param {number} [props.opacity=0.03] - Watermark opacity.
+ * @returns {React.ReactElement} The BrandWatermark component.
  */
 const BrandWatermark = ({ position = 'bottom-right', opacity = 0.03 }) => {
   const positionStyles = {
@@ -27,3 +34,10 @@ const BrandWatermark = ({ position = 'bottom-right', opacity = 0.03 }) => {
 };
 
 export default BrandWatermark;
+
+BrandWatermark.propTypes = {
+  /** Position preset: 'bottom-right', 'bottom-left', 'top-right', or 'center'. */
+  position: PropTypes.oneOf(['bottom-right', 'bottom-left', 'top-right', 'center']),
+  /** Watermark opacity (0–1). */
+  opacity: PropTypes.number,
+};

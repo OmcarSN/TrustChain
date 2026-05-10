@@ -1,7 +1,17 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import TrustChainLogo from './TrustChainLogo';
+import PropTypes from 'prop-types';
 
+/**
+ * BrandedLoader — Full-screen branded loading overlay.
+ * Displays the TrustChain logo with a breathing animation,
+ * a sliding progress bar, and a customizable loading message.
+ *
+ * @param {Object} props
+ * @param {string} [props.message='Loading...'] - Loading status message.
+ * @returns {React.ReactElement} The BrandedLoader component.
+ */
 const BrandedLoader = ({ message = 'Loading...' }) => {
   return (
     <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center" style={{ background: '#050505' }}>
@@ -45,3 +55,8 @@ const BrandedLoader = ({ message = 'Loading...' }) => {
 };
 
 export default BrandedLoader;
+
+BrandedLoader.propTypes = {
+  /** Loading status message displayed below the progress bar. */
+  message: PropTypes.string,
+};

@@ -5,6 +5,12 @@
  * into structured application-level credential events.
  */
 
+/**
+ * Parses a raw Horizon transaction into a structured credential event.
+ *
+ * @param {Object} tx - Raw Stellar Horizon transaction record.
+ * @returns {{txHash: string, walletAddress: string, credentialType: string, timestamp: string, ledger: number, successful: boolean}} Parsed credential event.
+ */
 export const parseTransactionToCredential = (tx) => {
   // Determine credential type from memo or operation type
   let credentialType = 'Verified Interaction';
@@ -25,6 +31,12 @@ export const parseTransactionToCredential = (tx) => {
   };
 };
 
+/**
+ * Filters transactions to only successful TrustChain operations.
+ *
+ * @param {Array<Object>} transactions - Array of raw Horizon transaction records.
+ * @returns {Array<Object>} Filtered array of successful transactions.
+ */
 export const filterTrustChainOps = (transactions) => {
   return transactions.filter(tx => {
     // Must be successful

@@ -3,11 +3,15 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 /**
- * @typedef {Object} HeroSectionProps
- * @property {Function} t - i18next translation function
+ * HeroSection — Landing page above-the-fold hero.
+ * Renders animated headline text with shimmer gradients, ghost subtitle,
+ * hero CTA buttons (Worker/Find Workers), background grid, corner brackets,
+ * and a slowly rotating watermark logo.
+ *
+ * @param {Object} props
+ * @param {Function} props.t - i18next translation function.
+ * @returns {React.ReactElement} The HeroSection component.
  */
-
-/** Landing page hero section with animated headlines and CTA buttons. */
 const HeroSection = ({ t }) => (
   <section style={{ position: 'relative', backgroundColor: '#080808' }}>
     <style>{`
@@ -53,7 +57,7 @@ const HeroSection = ({ t }) => (
     <div className="hero-inner relative z-10">
       <div className="hero-left justify-center">
         <div style={{ position: 'relative', zIndex: 1, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'flex-start' }}>
-          <div className="font-inter hero-badge" style={{ color: '#22c55e', fontSize: '11px', letterSpacing: '0.15em', fontWeight: '600', textTransform: 'uppercase' }}>
+          <div className="font-inter hero-badge tc-text-sm tc-ls-wide" style={{ color: '#22c55e', fontWeight: '600', textTransform: 'uppercase' }}>
             ✦ {t('landing.hero_badge', 'VERIFIED ON-CHAIN')}
           </div>
           <div className="hero-headline-block">
@@ -86,6 +90,7 @@ const HeroSection = ({ t }) => (
 );
 
 HeroSection.propTypes = {
+  /** i18next translation function. */
   t: PropTypes.func.isRequired,
 };
 

@@ -5,6 +5,7 @@ import { ToastProvider } from './context/ToastContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import GlobalBackground from './components/GlobalBackground';
+import SkipToContent from './components/SkipToContent';
 
 // ── Route-based Code Splitting ─────────────────────────────────
 // Each page is lazy-loaded, reducing initial bundle size significantly.
@@ -62,12 +63,13 @@ const App = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#050505]">
+      <SkipToContent />
       <ScrollToTop />
       {/* Global Animated Background */}
       <GlobalBackground />
 
       <Navbar />
-      <main className="flex-grow">
+      <main id="main-content" className="flex-grow">
         <Suspense fallback={<PageLoader />}>
           <AnimatePresence mode="wait">
             <Routes location={location} key={location.pathname}>

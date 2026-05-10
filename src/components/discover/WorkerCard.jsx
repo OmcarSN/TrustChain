@@ -4,8 +4,14 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 /**
- * Individual worker row card in the discover listing.
- * Shows avatar, name, city, skill, verification badge, and rating.
+ * WorkerCard — Individual worker row card in the DiscoverWorkers listing.
+ * Renders an avatar with initials, name, city, skill tag, verification
+ * badge, and rating/review count. Links to the worker's profile page.
+ *
+ * @param {Object} props
+ * @param {Object} props.worker - Worker data object.
+ * @param {number} props.index - Position index for staggered animation delay.
+ * @returns {React.ReactElement} The WorkerCard component.
  */
 const WorkerCard = ({ worker, index }) => {
   const { t } = useTranslation();
@@ -70,14 +76,22 @@ const WorkerCard = ({ worker, index }) => {
 };
 
 WorkerCard.propTypes = {
+  /** Worker data object with profile and reputation fields. */
   worker: PropTypes.shape({
+    /** Stellar wallet address. */
     address: PropTypes.string.isRequired,
+    /** Display name. */
     name: PropTypes.string.isRequired,
+    /** Primary skill category. */
     skill: PropTypes.string,
+    /** City of residence. */
     city: PropTypes.string,
+    /** Average endorsement rating. */
     rating: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    /** Total number of endorsements received. */
     totalEndorsements: PropTypes.number,
   }).isRequired,
+  /** Position index for staggered animation delay. */
   index: PropTypes.number.isRequired,
 };
 

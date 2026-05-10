@@ -10,8 +10,14 @@ import DashboardSidebar from '../components/dashboard/DashboardSidebar';
 import DashboardActivityFeed from '../components/dashboard/DashboardActivityFeed';
 
 /**
- * Dashboard page — composed from ConnectPrompt, DashboardSidebar, and DashboardActivityFeed.
- * Manages data fetching and state; delegates rendering to sub-components.
+ * Dashboard — Authenticated user's command center page.
+ * Fetches credential, endorsement, and reputation data from localStorage
+ * and Stellar Horizon, then delegates rendering to:
+ * - ConnectPrompt: shown when wallet is not connected
+ * - DashboardSidebar: stats, quick actions, credential card
+ * - DashboardActivityFeed: tab-filtered endorsement timeline
+ *
+ * @returns {React.ReactElement} The Dashboard page.
  */
 const Dashboard = () => {
   const { walletAddress, isConnected, connect } = useWallet();
@@ -131,11 +137,11 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-[#050505] relative overflow-hidden text-white">
       {/* Background Graphics */}
-      <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)', backgroundSize: '60px 60px', pointerEvents: 'none', zIndex: 0 }} />
-      <div style={{ position: 'absolute', top: '-150px', right: '-150px', width: '500px', height: '500px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,80,200,0.07) 0%, transparent 70%)', pointerEvents: 'none', zIndex: 0 }} />
-      <div style={{ position: 'absolute', bottom: '-100px', left: '-100px', width: '400px', height: '400px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,220,110,0.04) 0%, transparent 70%)', pointerEvents: 'none', zIndex: 0 }} />
-      <div className="absolute rounded-full pointer-events-none" style={{ top: '-80px', left: '20%', width: '400px', height: '400px', background: '#f97316', filter: 'blur(120px)', opacity: 0.04, zIndex: 0 }} />
-      <div className="absolute rounded-full pointer-events-none" style={{ bottom: '-80px', right: '-80px', width: '400px', height: '400px', background: '#1e3a8a', filter: 'blur(120px)', opacity: 0.05, zIndex: 0 }} />
+      <div className="tc-bg-grid" />
+      <div className="tc-orb-blue" />
+      <div className="tc-orb-green" />
+      <div className="tc-leak-orange" />
+      <div className="tc-leak-blue" />
 
       <style>{`
         @keyframes dbFadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
@@ -163,12 +169,12 @@ const Dashboard = () => {
         <div style={{ flex: 1, padding: '32px 40px', overflowY: 'auto' }}>
           {/* Page Header */}
           <div className="db-anim" style={{ marginBottom: '32px', animationDelay: '0s' }}>
-            <p className="font-inter" style={{ fontSize: '10px', letterSpacing: '4px', color: 'rgba(255,255,255,0.3)', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '600' }}>{t('dashboard.eyebrow')}</p>
-            <h1 className="font-clash" style={{ fontSize: 'clamp(1.6rem,3vw,2.4rem)', fontWeight: '900', color: '#fff', marginBottom: '4px' }}>
+            <p className="font-inter tc-eyebrow tc-mb-xs">{t('dashboard.eyebrow')}</p>
+            <h1 className="font-clash tc-fw-black tc-text-white" style={{ fontSize: 'clamp(1.6rem,3vw,2.4rem)', marginBottom: '4px' }}>
               {t('dashboard.overview')}
-              {credential && credential.name && credential.name !== 'Worker' && <span style={{ color: 'rgba(255,255,255,0.4)' }}>, {credential.name.split(' ')[0]}</span>}
+              {credential && credential.name && credential.name !== 'Worker' && <span className="tc-text-dim">, {credential.name.split(' ')[0]}</span>}
             </h1>
-            <p className="font-inter" style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)' }}>{t('dashboard.overviewSub')}</p>
+            <p className="font-inter tc-text-dim tc-text-base">{t('dashboard.overviewSub')}</p>
           </div>
 
           {/* Wallet bar */}
@@ -177,10 +183,10 @@ const Dashboard = () => {
               <span style={{ width: '6px', height: '6px', backgroundColor: '#00dc6e', borderRadius: '50%' }} />
               <span style={{ fontFamily: 'monospace', fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>{truncAddr(walletAddress)}</span>
               <button onClick={copyAddress} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.2)', display: 'flex', padding: '2px' }}>
-                {copied ? <Check style={{ width: '12px', height: '12px', color: '#00dc6e' }} /> : <Copy style={{ width: '12px', height: '12px' }} />}
+              <Copy className="tc-icon-sm" />
               </button>
               <a href={`https://stellar.expert/explorer/testnet/account/${walletAddress}`} target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(255,255,255,0.2)', display: 'flex' }}>
-                <ExternalLink style={{ width: '12px', height: '12px' }} />
+                <ExternalLink className="tc-icon-sm" />
               </a>
             </div>
           </div>

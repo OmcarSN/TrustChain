@@ -3,8 +3,15 @@ import PropTypes from 'prop-types';
 import { LayoutDashboard, Wallet } from 'lucide-react';
 
 /**
- * Full-screen prompt shown when the user's wallet is not connected.
- * Displays a connect button with animated entrance.
+ * ConnectPrompt — Full-screen wallet connection prompt.
+ * Displayed on the Dashboard when the user's Freighter wallet is not connected.
+ * Features animated entrance, shimmer text effect, pulsing connect button,
+ * and feature highlight badges.
+ *
+ * @param {Object} props
+ * @param {Function} props.connect - Callback to trigger Freighter wallet connection.
+ * @param {Function} props.t - i18next translation function.
+ * @returns {React.ReactElement} The ConnectPrompt component.
  */
 const ConnectPrompt = ({ connect, t }) => (
   <div className="min-h-screen bg-[#050505] relative overflow-hidden text-white" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden', paddingTop: '80px' }}>
@@ -31,20 +38,22 @@ const ConnectPrompt = ({ connect, t }) => (
       <p className="font-inter conn-anim" style={{ fontSize: '15px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.5px', marginBottom: '32px', maxWidth: '400px', textAlign: 'center', lineHeight: '1.6', animationDelay: '0.3s' }}>{t('dashboard.connectPrompt')}</p>
       <div className="conn-anim" style={{ animationDelay: '0.4s' }}>
         <button onClick={connect} className="conn-btn font-inter" style={{ padding: '14px 40px', backgroundColor: '#ffffff', color: '#000000', border: 'none', fontWeight: '800', fontSize: '13px', letterSpacing: '2px', cursor: 'pointer', borderRadius: '0', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', textTransform: 'uppercase' }}>
-          <Wallet style={{ width: '16px', height: '16px' }} /> {t('dashboard.connectBtn')}
+          <Wallet className="tc-icon-lg" /> {t('dashboard.connectBtn')}
         </button>
       </div>
       <div className="conn-anim font-inter" style={{ display: 'flex', gap: '32px', marginTop: '48px', opacity: 0.4, animationDelay: '0.6s' }}>
-        <span style={{ fontSize: '11px', letterSpacing: '2px', fontWeight: '700' }}>✓ VIEW STATS</span>
-        <span style={{ fontSize: '11px', letterSpacing: '2px', fontWeight: '700' }}>✓ MANAGE PROFILE</span>
-        <span style={{ fontSize: '11px', letterSpacing: '2px', fontWeight: '700' }}>✓ TRACK ENDORSEMENTS</span>
+        <span className="tc-text-sm tc-ls-wide tc-fw-bold">✓ VIEW STATS</span>
+        <span className="tc-text-sm tc-ls-wide tc-fw-bold">✓ MANAGE PROFILE</span>
+        <span className="tc-text-sm tc-ls-wide tc-fw-bold">✓ TRACK ENDORSEMENTS</span>
       </div>
     </div>
   </div>
 );
 
 ConnectPrompt.propTypes = {
+  /** Callback to trigger Freighter wallet connection. */
   connect: PropTypes.func.isRequired,
+  /** i18next translation function. */
   t: PropTypes.func.isRequired,
 };
 

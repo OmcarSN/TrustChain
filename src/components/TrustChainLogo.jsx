@@ -3,12 +3,15 @@ import PropTypes from 'prop-types';
 import logoSrc from '../assets/trustchain-logo.png';
 
 /**
- * TrustChainLogo — Official TrustChain brand logo
- * 
- * Design: Orange-red circle with black 8-pointed star/compass,
- *         "TRUSTCHAIN" arched text, and signature swoosh.
- * 
- * Uses the original brand logo image file with transparent/light background.
+ * TrustChainLogo — Official TrustChain brand logo component.
+ * Renders the brand PNG at a configurable size with icon/full variants.
+ *
+ * @param {Object} props
+ * @param {number} [props.size=40] - Logo width and height in px.
+ * @param {string} [props.className=''] - Additional CSS classes.
+ * @param {'full'|'icon'} [props.variant='full'] - Logo variant.
+ * @param {Object} [props.style={}] - Additional inline styles.
+ * @returns {React.ReactElement} The TrustChainLogo component.
  */
 const TrustChainLogo = ({ size = 40, className = '', variant = 'full', style = {} }) => {
   return (
@@ -32,9 +35,13 @@ const TrustChainLogo = ({ size = 40, className = '', variant = 'full', style = {
 };
 
 TrustChainLogo.propTypes = {
+  /** Logo width and height in px. */
   size: PropTypes.number,
+  /** Additional CSS classes. */
   className: PropTypes.string,
+  /** Logo variant: 'full' or 'icon'. */
   variant: PropTypes.oneOf(['full', 'icon']),
+  /** Additional inline styles. */
   style: PropTypes.object,
 };
 

@@ -2,53 +2,60 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Github, Globe, ExternalLink } from 'lucide-react';
 
+/**
+ * Contact — External links page for GitHub, Stellar, and Freighter.
+ * Provides quick-access cards with hover animations to project resources
+ * and a support text section below.
+ *
+ * @returns {React.ReactElement} The Contact page.
+ */
 const Contact = () => {
   const { t } = useTranslation();
   
   return (
-    <div style={{ paddingTop: '120px', paddingLeft: '24px', paddingRight: '24px', maxWidth: '800px', margin: '0 auto', minHeight: '80vh', paddingBottom: '80px' }}>
+    <div className="tc-page" style={{ maxWidth: '800px' }}>
       
-      <h1 className="font-clash" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: '900', color: '#ffffff', marginBottom: '40px', textTransform: 'uppercase' }}>
+      <h1 className="font-clash tc-heading-hero tc-mb-2xl">
         {t('contact_us')}
       </h1>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginBottom: '48px' }}>
+      <div className="tc-flex-col tc-mb-3xl" style={{ gap: '20px' }}>
         {/* GitHub */}
-        <a href="https://github.com/OmcarSN/TrustChain" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '16px', textDecoration: 'none' }} className="group">
-          <div style={{ width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.02)', borderRadius: '4px' }}>
+        <a href="https://github.com/OmcarSN/TrustChain" target="_blank" rel="noopener noreferrer" className="tc-flex tc-flex-gap group" style={{ textDecoration: 'none', alignItems: 'center' }}>
+          <div className="tc-activity-icon" style={{ width: '40px', height: '40px', borderRadius: '4px' }}>
             <Github className="w-4 h-4 text-white/60 group-hover:text-white transition-colors" />
           </div>
           <div>
-            <p className="font-inter uppercase" style={{ fontSize: '10px', letterSpacing: '2px', color: 'rgba(255,255,255,0.3)', marginBottom: '2px', fontWeight: 'bold' }}>GitHub</p>
+            <p className="font-inter tc-label tc-mb-xs" style={{ letterSpacing: '2px' }}>GitHub</p>
             <p className="font-inter text-white/60 group-hover:text-white transition-colors" style={{ fontSize: '15px' }}>github.com/trustchain</p>
           </div>
         </a>
 
         {/* Stellar */}
-        <a href="https://stellar.org" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '16px', textDecoration: 'none' }} className="group">
-          <div style={{ width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.02)', borderRadius: '4px' }}>
+        <a href="https://stellar.org" target="_blank" rel="noopener noreferrer" className="tc-flex tc-flex-gap group" style={{ textDecoration: 'none', alignItems: 'center' }}>
+          <div className="tc-activity-icon" style={{ width: '40px', height: '40px', borderRadius: '4px' }}>
             <Globe className="w-4 h-4 text-white/60 group-hover:text-white transition-colors" />
           </div>
           <div>
-            <p className="font-inter uppercase" style={{ fontSize: '10px', letterSpacing: '2px', color: 'rgba(255,255,255,0.3)', marginBottom: '2px', fontWeight: 'bold' }}>Stellar</p>
+            <p className="font-inter tc-label tc-mb-xs" style={{ letterSpacing: '2px' }}>Stellar</p>
             <p className="font-inter text-white/60 group-hover:text-white transition-colors" style={{ fontSize: '15px' }}>stellar.org</p>
           </div>
         </a>
 
         {/* Freighter */}
-        <a href="https://www.freighter.app" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '16px', textDecoration: 'none' }} className="group">
-          <div style={{ width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.02)', borderRadius: '4px' }}>
+        <a href="https://www.freighter.app" target="_blank" rel="noopener noreferrer" className="tc-flex tc-flex-gap group" style={{ textDecoration: 'none', alignItems: 'center' }}>
+          <div className="tc-activity-icon" style={{ width: '40px', height: '40px', borderRadius: '4px' }}>
             <ExternalLink className="w-4 h-4 text-white/60 group-hover:text-white transition-colors" />
           </div>
           <div>
-            <p className="font-inter uppercase" style={{ fontSize: '10px', letterSpacing: '2px', color: 'rgba(255,255,255,0.3)', marginBottom: '2px', fontWeight: 'bold' }}>Freighter</p>
+            <p className="font-inter tc-label tc-mb-xs" style={{ letterSpacing: '2px' }}>Freighter</p>
             <p className="font-inter text-white/60 group-hover:text-white transition-colors" style={{ fontSize: '15px' }}>freighter.app</p>
           </div>
         </a>
       </div>
 
-      <div style={{ paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-        <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.5)', lineHeight: '1.8' }} className="font-inter">
+      <div className="tc-divider-light" style={{ paddingTop: '24px' }}>
+        <p className="font-inter tc-body-lg" style={{ fontSize: '16px' }}>
           {t('contact_support_text')}
         </p>
       </div>

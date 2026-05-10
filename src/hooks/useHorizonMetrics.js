@@ -1,5 +1,22 @@
 import { useState, useEffect } from 'react';
 
+/**
+ * @typedef {Object} HorizonMetrics
+ * @property {number} totalCredentials - Count of successful transactions.
+ * @property {number} activeWallets - Unique source accounts across transactions.
+ * @property {number} todayTx - Transactions created today (UTC).
+ * @property {Array<{hash: string, walletAddress: string, timeAgo: string, operationType: string, successful: boolean}>} recentActivity - Last 10 transactions.
+ * @property {boolean} loading - Whether the initial fetch is in progress.
+ * @property {string|null} error - Error message if the fetch failed, or null.
+ */
+
+/**
+ * useHorizonMetrics — Fetches live transaction metrics from the Stellar
+ * Horizon testnet for a given contract account. Polls every 30 seconds.
+ *
+ * @param {string} contractId - Stellar account/contract ID to query.
+ * @returns {HorizonMetrics} Current metrics object.
+ */
 export function useHorizonMetrics(contractId) {
   const [metrics, setMetrics] = useState({
     totalCredentials: 0,

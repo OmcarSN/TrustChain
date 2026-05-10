@@ -4,6 +4,14 @@ import { Trash2, AlertTriangle, Activity, Database, Clock, RefreshCcw } from 'lu
 import { getErrorLog, getTxLog, clearLogs } from '../utils/monitor';
 import { useTranslation } from 'react-i18next';
 
+/**
+ * AdminLogs — Developer diagnostics page.
+ * Displays two side-by-side panels: a transaction log and an error log,
+ * each with sticky table headers and auto-refresh every 5 seconds.
+ * Provides refresh and clear actions for log management.
+ *
+ * @returns {React.ReactElement} The AdminLogs page.
+ */
 const AdminLogs = () => {
   const { t } = useTranslation();
   const [errors, setErrors] = useState([]);

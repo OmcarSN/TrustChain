@@ -1,7 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-/** "Built With" technology showcase section. */
+/**
+ * TechStack — "Built With" technology showcase section on the Landing page.
+ * Renders a scrolling background ticker, section header with gradient dividers,
+ * and a responsive 5-column grid of technology cards (Stellar, Soroban, React,
+ * Freighter, Rust) with hover lift animations.
+ *
+ * @param {Object} props
+ * @param {boolean} props.visible - Whether the section has scrolled into view.
+ * @param {Function} props.t - i18next translation function.
+ * @returns {React.ReactElement} The TechStack component.
+ */
 const TechStack = ({ visible, t }) => (
   <section style={{
     borderTop: '1px solid rgba(255,255,255,0.06)',
@@ -22,7 +32,7 @@ const TechStack = ({ visible, t }) => (
     <div style={{ opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(24px)', transition: 'opacity 0.6s ease, transform 0.6s cubic-bezier(0.22,1,0.36,1)' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '40px' }}>
         <div style={{ flex: 1, height: '1px', background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1))' }} />
-        <span style={{ fontSize: '11px', letterSpacing: '4px', color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase', fontWeight: '900' }}>
+        <span className="tc-eyebrow tc-fw-black" style={{ color: 'rgba(255,255,255,0.3)' }}>
           {t('landing.builtWith', 'BUILT WITH LEADING TECHNOLOGY')}
         </span>
         <div style={{ flex: 1, height: '1px', background: 'linear-gradient(90deg, rgba(255,255,255,0.1), transparent)' }} />
@@ -50,8 +60,8 @@ const TechStack = ({ visible, t }) => (
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             fontSize: '14px', fontWeight: '700', color: 'rgba(255,255,255,0.5)',
           }}>{tech.abbr}</div>
-          <span className="font-inter" style={{ fontSize: '13px', fontWeight: '700', color: '#ffffff', marginBottom: '4px' }}>{tech.name}</span>
-          <span className="font-inter" style={{ fontSize: '9px', letterSpacing: '2px', color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase' }}>{tech.desc}</span>
+          <span className="font-inter tc-text-base tc-fw-bold tc-text-white tc-mb-xs">{tech.name}</span>
+          <span className="font-inter tc-text-xs tc-ls-wide" style={{ color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase' }}>{tech.desc}</span>
         </div>
       ))}
     </div>
@@ -59,7 +69,9 @@ const TechStack = ({ visible, t }) => (
 );
 
 TechStack.propTypes = {
+  /** Whether the section is visible (from IntersectionObserver). */
   visible: PropTypes.bool.isRequired,
+  /** i18next translation function. */
   t: PropTypes.func.isRequired,
 };
 

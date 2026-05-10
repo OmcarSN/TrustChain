@@ -6,7 +6,11 @@ import { calculateScore } from '../lib/reputation';
 import WorkerCard from '../components/discover/WorkerCard';
 import FilterBar from '../components/discover/FilterBar';
 
-/* ── Helper: get all registered workers from localStorage ──── */
+/**
+ * getAllWorkers — Reads the worker registry from localStorage and hydrates
+ * each entry with credential data + computed reputation score.
+ * @returns {Array<Object>} Array of worker objects with address, name, skill, city, rating, etc.
+ */
 const getAllWorkers = () => {
   const registry = JSON.parse(localStorage.getItem('trustchain_worker_registry') || '[]');
   const workers = [];
@@ -34,6 +38,14 @@ const getAllWorkers = () => {
   return workers;
 };
 
+/**
+ * useCounter — Custom hook for animated number counting.
+ * Interpolates from 0 to target over a given duration.
+ * @param {number|string} target - Target value to count to.
+ * @param {number} [duration=1000] - Animation duration in ms.
+ * @param {number} [delay=0] - Delay before animation starts in ms.
+ * @returns {number} Current animated count value.
+ */
 const useCounter = (target, duration = 1000, delay = 0) => {
   const [count, setCount] = useState(0);
   const updateCount = useCallback((val) => setCount(val), []);
@@ -68,8 +80,12 @@ const RATING_OPTIONS = [
 ];
 
 /**
- * Discover Workers page — composed from WorkerCard and FilterBar sub-components.
- * Manages worker data, filtering logic, and search. Delegates rendering.
+ * DiscoverWorkers — Browse and search all registered workers page.
+ * Features animated stat counters, text search, multi-filter system
+ * (skill, city, rating), sort controls, and shimmer loading skeletons.
+ * Delegates card rendering to WorkerCard and filter UI to FilterBar.
+ *
+ * @returns {React.ReactElement} The DiscoverWorkers page.
  */
 const DiscoverWorkers = () => {
   const [workers, setWorkers] = useState([]);
@@ -166,39 +182,39 @@ const DiscoverWorkers = () => {
         @media (max-width: 540px) { .dw-grid { grid-template-columns: 1fr !important; } }
       `}</style>
 
-      <div style={{ paddingTop: '100px', paddingBottom: '80px', paddingLeft: '48px', paddingRight: '48px', maxWidth: '1400px', margin: '0 auto', position: 'relative', zIndex: 10 }}>
+      <div className="tc-page-wide tc-page-padded">
 
         {/* ═══ SECTION A: Hero Header ═══ */}
-        <div className="dw-hero" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '48px' }}>
+        <div className="dw-hero tc-flex-between tc-mb-4xl">
           <div>
-            <p className="font-inter" style={{ fontSize: '10px', letterSpacing: '4px', color: 'rgba(255,255,255,0.3)', marginBottom: '12px', textTransform: 'uppercase', fontWeight: '600', animation: 'fadeSlideRight 0.5s ease both', animationDelay: '0ms' }}>{t('discover.eyebrow')}</p>
-            <h1 className="font-clash" style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)', fontWeight: '900', lineHeight: '1.05', marginBottom: '12px', letterSpacing: '-0.02em' }}>
+            <p className="font-inter tc-eyebrow tc-mb-sm" style={{ animation: 'fadeSlideRight 0.5s ease both', animationDelay: '0ms' }}>{t('discover.eyebrow')}</p>
+            <h1 className="font-clash tc-heading-hero tc-mb-sm" style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)', letterSpacing: '-0.02em' }}>
               {t('discover.title', 'Discover Verified Workers').split(' ').map((word, i) => (
                 <span key={i} style={{ display: 'inline-block', marginRight: '0.25em', animation: 'wordUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both', animationDelay: `${i * 80}ms` }}>{word}</span>
               ))}
             </h1>
-            <p className="font-inter" style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)', maxWidth: '500px', lineHeight: '1.6', animation: 'slideUpFade 0.5s ease both', animationDelay: '400ms' }}>{t('discover.subtitle')}</p>
+            <p className="font-inter tc-text-dimmer" style={{ fontSize: '13px', maxWidth: '500px', lineHeight: '1.6', animation: 'slideUpFade 0.5s ease both', animationDelay: '400ms' }}>{t('discover.subtitle')}</p>
           </div>
-          <div className="grid grid-cols-3 gap-2 md:gap-4" style={{ alignItems: 'stretch', border: '1px solid rgba(255,255,255,0.08)', backgroundColor: 'rgba(255,255,255,0.02)', flexShrink: 0, animation: 'fadeSlideLeft 0.6s ease both', animationDelay: '200ms' }}>
+          <div className="grid grid-cols-3 gap-2 md:gap-4 tc-panel" style={{ flexShrink: 0, animation: 'fadeSlideLeft 0.6s ease both', animationDelay: '200ms' }}>
             {[
               { value: totalWorkers, label: t('discover.workers', 'WORKERS') },
               { value: avgRating, label: t('discover.avgRatingLabel', 'AVG RATING') },
               { value: totalEndorsements, label: t('discover.reviewsLabel', 'REVIEWS') },
             ].map((s, i, arr) => (
-              <div key={i} style={{ padding: '16px 12px', textAlign: 'center', borderRight: i < arr.length - 1 ? '1px solid rgba(255,255,255,0.08)' : 'none' }}>
+              <div key={i} className="tc-stat-cell" style={{ borderRight: i < arr.length - 1 ? '1px solid rgba(255,255,255,0.08)' : 'none' }}>
                 <p className="font-clash text-xl md:text-3xl font-black text-white leading-none mb-1">{s.value}</p>
-                <p className="font-inter" style={{ fontSize: '9px', letterSpacing: '3px', color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase' }}>{s.label}</p>
+                <p className="font-inter tc-caption">{s.label}</p>
               </div>
             ))}
           </div>
         </div>
 
         {/* ═══ SECTION B: Search + Filters ═══ */}
-        <div className="dw-search-container" style={{ marginBottom: '24px', animation: 'slideUpFade 0.5s ease both', animationDelay: '500ms' }}>
-          <input type="text" placeholder={t('discover.searchPlaceholder')} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="dw-search"
-            style={{ width: '100%', padding: '16px 52px 16px 20px', backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '0', color: '#ffffff', fontSize: '14px' }} />
+        <div className="dw-search-container tc-mb-lg" style={{ animation: 'slideUpFade 0.5s ease both', animationDelay: '500ms' }}>
+          <input type="text" placeholder={t('discover.searchPlaceholder')} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="dw-search tc-input"
+            style={{ padding: '16px 52px 16px 20px' }} />
           <div className="search-scan" />
-          <Search style={{ position: 'absolute', right: '18px', top: '50%', transform: 'translateY(-50%)', width: '16px', height: '16px', color: 'rgba(255,255,255,0.25)' }} />
+          <Search className="tc-icon-lg tc-icon-dimmer tc-search-icon-pos" />
         </div>
 
         <div style={{ animation: 'simpleFade 0.4s ease both', animationDelay: '650ms' }}>
@@ -212,11 +228,11 @@ const DiscoverWorkers = () => {
         </div>
 
         {/* ═══ SECTION C: Results Header ═══ */}
-        <div className="dw-anim" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', animationDelay: '0.2s' }}>
-          <span style={{ color: loading ? '#333' : '#555', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+        <div className="dw-anim tc-flex-between tc-mb-lg" style={{ animationDelay: '0.2s' }}>
+          <span className="tc-eyebrow" style={{ color: loading ? '#333' : '#555', letterSpacing: '0.12em' }}>
             {loading ? t('discover.loadingWorkers', 'loading workers...') : t('discover.workersFound', '{{count}} workers found', { count: filtered.length })}
           </span>
-          <div style={{ display: 'flex', gap: '8px' }}>
+          <div className="tc-flex tc-flex-gap-sm">
             {['Rating', 'Reviews', 'Name'].map(tab => (
               <button key={tab} onClick={() => setSortBy(tab)} style={{
                 border: '1px solid #1e1e1e', borderRadius: '20px', padding: '4px 12px', fontSize: '11px',
@@ -229,16 +245,16 @@ const DiscoverWorkers = () => {
 
         {/* ═══ SECTION D: Worker Cards ═══ */}
         {loading ? (
-          <div style={{ borderRadius: '16px', overflow: 'hidden', border: '1px solid #1a1a1a', backgroundColor: 'transparent' }}>
+          <div className="tc-card-container">
             {Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} style={{ minHeight: '70px', padding: '14px 20px', borderBottom: i === 4 ? 'none' : '1px solid #181818', display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <div key={i} className="tc-flex tc-flex-gap" style={{ minHeight: '70px', padding: '14px 20px', borderBottom: i === 4 ? 'none' : '1px solid #181818', alignItems: 'center' }}>
                 <div className="skeleton" style={{ width: '40px', height: '40px', borderRadius: '50%', flexShrink: 0 }} />
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <div className="tc-flex-col" style={{ flex: 1, gap: '6px' }}>
                   <div className="skeleton" style={{ width: '120px', height: '14px' }} />
                   <div className="skeleton" style={{ width: '80px', height: '10px' }} />
                 </div>
                 <div className="skeleton" style={{ width: '70px', height: '20px', borderRadius: '12px' }} />
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '6px', minWidth: '60px' }}>
+                <div className="tc-flex-col" style={{ alignItems: 'flex-end', gap: '6px', minWidth: '60px' }}>
                   <div className="skeleton" style={{ width: '30px', height: '16px' }} />
                   <div className="skeleton" style={{ width: '50px', height: '10px' }} />
                 </div>
@@ -246,7 +262,7 @@ const DiscoverWorkers = () => {
             ))}
           </div>
         ) : filtered.length > 0 ? (
-          <div style={{ borderRadius: '16px', overflow: 'hidden', border: '1px solid #1a1a1a' }}>
+          <div className="tc-card-container">
             {filtered.map((worker, i) => (<WorkerCard key={worker.address} worker={worker} index={i} />))}
           </div>
         ) : workers.length === 0 ? (

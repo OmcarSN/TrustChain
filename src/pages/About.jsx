@@ -2,6 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { usePlatformStats } from '../hooks/usePlatformStats';
 
+/**
+ * About — Static content page describing the TrustChain project.
+ * Features animated stat counters (worker count, endorsement count)
+ * with eased number animation and editorial section layout.
+ *
+ * @returns {React.ReactElement} The About page.
+ */
 const About = () => {
   const { t } = useTranslation();
   const { workerCount, totalEndorsements } = usePlatformStats();
@@ -49,32 +56,32 @@ const About = () => {
   }, [workerCount, totalEndorsements]);
 
   return (
-    <div style={{ paddingTop: '120px', paddingLeft: '24px', paddingRight: '24px', maxWidth: '800px', margin: '0 auto', minHeight: '80vh', paddingBottom: '80px' }}>
+    <div className="tc-page" style={{ maxWidth: '800px' }}>
       
-      <h1 className="font-clash" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: '900', color: '#ffffff', marginBottom: '40px', textTransform: 'uppercase' }}>
+      <h1 className="font-clash tc-heading-hero tc-mb-2xl" style={{ textTransform: 'uppercase' }}>
         {t('about_trustchain')}
       </h1>
 
       <div style={{ marginBottom: '40px' }}>
-        <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.6)', lineHeight: '1.8' }} className="font-inter">
+        <p className="font-inter tc-body-lg tc-text-dim" style={{ lineHeight: '1.8' }}>
           {t('about_description')}
         </p>
       </div>
 
       <div style={{ marginBottom: '40px' }}>
-        <p className="font-inter uppercase" style={{ fontSize: '11px', letterSpacing: '4px', color: 'rgba(255,255,255,0.3)', marginBottom: '12px', fontWeight: 'bold' }}>
+        <p className="font-inter uppercase tc-eyebrow tc-mb-sm">
           {t('our_mission')}
         </p>
-        <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.6)', lineHeight: '1.8' }} className="font-inter">
+        <p className="font-inter tc-body-lg tc-text-dim" style={{ lineHeight: '1.8' }}>
           {t('mission_text')}
         </p>
       </div>
 
       <div style={{ marginBottom: '40px' }}>
-        <p className="font-inter uppercase" style={{ fontSize: '11px', letterSpacing: '4px', color: 'rgba(255,255,255,0.3)', marginBottom: '12px', fontWeight: 'bold' }}>
+        <p className="font-inter uppercase tc-eyebrow tc-mb-sm">
           {t('built_by')}
         </p>
-        <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.6)', lineHeight: '1.8' }} className="font-inter">
+        <p className="font-inter tc-body-lg tc-text-dim" style={{ lineHeight: '1.8' }}>
           {t('built_by_text')}
         </p>
       </div>

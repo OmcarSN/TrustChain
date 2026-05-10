@@ -4,6 +4,13 @@ import { motion } from 'framer-motion';
 import { Home, ArrowLeft, Search } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
+/**
+ * NotFound — 404 error page.
+ * Renders a large ghosted "404" heading, subtitle, and navigation
+ * buttons (Home, Go Back) with motion entrance animation.
+ *
+ * @returns {React.ReactElement} The NotFound page.
+ */
 const NotFound = () => {
   const { t } = useTranslation();
   return (

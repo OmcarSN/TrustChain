@@ -2,6 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ShieldAlert, RefreshCcw, Home } from 'lucide-react';
 
+/**
+ * ErrorBoundary — React class component error boundary.
+ * Catches unhandled errors in the component tree and renders a
+ * branded fallback UI with reload and home navigation actions.
+ * Logs caught errors to the console for debugging.
+ */
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
@@ -52,6 +58,7 @@ class ErrorBoundary extends React.Component {
 }
 
 ErrorBoundary.propTypes = {
+  /** Child component tree to wrap with error boundary protection. */
   children: PropTypes.node.isRequired,
 };
 

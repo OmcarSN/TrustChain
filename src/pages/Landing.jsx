@@ -8,8 +8,12 @@ import HowItWorks from '../components/landing/HowItWorks';
 import TechStack from '../components/landing/TechStack';
 
 /**
- * Landing page — composed from sub-components for maintainability.
- * Each section is extracted into its own component under `components/landing/`.
+ * Landing — Public marketing homepage.
+ * Composes HeroSection, StatsBar, HowItWorks, and TechStack sub-components
+ * with IntersectionObserver-driven scroll-reveal animations. Also renders
+ * a trust ticker bar and a CTA banner with animated border.
+ *
+ * @returns {React.ReactElement} The Landing page.
  */
 const Landing = () => {
   const { t } = useTranslation();
@@ -83,13 +87,13 @@ const Landing = () => {
       {/* ═══ TRUST BAR ═══ */}
       <div style={{ width: '100%', background: '#0a0a0a', borderTop: '1px solid #1a1a1a', borderBottom: '1px solid #1a1a1a' }}>
         <div className="flex flex-row md:justify-center justify-start overflow-x-auto whitespace-nowrap hide-scrollbar" style={{ gap: '40px', padding: '14px 24px', alignItems: 'center' }}>
-          <span className="font-inter" style={{ color: '#333', fontSize: '11px', letterSpacing: '0.14em', fontWeight: '500', textTransform: 'uppercase' }}>✦ {t('landing.trust_stellar', 'BUILT ON STELLAR TESTNET')}</span>
+          <span className="font-inter tc-text-sm tc-ls-wide" style={{ color: '#333', fontWeight: '500', textTransform: 'uppercase' }}>✦ {t('landing.trust_stellar', 'BUILT ON STELLAR TESTNET')}</span>
           <span style={{ color: '#22c55e', fontSize: '11px' }}>✦</span>
-          <span className="font-inter" style={{ color: '#333', fontSize: '11px', letterSpacing: '0.14em', fontWeight: '500', textTransform: 'uppercase' }}>{t('landing.trust_gasless', '100% GASLESS')}</span>
+          <span className="font-inter tc-text-sm tc-ls-wide" style={{ color: '#333', fontWeight: '500', textTransform: 'uppercase' }}>{t('landing.trust_gasless', '100% GASLESS')}</span>
           <span style={{ color: '#22c55e', fontSize: '11px' }}>✦</span>
-          <span className="font-inter" style={{ color: '#333', fontSize: '11px', letterSpacing: '0.14em', fontWeight: '500', textTransform: 'uppercase' }}>{t('landing.trust_soulbound', 'SOULBOUND CREDENTIALS')}</span>
+          <span className="font-inter tc-text-sm tc-ls-wide" style={{ color: '#333', fontWeight: '500', textTransform: 'uppercase' }}>{t('landing.trust_soulbound', 'SOULBOUND CREDENTIALS')}</span>
           <span style={{ color: '#22c55e', fontSize: '11px' }}>✦</span>
-          <span className="font-inter" style={{ color: '#333', fontSize: '11px', letterSpacing: '0.14em', fontWeight: '500', textTransform: 'uppercase' }}>{t('landing.trust_opensource', 'OPEN SOURCE')}</span>
+          <span className="font-inter tc-text-sm tc-ls-wide" style={{ color: '#333', fontWeight: '500', textTransform: 'uppercase' }}>{t('landing.trust_opensource', 'OPEN SOURCE')}</span>
         </div>
       </div>
 

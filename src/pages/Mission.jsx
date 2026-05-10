@@ -1,53 +1,43 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
+/**
+ * Mission — Static content page explaining the TrustChain project's purpose.
+ * Renders a hero quote, problem statement, solution overview, and vision
+ * sections in a structured editorial layout with accent borders.
+ *
+ * @returns {React.ReactElement} The Mission page.
+ */
 const Mission = () => {
   const { t } = useTranslation();
   
   return (
-    <div style={{ paddingTop: '120px', paddingLeft: '24px', paddingRight: '24px', maxWidth: '800px', margin: '0 auto', minHeight: '80vh', paddingBottom: '80px' }}>
+    <div className="tc-page" style={{ maxWidth: '800px' }}>
       
-      <h1 className="font-clash" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: '900', color: '#ffffff', marginBottom: '40px', textTransform: 'uppercase' }}>
+      <h1 className="font-clash tc-heading-hero tc-mb-2xl" style={{ textTransform: 'uppercase' }}>
         {t('mission_page_title')}
       </h1>
 
-      <div style={{ 
-        marginBottom: '40px', 
-        paddingLeft: '20px', 
-        borderLeft: '3px solid rgba(0,220,110,0.4)',
-        paddingTop: '4px', paddingBottom: '4px'
-      }}>
-        <p style={{ fontSize: '18px', color: '#ffffff', lineHeight: '1.6', fontStyle: 'italic' }} className="font-clash">
+      <div className="tc-bio-quote tc-mb-2xl" style={{ paddingTop: '4px', paddingBottom: '4px' }}>
+        <p className="font-clash tc-text-white tc-text-italic" style={{ fontSize: '18px', lineHeight: '1.6' }}>
           {t('mission_quote')}
         </p>
       </div>
 
-      <div style={{ marginBottom: '40px' }}>
-        <p className="font-inter uppercase" style={{ fontSize: '11px', letterSpacing: '4px', color: 'rgba(255,255,255,0.3)', marginBottom: '12px', fontWeight: 'bold' }}>
-          {t('the_problem')}
-        </p>
-        <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.6)', lineHeight: '1.8' }} className="font-inter">
-          {t('problem_text')}
-        </p>
-      </div>
-
-      <div style={{ marginBottom: '40px' }}>
-        <p className="font-inter uppercase" style={{ fontSize: '11px', letterSpacing: '4px', color: 'rgba(255,255,255,0.3)', marginBottom: '12px', fontWeight: 'bold' }}>
-          {t('the_solution')}
-        </p>
-        <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.6)', lineHeight: '1.8' }} className="font-inter">
-          {t('solution_text')}
-        </p>
-      </div>
-
-      <div style={{ marginBottom: '40px' }}>
-        <p className="font-inter uppercase" style={{ fontSize: '11px', letterSpacing: '4px', color: 'rgba(255,255,255,0.3)', marginBottom: '12px', fontWeight: 'bold' }}>
-          {t('the_vision')}
-        </p>
-        <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.6)', lineHeight: '1.8' }} className="font-inter">
-          {t('vision_text')}
-        </p>
-      </div>
+      {[
+        { label: t('the_problem'), text: t('problem_text') },
+        { label: t('the_solution'), text: t('solution_text') },
+        { label: t('the_vision'), text: t('vision_text') },
+      ].map((section, idx) => (
+        <div key={idx} style={{ marginBottom: '40px' }}>
+          <p className="font-inter uppercase tc-eyebrow tc-mb-sm">
+            {section.label}
+          </p>
+          <p className="font-inter tc-body-lg tc-text-dim" style={{ lineHeight: '1.8' }}>
+            {section.text}
+          </p>
+        </div>
+      ))}
 
     </div>
   );

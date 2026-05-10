@@ -1,3 +1,10 @@
+/**
+ * Decodes a Stellar transaction error into a human-friendly message.
+ * Handles Error objects, Horizon API error responses, and string fallbacks.
+ *
+ * @param {Error|Object|string} error - The error to decode.
+ * @returns {string} A user-friendly error message.
+ */
 export function decodeTransactionError(error) {
   // If it's a standard Error object with our already-parsed message
   if (error instanceof Error && error.message) {

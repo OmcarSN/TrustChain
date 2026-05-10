@@ -1,10 +1,31 @@
 import { useState, useEffect } from 'react';
 import { calculateScore } from '../lib/reputation';
 
+/**
+ * notifyStatsUpdated — Dispatches a custom event to trigger a re-fetch
+ * of platform stats in all mounted usePlatformStats consumers.
+ *
+ * @returns {void}
+ */
 export const notifyStatsUpdated = () => {
   window.dispatchEvent(new CustomEvent('trustchain:statsUpdated'));
 };
 
+/**
+ * @typedef {Object} PlatformStats
+ * @property {number} workerCount - Total registered workers.
+ * @property {string} avgRating - Average rating across rated workers (1 decimal).
+ * @property {number} totalEndorsements - Workers with at least one endorsement.
+ */
+
+/**
+ * usePlatformStats — Derives aggregate platform statistics from
+ * localStorage worker registry and endorsement records. Listens for
+ * cross-tab storage events and `trustchain:statsUpdated` custom events
+ * to stay in sync.
+ *
+ * @returns {PlatformStats} Current platform statistics.
+ */
 export const usePlatformStats = () => {
   const [stats, setStats] = useState({
     workerCount: 0,
