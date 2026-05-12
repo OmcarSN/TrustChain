@@ -369,7 +369,7 @@ Professional-grade `@typedef`, `@param`, and `@returns` annotations added to all
 | `monitor.test.js` | 5 | Error/TX logging, log capping |
 | `components.test.jsx` | 4 | ErrorBoundary, TrustChainLogo smoke tests |
 | `feeBump.test.js` | 3 | Fee bump transaction building |
-| `navigation.test.jsx` | 9 | Route rendering, 404 handling, link behavior |
+| `subcomponents.test.jsx` | 9 | Sub-component rendering, props, interactions |
 
 ```bash
 # Run all tests
@@ -466,7 +466,7 @@ User Request → indexer.js → Horizon API (horizon-testnet.stellar.org)
 |----------|------|-------------|
 | `fetchCredentialsByWallet(address)` | `src/services/indexer.js` | Fetches all credential events for a wallet from Horizon |
 | `fetchAllCredentialEvents()` | `src/services/indexer.js` | Aggregates credentials across all registered wallets |
-| `fetchEndorsementsByWallet(address)` | `src/services/indexer.js` | Retrieves endorsement history from transaction data |
+| `fetchLatestLedger()` | `src/services/indexer.js` | Retrieves the latest ledger sequence and close time |
 
 ### Endpoints & Dashboards
 
@@ -547,7 +547,7 @@ Internal monitoring dashboard capturing all application events:
 ### Implementation
 - **Logger**: `src/utils/monitor.js` — `logTransaction()`, `logError()`, `getErrorLog()`, `getTxLog()`
 - **Dashboard**: `src/pages/AdminLogs.jsx` — split-panel transaction and error viewer
-- **Storage**: localStorage keys `trustchain_tx_log` and `trustchain_errors`
+- **Storage**: localStorage keys `trustchain_txlog` and `trustchain_errors`
 - **Access**: Hidden admin route at `/admin/logs`
 
 ---
@@ -620,9 +620,15 @@ trustchain/
 ├── api/                    # Vercel serverless functions (server-side)
 │   └── fee-bump.js         # Fee bump signing — SPONSOR_SECRET stays here
 ├── contracts/              # Soroban smart contracts (Rust)
-│   └── credential/
+│   ├── credential/
+│   │   └── src/
+│   │       └── lib.rs      # Credential issuance & retrieval logic
+│   ├── reputation/
+│   │   └── src/
+│   │       └── lib.rs      # Reputation scoring & endorsement logic
+│   └── governance/
 │       └── src/
-│           └── lib.rs      # Credential issuance & retrieval logic
+│           └── lib.rs      # Governance & admin transfer logic
 ├── src/
 │   ├── components/         # Reusable UI components (all have PropTypes)
 │   │   ├── Navbar.jsx      # Navigation with wallet state
@@ -651,6 +657,7 @@ trustchain/
 │   │   └── usePlatformStats.js  # Real-time platform stats
 │   ├── lib/                # Core business logic (JSDoc annotated)
 │   │   ├── stellar.js      # Stellar SDK interactions + /api/fee-bump client
+│   │   ├── stellar-config.js # Centralized network configuration
 │   │   ├── freighter.js    # Freighter wallet integration
 │   │   ├── reputation.js   # Reputation score calculation (JSDoc typed)
 │   │   └── toast.js        # Toast bridge for non-React code
@@ -664,14 +671,20 @@ trustchain/
 │   │   ├── WorkerProfile.jsx # Individual worker profile
 │   │   ├── Analytics.jsx   # Network metrics dashboard
 │   │   ├── Explorer.jsx    # On-chain credential explorer
+│   │   ├── HowItWorks.jsx  # Detailed feature walkthrough
+│   │   ├── About.jsx       # About the platform
+│   │   ├── Contact.jsx     # Contact information
+│   │   ├── Mission.jsx     # Mission statement
 │   │   ├── AdminLogs.jsx   # System monitoring dashboard
 │   │   └── NotFound.jsx    # 404 page
 │   ├── services/           # External service integrations
-│   │   └── indexer.js      # Horizon-based data indexer
+│   │   ├── indexer.js      # Horizon-based data indexer
+│   │   └── eventParser.js  # Transaction parsing & filtering
 │   ├── utils/              # Utility functions (JSDoc annotated)
 │   │   ├── validation.js   # Input validation & sanitization
 │   │   ├── feeBump.js      # Fee bump transaction builder
-│   │   └── monitor.js      # Error & transaction logging
+│   │   ├── monitor.js      # Error & transaction logging
+│   │   └── stellar-errors.js # Horizon error code decoder
 │   ├── test/               # Vitest test suites (93 tests)
 │   │   ├── components.test.jsx  # Component smoke tests
 │   │   ├── reputation.test.js   # Reputation scoring tests
@@ -706,7 +719,7 @@ trustchain/
 |----------|-----------|---------|-------------|
 | `fetchCredentialsByWallet(address)` | Stellar address | Credential[] | On-chain credentials from Horizon |
 | `fetchAllCredentialEvents()` | None | Event[] | All credential events across wallets |
-| `fetchEndorsementsByWallet(address)` | Stellar address | Endorsement[] | Endorsement history |
+| `fetchLatestLedger()` | None | `{ sequence, closedAt }` | Latest ledger sequence and close time |
 
 #### Reputation Engine (`src/lib/reputation.js`)
 

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { HORIZON_URL } from '../lib/stellar-config';
 
 /**
  * @typedef {Object} HorizonMetrics
@@ -36,7 +37,7 @@ export function useHorizonMetrics(contractId) {
     const fetchMetrics = async () => {
       try {
         // Fetch up to 100 transactions to calculate aggregated metrics
-        const response = await fetch(`https://horizon-testnet.stellar.org/accounts/${contractId}/transactions?order=desc&limit=100`);
+        const response = await fetch(`${HORIZON_URL}/accounts/${contractId}/transactions?order=desc&limit=100`);
         
         if (!response.ok) {
           throw new Error('Failed to fetch from testnet Horizon');

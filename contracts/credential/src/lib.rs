@@ -787,7 +787,7 @@ mod tests {
 
     #[test]
     fn test_admin_transfer() {
-        let (env, client, admin) = setup();
+        let (env, client, _admin) = setup();
         let new_admin = Address::generate(&env);
 
         client.propose_admin(&new_admin);

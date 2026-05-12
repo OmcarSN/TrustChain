@@ -30,3 +30,6 @@ dist-ssr
 
 # Rust build artifacts
 target/
+
+# Test coverage reports
+coverage/
