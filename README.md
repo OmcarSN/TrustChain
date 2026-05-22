@@ -8,7 +8,11 @@
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](./LICENSE)
 [![Security](https://img.shields.io/badge/Security-Checklist_Passed-brightgreen?style=for-the-badge)](./SECURITY.md)
 
-**TrustChain** is a decentralized, soulbound credential and reputation platform built on the **Stellar network**. It enables informal economy workers (construction, domestic work, transport, agriculture, etc.) to create portable, tamper-proof digital identities and build verifiable on-chain reputations through employer endorsements.
+**TrustChain** is a digital identity system on blockchain built on the **Stellar network**. It helps daily wage workers (like construction workers, house help, and drivers) create digital IDs that can't be faked, and build a work reputation based on employer ratings.
+
+## Why I Built This
+
+In India, crores of daily wage workers have no way to show their work history or skills. If they move to a new city, they start from zero. No LinkedIn, no resume, nothing. I built TrustChain so these workers can have a digital identity on blockchain that nobody can fake or delete. Employers can leave ratings, and anyone can verify a worker's reputation by just checking their wallet address.
 
 [🚀 Live Demo](https://trust-chain-mocha.vercel.app/) · [📊 Metrics Dashboard](#-metrics-dashboard) · [🔒 Security Checklist](./SECURITY.md) · [📖 User Guide](#-user-guide)
 
@@ -48,7 +52,7 @@ Over **2 billion** workers in the informal economy worldwide lack verifiable pro
 - Years of honest work produce **zero portable reputation**
 - Workers starting in a new city must **rebuild trust from scratch**
 
-Traditional credential systems (LinkedIn, certificates) are inaccessible to this population due to literacy barriers, lack of internet access, and the informal nature of their employment.
+Most of these workers don't use LinkedIn or have paper certificates to show their skills.
 
 ---
 
