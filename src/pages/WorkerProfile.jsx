@@ -4,13 +4,14 @@ import { motion } from 'framer-motion';
 import { User } from 'lucide-react';
 import { calculateScore } from '../lib/reputation';
 import { useTranslation } from 'react-i18next';
+import { getWorker, getEndorsements } from '../lib/supabaseData';
 import ProfileSidebar from '../components/worker-profile/ProfileSidebar';
 import ProfileStatsRow from '../components/worker-profile/ProfileStatsRow';
 import EndorsementList from '../components/worker-profile/EndorsementList';
 
 /**
  * WorkerProfile — Public worker reputation page.
- * Loads a worker's credential and endorsement data from localStorage,
+ * Loads a worker's credential and endorsement data from Supabase,
  * computes reputation scores, and delegates rendering to sub-components:
  * - ProfileSidebar: avatar, name, skill, wallet, share/copy actions
  * - ProfileStatsRow: avg rating, total reviews, highest, weighted score
@@ -28,9 +29,9 @@ const WorkerProfile = () => {
   const [copiedAddr, setCopiedAddr] = useState(false);
   const [copiedShare, setCopiedShare] = useState(false);
 
-  const loadProfile = useCallback(() => {
-    const data = JSON.parse(localStorage.getItem(`trustchain_worker_${address}`) || 'null');
-    const endorse = JSON.parse(localStorage.getItem(`endorsements_${address}`) || '[]');
+  const loadProfile = useCallback(async () => {
+    const data = await getWorker(address);
+    const endorse = await getEndorsements(address);
     if (data) {
       setProfile({
         name: data.name || data.fullName || 'Unknown',

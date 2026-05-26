@@ -3,39 +3,31 @@ import { Search, Users, Award, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { calculateScore } from '../lib/reputation';
+import { getAllWorkersWithEndorsements } from '../lib/supabaseData';
 import WorkerCard from '../components/discover/WorkerCard';
 import FilterBar from '../components/discover/FilterBar';
 
 /**
- * getAllWorkers — Reads the worker registry from localStorage and hydrates
- * each entry with credential data + computed reputation score.
- * @returns {Array<Object>} Array of worker objects with address, name, skill, city, rating, etc.
+ * getAllWorkers — Fetches all workers from Supabase with endorsements
+ * and computes reputation scores.
+ * @returns {Promise<Array<Object>>} Array of worker objects with address, name, skill, city, rating, etc.
  */
-const getAllWorkers = () => {
-  const registry = JSON.parse(localStorage.getItem('trustchain_worker_registry') || '[]');
-  const workers = [];
-  registry.forEach(address => {
-    const data = localStorage.getItem(`trustchain_worker_${address}`);
-    if (data) {
-      try {
-        const parsed = JSON.parse(data);
-        const endorsements = JSON.parse(localStorage.getItem(`endorsements_${address}`) || '[]');
-        const rep = calculateScore(endorsements);
-        workers.push({
-          address,
-          name: parsed.name || parsed.fullName || 'Unknown',
-          skill: parsed.skill || parsed.skillCategory || 'General',
-          city: parsed.city || 'Unknown',
-          experience: parsed.experience || 0,
-          bio: parsed.bio || '',
-          timestamp: parsed.timestamp,
-          rating: rep.average,
-          totalEndorsements: rep.total,
-        });
-      } catch { /* skip malformed entries */ }
-    }
+const getAllWorkers = async () => {
+  const workersWithEndorsements = await getAllWorkersWithEndorsements();
+  return workersWithEndorsements.map(w => {
+    const rep = calculateScore(w.endorsements || []);
+    return {
+      address: w.address,
+      name: w.name || 'Unknown',
+      skill: w.skill || 'General',
+      city: w.city || 'Unknown',
+      experience: w.experience || 0,
+      bio: w.bio || '',
+      timestamp: w.timestamp,
+      rating: rep.average,
+      totalEndorsements: rep.total,
+    };
   });
-  return workers;
 };
 
 /**
@@ -98,8 +90,8 @@ const DiscoverWorkers = () => {
   const [showFilters, setShowFilters] = useState(true);
   const { t } = useTranslation();
 
-  const loadWorkers = useCallback(() => {
-    const data = getAllWorkers();
+  const loadWorkers = useCallback(async () => {
+    const data = await getAllWorkers();
     setWorkers(data);
     setTimeout(() => { setLoading(false); }, 1500);
   }, []);

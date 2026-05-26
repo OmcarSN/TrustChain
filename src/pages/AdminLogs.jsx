@@ -17,10 +17,10 @@ const AdminLogs = () => {
   const [errors, setErrors] = useState([]);
   const [txs, setTxs] = useState([]);
 
-  const loadData = useCallback(() => { setErrors(getErrorLog()); setTxs(getTxLog()); }, []);
+  const loadData = useCallback(async () => { setErrors(await getErrorLog()); setTxs(await getTxLog()); }, []);
    
   useEffect(() => { loadData(); const iv = setInterval(loadData, 5000); return () => clearInterval(iv); }, [loadData]);
-  const handleClear = () => { if (window.confirm("Clear all logs?")) { clearLogs(); loadData(); } };
+  const handleClear = async () => { if (window.confirm("Clear all logs?")) { clearLogs(); await loadData(); } };
 
   return (
     <div className="min-h-screen bg-[#050505] pt-28 pb-12 px-6 lg:px-12 relative overflow-hidden text-white">

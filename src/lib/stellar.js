@@ -9,6 +9,7 @@ import {
 import * as freighter from "./freighter";
 import { logError, logTransaction } from "../utils/monitor";
 import { HORIZON_URL, SOROBAN_URL, NETWORK_PASSPHRASE } from "./stellar-config";
+import { getWorker } from "./supabaseData";
 
 // Initialize Network Servers
 export const server = new Horizon.Server(HORIZON_URL);
@@ -186,11 +187,11 @@ export async function fetchWorkerCredential(publicKey) {
 
       let localData = {};
       try {
-        const stored = localStorage.getItem(`trustchain_worker_${publicKey}`);
-        if (stored) {
-          localData = JSON.parse(stored);
+        const workerData = await getWorker(publicKey);
+        if (workerData) {
+          localData = workerData;
         }
-      } catch { /* ignore parse errors */ }
+      } catch { /* ignore fetch errors */ }
 
       return {
         name: localData.name || "Worker",

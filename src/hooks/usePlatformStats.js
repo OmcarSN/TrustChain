@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { calculateScore } from '../lib/reputation';
+import { getWorkerRegistry, getEndorsements } from '../lib/supabaseData';
 
 /**
  * notifyStatsUpdated — Dispatches a custom event to trigger a re-fetch
@@ -20,9 +21,8 @@ export const notifyStatsUpdated = () => {
 
 /**
  * usePlatformStats — Derives aggregate platform statistics from
- * localStorage worker registry and endorsement records. Listens for
- * cross-tab storage events and `trustchain:statsUpdated` custom events
- * to stay in sync.
+ * Supabase worker and endorsement data. Listens for
+ * `trustchain:statsUpdated` custom events to stay in sync.
  *
  * @returns {PlatformStats} Current platform statistics.
  */
@@ -34,21 +34,17 @@ export const usePlatformStats = () => {
   });
 
   useEffect(() => {
-    const fetchStats = () => {
+    const fetchStats = async () => {
       try {
-        const registry = JSON.parse(
-          localStorage.getItem('trustchain_worker_registry') || '[]'
-        );
+        const registry = await getWorkerRegistry();
 
         let totalRatingSum = 0;
         let ratedWorkerCount = 0;      // workers who have at least 1 valid rating
         let reviewedWorkerCount = 0;   // workers who have at least 1 endorsement
 
-        registry.forEach((address) => {
+        for (const address of registry) {
           try {
-            const endorsements = JSON.parse(
-              localStorage.getItem(`endorsements_${address}`) || '[]'
-            );
+            const endorsements = await getEndorsements(address);
             const rep = calculateScore(endorsements);
             const avg = parseFloat(rep.average);
 
@@ -65,7 +61,7 @@ export const usePlatformStats = () => {
           } catch {
             // skip malformed entries
           }
-        });
+        }
 
         const workerCount = registry.length;
         const avgRating =
@@ -86,18 +82,10 @@ export const usePlatformStats = () => {
     // Initial fetch
     fetchStats();
 
-    // Listen to storage events (cross-tab)
-    const handleStorage = (e) => {
-      if (e.key === 'trustchain_worker_registry' || (e.key && e.key.startsWith('endorsements_'))) {
-        fetchStats();
-      }
-    };
-
-    window.addEventListener('storage', handleStorage);
+    // Listen for in-tab stat updates (e.g. after a new mint or endorsement)
     window.addEventListener('trustchain:statsUpdated', fetchStats);
 
     return () => {
-      window.removeEventListener('storage', handleStorage);
       window.removeEventListener('trustchain:statsUpdated', fetchStats);
     };
   }, []);

@@ -1,6 +1,10 @@
-const ERRORS_KEY = 'trustchain_errors';
-const TXS_KEY = 'trustchain_txlog';
-const MAX_LOGS = 100;
+import {
+  logMonitorError,
+  logMonitorTransaction,
+  getMonitorErrorLog,
+  getMonitorTxLog,
+  clearMonitorLogs,
+} from '../lib/supabaseData';
 
 /**
  * @typedef {Object} ErrorLogEntry
@@ -19,91 +23,58 @@ const MAX_LOGS = 100;
  */
 
 /**
- * Logs an error to localStorage with context information.
- * Caps log at MAX_LOGS entries to prevent unbounded storage growth.
+ * Logs an error to Supabase with context information.
+ * Fire-and-forget — does not block callers.
  * @param {Error|string} error - The error to log
  * @param {string} context - Description of where/when the error occurred
  * @returns {void}
  */
 export const logError = (error, context) => {
   console.error(`[TrustChain Error] ${context}:`, error);
-
-  try {
-    const existing = JSON.parse(localStorage.getItem(ERRORS_KEY) || '[]');
-    existing.unshift({
-      message: error.message || String(error),
-      stack: error.stack || null,
-      context,
-      timestamp: new Date().toISOString()
-    });
-    
-    // Cap at 100
-    if (existing.length > MAX_LOGS) {
-      existing.length = MAX_LOGS; 
-    }
-    
-    localStorage.setItem(ERRORS_KEY, JSON.stringify(existing));
-  } catch (e) {
-    console.error('Failed to write to error log', e);
-  }
+  // Fire-and-forget async write to Supabase
+  logMonitorError(error, context);
 };
 
 /**
- * Logs a successful transaction to localStorage.
+ * Logs a successful transaction to Supabase.
  * @param {string} txHash - The Stellar transaction hash
  * @param {string} type - Transaction type identifier (e.g. "mint_credential", "endorse")
  * @param {string} wallet - The wallet address that initiated the transaction
  * @returns {void}
  */
 export const logTransaction = (txHash, type, wallet) => {
-  try {
-    const existing = JSON.parse(localStorage.getItem(TXS_KEY) || '[]');
-    existing.unshift({
-      txHash,
-      type,
-      wallet,
-      timestamp: new Date().toISOString()
-    });
-    
-    if (existing.length > MAX_LOGS) {
-      existing.length = MAX_LOGS;
-    }
-    
-    localStorage.setItem(TXS_KEY, JSON.stringify(existing));
-  } catch (e) {
-    console.error('Failed to write to tx log', e);
-  }
+  // Fire-and-forget async write to Supabase
+  logMonitorTransaction(txHash, type, wallet);
 };
 
 /**
- * Retrieves the error log from localStorage.
- * @returns {ErrorLogEntry[]} Array of error log entries, newest first
+ * Retrieves the error log from Supabase.
+ * @returns {Promise<ErrorLogEntry[]>} Array of error log entries, newest first
  */
-export const getErrorLog = () => {
+export const getErrorLog = async () => {
   try {
-    return JSON.parse(localStorage.getItem(ERRORS_KEY) || '[]');
+    return await getMonitorErrorLog();
   } catch {
     return [];
   }
 };
 
 /**
- * Retrieves the transaction log from localStorage.
- * @returns {TransactionLogEntry[]} Array of transaction log entries, newest first
+ * Retrieves the transaction log from Supabase.
+ * @returns {Promise<TransactionLogEntry[]>} Array of transaction log entries, newest first
  */
-export const getTxLog = () => {
+export const getTxLog = async () => {
   try {
-    return JSON.parse(localStorage.getItem(TXS_KEY) || '[]');
+    return await getMonitorTxLog();
   } catch {
     return [];
   }
 };
 
 /**
- * Clears both error and transaction logs from localStorage.
+ * Clears both error and transaction logs from Supabase.
  * @returns {void}
  */
 export const clearLogs = () => {
-  localStorage.removeItem(ERRORS_KEY);
-  localStorage.removeItem(TXS_KEY);
+  clearMonitorLogs();
 };

@@ -4,6 +4,7 @@ import { fetchWorkerCredential } from '../lib/stellar';
 import { calculateScore } from '../lib/reputation';
 import { useToast } from '../context/ToastContext';
 import { useTranslation } from 'react-i18next';
+import { getEndorsements } from '../lib/supabaseData';
 import VerifySearchHeader from '../components/verify/VerifySearchHeader';
 import VerifyResultsPanel from '../components/verify/VerifyResultsPanel';
 
@@ -33,7 +34,7 @@ const Verify = () => {
     setIsSearching(true); setError(null);
     try {
       const credential = await fetchWorkerCredential(address);
-      const endorsements = JSON.parse(localStorage.getItem(`endorsements_${address}`) || '[]');
+      const endorsements = await getEndorsements(address);
       const reputation = calculateScore(endorsements);
       setProfile({ ...credential, address, reputation, endorsements });
       toast.success(t('verify.verifiedResult'));

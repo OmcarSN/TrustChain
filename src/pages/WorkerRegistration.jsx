@@ -5,6 +5,7 @@ import { useToast } from '../context/ToastContext';
 import { validateWalletAddress, validateCredentialInput, sanitizeString } from '../utils/validation';
 import { useTranslation } from 'react-i18next';
 import { notifyStatsUpdated } from '../hooks/usePlatformStats';
+import { getWorker, upsertWorker } from '../lib/supabaseData';
 import RegistrationConnectPrompt from '../components/registration/RegistrationConnectPrompt';
 import ExistingCredentialCard from '../components/registration/ExistingCredentialCard';
 import RegistrationForm from '../components/registration/RegistrationForm';
@@ -14,7 +15,7 @@ import RegistrationForm from '../components/registration/RegistrationForm';
  * Manages form state, validation, and on-chain minting via Stellar.
  * Delegates rendering to RegistrationConnectPrompt (not connected),
  * ExistingCredentialCard (already registered), and RegistrationForm
- * (new registration). Stores credential data in localStorage and
+ * (new registration). Stores credential data in Supabase and
  * notifies the platform stats hook on successful mint.
  *
  * @returns {React.ReactElement} The WorkerRegistration page.
@@ -32,8 +33,7 @@ const WorkerRegistration = () => {
 
   useEffect(() => {
     if (walletAddress) {
-      const stored = localStorage.getItem(`trustchain_worker_${walletAddress}`);
-      setExistingCredential(stored ? JSON.parse(stored) : null);
+      getWorker(walletAddress).then(data => setExistingCredential(data || null));
     }
   }, [walletAddress]);
 
@@ -60,9 +60,7 @@ const WorkerRegistration = () => {
     try {
       const data = { name: sanitizeString(formData.fullName), skill: sanitizeString(formData.skillCategory), city: sanitizeString(formData.city), experience: sanitizeString(String(formData.experience)), bio: sanitizeString(formData.bio), timestamp: new Date().toISOString() };
       const response = await mintWorkerCredential(walletAddress, data);
-      localStorage.setItem(`trustchain_worker_${walletAddress}`, JSON.stringify(data));
-      const reg = JSON.parse(localStorage.getItem('trustchain_worker_registry') || '[]');
-      if (!reg.includes(walletAddress)) { reg.push(walletAddress); localStorage.setItem('trustchain_worker_registry', JSON.stringify(reg)); }
+      await upsertWorker(walletAddress, data);
       notifyStatsUpdated();
       setTxResult(response); setExistingCredential(data);
       toast.success(`Credential issued! Tx: ${response?.hash?.slice(0,8) || 'ok'}...`);

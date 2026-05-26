@@ -5,6 +5,7 @@ import { useWallet } from '../context/WalletContext';
 import { useToast } from '../context/ToastContext';
 import { useTranslation } from 'react-i18next';
 import { notifyStatsUpdated } from '../hooks/usePlatformStats';
+import { getWorker, getEndorsements, addEndorsement } from '../lib/supabaseData';
 import ConnectWalletPrompt from '../components/ConnectWalletPrompt';
 import WorkerSearchPanel from '../components/endorse/WorkerSearchPanel';
 import EndorsementForm from '../components/endorse/EndorsementForm';
@@ -43,7 +44,7 @@ const Endorse = () => {
     setIsSearching(true); setError(null); setFoundWorker(null);
     try {
       const credential = await fetchWorkerCredential(workerSearch);
-      const localData = JSON.parse(localStorage.getItem(`trustchain_worker_${workerSearch}`) || 'null');
+      const localData = await getWorker(workerSearch);
       if (localData) {
         credential.name = localData.name || localData.fullName || credential.name;
         credential.city = localData.city || credential.city;
@@ -55,7 +56,7 @@ const Endorse = () => {
       setFoundWorker({ ...credential, address: workerSearch });
       toast.success(t('endorse.workerFound'));
     } catch (err) {
-      const localData = JSON.parse(localStorage.getItem(`trustchain_worker_${workerSearch}`) || 'null');
+      const localData = await getWorker(workerSearch);
       if (localData) {
         setFoundWorker({ name: localData.name || localData.fullName || 'Worker', skill: localData.skill || localData.skillCategory || '—', city: localData.city || 'Unknown', bio: localData.bio || '', experience: localData.experience || '—', address: workerSearch });
         toast.success(t('endorse.workerFound'));
@@ -65,15 +66,14 @@ const Endorse = () => {
 
   const handleEndorse = async () => {
     if (!canSubmit) return;
-    const localKey = `endorsements_${foundWorker.address}`;
-    const prev = JSON.parse(localStorage.getItem(localKey) || '[]');
+    const prev = await getEndorsements(foundWorker.address);
     if (prev.some(e => e.endorser === walletAddress)) { toast.error(t('endorse.alreadyEndorsed')); return; }
     setIsSigning(true); setError(null);
     try {
       const response = await submitWorkerEndorsement({ worker: foundWorker.address, rating, jobType, feedback }, walletAddress);
       const hash = response.hash;
       setTxHash(hash); setIsSuccess(true);
-      localStorage.setItem(localKey, JSON.stringify([...prev, { endorser: walletAddress, worker: foundWorker.address, rating, jobType, feedback, txHash: hash, timestamp: new Date().toISOString() }]));
+      await addEndorsement({ endorser: walletAddress, worker: foundWorker.address, rating, jobType, feedback, txHash: hash });
       notifyStatsUpdated();
       toast.success(t('endorse.endorsementSealed'));
     } catch (err) { setError(err.message || 'Transaction failed'); toast.error(err.message || 'Submission failed'); }

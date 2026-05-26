@@ -93,6 +93,8 @@ jobs:
           VITE_SOROBAN_CONTRACT_ID: ${{ secrets.VITE_SOROBAN_CONTRACT_ID }}
           VITE_REPUTATION_CONTRACT_ID: ${{ secrets.VITE_REPUTATION_CONTRACT_ID }}
           VITE_SPONSOR_PUBLIC_KEY: ${{ secrets.VITE_SPONSOR_PUBLIC_KEY }}
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
 
       - name: 📊 Report bundle size
         run: |

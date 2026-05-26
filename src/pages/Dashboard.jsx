@@ -5,13 +5,14 @@ import { useTranslation } from 'react-i18next';
 import { useWallet } from '../context/WalletContext';
 import { fetchWorkerCredential } from '../lib/stellar';
 import { calculateScore } from '../lib/reputation';
+import { getWorker, getEndorsements, getEndorsementsGiven } from '../lib/supabaseData';
 import ConnectPrompt from '../components/dashboard/ConnectPrompt';
 import DashboardSidebar from '../components/dashboard/DashboardSidebar';
 import DashboardActivityFeed from '../components/dashboard/DashboardActivityFeed';
 
 /**
  * Dashboard — Authenticated user's command center page.
- * Fetches credential, endorsement, and reputation data from localStorage
+ * Fetches credential, endorsement, and reputation data from Supabase
  * and Stellar Horizon, then delegates rendering to:
  * - ConnectPrompt: shown when wallet is not connected
  * - DashboardSidebar: stats, quick actions, credential card
@@ -34,56 +35,21 @@ const Dashboard = () => {
     if (!walletAddress) { setLoading(false); return; }
     setLoading(true);
 
-      // ── 1. Always read endorsements received (never skip this) ──
-      const localKey = `endorsements_${walletAddress}`;
-      const received = JSON.parse(localStorage.getItem(localKey) || '[]');
-
-      if (import.meta.env.DEV) {
-        console.group('🔍 TrustChain Dashboard — Data Diagnostic');
-        console.log('Wallet:', walletAddress);
-        console.log('LocalStorage key checked:', localKey);
-        console.log('Raw value:', localStorage.getItem(localKey));
-        console.log('Parsed received endorsements:', received);
-        console.log('All localStorage keys:', Object.keys(localStorage));
-        console.groupEnd();
-      }
-
-      // Fallback: scan all endorsement keys if none found
-      let receivedFinal = received;
-      if (received.length === 0) {
-        const allReceived = [];
-        for (let i = 0; i < localStorage.length; i++) {
-          const key = localStorage.key(i);
-          if (key && key.startsWith('endorsements_')) {
-            const list = JSON.parse(localStorage.getItem(key) || '[]');
-            list.forEach(e => { if (e.worker === walletAddress) allReceived.push(e); });
-          }
-        }
-        if (allReceived.length > 0) {
-          receivedFinal = allReceived;
-          localStorage.setItem(localKey, JSON.stringify(allReceived));
-        }
-      }
-      setEndorsementsReceived(receivedFinal);
-      const rep = calculateScore(receivedFinal);
+      // ── 1. Endorsements received ──
+      const received = await getEndorsements(walletAddress);
+      setEndorsementsReceived(received);
+      const rep = calculateScore(received);
       setReputation(rep);
 
       // ── 2. Endorsements given ──
-      const given = [];
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key && key.startsWith('endorsements_') && key !== localKey) {
-          const list = JSON.parse(localStorage.getItem(key) || '[]');
-          list.forEach(e => { if (e.endorser === walletAddress) given.push(e); });
-        }
-      }
+      const given = await getEndorsementsGiven(walletAddress);
       given.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
       setEndorsementsGiven(given);
 
       // ── 3. Load credential ──
       try {
         const cred = await fetchWorkerCredential(walletAddress);
-        const localWorkerData = JSON.parse(localStorage.getItem(`trustchain_worker_${walletAddress}`) || 'null');
+        const localWorkerData = await getWorker(walletAddress);
         if (localWorkerData) {
           cred.name = localWorkerData.name || localWorkerData.fullName || cred.name;
           cred.skill = localWorkerData.skill || localWorkerData.skillCategory || cred.skill;
@@ -93,7 +59,7 @@ const Dashboard = () => {
         }
         setCredential(cred);
       } catch {
-        const localWorkerData = JSON.parse(localStorage.getItem(`trustchain_worker_${walletAddress}`) || 'null');
+        const localWorkerData = await getWorker(walletAddress);
         if (localWorkerData) {
           setCredential({
             name: localWorkerData.name || localWorkerData.fullName || 'Worker',

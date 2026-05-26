@@ -1,6 +1,7 @@
 import { parseTransactionToCredential, filterTrustChainOps } from './eventParser';
 import { logError } from '../utils/monitor';
 import { HORIZON_URL } from '../lib/stellar-config';
+import { getWorkerRegistry, getMonitorTxLog } from '../lib/supabaseData';
 
 const CONTRACT_ID = import.meta.env.VITE_CREDENTIAL_CONTRACT_ID || import.meta.env.VITE_CONTRACT_ID;
 
@@ -13,7 +14,7 @@ const CACHE_TTL_MS = 60 * 1000; // 60 seconds
  * Soroban contract IDs (C...) won't work with /accounts/ endpoint,
  * so we also try the sponsor wallet and connected wallet as fallbacks.
  */
-function getIndexableAccounts() {
+async function getIndexableAccounts() {
   const accounts = [];
   
   // If CONTRACT_ID starts with G, it's a valid Stellar account
@@ -27,9 +28,9 @@ function getIndexableAccounts() {
     accounts.push(sponsorPubKey);
   }
   
-  // Also check local worker registry for known wallet addresses
+  // Also check worker registry from Supabase for known wallet addresses
   try {
-    const registry = JSON.parse(localStorage.getItem('trustchain_worker_registry') || '[]');
+    const registry = await getWorkerRegistry();
     registry.forEach(addr => {
       if (addr && addr.startsWith('G') && !accounts.includes(addr)) {
         accounts.push(addr);
@@ -99,7 +100,7 @@ export const fetchAllCredentialEvents = async (forceRefresh = false) => {
   }
 
   try {
-    const accounts = getIndexableAccounts();
+    const accounts = await getIndexableAccounts();
     
     // Fetch transactions from all known accounts in parallel
     const txArrays = await Promise.all(
@@ -124,7 +125,7 @@ export const fetchAllCredentialEvents = async (forceRefresh = false) => {
     const parsedEvents = validOps.map(parseTransactionToCredential);
 
     // Also merge in local transaction logs for completeness
-    const localEvents = getLocalTransactionEvents();
+    const localEvents = await getLocalTransactionEvents();
     const mergedEvents = mergeEvents(parsedEvents, localEvents);
 
     sessionStorage.setItem(CACHE_KEY, JSON.stringify(mergedEvents));
@@ -137,7 +138,7 @@ export const fetchAllCredentialEvents = async (forceRefresh = false) => {
     logError(err, 'fetchAllCredentialEvents');
     
     // Fallback: return local transaction events
-    const localEvents = getLocalTransactionEvents();
+    const localEvents = await getLocalTransactionEvents();
     if (localEvents.length > 0) {
       sessionStorage.setItem(CACHE_KEY, JSON.stringify(localEvents));
       sessionStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
@@ -149,11 +150,11 @@ export const fetchAllCredentialEvents = async (forceRefresh = false) => {
 };
 
 /**
- * Gets credential events from local transaction monitor logs.
+ * Gets credential events from Supabase monitor transaction logs.
  */
-function getLocalTransactionEvents() {
+async function getLocalTransactionEvents() {
   try {
-    const txLog = JSON.parse(localStorage.getItem('trustchain_txlog') || '[]');
+    const txLog = await getMonitorTxLog();
     return txLog
       .filter(tx => tx.txHash && tx.wallet)
       .map(tx => ({
