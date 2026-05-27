@@ -1,4 +1,5 @@
 import React from 'react';
+import { NETWORK } from '../../lib/networkConfig';
 import PropTypes from 'prop-types';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -105,7 +106,7 @@ const WorkerSearchPanel = ({
                 animation: 'verifiedPulse 2s ease infinite',
               }} />
               <span className="font-inter tc-text-accent tc-text-xs tc-fw-bold" style={{ letterSpacing: '1.5px', opacity: 0.7 }}>
-                STELLAR TESTNET ACTIVE
+                STELLAR {NETWORK.toUpperCase()} ACTIVE
               </span>
             </div>
           </div>

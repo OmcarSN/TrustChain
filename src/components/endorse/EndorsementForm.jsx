@@ -1,4 +1,5 @@
 import React from 'react';
+import { explorerTxUrl } from '../../lib/networkConfig';
 import PropTypes from 'prop-types';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -149,7 +150,7 @@ const EndorsementForm = ({
               <div className="tc-card-interactive tc-mb-xs" style={{ borderRadius: '6px' }}>
                 <span className="tc-mono tc-text-xs" style={{ color: 'rgba(255,255,255,0.25)' }}>{txHash}</span>
               </div>
-              <a href={`https://stellar.expert/explorer/testnet/tx/${txHash}`} target="_blank" rel="noopener noreferrer"
+              <a href={explorerTxUrl(txHash)} target="_blank" rel="noopener noreferrer"
                 aria-label={`${t('endorse.viewOnExplorer')} - transaction ${txHash.slice(0, 8)}`}
                 className="font-inter tc-btn-outline tc-text-xs tc-ls-wide" style={{ color: 'rgba(255,255,255,0.4)', borderRadius: '8px', textDecoration: 'none' }}>
                 <ExternalLink className="tc-icon-sm" /> {t('endorse.viewOnExplorer')}

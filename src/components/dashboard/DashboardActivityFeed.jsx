@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Award, UserCheck, Clock, Hash, Star, Inbox } from 'lucide-react';
+import { explorerTxUrl } from '../../lib/networkConfig';
 
 /**
  * DashboardActivityFeed — Tab-filtered activity feed on the Dashboard page.
@@ -72,7 +73,7 @@ const DashboardActivityFeed = ({ filteredEvents, activeTab, setActiveTab, loadin
                     <Clock className="tc-icon-xs" />{new Date(event.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                   </span>
                   {event.txHash && (
-                    <a href={`https://stellar.expert/explorer/testnet/tx/${event.txHash}`} target="_blank" rel="noopener noreferrer" className="tc-mono tc-text-faint tc-text-sm tc-flex" style={{ alignItems: 'center', gap: '4px', textDecoration: 'none' }}>
+                    <a href={explorerTxUrl(event.txHash)} target="_blank" rel="noopener noreferrer" className="tc-mono tc-text-faint tc-text-sm tc-flex" style={{ alignItems: 'center', gap: '4px', textDecoration: 'none' }}>
                       <Hash className="tc-icon-xs" />{event.txHash.slice(0, 8)}…
                     </a>
                   )}

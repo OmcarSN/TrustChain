@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { NETWORK } from '../lib/networkConfig';
 import { motion } from 'framer-motion';
 import { ShieldCheck, Users, Activity, BarChart3, Globe, RefreshCw, Clock, TrendingUp, Layers, Zap, Wallet } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, ResponsiveContainer, BarChart, Bar } from 'recharts';
@@ -151,7 +152,7 @@ const Analytics = () => {
                 </p>
                 {card.isGreen && (
                   <span className="tc-verified-badge tc-text-xs" style={{ display: 'inline-block', marginTop: '8px', padding: '3px 8px', letterSpacing: '1.5px' }}>
-                    Stellar Testnet Operational
+                    Stellar {NETWORK.charAt(0).toUpperCase() + NETWORK.slice(1)} Operational
                   </span>
                 )}
               </motion.div>

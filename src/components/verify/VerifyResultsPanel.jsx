@@ -1,4 +1,5 @@
 import React from 'react';
+import { explorerTxUrl, explorerAccountUrl } from '../../lib/networkConfig';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Star, MapPin, Briefcase, ShieldCheck, ExternalLink,
@@ -51,7 +52,7 @@ const VerifyResultsPanel = ({
                     <p className="text-[9px] text-green-400/40 font-inter">{t('verify.credentialConfirmed')}</p>
                   </div>
                 </div>
-                <a href={`https://stellar.expert/explorer/testnet/account/${profile.address}`} target="_blank" rel="noopener noreferrer"
+                <a href={explorerAccountUrl(profile.address)} target="_blank" rel="noopener noreferrer"
                   aria-label={t('verify.viewExplorer', 'View on Stellar Explorer')}
                   className="hidden md:flex items-center gap-2 px-4 py-2 border border-white/10 rounded-[2px] text-[9px] font-bold uppercase tracking-wider text-white/40 hover:text-white hover:border-white/30 transition-all">
                   Explorer <ExternalLink className="w-3 h-3" aria-hidden="true" />
@@ -246,7 +247,7 @@ const VerifyResultsPanel = ({
                               </time>
                             </span>
                             {endorsement.txHash && (
-                              <a href={`https://stellar.expert/explorer/testnet/tx/${endorsement.txHash}`} target="_blank" rel="noopener noreferrer"
+                              <a href={explorerTxUrl(endorsement.txHash)} target="_blank" rel="noopener noreferrer"
                                 aria-label={`View transaction ${endorsement.txHash.slice(0,8)} on Stellar`}
                                 className="text-[8px] font-mono text-white/10 hover:text-white/30 transition-colors flex items-center gap-1">
                                 <Hash className="w-2 h-2" aria-hidden="true" /> {endorsement.txHash.slice(0,8)}…

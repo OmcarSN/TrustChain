@@ -1,4 +1,5 @@
 import React from 'react';
+import { explorerTxUrl } from '../../lib/networkConfig';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   User, MapPin, Briefcase, Calendar, FileText,
@@ -130,7 +131,7 @@ const RegistrationForm = ({
             </div>
             <h3 className="font-clash" style={{ fontSize: '18px', fontWeight: '800', marginBottom: '4px', color: '#fff' }}>Credential Minted!</h3>
             <p className="font-inter" style={{ fontSize: '10px', color: 'rgba(0,220,110,0.5)', marginBottom: '16px' }}>Sealed on Stellar</p>
-            <a href={`https://stellar.expert/explorer/testnet/tx/${txResult.hash}`} target="_blank" rel="noopener noreferrer" aria-label={t('registration.viewExplorerLabel', 'View transaction on Stellar Explorer')} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '10px', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', border: '1px solid rgba(255,255,255,0.1)', padding: '10px 20px', textDecoration: 'none', transition: 'color 0.2s', borderRadius: '4px' }}>
+            <a href={explorerTxUrl(txResult.hash)} target="_blank" rel="noopener noreferrer" aria-label={t('registration.viewExplorerLabel', 'View transaction on Stellar Explorer')} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '10px', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', border: '1px solid rgba(255,255,255,0.1)', padding: '10px 20px', textDecoration: 'none', transition: 'color 0.2s', borderRadius: '4px' }}>
               <ExternalLink style={{ width: '12px', height: '12px' }} aria-hidden="true" /> {t('registration.viewOnExplorer')}
             </a>
           </motion.div>

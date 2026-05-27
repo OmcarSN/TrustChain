@@ -1,4 +1,5 @@
 import React from 'react';
+import { explorerTxUrl } from '../../lib/networkConfig';
 import { Loader2, Database, Hash, Clock, ExternalLink, ShieldCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -110,7 +111,7 @@ const ExplorerResultsTable = ({ results, loading, error, searchQuery, t }) => {
                     </div>
                     <div role="cell">
                       <div className="flex items-center gap-2">
-                        <a href={`https://stellar.expert/explorer/testnet/tx/${cred.txHash}`} target="_blank" rel="noopener noreferrer"
+                        <a href={explorerTxUrl(cred.txHash)} target="_blank" rel="noopener noreferrer"
                           className="flex items-center gap-2 hover:text-white transition-colors tc-mono"
                           aria-label={`View transaction ${truncate(cred.txHash)} on Stellar Explorer`}
                           style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)' }}>
@@ -125,7 +126,7 @@ const ExplorerResultsTable = ({ results, loading, error, searchQuery, t }) => {
                         >
                           <span style={{ fontSize: '12px' }} aria-hidden="true">📋</span>
                         </button>
-                        <a href={`https://stellar.expert/explorer/testnet/tx/${cred.txHash}`} target="_blank" rel="noopener noreferrer" className="opacity-0 group-hover:opacity-100 transition-opacity" aria-label="Open in Stellar Explorer">
+                        <a href={explorerTxUrl(cred.txHash)} target="_blank" rel="noopener noreferrer" className="opacity-0 group-hover:opacity-100 transition-opacity" aria-label="Open in Stellar Explorer">
                           <ExternalLink className="w-3 h-3 text-white/30" aria-hidden="true" />
                         </a>
                       </div>

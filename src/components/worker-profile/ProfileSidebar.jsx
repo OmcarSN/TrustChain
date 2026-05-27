@@ -1,4 +1,5 @@
 import React from 'react';
+import { explorerAccountUrl } from '../../lib/networkConfig';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import {
@@ -65,7 +66,7 @@ const ProfileSidebar = ({
     </div>
 
     {/* View on Stellar */}
-    <a href={`https://stellar.expert/explorer/testnet/account/${address}`} target="_blank" rel="noopener noreferrer" className="prof-stellar font-inter tc-stellar-link tc-mb-lg" aria-label={t('profile.viewStellar', 'View account on Stellar Explorer')}>
+    <a href={explorerAccountUrl(address)} target="_blank" rel="noopener noreferrer" className="prof-stellar font-inter tc-stellar-link tc-mb-lg" aria-label={t('profile.viewStellar', 'View account on Stellar Explorer')}>
       <ExternalLink className="tc-icon-sm" aria-hidden="true" /> View on Stellar
     </a>
 

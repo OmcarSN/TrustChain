@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { explorerAccountUrl } from '../lib/networkConfig';
 import { ShieldCheck, Search, Users, FileCheck, Award, Eye, Copy, Check, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -142,7 +143,7 @@ const Dashboard = () => {
               <button onClick={copyAddress} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.2)', display: 'flex', padding: '2px' }}>
               {copied ? <Check className="tc-icon-sm" /> : <Copy className="tc-icon-sm" />}
               </button>
-              <a href={`https://stellar.expert/explorer/testnet/account/${walletAddress}`} target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(255,255,255,0.2)', display: 'flex' }}>
+              <a href={explorerAccountUrl(walletAddress)} target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(255,255,255,0.2)', display: 'flex' }}>
                 <ExternalLink className="tc-icon-sm" />
               </a>
             </div>

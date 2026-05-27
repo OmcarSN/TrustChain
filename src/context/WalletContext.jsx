@@ -3,7 +3,7 @@ import { getWalletAddress, getFreighterNetwork, connectWallet } from '../lib/fre
 import { ShieldAlert, AlertCircle, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import PropTypes from 'prop-types';
-import { STELLAR_NETWORK } from '../lib/stellar-config';
+import { NETWORK, FREIGHTER_NETWORK } from '../lib/networkConfig';
 
 /**
  * WalletContext — React context for Freighter wallet state.
@@ -41,7 +41,7 @@ export const WalletProvider = ({ children }) => {
       // Safety: ensure network is always a string or null
       const networkStr = (typeof currentNetwork === 'string') ? currentNetwork : null;
       setNetwork(networkStr);
-      if (networkStr && networkStr !== STELLAR_NETWORK) {
+      if (networkStr && networkStr.toUpperCase() !== FREIGHTER_NETWORK) {
         setIsWrongNetwork(true);
       } else {
         setIsWrongNetwork(false);
@@ -115,7 +115,7 @@ export const WalletProvider = ({ children }) => {
           >
             <ShieldAlert className="w-5 h-5 animate-pulse" />
             <p className="text-xs font-black uppercase tracking-widest">
-              Action Required: Switch Freighter to <span className="underline decoration-2 underline-offset-4">{STELLAR_NETWORK}</span> to use TrustChain.
+              Action Required: Switch Freighter to <span className="underline decoration-2 underline-offset-4">{NETWORK}</span> to use TrustChain.
             </p>
             <div className="flex items-center gap-2 ml-4 bg-white/10 px-3 py-1 rounded-lg border border-white/20">
                <span className="text-[9px] font-bold">CURRENT: {network || 'UNKNOWN'}</span>

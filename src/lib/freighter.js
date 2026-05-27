@@ -3,6 +3,7 @@
  * All methods are wrapped with timeout protection and handle
  * both old-style (raw values) and new-style (response objects) Freighter API returns.
  */
+import { FREIGHTER_NETWORK, NETWORK_PASSPHRASE } from './networkConfig';
 
 // Timeout wrapper — prevents hanging when Freighter isn't installed
 function withTimeout(promise, ms = 3000) {
@@ -171,7 +172,7 @@ export async function getFreighterNetwork() {
 /**
  * 4. signTransaction(transactionXDR, networkPassphrase)
  */
-export async function signTransaction(transactionXDR, networkPassphrase = "Test SDF Network ; September 2015") {
+export async function signTransaction(transactionXDR, networkPassphrase = NETWORK_PASSPHRASE) {
   try {
     const api = await getFreighterApi();
     if (!api) throw new Error("Freighter not available");
@@ -186,7 +187,7 @@ export async function signTransaction(transactionXDR, networkPassphrase = "Test 
     try {
       // Try new-style API first (Freighter v6+): positional args (xdr, opts)
       response = await api.signTransaction(transactionXDR, {
-        network: "TESTNET", // Use 'TESTNET' instead of networkPassphrase for v6+
+        network: FREIGHTER_NETWORK,
         networkPassphrase: networkPassphrase,
       });
     } catch (e1) {
@@ -195,7 +196,7 @@ export async function signTransaction(transactionXDR, networkPassphrase = "Test 
         // Fallback: object-style API
         response = await api.signTransaction({
           xdr: transactionXDR,
-          network: "TESTNET",
+          network: FREIGHTER_NETWORK,
           networkPassphrase: networkPassphrase,
         });
       } catch (e2) {

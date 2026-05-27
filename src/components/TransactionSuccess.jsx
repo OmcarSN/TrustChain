@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { explorerTxUrl } from '../lib/networkConfig';
 import { CheckCircle2, ExternalLink } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
@@ -41,7 +42,7 @@ const TransactionSuccess = ({ txHash, title, subtitle, borderRadius = '2px' }) =
         <span style={{ fontFamily: 'monospace', fontSize: '10px', color: 'rgba(255,255,255,0.25)' }}>{txHash}</span>
       </div>
       <a
-        href={`https://stellar.expert/explorer/testnet/tx/${txHash}`}
+        href={explorerTxUrl(txHash)}
         target="_blank"
         rel="noopener noreferrer"
         aria-label={`${t('endorse.viewOnExplorer')} - transaction ${txHash.slice(0, 8)}`}

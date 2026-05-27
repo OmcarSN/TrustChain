@@ -40,7 +40,7 @@ export function useHorizonMetrics(contractId) {
         const response = await fetch(`${HORIZON_URL}/accounts/${contractId}/transactions?order=desc&limit=100`);
         
         if (!response.ok) {
-          throw new Error('Failed to fetch from testnet Horizon');
+          throw new Error('Failed to fetch from Horizon');
         }
 
         const data = await response.json();

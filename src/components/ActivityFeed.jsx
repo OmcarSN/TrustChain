@@ -1,4 +1,5 @@
 import React from 'react';
+import { explorerTxUrl } from '../lib/networkConfig';
 import PropTypes from 'prop-types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -111,7 +112,7 @@ const ActivityFeed = ({ activities, loading }) => {
               return (
                 <a
                   key={`${activity.hash}-${idx}`}
-                  href={`https://stellar.expert/explorer/testnet/tx/${activity.hash}`}
+                  href={explorerTxUrl(activity.hash)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="tc-feed-item"

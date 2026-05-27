@@ -8,7 +8,7 @@ import {
 } from "@stellar/stellar-sdk";
 import * as freighter from "./freighter";
 import { logError, logTransaction } from "../utils/monitor";
-import { HORIZON_URL, SOROBAN_URL, NETWORK_PASSPHRASE } from "./stellar-config";
+import { HORIZON_URL, SOROBAN_URL, NETWORK_PASSPHRASE, STELLAR_NETWORK, isTestnet } from "./stellar-config";
 import { getWorker } from "./supabaseData";
 
 // Initialize Network Servers
@@ -51,7 +51,7 @@ export async function loadAccount(publicKey) {
     return await server.loadAccount(publicKey);
   } catch (error) {
     if (error.response?.status === 404) {
-      throw new Error("Account not found on Testnet. Please fund your account using Friendbot.");
+      throw new Error(`Account not found on ${STELLAR_NETWORK}. Please fund your account${isTestnet ? ' using Friendbot' : ''}.`);
     }
     throw error;
   }

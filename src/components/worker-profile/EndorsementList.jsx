@@ -1,4 +1,5 @@
 import React from 'react';
+import { explorerTxUrl } from '../../lib/networkConfig';
 import PropTypes from 'prop-types';
 import { Star, Award, Clock, User, Hash } from 'lucide-react';
 
@@ -74,7 +75,7 @@ const EndorsementList = ({ endorsements, t }) => (
                 {t('profile.endorserLabel')}: {e.endorser ? `${e.endorser.substring(0, 6)}...${e.endorser.substring(e.endorser.length - 4)}` : 'Unknown'}
               </span>
               {e.txHash && (
-                <a href={`https://stellar.expert/explorer/testnet/tx/${e.txHash}`} target="_blank" rel="noopener noreferrer" aria-label={`${t('profile.viewTx')}: ${e.txHash.substring(0, 8)}`} className="tc-meta-row tc-mono prof-stellar" style={{ textDecoration: 'none', color: 'rgba(255,255,255,0.25)' }}>
+                <a href={explorerTxUrl(e.txHash)} target="_blank" rel="noopener noreferrer" aria-label={`${t('profile.viewTx')}: ${e.txHash.substring(0, 8)}`} className="tc-meta-row tc-mono prof-stellar" style={{ textDecoration: 'none', color: 'rgba(255,255,255,0.25)' }}>
                   <Hash className="tc-icon-xs tc-icon-dimmer" aria-hidden="true" />
                   {t('profile.viewTx')}: {e.txHash.substring(0, 8)}...
                 </a>

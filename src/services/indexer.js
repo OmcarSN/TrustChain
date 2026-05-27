@@ -1,9 +1,9 @@
 import { parseTransactionToCredential, filterTrustChainOps } from './eventParser';
 import { logError } from '../utils/monitor';
-import { HORIZON_URL } from '../lib/stellar-config';
+import { HORIZON_URL, CREDENTIAL_CONTRACT_ID, SPONSOR_PUBLIC_KEY } from '../lib/networkConfig';
 import { getWorkerRegistry, getMonitorTxLog } from '../lib/supabaseData';
 
-const CONTRACT_ID = import.meta.env.VITE_CREDENTIAL_CONTRACT_ID || import.meta.env.VITE_CONTRACT_ID;
+const CONTRACT_ID = CREDENTIAL_CONTRACT_ID;
 
 const CACHE_KEY = 'trustchain_indexed_events';
 const CACHE_TIME_KEY = 'trustchain_indexed_events_timestamp';
@@ -23,7 +23,7 @@ async function getIndexableAccounts() {
   }
   
   // Try sponsor wallet (public key only — safe for client bundle)
-  const sponsorPubKey = import.meta.env.VITE_SPONSOR_PUBLIC_KEY;
+  const sponsorPubKey = SPONSOR_PUBLIC_KEY;
   if (sponsorPubKey && sponsorPubKey.startsWith('G') && !accounts.includes(sponsorPubKey)) {
     accounts.push(sponsorPubKey);
   }
