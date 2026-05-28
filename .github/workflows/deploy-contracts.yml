@@ -23,9 +23,9 @@ jobs:
 
       - name: Install Rust
         run: |
-          rustup install 1.81
-          rustup default 1.81
-          rustup target add wasm32-unknown-unknown --toolchain 1.81
+          rustup install stable
+          rustup default stable
+          rustup target add wasm32v1-none
 
       - name: Install Stellar CLI
         run: |
@@ -37,11 +37,10 @@ jobs:
       - name: Pin serde to avoid serde_core breakage
         run: cargo update -p serde --precise 1.0.227
 
-      - name: Build all contracts
+      - name: Build contracts
         run: |
-          cargo +1.81 build --target wasm32-unknown-unknown --release -p credential-contract
-          cargo +1.81 build --target wasm32-unknown-unknown --release -p reputation-contract
-          cargo +1.81 build --target wasm32-unknown-unknown --release -p governance-contract
+          cargo build --target wasm32v1-none --release -p credential-contract
+          cargo build --target wasm32v1-none --release -p reputation-contract
 
       - name: List WASM files
         run: find target -name "*.wasm" -type f | head -20
@@ -51,9 +50,8 @@ jobs:
         with:
           name: soroban-contracts
           path: |
-            target/wasm32-unknown-unknown/release/credential_contract.wasm
-            target/wasm32-unknown-unknown/release/reputation_contract.wasm
-            target/wasm32-unknown-unknown/release/governance_contract.wasm
+            target/wasm32v1-none/release/credential_contract.wasm
+            target/wasm32v1-none/release/reputation_contract.wasm
 
       - name: Deploy Reputation Contract
         if: success()
@@ -71,35 +69,12 @@ jobs:
 
           echo "🚀 Deploying Reputation Contract to $NETWORK..."
           REP_ID=$(stellar contract deploy \
-            --wasm target/wasm32-unknown-unknown/release/reputation_contract.wasm \
+            --wasm target/wasm32v1-none/release/reputation_contract.wasm \
             --source "$STELLAR_SECRET_KEY" \
             --rpc-url "$RPC_URL" \
             --network-passphrase "$NETWORK_PASSPHRASE")
           echo "✅ Reputation Contract ID: $REP_ID"
           echo "REPUTATION_CONTRACT_ID=$REP_ID" >> $GITHUB_ENV
-
-      - name: Deploy Governance Contract
-        if: success()
-        env:
-          STELLAR_SECRET_KEY: ${{ secrets.SPONSOR_SECRET }}
-        run: |
-          NETWORK=${{ github.event.inputs.deploy_network }}
-          if [ "$NETWORK" = "mainnet" ]; then
-            RPC_URL="https://soroban-rpc.mainnet.stellar.gateway.fm"
-            NETWORK_PASSPHRASE="Public Global Stellar Network ; September 2015"
-          else
-            RPC_URL="https://soroban-testnet.stellar.org"
-            NETWORK_PASSPHRASE="Test SDF Network ; September 2015"
-          fi
-
-          echo "🚀 Deploying Governance Contract to $NETWORK..."
-          GOV_ID=$(stellar contract deploy \
-            --wasm target/wasm32-unknown-unknown/release/governance_contract.wasm \
-            --source "$STELLAR_SECRET_KEY" \
-            --rpc-url "$RPC_URL" \
-            --network-passphrase "$NETWORK_PASSPHRASE")
-          echo "✅ Governance Contract ID: $GOV_ID"
-          echo "GOVERNANCE_CONTRACT_ID=$GOV_ID" >> $GITHUB_ENV
 
       - name: Print Contract IDs
         if: success()
@@ -108,9 +83,7 @@ jobs:
           echo "🎉 DEPLOYMENT COMPLETE!"
           echo "============================================"
           echo "Reputation Contract ID: $REPUTATION_CONTRACT_ID"
-          echo "Governance Contract ID: $GOVERNANCE_CONTRACT_ID"
           echo ""
           echo "Add these to your Vercel environment variables:"
           echo "  VITE_REPUTATION_CONTRACT_ID=$REPUTATION_CONTRACT_ID"
-          echo "  VITE_GOVERNANCE_CONTRACT_ID=$GOVERNANCE_CONTRACT_ID"
           echo "============================================"
