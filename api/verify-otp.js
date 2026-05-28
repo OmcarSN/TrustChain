@@ -129,7 +129,7 @@ export default async function handler(req, res) {
         phone,
         wallet_address: walletAddress,
         verified_at: new Date().toISOString(),
-      }, { onConflict: 'wallet_address' });
+      }, { onConflict: 'phone' });
 
     if (insertError) {
       console.error("[verify-otp] Upsert verified_phones error:", insertError.message, insertError.details, insertError.hint);
