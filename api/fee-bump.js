@@ -1,4 +1,4 @@
-import { Keypair } from "@stellar/stellar-sdk";
+import { Keypair, Networks } from "@stellar/stellar-sdk";
 import { buildFeeBumpTransaction } from "../src/utils/feeBump.js";
 
 /**
@@ -55,9 +55,8 @@ export default async function handler(req, res) {
   // ── Build fee bump via shared utility ─────────────────────────────
   try {
     const network = (process.env.VITE_STELLAR_NETWORK || "testnet").toLowerCase();
-    const networkPassphrase = network === "mainnet"
-      ? "Public Global Stellar Network ; September 2015"
-      : (process.env.SPONSOR_NETWORK_PASSPHRASE || "Test SDF Network ; September 2015");
+    const isMainnet = network === "mainnet";
+    const networkPassphrase = isMainnet ? Networks.PUBLIC : Networks.TESTNET;
 
     const sponsorKeypair = Keypair.fromSecret(sponsorSecret);
     const feeBumpXDR = buildFeeBumpTransaction(
