@@ -80,7 +80,7 @@ const ExistingCredentialCard = ({ existingCredential, walletAddress, copiedAddr,
               return (
                 <div key={idx} className="wp-anim" style={{ padding: '14px 0', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingRight: isLeft ? '24px' : '0', paddingLeft: isLeft ? '0' : '24px', borderRight: isLeft ? '1px solid rgba(255,255,255,0.05)' : 'none', animationDelay: `${0.28 + idx * 0.05}s` }}>
                   <span className="font-inter tc-label tc-mb-xs" style={{ display: 'block' }}>{f.label}</span>
-                  <span className="font-clash tc-text-white tc-text-lg tc-fw-bold">{f.value}</span>
+                  <span className="font-clash tc-text-white tc-text-lg tc-fw-bold" style={{ wordSpacing: '0.15em', letterSpacing: '0.02em' }}>{f.value}</span>
                 </div>
               );
             })}
