@@ -96,7 +96,7 @@ export default async function handler(req, res) {
   // ── Main logic ────────────────────────────────────────────────────
   try {
     // 1. Verify OTP via Twilio Verify API
-    const checkUrl = `https://verify.twilio.com/v2/Services/${verifyServiceSid}/VerificationChecks`;
+    const checkUrl = `https://verify.twilio.com/v2/Services/${verifyServiceSid}/VerificationCheck`;
     const twilioAuth = Buffer.from(
       `${twilioAccountSid}:${twilioAuthToken}`
     ).toString("base64");
