@@ -130,8 +130,8 @@ const WorkerRegistration = () => {
 
         <div className="min-h-screen w-full" style={{ paddingTop: '80px', paddingBottom: '64px', paddingLeft: '60px', paddingRight: '60px', position: 'relative', zIndex: 10 }}>
           <div className="reg-anim" style={{ textAlign: 'center', padding: '40px 60px 0 60px', width: '100%', animationDelay: '0s' }}>
-            <p className="font-inter" style={{ color: '#22c55e', fontSize: '11px', letterSpacing: '0.2em', marginBottom: '12px', textTransform: 'uppercase', fontWeight: '600' }}>WORKER PORTAL</p>
-            <h1 className="font-clash" style={{ fontSize: '28px', fontWeight: '800', marginBottom: '4px', letterSpacing: '-0.02em', lineHeight: '1.1' }}>Worker Identity Portal</h1>
+            <p className="font-inter" style={{ color: '#22c55e', fontSize: '11px', letterSpacing: '0.2em', marginBottom: '12px', textTransform: 'uppercase', fontWeight: '600' }}>{t('nav.workerPortal')}</p>
+            <h1 className="font-clash" style={{ fontSize: '28px', fontWeight: '800', marginBottom: '4px', letterSpacing: '-0.02em', lineHeight: '1.1' }}>{t('registration.headerTitle')}</h1>
             <p className="font-inter" style={{ fontSize: '13px', color: '#666', marginTop: '6px' }}>{t('registration.headerSubtitle')}</p>
           </div>
 
@@ -165,8 +165,8 @@ const WorkerRegistration = () => {
       <div className="min-h-screen w-full" style={{ paddingTop: '80px', paddingBottom: '64px', paddingLeft: '60px', paddingRight: '60px', position: 'relative', zIndex: 10 }}>
         {/* Page Header */}
         <div className="reg-anim" style={{ textAlign: 'center', padding: '40px 60px 0 60px', width: '100%', animationDelay: '0s' }}>
-          <p className="font-inter" style={{ color: '#22c55e', fontSize: '11px', letterSpacing: '0.2em', marginBottom: '12px', textTransform: 'uppercase', fontWeight: '600' }}>WORKER PORTAL</p>
-          <h1 className="font-clash" style={{ fontSize: '28px', fontWeight: '800', marginBottom: '4px', letterSpacing: '-0.02em', lineHeight: '1.1' }}>Worker Identity Portal</h1>
+          <p className="font-inter" style={{ color: '#22c55e', fontSize: '11px', letterSpacing: '0.2em', marginBottom: '12px', textTransform: 'uppercase', fontWeight: '600' }}>{t('nav.workerPortal')}</p>
+          <h1 className="font-clash" style={{ fontSize: '28px', fontWeight: '800', marginBottom: '4px', letterSpacing: '-0.02em', lineHeight: '1.1' }}>{t('registration.headerTitle')}</h1>
           <p className="font-inter" style={{ fontSize: '13px', color: '#666', marginTop: '6px' }}>{t('registration.headerSubtitle')}</p>
         </div>
 
