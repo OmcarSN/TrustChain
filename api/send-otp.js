@@ -1,11 +1,10 @@
 import { createClient } from "@supabase/supabase-js";
-import { randomInt } from "crypto";
 
 /**
  * Vercel Serverless Function: POST /api/send-otp
  *
- * Generates a 6-digit OTP, stores it in Supabase `otp_codes`, and sends it
- * to the user's phone via Twilio SMS.
+ * Checks for duplicate phone numbers in Supabase, then sends an OTP
+ * via Twilio Verify API (handles OTP generation, delivery, and expiry).
  *
  * Request body:  { phone: string, walletAddress: string }
  * Response body: { success: true, message: string } | { error: string }
@@ -45,9 +44,9 @@ export default async function handler(req, res) {
 
   const twilioAccountSid = process.env.TWILIO_ACCOUNT_SID;
   const twilioAuthToken = process.env.TWILIO_AUTH_TOKEN;
-  const twilioPhoneNumber = process.env.TWILIO_PHONE_NUMBER;
+  const verifyServiceSid = process.env.TWILIO_VERIFY_SERVICE_SID;
 
-  if (!twilioAccountSid || !twilioAuthToken || !twilioPhoneNumber) {
+  if (!twilioAccountSid || !twilioAuthToken || !verifyServiceSid) {
     console.error("[send-otp] Twilio env vars are not fully configured.");
     return res.status(500).json({ error: "SMS service not configured" });
   }
@@ -92,45 +91,13 @@ export default async function handler(req, res) {
         .json({ error: "This phone number has already been registered" });
     }
 
-    // 2. Generate 6-digit OTP
-    const otpCode = String(randomInt(100000, 999999));
-
-    // 3. Cleanup any existing OTP for this phone
-    const { error: deleteError } = await supabase
-      .from("otp_codes")
-      .delete()
-      .eq("phone", phone);
-
-    if (deleteError) {
-      console.error("[send-otp] OTP cleanup error:", deleteError.message);
-      // Non-fatal — proceed anyway
-    }
-
-    // 4. Store new OTP with 5-minute expiry
-    const expiresAt = new Date(Date.now() + 5 * 60 * 1000).toISOString();
-
-    const { error: insertError } = await supabase.from("otp_codes").insert({
-      phone,
-      otp_code: otpCode,
-      wallet_address: walletAddress,
-      expires_at: expiresAt,
-      created_at: new Date().toISOString(),
-    });
-
-    if (insertError) {
-      console.error("[send-otp] OTP insert error:", insertError.message);
-      return res.status(500).json({ error: "Failed to store OTP" });
-    }
-
-    // 5. Send SMS via Twilio REST API
-    const twilioUrl = `https://api.twilio.com/2010-04-01/Accounts/${twilioAccountSid}/Messages.json`;
+    // 2. Send OTP via Twilio Verify API
+    const verifyUrl = `https://verify.twilio.com/v2/Services/${verifyServiceSid}/Verifications`;
     const twilioAuth = Buffer.from(
       `${twilioAccountSid}:${twilioAuthToken}`
     ).toString("base64");
 
-    const smsBody = `Your TrustChain verification code is: ${otpCode}. It expires in 5 minutes.`;
-
-    const twilioRes = await fetch(twilioUrl, {
+    const twilioRes = await fetch(verifyUrl, {
       method: "POST",
       headers: {
         Authorization: `Basic ${twilioAuth}`,
@@ -138,15 +105,14 @@ export default async function handler(req, res) {
       },
       body: new URLSearchParams({
         To: phone,
-        From: twilioPhoneNumber,
-        Body: smsBody,
+        Channel: "sms",
       }).toString(),
     });
 
     if (!twilioRes.ok) {
       const twilioError = await twilioRes.text();
-      console.error("[send-otp] Twilio error:", twilioError);
-      return res.status(500).json({ error: "Failed to send SMS" });
+      console.error("[send-otp] Twilio Verify error:", twilioError);
+      return res.status(500).json({ error: "Failed to send verification code" });
     }
 
     return res.status(200).json({ success: true, message: "OTP sent successfully" });
