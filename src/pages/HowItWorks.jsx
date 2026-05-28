@@ -59,17 +59,25 @@ const HowItWorks = () => {
             
             <motion.div variants={fadeIn} className="tc-card">
               <h3 className="font-inter tc-step-label">STEP 2</h3>
-              <h4 className="font-clash tc-heading-sm tc-mb-sm">{t('hiw.workers.step2.title', 'Do Great Work')}</h4>
+              <h4 className="font-clash tc-heading-sm tc-mb-sm">{t('hiw.workers.step2.title', 'Verify Your Identity')}</h4>
               <p className="font-inter tc-body">
-                {t('hiw.workers.step2.desc', 'Go out and do your job in the real world just like you normally do. Fix the pipe, build the wall, or paint the house.')}
+                {t('hiw.workers.step2.desc', 'Verify your phone number with a one-time passcode. This ensures our platform remains spam-free and builds trust with employers.')}
               </p>
             </motion.div>
 
             <motion.div variants={fadeIn} className="tc-card">
               <h3 className="font-inter tc-step-label">STEP 3</h3>
-              <h4 className="font-clash tc-heading-sm tc-mb-sm">{t('hiw.workers.step3.title', 'Collect Your Stars')}</h4>
+              <h4 className="font-clash tc-heading-sm tc-mb-sm">{t('hiw.workers.step3.title', 'Do Great Work')}</h4>
               <p className="font-inter tc-body">
-                {t('hiw.workers.step3.desc', 'After the job, the person who hired you gives you a rating. This rating is permanently glued to your digital profile so future customers can see how amazing you are.')}
+                {t('hiw.workers.step3.desc', 'Go out and do your job in the real world just like you normally do. Fix the pipe, build the wall, or paint the house.')}
+              </p>
+            </motion.div>
+
+            <motion.div variants={fadeIn} className="tc-card">
+              <h3 className="font-inter tc-step-label">STEP 4</h3>
+              <h4 className="font-clash tc-heading-sm tc-mb-sm">{t('hiw.workers.step4.title', 'Collect Your Stars')}</h4>
+              <p className="font-inter tc-body">
+                {t('hiw.workers.step4.desc', 'After the job, the person who hired you gives you a rating. This rating is permanently glued to your digital profile so future customers can see how amazing you are.')}
               </p>
             </motion.div>
           </div>

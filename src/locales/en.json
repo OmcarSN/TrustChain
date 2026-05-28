@@ -512,14 +512,18 @@
     "workers": {
       "title": "01. FOR WORKERS (BUILDING YOUR RESUME)",
       "step1": {
-        "title": "Get Your Digital Key & Verify",
-        "desc": "You don't need an email or a password. You just download a digital wallet (like Freighter) and verify your phone number. This acts as your unique, spam-free key to log into TrustChain."
+        "title": "Get Your Digital Key",
+        "desc": "You don't need an email or a password. You just download a digital wallet (like Freighter). This acts as your unique key to log into TrustChain."
       },
       "step2": {
+        "title": "Verify Your Identity",
+        "desc": "Verify your phone number with a one-time passcode. This ensures our platform remains spam-free and builds trust with employers."
+      },
+      "step3": {
         "title": "Do Great Work",
         "desc": "Go out and do your job in the real world just like you normally do. Fix the pipe, build the wall, or paint the house."
       },
-      "step3": {
+      "step4": {
         "title": "Collect Your Stars",
         "desc": "After the job, the person who hired you gives you a rating. This rating is permanently glued to your digital profile so future customers can see how amazing you are."
       }
