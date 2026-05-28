@@ -18,10 +18,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install system dependencies
+        run: sudo apt-get install -y libdbus-1-dev pkg-config
+
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: wasm32-unknown-unknown
+        run: |
+          rustup install 1.81
+          rustup default 1.81
+          rustup target add wasm32-unknown-unknown --toolchain 1.81
 
       - name: Install Stellar CLI
         run: |
@@ -34,7 +38,10 @@ jobs:
         run: cargo update -p serde --precise 1.0.227
 
       - name: Build all contracts
-        run: stellar contract build
+        run: |
+          cargo +1.81 build --target wasm32-unknown-unknown --release -p credential-contract
+          cargo +1.81 build --target wasm32-unknown-unknown --release -p reputation-contract
+          cargo +1.81 build --target wasm32-unknown-unknown --release -p governance-contract
 
       - name: List WASM files
         run: find target -name "*.wasm" -type f | head -20
