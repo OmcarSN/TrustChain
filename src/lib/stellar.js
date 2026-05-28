@@ -128,40 +128,50 @@ function truncateToBytes(str, maxBytes = 64) {
 }
 
 /**
- * Mint worker credential using native ManageData operations.
- * Stable and sponsor-able without Soroban contract deployment blocks.
+ * Mint worker credential using the sponsored build-mint API.
+ *
+ * Flow:
+ *  1. Frontend sends publicKey + credential data to /api/build-mint
+ *  2. Backend checks if account exists; if not, prepends CreateAccount op
+ *  3. Backend builds & sponsor-signs the transaction, returns partial XDR
+ *  4. Frontend asks user to co-sign via Freighter (authorizes ManageData)
+ *  5. Frontend submits the fully-signed transaction to the network
+ *
+ * This ensures minting works even when the user's account doesn't yet
+ * exist on the Stellar ledger (common on mainnet for new users).
  */
 export async function mintWorkerCredential(publicKey, data) {
   try {
-    const account = await loadAccount(publicKey);
-    
-    // We use native operations to ensure stability
-    const op = Operation.manageData({
-      name: `tc_${publicKey.slice(0, 8)}`,
-      value: truncateToBytes(data.skill || data.skillCategory || 'Worker', 64)
+    const dataKey = `tc_${publicKey.slice(0, 8)}`;
+    const dataValue = truncateToBytes(data.skill || data.skillCategory || 'Worker', 64);
+
+    // Step 1: Request the backend to build a sponsor-signed transaction
+    const buildResponse = await fetch('/api/build-mint', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ publicKey, dataKey, dataValue }),
     });
 
-    const builder = new TransactionBuilder(account, {
-      fee: BASE_FEE,
-      networkPassphrase,
-    })
-      .addOperation(op)
-      .setTimeout(30);
-    
-    const transaction = builder.build();
-    const xdr = transaction.toEnvelope().toXDR('base64');
-    const signedXdr = await freighter.signTransaction(xdr, networkPassphrase);
-    
-    // Attempt Fee Bump via server-side API (sponsor key never in browser)
-    let finalXdr = signedXdr;
-    try {
-      const feeBumpXdr = await requestFeeBump(signedXdr);
-      if (feeBumpXdr) finalXdr = feeBumpXdr;
-    } catch {
-      logError({ message: 'Fee bump request failed, submitting without sponsorship.' }, 'feeBumpAttempt');
+    if (!buildResponse.ok) {
+      const errData = await buildResponse.json().catch(() => ({}));
+      throw new Error(errData.error || `Build-mint API failed (${buildResponse.status})`);
     }
 
-    const response = await submitTransaction(finalXdr);
+    const { txXDR, accountCreated } = await buildResponse.json();
+
+    if (!txXDR) {
+      throw new Error('Build-mint API returned empty transaction');
+    }
+
+    if (accountCreated) {
+      console.log('[TrustChain] Sponsor is creating account for new user:', publicKey);
+    }
+
+    // Step 2: User co-signs via Freighter (authorizes the ManageData operation)
+    const signedXdr = await freighter.signTransaction(txXDR, networkPassphrase);
+
+    // Step 3: Submit the fully-signed transaction
+    const response = await submitTransaction(signedXdr);
     logTransaction(response.hash, "Mint Credential", publicKey);
     return response;
   } catch (error) {
