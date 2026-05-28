@@ -32,15 +32,13 @@ export default async function handler(req, res) {
   }
 
   // ── Read env ──────────────────────────────────────────────────────
-  const supabaseUrl =
-    process.env.SUPABASE_URL ||
-    process.env.VITE_SUPABASE_URL ||
-    "https://lvmbedzvyncvkewmgutk.supabase.co";
+  const supabaseUrl = process.env.SUPABASE_URL || "https://lvmbedzvyncvkewmgutk.supabase.co";
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-  const supabaseAnonKey =
-    process.env.SUPABASE_ANON_KEY ||
-    process.env.VITE_SUPABASE_ANON_KEY ||
-    "sb_publishable_1eb6lJVw8NUspgplLHoNmQ_-3d3V8qL";
+  if (!supabaseServiceKey) {
+    console.error("[send-otp] SUPABASE_SERVICE_ROLE_KEY env var is not set.");
+    return res.status(500).json({ error: "Database configuration error" });
+  }
 
   const twilioAccountSid = process.env.TWILIO_ACCOUNT_SID;
   const twilioAuthToken = process.env.TWILIO_AUTH_TOKEN;
@@ -71,7 +69,7 @@ export default async function handler(req, res) {
 
   // ── Main logic ────────────────────────────────────────────────────
   try {
-    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     // 1. Check if phone is already verified
     const { data: existingPhone, error: lookupError } = await supabase
