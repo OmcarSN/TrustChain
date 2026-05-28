@@ -25,6 +25,7 @@ const About = lazy(() => import('./pages/About'));
 const Mission = lazy(() => import('./pages/Mission'));
 const Contact = lazy(() => import('./pages/Contact'));
 const HowItWorks = lazy(() => import('./pages/HowItWorks'));
+const Governance = lazy(() => import('./pages/Governance'));
 
 // Minimal loading fallback (no UI change — just a brief black screen)
 const PageLoader = () => (
@@ -90,6 +91,9 @@ const App = () => {
               <Route path="/mission" element={<PageWrapper><Mission /></PageWrapper>} />
               <Route path="/contact" element={<PageWrapper><Contact /></PageWrapper>} />
               <Route path="/how-it-works" element={<PageWrapper><HowItWorks /></PageWrapper>} />
+
+              {/* Governance */}
+              <Route path="/governance" element={<PageWrapper><Governance /></PageWrapper>} />
 
               {/* Hidden Admin Route */}
               <Route path="/admin/logs" element={<PageWrapper><AdminLogs /></PageWrapper>} />

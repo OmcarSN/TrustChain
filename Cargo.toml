@@ -1,10 +1,14 @@
 [workspace]
-
+resolver = "2"
 members = [
     "contracts/credential",
     "contracts/reputation",
     "contracts/governance",
 ]
+
+[workspace.dependencies]
+# Pin serde before 1.0.228 to avoid serde_core no_std WASM breakage
+serde = ">=1.0.0, <1.0.228"
 
 [profile.release]
 opt-level = "z"
