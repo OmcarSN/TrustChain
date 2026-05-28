@@ -9,6 +9,7 @@ import { getWorker, upsertWorker } from '../lib/supabaseData';
 import RegistrationConnectPrompt from '../components/registration/RegistrationConnectPrompt';
 import ExistingCredentialCard from '../components/registration/ExistingCredentialCard';
 import RegistrationForm from '../components/registration/RegistrationForm';
+import PhoneVerification from '../components/registration/PhoneVerification';
 
 /**
  * WorkerRegistration — Orchestrator page for minting worker credentials.
@@ -30,6 +31,8 @@ const WorkerRegistration = () => {
   const [txResult, setTxResult] = useState(null);
   const [existingCredential, setExistingCredential] = useState(null);
   const [copiedAddr, setCopiedAddr] = useState(false);
+  const [isPhoneVerified, setIsPhoneVerified] = useState(false);
+  const [verifiedPhone, setVerifiedPhone] = useState('');
 
   useEffect(() => {
     if (walletAddress) {
@@ -58,7 +61,7 @@ const WorkerRegistration = () => {
     if (!validateForm()) return;
     setIsMinting(true);
     try {
-      const data = { name: sanitizeString(formData.fullName), skill: sanitizeString(formData.skillCategory), city: sanitizeString(formData.city), experience: sanitizeString(String(formData.experience)), bio: sanitizeString(formData.bio), timestamp: new Date().toISOString() };
+      const data = { name: sanitizeString(formData.fullName), skill: sanitizeString(formData.skillCategory), city: sanitizeString(formData.city), experience: sanitizeString(String(formData.experience)), bio: sanitizeString(formData.bio), phone: verifiedPhone, timestamp: new Date().toISOString() };
       const response = await mintWorkerCredential(walletAddress, data);
       await upsertWorker(walletAddress, data);
       notifyStatsUpdated();
@@ -98,6 +101,36 @@ const WorkerRegistration = () => {
         }}
         t={t}
       />
+    );
+  }
+
+  // ── Phone Verification Gate ──
+  if (!isPhoneVerified && !existingCredential) {
+    return (
+      <div className="min-h-screen bg-[#050505] relative overflow-hidden text-white">
+        <div className="tc-bg-grid" />
+        <div className="tc-orb-blue" />
+        <div className="tc-orb-green" />
+        <div className="tc-leak-orange" />
+        <div className="tc-leak-blue" />
+
+        <div className="min-h-screen w-full" style={{ paddingTop: '80px', paddingBottom: '64px', paddingLeft: '60px', paddingRight: '60px', position: 'relative', zIndex: 10 }}>
+          <div className="reg-anim" style={{ textAlign: 'center', padding: '40px 60px 0 60px', width: '100%', animationDelay: '0s' }}>
+            <p className="font-inter" style={{ color: '#22c55e', fontSize: '11px', letterSpacing: '0.2em', marginBottom: '12px', textTransform: 'uppercase', fontWeight: '600' }}>WORKER PORTAL</p>
+            <h1 className="font-clash" style={{ fontSize: '28px', fontWeight: '800', marginBottom: '4px', letterSpacing: '-0.02em', lineHeight: '1.1' }}>Worker Identity Portal</h1>
+            <p className="font-inter" style={{ fontSize: '13px', color: '#666', marginTop: '6px' }}>{t('registration.headerSubtitle')}</p>
+          </div>
+
+          <PhoneVerification
+            walletAddress={walletAddress}
+            onVerified={(phoneNumber) => {
+              setVerifiedPhone(phoneNumber);
+              setIsPhoneVerified(true);
+            }}
+            t={t}
+          />
+        </div>
+      </div>
     );
   }
 

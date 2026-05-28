@@ -1,0 +1,161 @@
+import { createClient } from "@supabase/supabase-js";
+import { randomInt } from "crypto";
+
+/**
+ * Vercel Serverless Function: POST /api/send-otp
+ *
+ * Generates a 6-digit OTP, stores it in Supabase `otp_codes`, and sends it
+ * to the user's phone via Twilio SMS.
+ *
+ * Request body:  { phone: string, walletAddress: string }
+ * Response body: { success: true, message: string } | { error: string }
+ */
+
+const MAX_BODY_SIZE = 10 * 1024; // 10 KB
+
+// E.164 phone format: + followed by 1-15 digits
+const E164_REGEX = /^\+[1-9]\d{1,14}$/;
+
+export default async function handler(req, res) {
+  // ── Method guard ──────────────────────────────────────────────────
+  if (req.method !== "POST") {
+    res.setHeader("Allow", "POST");
+    return res.status(405).json({ error: "Method not allowed" });
+  }
+
+  // ── CORS ──────────────────────────────────────────────────────────
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  if (req.method === "OPTIONS") {
+    return res.status(204).end();
+  }
+
+  // ── Read env ──────────────────────────────────────────────────────
+  const supabaseUrl =
+    process.env.SUPABASE_URL ||
+    process.env.VITE_SUPABASE_URL ||
+    "https://lvmbedzvyncvkewmgutk.supabase.co";
+
+  const supabaseAnonKey =
+    process.env.SUPABASE_ANON_KEY ||
+    process.env.VITE_SUPABASE_ANON_KEY ||
+    "sb_publishable_1eb6lJVw8NUspgplLHoNmQ_-3d3V8qL";
+
+  const twilioAccountSid = process.env.TWILIO_ACCOUNT_SID;
+  const twilioAuthToken = process.env.TWILIO_AUTH_TOKEN;
+  const twilioPhoneNumber = process.env.TWILIO_PHONE_NUMBER;
+
+  if (!twilioAccountSid || !twilioAuthToken || !twilioPhoneNumber) {
+    console.error("[send-otp] Twilio env vars are not fully configured.");
+    return res.status(500).json({ error: "SMS service not configured" });
+  }
+
+  // ── Validate body ────────────────────────────────────────────────
+  const contentLength = parseInt(req.headers["content-length"] || "0", 10);
+  if (contentLength > MAX_BODY_SIZE) {
+    return res.status(413).json({ error: "Request body too large" });
+  }
+
+  const { phone, walletAddress } = req.body || {};
+
+  if (!phone || typeof phone !== "string" || !E164_REGEX.test(phone)) {
+    return res
+      .status(400)
+      .json({ error: "Missing or invalid phone (must be E.164 format, e.g. +91XXXXXXXXXX)" });
+  }
+
+  if (!walletAddress || typeof walletAddress !== "string") {
+    return res.status(400).json({ error: "Missing or invalid walletAddress" });
+  }
+
+  // ── Main logic ────────────────────────────────────────────────────
+  try {
+    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+    // 1. Check if phone is already verified
+    const { data: existingPhone, error: lookupError } = await supabase
+      .from("verified_phones")
+      .select("phone")
+      .eq("phone", phone)
+      .maybeSingle();
+
+    if (lookupError) {
+      console.error("[send-otp] Supabase lookup error:", lookupError.message);
+      return res.status(500).json({ error: "Database lookup failed" });
+    }
+
+    if (existingPhone) {
+      return res
+        .status(409)
+        .json({ error: "This phone number has already been registered" });
+    }
+
+    // 2. Generate 6-digit OTP
+    const otpCode = String(randomInt(100000, 999999));
+
+    // 3. Cleanup any existing OTP for this phone
+    const { error: deleteError } = await supabase
+      .from("otp_codes")
+      .delete()
+      .eq("phone", phone);
+
+    if (deleteError) {
+      console.error("[send-otp] OTP cleanup error:", deleteError.message);
+      // Non-fatal — proceed anyway
+    }
+
+    // 4. Store new OTP with 5-minute expiry
+    const expiresAt = new Date(Date.now() + 5 * 60 * 1000).toISOString();
+
+    const { error: insertError } = await supabase.from("otp_codes").insert({
+      phone,
+      otp_code: otpCode,
+      wallet_address: walletAddress,
+      expires_at: expiresAt,
+      created_at: new Date().toISOString(),
+    });
+
+    if (insertError) {
+      console.error("[send-otp] OTP insert error:", insertError.message);
+      return res.status(500).json({ error: "Failed to store OTP" });
+    }
+
+    // 5. Send SMS via Twilio REST API
+    const twilioUrl = `https://api.twilio.com/2010-04-01/Accounts/${twilioAccountSid}/Messages.json`;
+    const twilioAuth = Buffer.from(
+      `${twilioAccountSid}:${twilioAuthToken}`
+    ).toString("base64");
+
+    const smsBody = `Your TrustChain verification code is: ${otpCode}. It expires in 5 minutes.`;
+
+    const twilioRes = await fetch(twilioUrl, {
+      method: "POST",
+      headers: {
+        Authorization: `Basic ${twilioAuth}`,
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        To: phone,
+        From: twilioPhoneNumber,
+        Body: smsBody,
+      }).toString(),
+    });
+
+    if (!twilioRes.ok) {
+      const twilioError = await twilioRes.text();
+      console.error("[send-otp] Twilio error:", twilioError);
+      return res.status(500).json({ error: "Failed to send SMS" });
+    }
+
+    return res.status(200).json({ success: true, message: "OTP sent successfully" });
+  } catch (err) {
+    const safeMessage = (err.message || String(err)).replace(
+      /S[A-Z0-9]{55}/g,
+      "[REDACTED]"
+    );
+    console.error("[send-otp] Error:", safeMessage);
+    return res.status(500).json({ error: "OTP send failed" });
+  }
+}
