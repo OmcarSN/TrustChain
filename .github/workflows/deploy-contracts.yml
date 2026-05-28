@@ -76,14 +76,38 @@ jobs:
           echo "✅ Reputation Contract ID: $REP_ID"
           echo "REPUTATION_CONTRACT_ID=$REP_ID" >> $GITHUB_ENV
 
+      - name: Deploy Credential Contract
+        if: success()
+        env:
+          STELLAR_SECRET_KEY: ${{ secrets.SPONSOR_SECRET }}
+        run: |
+          NETWORK=${{ github.event.inputs.deploy_network }}
+          if [ "$NETWORK" = "mainnet" ]; then
+            RPC_URL="https://soroban-rpc.mainnet.stellar.gateway.fm"
+            NETWORK_PASSPHRASE="Public Global Stellar Network ; September 2015"
+          else
+            RPC_URL="https://soroban-testnet.stellar.org"
+            NETWORK_PASSPHRASE="Test SDF Network ; September 2015"
+          fi
+          echo "🚀 Deploying Credential Contract to $NETWORK..."
+          CRED_ID=$(stellar contract deploy \
+            --wasm target/wasm32v1-none/release/credential_contract.wasm \
+            --source "$STELLAR_SECRET_KEY" \
+            --rpc-url "$RPC_URL" \
+            --network-passphrase "$NETWORK_PASSPHRASE")
+          echo "✅ Credential Contract ID: $CRED_ID"
+          echo "CREDENTIAL_CONTRACT_ID=$CRED_ID" >> $GITHUB_ENV
+
       - name: Print Contract IDs
         if: success()
         run: |
           echo "============================================"
           echo "🎉 DEPLOYMENT COMPLETE!"
           echo "============================================"
+          echo "Credential Contract ID: $CREDENTIAL_CONTRACT_ID"
           echo "Reputation Contract ID: $REPUTATION_CONTRACT_ID"
           echo ""
           echo "Add these to your Vercel environment variables:"
+          echo "  VITE_CREDENTIAL_CONTRACT_ID=$CREDENTIAL_CONTRACT_ID"
           echo "  VITE_REPUTATION_CONTRACT_ID=$REPUTATION_CONTRACT_ID"
           echo "============================================"
