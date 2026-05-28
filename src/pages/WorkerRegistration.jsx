@@ -33,6 +33,7 @@ const WorkerRegistration = () => {
   const [copiedAddr, setCopiedAddr] = useState(false);
   const [isPhoneVerified, setIsPhoneVerified] = useState(false);
   const [verifiedPhone, setVerifiedPhone] = useState('');
+  const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
     if (walletAddress) {
@@ -61,11 +62,21 @@ const WorkerRegistration = () => {
     if (!validateForm()) return;
     setIsMinting(true);
     try {
-      const data = { name: sanitizeString(formData.fullName), skill: sanitizeString(formData.skillCategory), city: sanitizeString(formData.city), experience: sanitizeString(String(formData.experience)), bio: sanitizeString(formData.bio), phone: verifiedPhone, timestamp: new Date().toISOString() };
+      const data = { 
+        name: sanitizeString(formData.fullName), 
+        skill: sanitizeString(formData.skillCategory), 
+        city: sanitizeString(formData.city), 
+        experience: sanitizeString(String(formData.experience)), 
+        bio: sanitizeString(formData.bio), 
+        phone: verifiedPhone || (existingCredential ? existingCredential.phone : ''), 
+        timestamp: new Date().toISOString() 
+      };
       const response = await mintWorkerCredential(walletAddress, data);
       await upsertWorker(walletAddress, data);
       notifyStatsUpdated();
-      setTxResult(response); setExistingCredential(data);
+      setTxResult(response); 
+      setExistingCredential(data);
+      setIsUpdating(false);
       toast.success(`Credential issued! Tx: ${response?.hash?.slice(0,8) || 'ok'}...`);
     } catch (err) { console.error(err); toast.error(err.message || 'Failed to mint'); }
     finally { setIsMinting(false); }
@@ -81,7 +92,7 @@ const WorkerRegistration = () => {
   }
 
   // ── Existing Credential View ──
-  if (existingCredential && !isMinting && !txResult) {
+  if (existingCredential && !isUpdating && !isMinting && !txResult) {
     return (
       <ExistingCredentialCard
         existingCredential={existingCredential}
@@ -97,7 +108,7 @@ const WorkerRegistration = () => {
             city: existingCredential.city || '',
             bio: existingCredential.bio || ''
           });
-          setExistingCredential(null);
+          setIsUpdating(true);
         }}
         t={t}
       />
