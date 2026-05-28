@@ -132,8 +132,8 @@ export default async function handler(req, res) {
       }, { onConflict: 'wallet_address' });
 
     if (insertError) {
-      console.error("[verify-otp] Upsert verified_phones error:", insertError.message);
-      return res.status(500).json({ error: "Failed to save verification" });
+      console.error("[verify-otp] Upsert verified_phones error:", insertError.message, insertError.details, insertError.hint);
+      return res.status(500).json({ error: `Failed to save verification: ${insertError.message}` });
     }
 
     return res.status(200).json({ success: true, verified: true });
