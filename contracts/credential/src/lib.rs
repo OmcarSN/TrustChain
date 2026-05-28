@@ -1,7 +1,7 @@
 #![no_std]
 use soroban_sdk::{
     contract, contracterror, contractimpl, contracttype,
-    Address, Env, String, Vec, symbol_short,
+    Address, Env, String, Symbol, Vec,
 };
 
 // ─── Error Types ───────────────────────────────────────────────
@@ -76,14 +76,6 @@ pub struct WorkerData {
 pub struct CredentialContract;
 
 // ─── Event topic symbols ───────────────────────────────────────
-const TOPIC_INIT: symbol_short = symbol_short!("init");
-const TOPIC_ISSUE: symbol_short = symbol_short!("issue");
-const TOPIC_REVOKE: symbol_short = symbol_short!("revoke");
-const TOPIC_UPDATE: symbol_short = symbol_short!("update");
-const TOPIC_RENEW: symbol_short = symbol_short!("renew");
-const TOPIC_ADMIN: symbol_short = symbol_short!("admin");
-const TOPIC_VERIFY: symbol_short = symbol_short!("verify");
-const TOPIC_BATCH: symbol_short = symbol_short!("batch");
 
 #[contractimpl]
 impl CredentialContract {
@@ -105,7 +97,7 @@ impl CredentialContract {
         env.storage().persistent().set(&DataKey::ActiveCount, &0u32);
         env.storage().persistent().set(&DataKey::Paused, &false); // Starts unpaused
 
-        env.events().publish((TOPIC_INIT,), admin);
+        env.events().publish((Symbol::new(&env, "init"),), admin);
 
         Ok(())
     }
@@ -184,7 +176,7 @@ impl CredentialContract {
             .get(&DataKey::ActiveCount).unwrap_or(0);
         env.storage().persistent().set(&DataKey::ActiveCount, &(active + 1));
 
-        env.events().publish((TOPIC_ISSUE,), worker);
+        env.events().publish((Symbol::new(&env, "issue"),), worker);
 
         Ok(())
     }
@@ -246,7 +238,7 @@ impl CredentialContract {
         };
 
         env.storage().persistent().set(&DataKey::Credential(worker.clone()), &updated);
-        env.events().publish((TOPIC_UPDATE,), worker);
+        env.events().publish((Symbol::new(&env, "update"),), worker);
 
         Ok(())
     }
@@ -280,7 +272,7 @@ impl CredentialContract {
         data.renewal_count += 1;
 
         env.storage().persistent().set(&DataKey::Credential(worker.clone()), &data);
-        env.events().publish((TOPIC_RENEW,), worker);
+        env.events().publish((Symbol::new(&env, "renew"),), worker);
 
         Ok(())
     }
@@ -313,7 +305,7 @@ impl CredentialContract {
             env.storage().persistent().set(&DataKey::ActiveCount, &(active - 1));
         }
 
-        env.events().publish((TOPIC_REVOKE,), worker);
+        env.events().publish((Symbol::new(&env, "revoke"),), worker);
 
         Ok(())
     }
@@ -358,7 +350,7 @@ impl CredentialContract {
             revoked_count += 1;
         }
 
-        env.events().publish((TOPIC_BATCH,), revoked_count);
+        env.events().publish((Symbol::new(&env, "batch"),), revoked_count);
 
         Ok(revoked_count)
     }
@@ -407,7 +399,7 @@ impl CredentialContract {
                 &DataKey::VerificationLevel(worker.clone()),
                 &new_level,
             );
-            env.events().publish((TOPIC_VERIFY,), (worker, new_level));
+            env.events().publish((Symbol::new(&env, "verify"),), (worker, new_level));
         }
 
         Ok(new_level)
@@ -429,7 +421,7 @@ impl CredentialContract {
             &VERIFICATION_ADMIN,
         );
 
-        env.events().publish((TOPIC_VERIFY,), (worker, VERIFICATION_ADMIN));
+        env.events().publish((Symbol::new(&env, "verify"),), (worker, VERIFICATION_ADMIN));
 
         Ok(())
     }
@@ -446,7 +438,7 @@ impl CredentialContract {
         admin.require_auth();
 
         env.storage().persistent().set(&DataKey::ProposedAdmin, &new_admin);
-        env.events().publish((TOPIC_ADMIN,), new_admin);
+        env.events().publish((Symbol::new(&env, "admin"),), new_admin);
 
         Ok(())
     }
@@ -462,7 +454,7 @@ impl CredentialContract {
         env.storage().persistent().set(&DataKey::Admin, &proposed);
         env.storage().persistent().remove(&DataKey::ProposedAdmin);
 
-        env.events().publish((TOPIC_ADMIN,), proposed);
+        env.events().publish((Symbol::new(&env, "admin"),), proposed);
 
         Ok(())
     }

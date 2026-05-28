@@ -1,7 +1,7 @@
 #![no_std]
 use soroban_sdk::{
     contract, contracterror, contractimpl, contracttype,
-    Address, Env, String, Vec, symbol_short,
+    Address, Env, String, Symbol, Vec,
 };
 
 // ─── Error Types ───────────────────────────────────────────────
@@ -89,12 +89,6 @@ pub struct Dispute {
 #[contract]
 pub struct ReputationContract;
 
-const TOPIC_INIT: symbol_short = symbol_short!("init");
-const TOPIC_ENDORSE: symbol_short = symbol_short!("endorse");
-const TOPIC_REP: symbol_short = symbol_short!("repupd");
-const TOPIC_TIER: symbol_short = symbol_short!("tier");
-const TOPIC_DISPUTE: symbol_short = symbol_short!("dispute");
-const TOPIC_RESOLVE: symbol_short = symbol_short!("resolve");
 
 #[contractimpl]
 impl ReputationContract {
@@ -116,7 +110,7 @@ impl ReputationContract {
         env.storage().persistent().set(&DataKey::ActiveDisputeCount, &0u32);
         env.storage().persistent().set(&DataKey::Paused, &false); // Starts unpaused
 
-        env.events().publish((TOPIC_INIT,), admin);
+        env.events().publish((Symbol::new(&env, "init"),), admin);
 
         Ok(())
     }
@@ -202,7 +196,7 @@ impl ReputationContract {
         env.storage().persistent()
             .set(&DataKey::TotalEndorsements, &(global + 1));
 
-        env.events().publish((TOPIC_ENDORSE,), (endorser, worker));
+        env.events().publish((Symbol::new(&env, "endorse"),), (endorser, worker));
 
         Ok(())
     }
@@ -281,7 +275,7 @@ impl ReputationContract {
         env.storage().persistent()
             .set(&DataKey::TrustTier(worker.clone()), &trust_tier);
 
-        env.events().publish((TOPIC_TIER,), (worker.clone(), trust_tier));
+        env.events().publish((Symbol::new(&env, "tier"),), (worker.clone(), trust_tier));
     }
 
     /// Compute trust tier based on endorsement count and average rating.
@@ -351,7 +345,7 @@ impl ReputationContract {
         env.storage().persistent()
             .set(&DataKey::ActiveDisputeCount, &(count + 1));
 
-        env.events().publish((TOPIC_DISPUTE,), (worker, endorsement_index));
+        env.events().publish((Symbol::new(&env, "dispute"),), (worker, endorsement_index));
 
         Ok(())
     }
@@ -414,7 +408,7 @@ impl ReputationContract {
                 .set(&DataKey::ActiveDisputeCount, &(count - 1));
         }
 
-        env.events().publish((TOPIC_RESOLVE,), (worker, dispute_index));
+        env.events().publish((Symbol::new(&env, "resolve"),), (worker, dispute_index));
 
         Ok(())
     }
