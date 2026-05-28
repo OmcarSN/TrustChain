@@ -49,7 +49,7 @@ const WorkerRegistration = () => {
     if (!formData.experience || formData.experience < 0 || formData.experience > 50) ne.experience = 'Must be 0-50 years';
     if (!formData.city) ne.city = 'City is required';
     if (!formData.bio || formData.bio.length < 10) ne.bio = 'Bio must be at least 10 chars';
-    if (new TextEncoder().encode(formData.bio).length > 64) ne.bio = 'Bio too long (max 64 bytes)';
+    if (formData.bio.length > 150) ne.bio = 'Bio too long (max 150 chars)';
     const sc = validateCredentialInput({ fullName: formData.fullName, skillCategory: formData.skillCategory, experience: String(formData.experience), city: formData.city, bio: formData.bio });
     if (!sc.isValid) Object.keys(sc.errors).forEach(k => { ne[k] = sc.errors[k]; });
     setErrors(ne);
@@ -72,7 +72,10 @@ const WorkerRegistration = () => {
         timestamp: new Date().toISOString() 
       };
       const response = await mintWorkerCredential(walletAddress, data);
-      await upsertWorker(walletAddress, data);
+      const isUpserted = await upsertWorker(walletAddress, data);
+      if (!isUpserted) {
+        throw new Error("Minted on-chain successfully, but failed to sync to database. Please refresh.");
+      }
       notifyStatsUpdated();
       setTxResult(response); 
       setExistingCredential(data);

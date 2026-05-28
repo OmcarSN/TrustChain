@@ -6,6 +6,7 @@ import { useToast } from '../context/ToastContext';
 import { useTranslation } from 'react-i18next';
 import { notifyStatsUpdated } from '../hooks/usePlatformStats';
 import { getWorker, getEndorsements, addEndorsement } from '../lib/supabaseData';
+import { validateWalletAddress } from '../utils/validation';
 import ConnectWalletPrompt from '../components/ConnectWalletPrompt';
 import WorkerSearchPanel from '../components/endorse/WorkerSearchPanel';
 import EndorsementForm from '../components/endorse/EndorsementForm';
@@ -39,12 +40,12 @@ const Endorse = () => {
   const canSubmit = isConnected && foundWorker && rating > 0 && jobType && feedback.length >= 20;
 
   const handleSearch = async () => {
-    if (!workerSearch) return;
-    if (workerSearch === walletAddress) { toast.error(t('endorse.cannotEndorseSelf')); return; }
+    if (!validateWalletAddress(workerSearch.trim())) { toast.error(t('endorse.invalidAddress')); return; }
+    if (workerSearch.trim() === walletAddress) { toast.error(t('endorse.cannotEndorseSelf')); return; }
     setIsSearching(true); setError(null); setFoundWorker(null);
     try {
-      const credential = await fetchWorkerCredential(workerSearch);
-      const localData = await getWorker(workerSearch);
+      const credential = await fetchWorkerCredential(workerSearch.trim());
+      const localData = await getWorker(workerSearch.trim());
       if (localData) {
         credential.name = localData.name || localData.fullName || credential.name;
         credential.city = localData.city || credential.city;
@@ -73,7 +74,10 @@ const Endorse = () => {
       const response = await submitWorkerEndorsement({ worker: foundWorker.address, rating, jobType, feedback }, walletAddress);
       const hash = response.hash;
       setTxHash(hash); setIsSuccess(true);
-      await addEndorsement({ endorser: walletAddress, worker: foundWorker.address, rating, jobType, feedback, txHash: hash });
+      const isSaved = await addEndorsement({ endorser: walletAddress, worker: foundWorker.address, rating, jobType, feedback, txHash: hash });
+      if (!isSaved) {
+        throw new Error("Endorsement sealed on-chain, but failed to sync to the database. Please try refreshing.");
+      }
       notifyStatsUpdated();
       toast.success(t('endorse.endorsementSealed'));
     } catch (err) { setError(err.message || 'Transaction failed'); toast.error(err.message || 'Submission failed'); }

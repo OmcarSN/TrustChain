@@ -116,8 +116,8 @@ const RegistrationForm = ({
           {errors.city && <p className="text-red-400 text-[10px]" role="alert">{errors.city}</p>}
         </div>
         <div className="form-field field-bio">
-          <label htmlFor="reg-bio" className="field-label font-inter uppercase"><FileText className="w-3.5 h-3.5 text-[#333]" aria-hidden="true" /> Short Bio <span className="ml-auto text-[10px] text-[#444]" aria-live="polite">{(formData.bio || '').length}/64</span></label>
-          <textarea id="reg-bio" name="bio" value={formData.bio} onChange={handleInputChange} rows="3" maxLength={64} placeholder={t('registration.bioPlaceholder')} aria-required="true" aria-invalid={!!errors.bio} className={`field-input resize-none ${formData.bio.length >= 10 ? 'filled' : ''} ${errors.bio ? '!border-red-500/50' : ''}`} />
+          <label htmlFor="reg-bio" className="field-label font-inter uppercase"><FileText className="w-3.5 h-3.5 text-[#333]" aria-hidden="true" /> Short Bio <span className="ml-auto text-[10px] text-[#444]" aria-live="polite">{(formData.bio || '').length}/150</span></label>
+          <textarea id="reg-bio" name="bio" value={formData.bio} onChange={handleInputChange} rows="3" maxLength={150} placeholder={t('registration.bioPlaceholder')} aria-required="true" aria-invalid={!!errors.bio} className={`field-input resize-none ${formData.bio.length >= 10 ? 'filled' : ''} ${errors.bio ? '!border-red-500/50' : ''}`} />
           {errors.bio && <p className="text-red-400 text-[10px]" role="alert">{errors.bio}</p>}
         </div>
       </div>
