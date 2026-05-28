@@ -20,6 +20,21 @@ class ErrorBoundary extends React.Component {
 
   componentDidCatch(error, errorInfo) {
     console.error("Uncaught error:", error, errorInfo);
+    
+    // Detect Vite dynamic import failure (usually means a new deployment happened)
+    const isChunkLoadError = error.name === 'ChunkLoadError' || 
+      (error.message && (error.message.includes('Failed to fetch dynamically imported module') || error.message.includes('Importing a module script failed')));
+      
+    if (isChunkLoadError) {
+      // Prevent infinite reload loop if the new chunk is actually broken
+      if (!sessionStorage.getItem('trustchain_chunk_reloaded')) {
+        sessionStorage.setItem('trustchain_chunk_reloaded', 'true');
+        window.location.reload();
+      }
+    } else {
+      // Reset the flag on successful navigation/catch of normal errors
+      sessionStorage.removeItem('trustchain_chunk_reloaded');
+    }
   }
 
   render() {
