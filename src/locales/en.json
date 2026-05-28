@@ -512,8 +512,8 @@
     "workers": {
       "title": "01. FOR WORKERS (BUILDING YOUR RESUME)",
       "step1": {
-        "title": "Get Your Digital Key",
-        "desc": "You don't need an email or a password. You just download a digital wallet (like Freighter). This wallet acts as your unique key to log into TrustChain."
+        "title": "Get Your Digital Key & Verify",
+        "desc": "You don't need an email or a password. You just download a digital wallet (like Freighter) and verify your phone number. This acts as your unique, spam-free key to log into TrustChain."
       },
       "step2": {
         "title": "Do Great Work",
