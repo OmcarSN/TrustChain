@@ -647,6 +647,16 @@
 .field-input { width: 100%; background: #0a0a0a; border: 1px solid #1e1e1e; border-radius: 4px; padding: 12px 16px; font-size: 14px; color: #e5e5e5; transition: border-color 0.2s ease; }
 .field-input:focus { outline: none; border-color: #2a2a2a; }
 .field-input.has-value { border-color: rgba(34,197,94,0.2); }
+
+/* Fix browser autofill white background */
+.field-input:-webkit-autofill,
+.field-input:-webkit-autofill:hover, 
+.field-input:-webkit-autofill:focus, 
+.field-input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px #0a0a0a inset !important;
+  -webkit-text-fill-color: #e5e5e5 !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
 select.field-input { appearance: none; cursor: pointer; }
 select.field-input option { background: #0c0c0c; color: #fff; }
 
