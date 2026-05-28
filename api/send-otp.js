@@ -98,10 +98,33 @@ export default async function handler(req, res) {
 
   // ── Main logic ────────────────────────────────────────────────────
   try {
-    // 1. Check if phone is already verified
+    // 1a. Check if this wallet already has a verified phone
+    const { data: existingWallet, error: walletLookupError } = await supabase
+      .from("verified_phones")
+      .select("phone, wallet_address")
+      .eq("wallet_address", walletAddress)
+      .maybeSingle();
+
+    if (walletLookupError) {
+      console.error("[send-otp] Wallet lookup error:", walletLookupError.message);
+      return res.status(500).json({ error: "Database lookup failed" });
+    }
+
+    // If this wallet is already verified with THIS phone, allow re-send (resend scenario)
+    // If this wallet is already verified with a DIFFERENT phone, block it
+    if (existingWallet) {
+      if (existingWallet.phone !== phone) {
+        return res
+          .status(409)
+          .json({ error: "This wallet is already verified with a different phone number" });
+      }
+      // Same wallet + same phone = allow re-verification (they might need to re-verify)
+    }
+
+    // 1b. Check if phone is already used by a DIFFERENT wallet
     const { data: existingPhone, error: lookupError } = await supabase
       .from("verified_phones")
-      .select("phone")
+      .select("phone, wallet_address")
       .eq("phone", phone)
       .maybeSingle();
 
@@ -110,10 +133,10 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: "Database lookup failed" });
     }
 
-    if (existingPhone) {
+    if (existingPhone && existingPhone.wallet_address !== walletAddress) {
       return res
         .status(409)
-        .json({ error: "This phone number has already been registered" });
+        .json({ error: "This phone number has already been registered with a different wallet" });
     }
 
     // 2. Send OTP via Twilio Verify API

@@ -100,31 +100,7 @@ const WorkerRegistration = () => {
     return <RegistrationConnectPrompt connect={connect} t={t} />;
   }
 
-  // ── Existing Credential View ──
-  if (existingCredential && !isUpdating && !isMinting && !txResult) {
-    return (
-      <ExistingCredentialCard
-        existingCredential={existingCredential}
-        walletAddress={walletAddress}
-        copiedAddr={copiedAddr}
-        copyAddr={copyAddr}
-        trunc={trunc}
-        onUpdate={() => {
-          setFormData({
-            fullName: existingCredential.name || existingCredential.fullName || '',
-            skillCategory: existingCredential.skill || existingCredential.skillCategory || '',
-            experience: existingCredential.experience || '',
-            city: existingCredential.city || '',
-            bio: existingCredential.bio || ''
-          });
-          setIsUpdating(true);
-        }}
-        t={t}
-      />
-    );
-  }
-
-  // ── Phone Verification Gate ──
+  // ── Phone Verification Gate (MUST come FIRST, before credential check) ──
   // Show spinner while checking verification status
   if (isPhoneVerified === null) {
     return (
@@ -134,7 +110,7 @@ const WorkerRegistration = () => {
     );
   }
 
-  // Force ALL users to verify phone, even if they have an existing credential
+  // Force ALL users to verify phone — no exceptions, even existing credentials
   if (!isPhoneVerified) {
     return (
       <div className="min-h-screen bg-[#050505] relative overflow-hidden text-white">
@@ -161,6 +137,30 @@ const WorkerRegistration = () => {
           />
         </div>
       </div>
+    );
+  }
+
+  // ── Existing Credential View (only shown AFTER phone is verified) ──
+  if (existingCredential && !isUpdating && !isMinting && !txResult) {
+    return (
+      <ExistingCredentialCard
+        existingCredential={existingCredential}
+        walletAddress={walletAddress}
+        copiedAddr={copiedAddr}
+        copyAddr={copyAddr}
+        trunc={trunc}
+        onUpdate={() => {
+          setFormData({
+            fullName: existingCredential.name || existingCredential.fullName || '',
+            skillCategory: existingCredential.skill || existingCredential.skillCategory || '',
+            experience: existingCredential.experience || '',
+            city: existingCredential.city || '',
+            bio: existingCredential.bio || ''
+          });
+          setIsUpdating(true);
+        }}
+        t={t}
+      />
     );
   }
 

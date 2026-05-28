@@ -122,17 +122,17 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Invalid OTP" });
     }
 
-    // 2. OTP is valid — insert into verified_phones
+    // 2. OTP is valid — upsert into verified_phones (upsert handles re-verification)
     const { error: insertError } = await supabase
       .from("verified_phones")
-      .insert({
+      .upsert({
         phone,
         wallet_address: walletAddress,
         verified_at: new Date().toISOString(),
-      });
+      }, { onConflict: 'wallet_address' });
 
     if (insertError) {
-      console.error("[verify-otp] Insert verified_phones error:", insertError.message);
+      console.error("[verify-otp] Upsert verified_phones error:", insertError.message);
       return res.status(500).json({ error: "Failed to save verification" });
     }
 
