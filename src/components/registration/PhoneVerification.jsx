@@ -51,7 +51,7 @@ const PhoneVerification = ({ walletAddress, onVerified, t }) => {
   const handleSendOTP = async () => {
     const formatted = formatPhone(phone);
     if (!formatted || formatted.length < 10) {
-      setError('Please enter a valid phone number with country code (e.g. +91XXXXXXXXXX)');
+      setError(t('phoneVerify.errInvalidPhone'));
       return;
     }
 
@@ -68,7 +68,7 @@ const PhoneVerification = ({ walletAddress, onVerified, t }) => {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || 'Failed to send OTP');
+        setError(data.error || t('phoneVerify.errSendFail'));
         return;
       }
 
@@ -76,7 +76,7 @@ const PhoneVerification = ({ walletAddress, onVerified, t }) => {
       setStep('otp');
       setCountdown(60); // 60 second cooldown before resend
     } catch (err) {
-      setError(err.message || 'Network error. Please try again.');
+      setError(err.message || t('phoneVerify.errNetwork'));
     } finally {
       setLoading(false);
     }
@@ -84,7 +84,7 @@ const PhoneVerification = ({ walletAddress, onVerified, t }) => {
 
   const handleVerifyOTP = async () => {
     if (!otp || otp.length !== 6) {
-      setError('Please enter the 6-digit code');
+      setError(t('phoneVerify.errInvalidCode'));
       return;
     }
 
@@ -101,7 +101,7 @@ const PhoneVerification = ({ walletAddress, onVerified, t }) => {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || 'Verification failed');
+        setError(data.error || t('phoneVerify.errVerifyFail'));
         return;
       }
 
@@ -109,7 +109,7 @@ const PhoneVerification = ({ walletAddress, onVerified, t }) => {
       // Brief delay so user sees the success state
       setTimeout(() => onVerified(phone), 800);
     } catch (err) {
-      setError(err.message || 'Network error. Please try again.');
+      setError(err.message || t('phoneVerify.errNetwork'));
     } finally {
       setLoading(false);
     }
@@ -134,15 +134,15 @@ const PhoneVerification = ({ walletAddress, onVerified, t }) => {
       <div className="form-card-header">
         <h2 className="form-card-title font-inter" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <ShieldCheck className="w-4 h-4" style={{ color: '#22c55e' }} />
-          Phone Verification
+          {t('phoneVerify.title')}
         </h2>
         <span className="form-progress-badge font-inter uppercase">
-          {step === 'verified' ? '✓ VERIFIED' : step === 'otp' ? 'STEP 2/2' : 'STEP 1/2'}
+          {step === 'verified' ? t('phoneVerify.verified') : step === 'otp' ? t('phoneVerify.step2') : t('phoneVerify.step1')}
         </span>
       </div>
 
       <p className="font-inter" style={{ fontSize: '12px', color: '#666', marginBottom: '24px', lineHeight: '1.6' }}>
-        To prevent abuse of our sponsored account creation, please verify your phone number before minting your credential.
+        {t('phoneVerify.desc')}
       </p>
 
       <AnimatePresence mode="wait">
@@ -150,7 +150,7 @@ const PhoneVerification = ({ walletAddress, onVerified, t }) => {
           <motion.div key="phone-step" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <div className="form-field">
               <label htmlFor="otp-phone" className="field-label font-inter uppercase">
-                <Phone className="w-3.5 h-3.5 text-[#333]" /> PHONE NUMBER
+                <Phone className="w-3.5 h-3.5 text-[#333]" /> {t('phoneVerify.phoneLabel')}
               </label>
               <input
                 id="otp-phone"
@@ -162,7 +162,7 @@ const PhoneVerification = ({ walletAddress, onVerified, t }) => {
                 onKeyDown={(e) => e.key === 'Enter' && handleSendOTP()}
               />
               <p className="font-inter" style={{ fontSize: '10px', color: '#444', marginTop: '4px' }}>
-                Include country code (e.g. +91 for India)
+                {t('phoneVerify.phoneHint')}
               </p>
             </div>
 
@@ -173,9 +173,9 @@ const PhoneVerification = ({ walletAddress, onVerified, t }) => {
               style={{ marginTop: '20px' }}
             >
               {loading ? (
-                <><Loader2 className="w-4 h-4 animate-spin" /> SENDING OTP...</>
+                <><Loader2 className="w-4 h-4 animate-spin" /> {t('phoneVerify.btnSending')}</>
               ) : (
-                <><Phone className="w-4 h-4" /> SEND VERIFICATION CODE</>
+                <><Phone className="w-4 h-4" /> {t('phoneVerify.btnSend')}</>
               )}
             </button>
           </motion.div>
@@ -195,13 +195,13 @@ const PhoneVerification = ({ walletAddress, onVerified, t }) => {
             }}>
               <CheckCircle2 className="w-4 h-4" style={{ color: '#22c55e', flexShrink: 0 }} />
               <span className="font-inter" style={{ fontSize: '11px', color: '#22c55e' }}>
-                Code sent to <strong>{phone}</strong>
+                {t('phoneVerify.codeSent')} <strong>{phone}</strong>
               </span>
             </div>
 
             <div className="form-field">
               <label htmlFor="otp-code" className="field-label font-inter uppercase">
-                <ShieldCheck className="w-3.5 h-3.5 text-[#333]" /> VERIFICATION CODE
+                <ShieldCheck className="w-3.5 h-3.5 text-[#333]" /> {t('phoneVerify.codeLabel')}
               </label>
               <input
                 ref={otpInputRef}
@@ -217,7 +217,7 @@ const PhoneVerification = ({ walletAddress, onVerified, t }) => {
                 onKeyDown={(e) => e.key === 'Enter' && handleVerifyOTP()}
               />
               <p className="font-inter" style={{ fontSize: '10px', color: '#444', marginTop: '4px', textAlign: 'center' }}>
-                Enter the 6-digit code sent to your phone
+                {t('phoneVerify.codeHint')}
               </p>
             </div>
 
@@ -228,9 +228,9 @@ const PhoneVerification = ({ walletAddress, onVerified, t }) => {
               style={{ marginTop: '20px' }}
             >
               {loading ? (
-                <><Loader2 className="w-4 h-4 animate-spin" /> VERIFYING...</>
+                <><Loader2 className="w-4 h-4 animate-spin" /> {t('phoneVerify.btnVerifying')}</>
               ) : (
-                <><ShieldCheck className="w-4 h-4" /> VERIFY CODE</>
+                <><ShieldCheck className="w-4 h-4" /> {t('phoneVerify.btnVerify')}</>
               )}
             </button>
 
@@ -252,7 +252,7 @@ const PhoneVerification = ({ walletAddress, onVerified, t }) => {
                 letterSpacing: '0.05em',
               }}
             >
-              {countdown > 0 ? `RESEND CODE IN ${countdown}s` : 'RESEND CODE'}
+              {countdown > 0 ? t('phoneVerify.btnResendIn').replace('{{seconds}}', countdown) : t('phoneVerify.btnResend')}
             </button>
           </motion.div>
         )}
@@ -274,10 +274,10 @@ const PhoneVerification = ({ walletAddress, onVerified, t }) => {
               <CheckCircle2 style={{ width: '28px', height: '28px', color: '#22c55e' }} />
             </div>
             <h3 className="font-clash" style={{ fontSize: '16px', fontWeight: '800', color: '#fff', marginBottom: '4px' }}>
-              Phone Verified
+              {t('phoneVerify.successTitle')}
             </h3>
             <p className="font-inter" style={{ fontSize: '11px', color: '#555' }}>
-              Proceeding to registration...
+              {t('phoneVerify.successDesc')}
             </p>
           </motion.div>
         )}

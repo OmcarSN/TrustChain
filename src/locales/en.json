@@ -84,7 +84,7 @@
     "stepsTitleP2": "Verified Trust",
     "stepsDesc": "From registration to reputation — your journey on the decentralized trust layer.",
     "step1Title": "Register & Mint",
-    "step1Desc": "Connect your Freighter wallet, fill your details, and mint a soulbound credential to Stellar.",
+    "step1Desc": "Connect your Freighter wallet, verify your phone number, fill your details, and mint a soulbound credential to Stellar.",
     "step2Title": "Get Endorsed",
     "step2Desc": "Employers submit on-chain endorsements with ratings and feedback — building your reputation.",
     "step3Title": "Verify & Share",
@@ -566,5 +566,30 @@
       "title": "Why is this safe and free?",
       "desc": "TrustChain is built on top of a powerful computer network called Stellar. Think of Stellar as a giant, unbreakable digital safe. Once a review is put into the safe, nobody can change it or cheat the system. Best of all, we made it completely free to use—workers never have to pay money to collect their well-earned reviews."
     }
+  },
+  "phoneVerify": {
+    "title": "Phone Verification",
+    "step1": "STEP 1/2",
+    "step2": "STEP 2/2",
+    "verified": "✓ VERIFIED",
+    "desc": "To prevent abuse of our sponsored account creation, please verify your phone number before minting your credential.",
+    "phoneLabel": "PHONE NUMBER",
+    "phoneHint": "Include country code (e.g. +91 for India)",
+    "btnSending": "SENDING OTP...",
+    "btnSend": "SEND VERIFICATION CODE",
+    "codeSent": "Code sent to",
+    "codeLabel": "VERIFICATION CODE",
+    "codeHint": "Enter the 6-digit code sent to your phone",
+    "btnVerifying": "VERIFYING...",
+    "btnVerify": "VERIFY CODE",
+    "btnResendIn": "RESEND CODE IN {{seconds}}s",
+    "btnResend": "RESEND CODE",
+    "successTitle": "Phone Verified",
+    "successDesc": "Proceeding to registration...",
+    "errInvalidPhone": "Please enter a valid phone number with country code (e.g. +91XXXXXXXXXX)",
+    "errSendFail": "Failed to send OTP",
+    "errInvalidCode": "Please enter the 6-digit code",
+    "errVerifyFail": "Verification failed",
+    "errNetwork": "Network error. Please try again."
   }
 }
