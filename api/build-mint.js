@@ -138,7 +138,7 @@ export default async function handler(req, res) {
       builder.addOperation(
         Operation.createAccount({
           destination: publicKey,
-          startingBalance: "1", // Minimum reserve to activate the account
+          startingBalance: "2", // 1 XLM base reserve + 0.5 XLM per data entry + 0.5 buffer
         })
       );
     }
