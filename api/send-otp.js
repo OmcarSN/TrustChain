@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from '@supabase/supabase-js';
 
 /**
  * Vercel Serverless Function: POST /api/send-otp
@@ -10,6 +10,29 @@ import { createClient } from "@supabase/supabase-js";
  * Response body: { success: true, message: string } | { error: string }
  */
 
+const SUPABASE_URL = process.env.SUPABASE_URL || 'https://lvmbedzvyncvkewmgutk.supabase.co';
+const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+const supabase = SERVICE_KEY ? createClient(
+  SUPABASE_URL,
+  SERVICE_KEY,
+  {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false
+    },
+    db: {
+      schema: 'public'
+    },
+    global: {
+      headers: {
+        'apikey': SERVICE_KEY,
+        'Authorization': `Bearer ${SERVICE_KEY}`
+      }
+    }
+  }
+) : null;
+
 const MAX_BODY_SIZE = 10 * 1024; // 10 KB
 
 // E.164 phone format: + followed by 1-15 digits
@@ -20,6 +43,8 @@ export default async function handler(req, res) {
     hasSupabaseUrl: !!process.env.SUPABASE_URL,
     hasServiceKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
     hasViteSupabaseUrl: !!process.env.VITE_SUPABASE_URL,
+    supabaseUrlValue: SUPABASE_URL,
+    supabaseClientReady: !!supabase,
   });
 
   // ── Method guard ──────────────────────────────────────────────────
@@ -37,15 +62,13 @@ export default async function handler(req, res) {
     return res.status(204).end();
   }
 
-  // ── Read env ──────────────────────────────────────────────────────
-  const supabaseUrl = process.env.SUPABASE_URL || "https://lvmbedzvyncvkewmgutk.supabase.co";
-  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-  if (!supabaseServiceKey) {
+  // ── Check Supabase client ─────────────────────────────────────────
+  if (!supabase) {
     console.error("[send-otp] SUPABASE_SERVICE_ROLE_KEY env var is not set.");
     return res.status(500).json({ error: "Database configuration error" });
   }
 
+  // ── Read env ──────────────────────────────────────────────────────
   const twilioAccountSid = process.env.TWILIO_ACCOUNT_SID;
   const twilioAuthToken = process.env.TWILIO_AUTH_TOKEN;
   const verifyServiceSid = process.env.TWILIO_VERIFY_SERVICE_SID;
@@ -75,8 +98,6 @@ export default async function handler(req, res) {
 
   // ── Main logic ────────────────────────────────────────────────────
   try {
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
-
     // 1. Check if phone is already verified
     const { data: existingPhone, error: lookupError } = await supabase
       .from("verified_phones")

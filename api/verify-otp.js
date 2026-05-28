@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from '@supabase/supabase-js';
 
 /**
  * Vercel Serverless Function: POST /api/verify-otp
@@ -9,6 +9,29 @@ import { createClient } from "@supabase/supabase-js";
  * Request body:  { phone: string, otp: string, walletAddress: string }
  * Response body: { success: true, verified: true } | { error: string }
  */
+
+const SUPABASE_URL = process.env.SUPABASE_URL || 'https://lvmbedzvyncvkewmgutk.supabase.co';
+const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+const supabase = SERVICE_KEY ? createClient(
+  SUPABASE_URL,
+  SERVICE_KEY,
+  {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false
+    },
+    db: {
+      schema: 'public'
+    },
+    global: {
+      headers: {
+        'apikey': SERVICE_KEY,
+        'Authorization': `Bearer ${SERVICE_KEY}`
+      }
+    }
+  }
+) : null;
 
 const MAX_BODY_SIZE = 10 * 1024; // 10 KB
 
@@ -30,15 +53,13 @@ export default async function handler(req, res) {
     return res.status(204).end();
   }
 
-  // ── Read env ──────────────────────────────────────────────────────
-  const supabaseUrl = process.env.SUPABASE_URL || "https://lvmbedzvyncvkewmgutk.supabase.co";
-  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-  if (!supabaseServiceKey) {
+  // ── Check Supabase client ─────────────────────────────────────────
+  if (!supabase) {
     console.error("[verify-otp] SUPABASE_SERVICE_ROLE_KEY env var is not set.");
     return res.status(500).json({ error: "Database configuration error" });
   }
 
+  // ── Read env ──────────────────────────────────────────────────────
   const twilioAccountSid = process.env.TWILIO_ACCOUNT_SID;
   const twilioAuthToken = process.env.TWILIO_AUTH_TOKEN;
   const verifyServiceSid = process.env.TWILIO_VERIFY_SERVICE_SID;
@@ -95,7 +116,6 @@ export default async function handler(req, res) {
     const twilioData = await twilioRes.json();
 
     if (!twilioRes.ok || twilioData.status !== "approved") {
-      // Twilio returns status "pending" for wrong code, or 404 if expired
       if (twilioRes.status === 404) {
         return res.status(400).json({ error: "OTP has expired. Please request a new code." });
       }
@@ -103,8 +123,6 @@ export default async function handler(req, res) {
     }
 
     // 2. OTP is valid — insert into verified_phones
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
-
     const { error: insertError } = await supabase
       .from("verified_phones")
       .insert({
