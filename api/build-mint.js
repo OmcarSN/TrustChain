@@ -1,3 +1,4 @@
+import { createClient } from '@supabase/supabase-js';
 import {
   Keypair,
   Horizon,
@@ -57,7 +58,16 @@ export default async function handler(req, res) {
     ? "https://horizon.stellar.org"
     : "https://horizon-testnet.stellar.org";
 
-  // ── Validate body ────────────────────────────────────────────────
+  // ── Validate Supabase & Verification ─────────────────────────────
+  const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl || !supabaseKey) {
+    console.error("[build-mint] Supabase URL or Key not set.");
+    return res.status(500).json({ error: "Database configuration error" });
+  }
+
+  const supabase = createClient(supabaseUrl, supabaseKey);
   const contentLength = parseInt(req.headers["content-length"] || "0", 10);
   if (contentLength > MAX_BODY_SIZE) {
     return res.status(413).json({ error: "Request body too large" });
@@ -73,6 +83,28 @@ export default async function handler(req, res) {
   }
   if (!dataValue || typeof dataValue !== "string") {
     return res.status(400).json({ error: "Missing or invalid dataValue" });
+  }
+
+  // ── Enforce Phone Verification ───────────────────────────────────
+  try {
+    const { data: verifiedData, error: verifiedError } = await supabase
+      .from('verified_phones')
+      .select('phone')
+      .eq('wallet_address', publicKey)
+      .maybeSingle();
+
+    if (verifiedError) {
+      console.error("[build-mint] Supabase query error:", verifiedError);
+      return res.status(500).json({ error: "Failed to verify phone status" });
+    }
+
+    if (!verifiedData) {
+      console.error(`[build-mint] Blocked unverified wallet: ${publicKey}`);
+      return res.status(403).json({ error: "Wallet address is not phone-verified. Please verify your phone number first." });
+    }
+  } catch (err) {
+    console.error("[build-mint] Verification check failed:", err);
+    return res.status(500).json({ error: "Server error during verification check" });
   }
 
   // ── Build transaction ─────────────────────────────────────────────

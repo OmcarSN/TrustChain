@@ -77,6 +77,30 @@ export async function upsertWorker(walletAddress, workerData) {
 }
 
 /**
+ * Checks if a wallet address has a verified phone number in the system.
+ * @param {string} walletAddress - Stellar wallet address
+ * @returns {Promise<boolean>} true if verified
+ */
+export async function checkPhoneVerified(walletAddress) {
+  try {
+    const { data, error } = await supabase
+      .from('verified_phones')
+      .select('wallet_address')
+      .eq('wallet_address', walletAddress)
+      .maybeSingle();
+
+    if (error) {
+      console.error('[supabaseData] checkPhoneVerified error:', error.message);
+      return false;
+    }
+    return !!data;
+  } catch (err) {
+    console.error('[supabaseData] checkPhoneVerified exception:', err);
+    return false;
+  }
+}
+
+/**
  * Returns all registered worker wallet addresses.
  * Replaces localStorage 'trustchain_worker_registry'.
  * @returns {Promise<string[]>} Array of wallet addresses

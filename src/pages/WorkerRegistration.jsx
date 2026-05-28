@@ -5,7 +5,7 @@ import { useToast } from '../context/ToastContext';
 import { validateWalletAddress, validateCredentialInput, sanitizeString } from '../utils/validation';
 import { useTranslation } from 'react-i18next';
 import { notifyStatsUpdated } from '../hooks/usePlatformStats';
-import { getWorker, upsertWorker } from '../lib/supabaseData';
+import { getWorker, upsertWorker, checkPhoneVerified } from '../lib/supabaseData';
 import RegistrationConnectPrompt from '../components/registration/RegistrationConnectPrompt';
 import ExistingCredentialCard from '../components/registration/ExistingCredentialCard';
 import RegistrationForm from '../components/registration/RegistrationForm';
@@ -31,13 +31,19 @@ const WorkerRegistration = () => {
   const [txResult, setTxResult] = useState(null);
   const [existingCredential, setExistingCredential] = useState(null);
   const [copiedAddr, setCopiedAddr] = useState(false);
-  const [isPhoneVerified, setIsPhoneVerified] = useState(false);
+  const [isPhoneVerified, setIsPhoneVerified] = useState(null); // null = loading state
   const [verifiedPhone, setVerifiedPhone] = useState('');
   const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
     if (walletAddress) {
-      getWorker(walletAddress).then(data => setExistingCredential(data || null));
+      Promise.all([
+        getWorker(walletAddress),
+        checkPhoneVerified(walletAddress)
+      ]).then(([workerData, isVerified]) => {
+        setExistingCredential(workerData || null);
+        setIsPhoneVerified(isVerified);
+      });
     }
   }, [walletAddress]);
 
@@ -119,7 +125,17 @@ const WorkerRegistration = () => {
   }
 
   // ── Phone Verification Gate ──
-  if (!isPhoneVerified && !existingCredential) {
+  // Show spinner while checking verification status
+  if (isPhoneVerified === null) {
+    return (
+      <div className="min-h-screen bg-[#050505] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#22c55e]"></div>
+      </div>
+    );
+  }
+
+  // Force ALL users to verify phone, even if they have an existing credential
+  if (!isPhoneVerified) {
     return (
       <div className="min-h-screen bg-[#050505] relative overflow-hidden text-white">
         <div className="tc-bg-grid" />
