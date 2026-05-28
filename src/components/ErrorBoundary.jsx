@@ -11,11 +11,17 @@ import { ShieldAlert, RefreshCcw, Home } from 'lucide-react';
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false, error: null };
+    this.state = { hasError: false, error: null, isReloading: false };
   }
 
   static getDerivedStateFromError(error) {
-    return { hasError: true, error };
+    const isChunkLoadError = error.name === 'ChunkLoadError' || 
+      (error.message && (error.message.includes('Failed to fetch dynamically imported module') || error.message.includes('Importing a module script failed')));
+      
+    if (isChunkLoadError && !sessionStorage.getItem('trustchain_chunk_reloaded')) {
+       return { hasError: true, error, isReloading: true };
+    }
+    return { hasError: true, error, isReloading: false };
   }
 
   componentDidCatch(error, errorInfo) {
@@ -38,6 +44,10 @@ class ErrorBoundary extends React.Component {
   }
 
   render() {
+    if (this.state.isReloading) {
+      return <div className="min-h-screen bg-[#050505]" />;
+    }
+
     if (this.state.hasError) {
       return (
         <div className="min-h-screen bg-[#050505] flex items-center justify-center p-6 text-white text-center">
