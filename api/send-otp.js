@@ -98,6 +98,13 @@ export default async function handler(req, res) {
 
   // ── Main logic ────────────────────────────────────────────────────
   try {
+    // --- SECURE DEMO BYPASS ---
+    const demoPhone = process.env.DEMO_BYPASS_PHONE;
+    if (demoPhone && phone === demoPhone) {
+      return res.status(200).json({ success: true, message: "Demo OTP sent successfully" });
+    }
+    // --------------------------
+
     // 1a. Check if this wallet already has a verified phone
     const { data: existingWallet, error: walletLookupError } = await supabase
       .from("verified_phones")
