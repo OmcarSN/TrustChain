@@ -139,6 +139,12 @@ export default async function handler(req, res) {
         .json({ error: "This phone number has already been registered with a different wallet" });
     }
 
+    // --- DEMO BYPASS FOR JUDGES ---
+    if (phone === "+910000000000") {
+      return res.status(200).json({ success: true, message: "Demo OTP sent successfully" });
+    }
+    // ------------------------------
+
     // 2. Send OTP via Twilio Verify API
     const verifyUrl = `https://verify.twilio.com/v2/Services/${verifyServiceSid}/Verifications`;
     const twilioAuth = Buffer.from(

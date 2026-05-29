@@ -95,32 +95,46 @@ export default async function handler(req, res) {
 
   // ── Main logic ────────────────────────────────────────────────────
   try {
-    // 1. Verify OTP via Twilio Verify API
-    const checkUrl = `https://verify.twilio.com/v2/Services/${verifyServiceSid}/VerificationCheck`;
-    const twilioAuth = Buffer.from(
-      `${twilioAccountSid}:${twilioAuthToken}`
-    ).toString("base64");
+    // --- DEMO BYPASS FOR JUDGES ---
+    let isValidOTP = false;
 
-    const twilioRes = await fetch(checkUrl, {
-      method: "POST",
-      headers: {
-        Authorization: `Basic ${twilioAuth}`,
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: new URLSearchParams({
-        To: phone,
-        Code: otp,
-      }).toString(),
-    });
-
-    const twilioData = await twilioRes.json();
-
-    if (!twilioRes.ok || twilioData.status !== "approved") {
-      if (twilioRes.status === 404) {
-        return res.status(400).json({ error: "OTP has expired. Please request a new code." });
+    if (phone === "+910000000000") {
+      if (otp === "123456") {
+        isValidOTP = true;
+      } else {
+        return res.status(400).json({ error: "Invalid Demo OTP. Use 123456" });
       }
-      return res.status(400).json({ error: "Invalid OTP" });
+    } else {
+      // 1. Verify OTP via Twilio Verify API
+      const checkUrl = `https://verify.twilio.com/v2/Services/${verifyServiceSid}/VerificationCheck`;
+      const twilioAuth = Buffer.from(
+        `${twilioAccountSid}:${twilioAuthToken}`
+      ).toString("base64");
+
+      const twilioRes = await fetch(checkUrl, {
+        method: "POST",
+        headers: {
+          Authorization: `Basic ${twilioAuth}`,
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          To: phone,
+          Code: otp,
+        }).toString(),
+      });
+
+      const twilioData = await twilioRes.json();
+
+      if (!twilioRes.ok || twilioData.status !== "approved") {
+        if (twilioRes.status === 404) {
+          return res.status(400).json({ error: "OTP has expired. Please request a new code." });
+        }
+        return res.status(400).json({ error: "Invalid OTP" });
+      }
+      
+      isValidOTP = true;
     }
+    // ------------------------------
 
     // 2. OTP is valid — upsert into verified_phones (upsert handles re-verification)
     const { error: insertError } = await supabase
