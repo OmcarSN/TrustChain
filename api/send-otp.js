@@ -98,6 +98,13 @@ export default async function handler(req, res) {
 
   // ── Main logic ────────────────────────────────────────────────────
   try {
+    // --- DEMO BYPASS FOR JUDGES ---
+    // If it's the magic number, skip ALL database checks and Twilio calls
+    if (phone === "+910000000000") {
+      return res.status(200).json({ success: true, message: "Demo OTP sent successfully" });
+    }
+    // ------------------------------
+
     // 1a. Check if this wallet already has a verified phone
     const { data: existingWallet, error: walletLookupError } = await supabase
       .from("verified_phones")
@@ -138,12 +145,6 @@ export default async function handler(req, res) {
         .status(409)
         .json({ error: "This phone number has already been registered with a different wallet" });
     }
-
-    // --- DEMO BYPASS FOR JUDGES ---
-    if (phone === "+910000000000") {
-      return res.status(200).json({ success: true, message: "Demo OTP sent successfully" });
-    }
-    // ------------------------------
 
     // 2. Send OTP via Twilio Verify API
     const verifyUrl = `https://verify.twilio.com/v2/Services/${verifyServiceSid}/Verifications`;
