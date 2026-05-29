@@ -69,13 +69,11 @@ const Navbar = () => {
 
   const navLinks = isConnected ? [
     { name: t('nav.home', 'Home'), path: '/' },
-    { name: t('nav.discover', 'Find Workers'), path: '/discover' },
-    { name: 'Governance', path: '/governance' },
+    { name: t('nav.discover', 'Find Workers'), path: '/discover' }
   ] : [
     { name: t('nav.home', 'Home'), path: '/' },
     { name: t('nav.discover', 'Find Workers'), path: '/discover' },
-    { name: t('nav.howItWorks', 'How It Works'), path: '/how-it-works' },
-    { name: 'Governance', path: '/governance' },
+    { name: t('nav.howItWorks', 'How It Works'), path: '/how-it-works' }
   ];
 
   return (
