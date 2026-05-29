@@ -41,6 +41,7 @@ jobs:
         run: |
           cargo build --target wasm32v1-none --release -p credential-contract
           cargo build --target wasm32v1-none --release -p reputation-contract
+          cargo build --target wasm32v1-none --release -p governance-contract
 
       - name: List WASM files
         run: find target -name "*.wasm" -type f | head -20
@@ -52,6 +53,7 @@ jobs:
           path: |
             target/wasm32v1-none/release/credential_contract.wasm
             target/wasm32v1-none/release/reputation_contract.wasm
+            target/wasm32v1-none/release/governance_contract.wasm
 
       - name: Deploy Reputation Contract
         if: success()
@@ -98,6 +100,28 @@ jobs:
           echo "✅ Credential Contract ID: $CRED_ID"
           echo "CREDENTIAL_CONTRACT_ID=$CRED_ID" >> $GITHUB_ENV
 
+      - name: Deploy Governance Contract
+        if: success()
+        env:
+          STELLAR_SECRET_KEY: ${{ secrets.SPONSOR_SECRET }}
+        run: |
+          NETWORK=${{ github.event.inputs.deploy_network }}
+          if [ "$NETWORK" = "mainnet" ]; then
+            RPC_URL="https://soroban-rpc.mainnet.stellar.gateway.fm"
+            NETWORK_PASSPHRASE="Public Global Stellar Network ; September 2015"
+          else
+            RPC_URL="https://soroban-testnet.stellar.org"
+            NETWORK_PASSPHRASE="Test SDF Network ; September 2015"
+          fi
+          echo "🚀 Deploying Governance Contract to $NETWORK..."
+          GOV_ID=$(stellar contract deploy \
+            --wasm target/wasm32v1-none/release/governance_contract.wasm \
+            --source "$STELLAR_SECRET_KEY" \
+            --rpc-url "$RPC_URL" \
+            --network-passphrase "$NETWORK_PASSPHRASE")
+          echo "✅ Governance Contract ID: $GOV_ID"
+          echo "GOVERNANCE_CONTRACT_ID=$GOV_ID" >> $GITHUB_ENV
+
       - name: Print Contract IDs
         if: success()
         run: |
@@ -106,8 +130,10 @@ jobs:
           echo "============================================"
           echo "Credential Contract ID: $CREDENTIAL_CONTRACT_ID"
           echo "Reputation Contract ID: $REPUTATION_CONTRACT_ID"
+          echo "Governance Contract ID: $GOVERNANCE_CONTRACT_ID"
           echo ""
           echo "Add these to your Vercel environment variables:"
           echo "  VITE_CREDENTIAL_CONTRACT_ID=$CREDENTIAL_CONTRACT_ID"
           echo "  VITE_REPUTATION_CONTRACT_ID=$REPUTATION_CONTRACT_ID"
+          echo "  VITE_GOVERNANCE_CONTRACT_ID=$GOVERNANCE_CONTRACT_ID"
           echo "============================================"
