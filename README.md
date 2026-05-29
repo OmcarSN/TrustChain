@@ -73,6 +73,12 @@ Most of these workers don't use LinkedIn or have paper certificates to show thei
 
 ## ✨ Key Features
 
+### 📱 Sybil-Resistant Phone Verification
+- **Twilio OTP Integration** — prevents bots and duplicate accounts
+- **Supabase Backend** — securely stores verified `phone <-> wallet` mappings
+- **1-to-1 Mapping** — each worker can only register one wallet address per phone number
+- Ensures enterprise-grade trust in the worker registry
+
 ### 👷 Worker Registration & Credential Minting
 - Connect Freighter wallet and fill professional details
 - Mint a soulbound credential as ManageData entries on Stellar
@@ -255,13 +261,14 @@ TrustChain has been upgraded to **Level 6 Black Belt** with production-grade fea
 - **Automated Workflow (`.github/workflows/ci.yml`)**: 8-stage professional pipeline triggering on push to main.
 - **Stages**: Frontend linting, Frontend unit/integration testing, Frontend bundling, `cargo clippy` linting, `cargo test` for smart contracts, WASM artifact builds, NPM security auditing, and automated Vercel preview/production deployments.
 
-### ⚡ Gasless Transactions (Fee Bump)
+### ⚡ Gasless Transactions & Automated Onboarding
 - **Shared Logic:** `src/utils/feeBump.js` — `buildFeeBumpTransaction(innerTxXDR, sponsorKeypair, networkPassphrase)`
-- **Server-Side API:** `api/fee-bump.js` — Vercel serverless function that wraps the shared utility with secret key access
-- **Why:** Informal economy workers should never need XLM to receive credentials
-- **How:** Client sends the signed inner transaction XDR to `/api/fee-bump`; the server wraps it in a `FeeBumpTransaction` using a secret stored in Vercel env vars (never exposed to browser)
-- **UI:** "⚡ GASLESS TRANSACTION" badge shown on Worker Portal before signing
-- **Fallback:** If fee bump fails, transaction submits normally — minting never breaks
+- **Server-Side API:** `api/fee-bump.js` & `api/build-mint.js` — Vercel serverless functions
+- **Why:** Informal economy workers should never need to buy XLM to receive credentials
+- **How it works (2-Step Magic):** 
+  1. **New Users (0 XLM):** When a new worker registers, our server automatically creates their Stellar account and funds it with **2 XLM** (enough to cover the base reserve and future fees).
+  2. **Existing Users:** For everyday transactions (minting, endorsing, voting), our server wraps the transaction in a `FeeBumpTransaction` so the sponsor wallet pays the network fee (~0.01 XLM).
+- **Security:** `SPONSOR_SECRET` is stored securely in Vercel env vars and never exposed to the frontend.
 
 ### 📊 Analytics Dashboard
 - **Live at:** [trust-chain-mocha.vercel.app/analytics](https://trust-chain-mocha.vercel.app/analytics)
@@ -393,42 +400,24 @@ npx vitest run
 
 ---
 
-## ⚡ Advanced Feature: Fee Sponsorship (Gasless Transactions)
+## ⚡ Advanced Feature: Gasless Onboarding & Fee Sponsorship
 
-TrustChain implements **Fee Bump Transactions** to enable **gasless operations** for workers — eliminating the barrier of funding a Stellar account with XLM just to mint credentials.
+TrustChain completely eliminates the biggest barrier to Web3 adoption: **Gas Fees**. 
 
-### How It Works
+Blue-collar workers (painters, plumbers, drivers) shouldn't need to visit a crypto exchange just to create a professional profile. TrustChain solves this using a **Sponsor Wallet Architecture**.
 
-1. **Worker signs** the transaction via Freighter (no XLM needed for fees)
-2. **TrustChain sponsor key** wraps the signed transaction in a `FeeBumpTransaction`
-3. **Sponsor pays** the network fee on behalf of the worker
-4. **Transaction submitted** to Horizon with the sponsor as fee source
+### The Automated Onboarding Flow
 
-### Implementation
-
-```
-File: src/utils/feeBump.js
-```
-
-```javascript
-// Core fee bump logic using TransactionBuilder.buildFeeBumpTransaction()
-const feeBumpTx = TransactionBuilder.buildFeeBumpTransaction(
-  sponsorKeypair,      // feeSource — sponsor pays
-  "200",               // baseFee
-  innerTransaction,    // worker's signed transaction
-  networkPassphrase    // Stellar Testnet
-);
-feeBumpTx.sign(sponsorKeypair);
-return feeBumpTx.toXDR();
-```
+1. **The 2 XLM Airdrop:** When a brand new worker connects an empty wallet (0 XLM balance), they normally wouldn't even exist on the Stellar ledger. Our backend detects this and automatically prepends a `CreateAccount` operation, funding the worker with **2 XLM** from our Sponsor Wallet. This covers Stellar's minimum reserve requirement and gives them a working wallet for life.
+2. **Fee Bump Transactions:** For all other operations (minting credentials, submitting endorsements, voting in DAO), the worker simply signs the transaction. Our `/api/fee-bump` serverless function wraps it and pays the ~0.01 XLM network fee.
+3. **The Result:** The user experiences a seamless Web2-like flow while interacting directly with a decentralized Web3 blockchain.
 
 ### Security Measures
 
 - Sponsor secret key stored **server-side only** in Vercel env vars (`SPONSOR_SECRET` — no `VITE_` prefix)
-- Fee bump signing performed via Vercel serverless function (`/api/fee-bump`)
+- Fee bump signing performed via Vercel serverless functions (`/api/fee-bump` and `/api/build-mint`)
 - Client never has access to the sponsor secret — only sends signed XDR to API
 - Error messages sanitized with regex: `/S[A-Z0-9]{55}/g → [REDACTED]`
-- Graceful fallback: if API is unavailable, transaction submits without sponsorship
 
 ### Files Involved
 | File | Purpose |
