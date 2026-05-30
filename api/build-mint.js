@@ -5,6 +5,7 @@ import {
   TransactionBuilder,
   Networks,
   Operation,
+  Asset,
   BASE_FEE,
 } from "@stellar/stellar-sdk";
 
@@ -118,8 +119,18 @@ export default async function handler(req, res) {
 
     // Check if user account exists on the ledger
     let accountExists = true;
+    let needsTopUp = false;
     try {
-      await horizonServer.loadAccount(publicKey);
+      const userAccount = await horizonServer.loadAccount(publicKey);
+      // Check if balance is sufficient for ManageData reserve
+      // Minimum needed: (2 + subentryCount + 1) * 0.5 XLM
+      const nativeBalance = parseFloat(
+        userAccount.balances.find((b) => b.asset_type === "native")?.balance || "0"
+      );
+      const minNeeded = (2 + userAccount.subentry_count + 1) * 0.5;
+      if (nativeBalance < minNeeded) {
+        needsTopUp = true;
+      }
     } catch (err) {
       if (err.response && err.response.status === 404) {
         accountExists = false;
@@ -142,6 +153,15 @@ export default async function handler(req, res) {
         Operation.createAccount({
           destination: publicKey,
           startingBalance: "2", // 1 XLM base reserve + 0.5 XLM per data entry + 0.5 buffer
+        })
+      );
+    } else if (needsTopUp) {
+      // Account exists but doesn't have enough for the new data entry reserve
+      builder.addOperation(
+        Operation.payment({
+          destination: publicKey,
+          asset: Asset.native(),
+          amount: "1", // Top up with 1 XLM
         })
       );
     }
