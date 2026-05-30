@@ -73,6 +73,14 @@ const PhoneVerification = ({ walletAddress, onVerified, t }) => {
       }
 
       setPhone(formatted);
+
+      // If phone was already verified before, skip OTP entirely
+      if (data.alreadyVerified) {
+        setStep('verified');
+        setTimeout(() => onVerified(formatted), 800);
+        return;
+      }
+
       setStep('otp');
       setCountdown(60); // 60 second cooldown before resend
     } catch (err) {

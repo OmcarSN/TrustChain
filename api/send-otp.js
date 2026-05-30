@@ -140,10 +140,24 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: "Database lookup failed" });
     }
 
+    // If this phone was already verified (even with a different wallet),
+    // auto-relink it to the new wallet — no OTP needed again
     if (existingPhone && existingPhone.wallet_address !== walletAddress) {
-      return res
-        .status(409)
-        .json({ error: "This phone number has already been registered with a different wallet" });
+      const { error: updateError } = await supabase
+        .from("verified_phones")
+        .update({ wallet_address: walletAddress })
+        .eq("phone", phone);
+
+      if (updateError) {
+        console.error("[send-otp] Relink error:", updateError.message);
+        return res.status(500).json({ error: "Failed to relink phone" });
+      }
+
+      return res.status(200).json({
+        success: true,
+        alreadyVerified: true,
+        message: "Phone already verified — linked to your current wallet",
+      });
     }
 
     // 2. Send OTP via Twilio Verify API
