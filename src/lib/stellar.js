@@ -168,10 +168,18 @@ export async function mintWorkerCredential(publicKey, data) {
     }
 
     // Step 2: User co-signs via Freighter (authorizes the ManageData operation)
-    const signedXdr = await freighter.signTransaction(txXDR, networkPassphrase);
+    // If the user IS the sponsor, the backend already signed — skip Freighter co-sign
+    const sponsorPubKey = import.meta.env.VITE_SPONSOR_PUBLIC_KEY || '';
+    let finalXdr;
+    if (sponsorPubKey && publicKey === sponsorPubKey) {
+      console.log('[TrustChain] User is sponsor — skipping Freighter co-sign');
+      finalXdr = txXDR; // already fully signed by backend
+    } else {
+      finalXdr = await freighter.signTransaction(txXDR, networkPassphrase);
+    }
 
     // Step 3: Submit the fully-signed transaction
-    const response = await submitTransaction(signedXdr);
+    const response = await submitTransaction(finalXdr);
     logTransaction(response.hash, "Mint Credential", publicKey);
     return response;
   } catch (error) {
