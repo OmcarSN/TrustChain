@@ -102,7 +102,7 @@ async function queryContract(methodName, args) {
   const contract = new Contract(REPUTATION_CONTRACT_ID);
 
   // Use a dummy source for read-only queries
-  const dummyKey = 'GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF';
+  const dummyKey = import.meta.env.VITE_SPONSOR_PUBLIC_KEY || 'GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF';
   let account;
   try {
     account = await sorobanServer.getAccount(dummyKey);

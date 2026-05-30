@@ -54,7 +54,7 @@ async function fetchTransactionsForAccount(accountId) {
       
       if (!response.ok) {
         if (response.status === 404) {
-          // Account doesn't exist on testnet yet
+          // Account doesn't exist on the network yet
           return [];
         }
         // Don't throw on Bad Request — just return empty

@@ -92,7 +92,7 @@ async function queryContract(methodName, args) {
   if (!GOVERNANCE_CONTRACT_ID) return null;
 
   const contract = new Contract(GOVERNANCE_CONTRACT_ID);
-  const dummyKey = 'GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF';
+  const dummyKey = import.meta.env.VITE_SPONSOR_PUBLIC_KEY || 'GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF';
   let account;
   try {
     account = await sorobanServer.getAccount(dummyKey);

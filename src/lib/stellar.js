@@ -243,7 +243,7 @@ export async function submitWorkerEndorsement(endorsementData, endorserAddress) 
       networkPassphrase,
     })
       .addOperation(Operation.manageData({ name: key, value }))
-      .setTimeout(30);
+      .setTimeout(120);
 
     const transaction = builder.build();
     const signedXdr = await freighter.signTransaction(transaction.toXDR(), networkPassphrase);

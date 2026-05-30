@@ -39,14 +39,6 @@ const MAX_BODY_SIZE = 10 * 1024; // 10 KB
 const E164_REGEX = /^\+[1-9]\d{1,14}$/;
 
 export default async function handler(req, res) {
-  console.log('ENV CHECK:', {
-    hasSupabaseUrl: !!process.env.SUPABASE_URL,
-    hasServiceKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
-    hasViteSupabaseUrl: !!process.env.VITE_SUPABASE_URL,
-    supabaseUrlValue: SUPABASE_URL,
-    supabaseClientReady: !!supabase,
-  });
-
   // ── Method guard ──────────────────────────────────────────────────
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
