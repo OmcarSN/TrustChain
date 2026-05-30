@@ -17,6 +17,8 @@ import { buildFeeBumpTransaction } from "../src/utils/feeBump.js";
 
 const MAX_BODY_SIZE = 10 * 1024; // 10 KB — generous limit for a single XDR
 
+export const config = { maxDuration: 30 };
+
 export default async function handler(req, res) {
   // ── Method guard ──────────────────────────────────────────────────
   if (req.method !== "POST") {

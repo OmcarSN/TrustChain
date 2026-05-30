@@ -23,6 +23,9 @@ import {
 
 const MAX_BODY_SIZE = 10 * 1024; // 10 KB
 
+// Increase Vercel function timeout for Mainnet Horizon (slower than Testnet)
+export const config = { maxDuration: 30 };
+
 export default async function handler(req, res) {
   // ── Method guard ──────────────────────────────────────────────────
   if (req.method !== "POST") {
