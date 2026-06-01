@@ -27,7 +27,7 @@ const Contact = () => {
           </div>
           <div>
             <p className="font-inter tc-label tc-mb-xs" style={{ letterSpacing: '2px' }}>GitHub</p>
-            <p className="font-inter text-white/60 group-hover:text-white transition-colors" style={{ fontSize: '15px' }}>github.com/trustchain</p>
+            <p className="font-inter text-white/60 group-hover:text-white transition-colors" style={{ fontSize: '15px' }}>github.com/OmcarSN/TrustChain</p>
           </div>
         </a>
 

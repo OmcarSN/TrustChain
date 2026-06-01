@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 /**
  * Analytics — Network insights page.
- * Displays real-time Stellar testnet metrics including total credentials,
+ * Displays real-time Stellar network metrics including total credentials,
  * active wallets, today's transactions, a 7-day trend chart (area/bar toggle),
  * and a live activity feed panel.
  *
@@ -110,7 +110,7 @@ const Analytics = () => {
                   opacity: isRefreshing ? 0.4 : 1
                 }}
               >
-                <RefreshCw className="tc-icon-sm" className={isRefreshing ? 'animate-spin' : ''} />
+                <RefreshCw className={`tc-icon-sm ${isRefreshing ? 'animate-spin' : ''}`} />
                 {t('analytics.indexNow')}
               </button>
             </div>

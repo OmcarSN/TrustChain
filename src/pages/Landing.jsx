@@ -87,7 +87,7 @@ const Landing = () => {
       {/* ═══ TRUST BAR ═══ */}
       <div style={{ width: '100%', background: '#0a0a0a', borderTop: '1px solid #1a1a1a', borderBottom: '1px solid #1a1a1a' }}>
         <div className="flex flex-row md:justify-center justify-start overflow-x-auto whitespace-nowrap hide-scrollbar" style={{ gap: '40px', padding: '14px 24px', alignItems: 'center' }}>
-          <span className="font-inter tc-text-sm tc-ls-wide" style={{ color: '#333', fontWeight: '500', textTransform: 'uppercase' }}>✦ {t('landing.trust_stellar', 'BUILT ON STELLAR TESTNET')}</span>
+          <span className="font-inter tc-text-sm tc-ls-wide" style={{ color: '#333', fontWeight: '500', textTransform: 'uppercase' }}>✦ {t('landing.trust_stellar', 'BUILT ON STELLAR MAINNET')}</span>
           <span style={{ color: '#22c55e', fontSize: '11px' }}>✦</span>
           <span className="font-inter tc-text-sm tc-ls-wide" style={{ color: '#333', fontWeight: '500', textTransform: 'uppercase' }}>{t('landing.trust_gasless', '100% GASLESS')}</span>
           <span style={{ color: '#22c55e', fontSize: '11px' }}>✦</span>

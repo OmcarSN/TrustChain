@@ -1,4 +1,4 @@
-{
+﻿{
   "nav_dashboard": "डैशबोर्ड",
   "nav_worker_portal": "कामगार पोर्टल",
   "nav_analytics": "विश्लेषण",
@@ -6,7 +6,7 @@
   "nav_disconnect": "डिस्कनेक्ट",
   "nav_find_workers": "कामगार खोजें",
   "footer_tagline": "अनौपचारिक अर्थव्यवस्था के लिए सत्यापित प्रतिष्ठा, Stellar पर।",
-  "footer_testnet": "STELLAR TESTNET पर",
+  "footer_MAINNET": "STELLAR MAINNET पर",
   "footer_platform": "प्लेटफ़ॉर्म",
   "about_trustchain": "ट्रस्टचेन के बारे में",
   "about_description": "ट्रस्टचेन अनौपचारिक अर्थव्यवस्था के लिए एक विकेंद्रीकृत क्रेडेंशियल और प्रतिष्ठा मंच है, जो Stellar Soroban ब्लॉकचेन पर बना है।",
@@ -49,10 +49,10 @@
     "desc": "ऑन-चेन सत्यापित पहचान के माध्यम से अनौपचारिक अर्थव्यवस्था को डिजिटल रूप से सशक्त बनाना।",
     "connect": "जुड़ें और एक्सप्लोर करें",
     "tech": "तकनीकी स्टैक",
-    "builtOn": "स्टेलर टेस्टनेट पर निर्मित",
+    "builtOn": "स्टेलर मेननेट पर निर्मित",
     "rights": "© 2026 ट्रस्टचेन प्रोटोकॉल",
     "foundation": "सावरिन आइडेंटिटी फाउंडेशन",
-    "live": "स्टेलर टेस्टनेट लाइव"
+    "live": "स्टेलर मेननेट लाइव"
   },
   "landing": {
     "badge": "विश्वास का नया मानक",
@@ -68,11 +68,11 @@
     "hero_cta_worker": "मैं एक कामगार हूँ",
     "hero_cta_find": "कामगार खोजें",
     "networkLabel": "नेटवर्क",
-    "networkValue": "स्टेलर टेस्टनेट",
+    "networkValue": "स्टेलर मेननेट",
     "stepLabel": "चरण",
     "btnWorker": "मैं एक कामगार हूँ",
     "btnFind": "कामगार खोजें",
-    "statsBar": "79 कुल इंटरैक्शन • 47 सक्रिय वॉलेट • स्टेलर टेस्टनेट पर निर्मित",
+    "statsBar": "79 कुल इंटरैक्शन • 47 सक्रिय वॉलेट • स्टेलर मेननेट पर निर्मित",
     "stat1Value": "2B+",
     "stat1Label": "बैंक-रहित कामगार",
     "stat2Value": "शून्य-लागत",
@@ -92,7 +92,7 @@
     "getStarted": "शुरू करें",
     "badge1": "स्टेलर नेटवर्क",
     "badge2": "सॉलबाइंड टोकन",
-    "badge3": "टेस्टनेट लाइव",
+    "badge3": "मेननेट लाइव",
     "whyTitle": "ट्रस्टचेन क्यों?",
     "whyHeading1": "एंटरप्राइज़-ग्रेड",
     "whyHeading2": "विश्वास अवसंरचना",
@@ -169,11 +169,11 @@
     "endorsementGiven": "समर्थन दिया गया",
     "badge1": "स्टेलर नेटवर्क",
     "badge2": "ऑन-चेन डेटा",
-    "badge3": "लाइव टेस्टनेट",
+    "badge3": "लाइव मेननेट",
     "dashboardBtn": "डैशबोर्ड",
     "realTimeEvents": "रीयल-टाइम अनुबंध ईवेंट",
     "live": "लाइव",
-    "noActivitySubFeed": "स्टेलर टेस्टनेट पर अनुबंध इंटरैक्शन की प्रतीक्षा में..."
+    "noActivitySubFeed": "स्टेलर मेननेट पर अनुबंध इंटरैक्शन की प्रतीक्षा में..."
   },
   "discover": {
     "headerBadge": "सार्वजनिक निर्देशिका",
@@ -210,7 +210,7 @@
     "filtered": "फ़िल्टर किया",
     "registerAsWorker": "कामगार के रूप में पंजीकरण करें",
     "badgeOnChain": "ऑन-चेन सत्यापित",
-    "badgeStellar": "स्टेलर टेस्टनेट",
+    "badgeStellar": "स्टेलर मेननेट",
     "badgeRealtime": "रीयल-टाइम खोज"
   },
   "explorer": {
@@ -286,7 +286,7 @@
     "viewOnExplorer": "Explorer पर देखें",
     "badgeOnChain": "ऑन-चेन सत्यापित",
     "badgePermanent": "स्थायी रिकॉर्ड",
-    "badgeStellar": "स्टेलर टेस्टनेट",
+    "badgeStellar": "स्टेलर मेननेट",
     "cannotEndorseSelf": "आप खुद का समर्थन नहीं कर सकते।",
     "workerFound": "कामगार मिल गया",
     "alreadyEndorsed": "इस कामगार को पहले ही समर्थन दिया जा चुका है।",
@@ -334,7 +334,7 @@
     "backToHomeFull": "होम पर वापस जाएं",
     "badgeSoulbound": "सॉलबाइंड टोकन",
     "badgePermanent": "स्थायी रिकॉर्ड",
-    "badgeStellar": "स्टेलर टेस्टनेट",
+    "badgeStellar": "स्टेलर मेननेट",
     "nameLabel": "नाम",
     "skillLabel": "कौशल",
     "experienceLabel": "अनुभव",
@@ -373,7 +373,7 @@
     "beFirstEndorse": "इस कामगार को सबसे पहले समर्थन दें",
     "badgePublic": "सार्वजनिक प्रोफ़ाइल",
     "badgeVerifiedData": "सत्यापित डेटा",
-    "badgeStellar": "स्टेलर टेस्टनेट"
+    "badgeStellar": "स्टेलर मेननेट"
   },
   "analytics": {
     "headerTitle": "प्लेटफ़ॉर्म एनालिटिक्स",
@@ -387,7 +387,7 @@
     "tableType": "लेनदेन प्रकार",
     "tableTime": "समय-चिह्न",
     "tableHash": "हैश / लेजर",
-    "testnet": "टेस्टनेट",
+    "MAINNET": "मेननेट",
     "indexed": "अनुक्रमित:",
     "indexNow": "अभी इंडेक्स करें",
     "contractIndex": "अनुबंध सूचकांक",
@@ -395,7 +395,7 @@
     "txToday": "आज के लेनदेन",
     "past24h": "पिछले 24 घंटे",
     "networkStatus": "नेटवर्क स्थिति",
-    "stellarOps": "स्टेलर टेस्टनेट चालू",
+    "stellarOps": "स्टेलर मेननेट चालू",
     "overview7d": "7-दिवसीय अवलोकन",
     "area": "क्षेत्र",
     "bar": "बार",
@@ -419,7 +419,7 @@
     "onChainBadge": "ऑन-चेन सत्यापन",
     "searchBtn": "खोजें",
     "ledgerVerified": "लेजर सत्यापित",
-    "credentialConfirmed": "Stellar टेस्टनेट पर क्रेडेंशियल की पुष्टि हुई",
+    "credentialConfirmed": "Stellar मेननेट पर क्रेडेंशियल की पुष्टि हुई",
     "stellarAddress": "Stellar पता",
     "yearsExp": "वर्ष का अनुभव",
     "ratingBreakdown": "रेटिंग विवरण",
