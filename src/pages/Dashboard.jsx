@@ -97,7 +97,6 @@ const Dashboard = () => {
     { to: '/worker', icon: credential ? FileCheck : ShieldCheck, label: credential ? t('dashboard.updateCred') : t('dashboard.mintCred'), sub: t('dashboard.workerPortal') },
     { to: '/discover', icon: Users, label: t('dashboard.findWorkers'), sub: t('dashboard.browseHire') },
     { to: '/endorse', icon: Award, label: t('dashboard.endorseWorker'), sub: t('dashboard.writeReview') },
-    { to: '/verify', icon: Search, label: t('dashboard.verifyWorker'), sub: t('dashboard.auditReputation') },
     ...(credential ? [{ to: `/profile/${walletAddress}`, icon: Eye, label: t('dashboard.myProfile'), sub: t('dashboard.publicPage') }] : []),
   ];
 
