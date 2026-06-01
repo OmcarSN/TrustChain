@@ -143,7 +143,7 @@ export default async function handler(req, res) {
     const sponsorAccount = await horizonServer.loadAccount(sponsorPublicKey);
 
     const builder = new TransactionBuilder(sponsorAccount, {
-      fee: '10000',
+      fee: BASE_FEE,
       networkPassphrase,
     });
 
