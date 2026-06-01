@@ -52,6 +52,17 @@ const Contact = () => {
             <p className="font-inter text-white/60 group-hover:text-white transition-colors" style={{ fontSize: '15px' }}>freighter.app</p>
           </div>
         </a>
+
+        {/* Stellar Expert (Sponsor) */}
+        <a href="https://stellar.expert/explorer/public/account/GAPTP3YBWMIGE3GT3FDRAOOCLO6ZLZ2U7IIGK2VQBGDL2NLVAZX5E57A" target="_blank" rel="noopener noreferrer" className="tc-flex tc-flex-gap group" style={{ textDecoration: 'none', alignItems: 'center' }}>
+          <div className="tc-activity-icon" style={{ width: '40px', height: '40px', borderRadius: '4px' }}>
+            <ExternalLink className="w-4 h-4 text-white/60 group-hover:text-white transition-colors" />
+          </div>
+          <div>
+            <p className="font-inter tc-label tc-mb-xs" style={{ letterSpacing: '2px', color: '#22c55e' }}>Sponsor Wallet (Explorer)</p>
+            <p className="font-inter text-white/60 group-hover:text-white transition-colors" style={{ fontSize: '15px' }}>View all Mainnet transactions</p>
+          </div>
+        </a>
       </div>
 
       <div className="tc-divider-light" style={{ paddingTop: '24px' }}>
