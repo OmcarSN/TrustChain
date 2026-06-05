@@ -3,7 +3,7 @@
 
 [![Level](https://img.shields.io/badge/Level-6_Black_Belt_⚫-black?style=for-the-badge)](#-level-6-black-belt--production-upgrades)
 [![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-trust--chain--mocha.vercel.app-7c3aed?style=for-the-badge)](https://trust-chain-mocha.vercel.app/)
-[![Stellar](https://img.shields.io/badge/Built_on-Stellar_Testnet-blue?style=for-the-badge&logo=stellar)](https://stellar.org)
+[![Stellar](https://img.shields.io/badge/Built_on-Stellar_Mainnet-blue?style=for-the-badge&logo=stellar)](https://stellar.org)
 [![Soroban](https://img.shields.io/badge/Smart_Contracts-Soroban-orange?style=for-the-badge)](https://soroban.stellar.org)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](./LICENSE)
 [![Security](https://img.shields.io/badge/Security-Checklist_Passed-brightgreen?style=for-the-badge)](./SECURITY.md)
@@ -133,13 +133,13 @@ Most of these workers don't use LinkedIn or have paper certificates to show thei
 | 📊 **Metrics Dashboard** | [trust-chain-mocha.vercel.app/analytics](https://trust-chain-mocha.vercel.app/analytics) |
 | 🔍 **Monitoring Dashboard** | [trust-chain-mocha.vercel.app/admin/logs](https://trust-chain-mocha.vercel.app/admin/logs) |
 | 🔒 **Security Checklist** | [SECURITY.md](./SECURITY.md) |
-| 🔭 **Credential Contract** | [View on Stellar Expert](https://stellar.expert/explorer/testnet/contract/CCQG7ZFOQX4H7OSUXDU2FE2J73XCUQLXP2FONFUMKXXDUP253J3JP6HZ) |
-| 🔭 **Reputation Contract** | [View on Stellar Expert](https://stellar.expert/explorer/testnet/contract/CAHH72L2C7XN32IKOIBLNODWQF4MLUJTJRZWFCU4JIUQEXLEEX3E52GI) |
+| 🔭 **Credential Contract** | [View on Stellar Expert](https://stellar.expert/explorer/public/contract/CCBIIOQMO4BOHZ7RTL7FQDQJCLNRUR7JMNWHDBO4L6QMISLB3UZHDTU4) |
+| 🔭 **Reputation Contract** | [View on Stellar Expert](https://stellar.expert/explorer/public/contract/CBSGD23P6GB4BJBB3ZM5CPTN6EPV2FUWXKC72SMOITNWPCGLMLLSDLYT) |
 | 📝 **Feedback Form** | [Google Form](https://docs.google.com/forms/d/e/1FAIpQLSc9x0prppbJZpEPGv_HJmZESKKAikCJ5IH1SUXl5aX20ekWLQ/viewform?usp=publish-editor) |
 | 🌐 **Credential Explorer** | [trust-chain-mocha.vercel.app/explorer](https://trust-chain-mocha.vercel.app/explorer) |
 | 📊 **User Feedback Excel** | [user-feedback.xlsx](./user-feedback.xlsx) (30 responses) |
 
-> **Note:** The app requires the [Freighter Wallet](https://www.freighter.app/) browser extension set to **Testnet** mode.
+> **Note:** The app requires the [Freighter Wallet](https://www.freighter.app/) browser extension set to **Mainnet (Pubnet)** mode.
 
 ---
 
@@ -177,10 +177,10 @@ Most of these workers don't use LinkedIn or have paper certificates to show thei
                         │
                         ▼
 ┌─────────────────────────────────────────────────────────────┐
-│            STELLAR BLOCKCHAIN (Testnet)                     │
+│            STELLAR BLOCKCHAIN (Mainnet)                     │
 │                                                             │
 │  ┌─────────────────────────────────────────────────────┐    │
-│  │  Horizon API: horizon-testnet.stellar.org           │    │
+│  │  Horizon API: horizon.stellar.org                         │    │
 │  │  • Account queries        • Transaction submission  │    │
 │  │  • ManageData retrieval   • Ledger history          │    │
 │  └─────────────────────────────────────────────────────┘    │
@@ -208,8 +208,8 @@ Verifier searches → Indexer queries Horizon → Parses ManageData → Displays
 ### Smart Contract Addresses
 | Contract | Address |
 |----------|---------| 
-| Credential Contract | `CCQG7ZFOQX4H7OSUXDU2FE2J73XCUQLXP2FONFUMKXXDUP253J3JP6HZ` |
-| Reputation Contract | `CAHH72L2C7XN32IKOIBLNODWQF4MLUJTJRZWFCU4JIUQEXLEEX3E52GI` |
+| Credential Contract | `CCBIIOQMO4BOHZ7RTL7FQDQJCLNRUR7JMNWHDBO4L6QMISLB3UZHDTU4` |
+| Reputation Contract | `CBSGD23P6GB4BJBB3ZM5CPTN6EPV2FUWXKC72SMOITNWPCGLMLLSDLYT` |
 
 ---
 
@@ -217,15 +217,18 @@ Verifier searches → Indexer queries Horizon → Parses ManageData → Displays
 
 | Layer | Technology |
 |-------|-----------| 
-| Frontend | React 19 + Vite + Tailwind CSS v4 |
+| Frontend | React 19 + Vite + Vanilla CSS |
 | Animations | Framer Motion |
 | Charts | Recharts |
 | Routing | React Router v7 |
 | Type Safety | PropTypes (runtime) + JSDoc (IDE) |
 | Testing | Vitest + @testing-library/react (93 tests) |
-| Blockchain | Stellar Testnet + Horizon API |
+| Blockchain | Stellar Mainnet + Horizon API |
 | Wallet | Freighter API v6 |
 | Smart Contracts | Soroban SDK + Rust |
+| Database | Supabase (PostgreSQL) |
+| SMS Verification | Twilio OTP |
+| Localization | i18next (English + Hindi) |
 | Deployment | Vercel (with security headers) |
 | Monitoring | Custom localStorage-based logger |
 
@@ -237,15 +240,15 @@ Verifier searches → Indexer queries Horizon → Parses ManageData → Displays
 - Manages worker credential operations
 - Stores credential metadata on-chain
 - Soulbound — non-transferable by design
-- Address: `CCQG7ZFOQX4H7OSUXDU2FE2J73XCUQLXP2FONFUMKXXDUP253J3JP6HZ`
-- [View on Stellar Expert](https://stellar.expert/explorer/testnet/contract/CCQG7ZFOQX4H7OSUXDU2FE2J73XCUQLXP2FONFUMKXXDUP253J3JP6HZ)
+- Address: `CCBIIOQMO4BOHZ7RTL7FQDQJCLNRUR7JMNWHDBO4L6QMISLB3UZHDTU4`
+- [View on Stellar Expert](https://stellar.expert/explorer/public/contract/CCBIIOQMO4BOHZ7RTL7FQDQJCLNRUR7JMNWHDBO4L6QMISLB3UZHDTU4)
 
 ### Reputation Contract
 - Handles reputation score computation
 - Aggregates endorsement data
 - Produces queryable scores
-- Address: `CAHH72L2C7XN32IKOIBLNODWQF4MLUJTJRZWFCU4JIUQEXLEEX3E52GI`
-- [View on Stellar Expert](https://stellar.expert/explorer/testnet/contract/CAHH72L2C7XN32IKOIBLNODWQF4MLUJTJRZWFCU4JIUQEXLEEX3E52GI)
+- Address: `CBSGD23P6GB4BJBB3ZM5CPTN6EPV2FUWXKC72SMOITNWPCGLMLLSDLYT`
+- [View on Stellar Expert](https://stellar.expert/explorer/public/contract/CBSGD23P6GB4BJBB3ZM5CPTN6EPV2FUWXKC72SMOITNWPCGLMLLSDLYT)
 
 ---
 
@@ -267,7 +270,7 @@ TrustChain has been upgraded to **Level 6 Black Belt** with production-grade fea
 - **Why:** Informal economy workers should never need to buy XLM to receive credentials
 - **How it works (2-Step Magic):** 
   1. **New Users (0 XLM):** When a new worker registers, our server automatically creates their Stellar account and funds it with **2 XLM** (enough to cover the base reserve and future fees).
-  2. **Existing Users:** For everyday transactions (minting, endorsing, voting), our server wraps the transaction in a `FeeBumpTransaction` so the sponsor wallet pays the network fee (~0.01 XLM).
+  2. **Existing Users:** For everyday transactions (minting, endorsing, voting), our server wraps the transaction in a `FeeBumpTransaction` so the sponsor wallet pays the network fee (0.00001 XLM).
 - **Security:** `SPONSOR_SECRET` is stored securely in Vercel env vars and never exposed to the frontend.
 
 ### 📊 Analytics Dashboard
@@ -409,7 +412,7 @@ Blue-collar workers (painters, plumbers, drivers) shouldn't need to visit a cryp
 ### The Automated Onboarding Flow
 
 1. **The 2 XLM Airdrop:** When a brand new worker connects an empty wallet (0 XLM balance), they normally wouldn't even exist on the Stellar ledger. Our backend detects this and automatically prepends a `CreateAccount` operation, funding the worker with **2 XLM** from our Sponsor Wallet. This covers Stellar's minimum reserve requirement and gives them a working wallet for life.
-2. **Fee Bump Transactions:** For all other operations (minting credentials, submitting endorsements, voting in DAO), the worker simply signs the transaction. Our `/api/fee-bump` serverless function wraps it and pays the ~0.01 XLM network fee.
+2. **Fee Bump Transactions:** For all other operations (minting credentials, submitting endorsements, voting in DAO), the worker simply signs the transaction. Our `/api/fee-bump` serverless function wraps it and pays the 0.00001 XLM network fee.
 3. **The Result:** The user experiences a seamless Web2-like flow while interacting directly with a decentralized Web3 blockchain.
 
 ### Security Measures
@@ -444,7 +447,7 @@ Instead of maintaining a backend database, TrustChain queries the **Stellar Hori
 ### Architecture
 
 ```
-User Request → indexer.js → Horizon API (horizon-testnet.stellar.org)
+User Request → indexer.js → Horizon API (horizon.stellar.org)
                    │
                    ├── Parse ManageData operations
                    ├── Extract credential type, timestamp, tx hash
@@ -466,7 +469,7 @@ User Request → indexer.js → Horizon API (horizon-testnet.stellar.org)
 | Resource | Link |
 |----------|------|
 | **Credential Explorer UI** | [trust-chain-mocha.vercel.app/explorer](https://trust-chain-mocha.vercel.app/explorer) |
-| **Horizon API (Testnet)** | [horizon-testnet.stellar.org](https://horizon-testnet.stellar.org) |
+| **Horizon API (Mainnet)** | [horizon.stellar.org](https://horizon.stellar.org) |
 | **Analytics Dashboard** | [trust-chain-mocha.vercel.app/analytics](https://trust-chain-mocha.vercel.app/analytics) |
 
 ### Resilience Strategy
@@ -569,13 +572,12 @@ Internal monitoring dashboard capturing all application events:
 ### For Workers — Mint Your Credential
 
 1. **Install Freighter** — Download the [Freighter wallet](https://www.freighter.app/) browser extension
-2. **Switch to Testnet** — Open Freighter settings → Network → Select "Testnet"
-3. **Fund your account** — Visit [Friendbot](https://friendbot.stellar.org/) and paste your wallet address
-4. **Visit TrustChain** — Go to [trust-chain-mocha.vercel.app](https://trust-chain-mocha.vercel.app/)
-5. **Connect Wallet** — Click "Connect Freighter" in the navbar
-6. **Register** — Click "I'm a Worker" → Fill your name, skill, experience, city, and bio
-7. **Mint** — Click "Mint My Credential" → Approve the transaction in Freighter
-8. **Done!** — Your credential is now permanently sealed on the Stellar blockchain
+2. **Switch to Mainnet** — Open Freighter settings → Network → Select "Mainnet (Pubnet)"
+3. **Visit TrustChain** — Go to [trust-chain-mocha.vercel.app](https://trust-chain-mocha.vercel.app/)
+4. **Connect Wallet** — Click "Connect Freighter" in the navbar
+5. **Register** — Click "I'm a Worker" → Fill your name, skill, experience, city, and bio
+6. **Mint** — Click "Mint My Credential" → Approve the transaction in Freighter
+7. **Done!** — Your credential is now permanently sealed on the Stellar blockchain
 
 ### For Employers — Endorse a Worker
 
@@ -737,8 +739,7 @@ trustchain/
 
 ### Prerequisites
 - Node.js >= 18.x
-- [Freighter Wallet](https://www.freighter.app/) set to **Testnet**
-- Funded Testnet account via [Friendbot](https://friendbot.stellar.org)
+- [Freighter Wallet](https://www.freighter.app/) set to **Mainnet (Pubnet)**
 
 ### Installation
 ```bash
@@ -835,9 +836,9 @@ npm run build
 
 ---
 
-## 👛 Testnet User Wallet Addresses
+## 👛 Testnet User Wallet Addresses (Bootcamp Phase)
 
-> **✅ 30 verified users onboarded with active Stellar Testnet wallets**
+> ✅ **30 verified users onboarded with active Stellar Testnet wallets during the RiseIn Bootcamp phase**
 
 | # | Name | Wallet Address | Explorer Link |
 |---|------|---------------|---------------|
@@ -912,14 +913,14 @@ npm run build
 
 ### Next Phase Roadmap
 
-1. **📱 Mobile-First Redesign** — Most informal workers use smartphones
-2. **🌐 Marathi Language Support** — Planned for accessibility for non-English workers (Hindi completed ✅)
-3. **🔐 Stellar Mainnet Deployment** — Production-ready permanent credentials
-4. **📷 Photo Evidence** — Attach work photos to endorsements
-5. **🔗 QR Code Sharing** — Print and share profiles offline
-6. **🤖 AI Worker Matching** — Smart recommendations for employers
-7. **📊 Advanced Analytics** — Reputation trends and insights
-8. **💬 In-App Messaging** — Direct employer-worker communication
+1. 📱 **Mobile-First Redesign** — Most informal workers use smartphones
+2. 🌐 **Marathi Language Support** — Planned for accessibility for non-English workers (Hindi completed ✅)
+3. ✅ ~~**Stellar Mainnet Deployment**~~ — **DONE!** Both Credential and Reputation contracts deployed on Mainnet
+4. 📷 **Photo Evidence** — Attach work photos to endorsements
+5. 🔗 **QR Code Sharing** — Print and share profiles offline
+6. 🤖 **AI Worker Matching** — Smart recommendations for employers
+7. 📊 **Advanced Analytics** — Reputation trends and insights
+8. 💬 **In-App Messaging** — Direct employer-worker communication
 
 ---
 
