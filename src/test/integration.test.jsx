@@ -5,7 +5,7 @@
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '../i18n';
@@ -59,6 +59,7 @@ describe('Integration: Explorer search flow', () => {
   it('accepts input in the search field', async () => {
     const { default: Explorer } = await import('../pages/Explorer');
     renderPage(<Explorer />, '/explorer');
+    await waitFor(() => {});
     const inputs = screen.getAllByRole('textbox');
     const searchInput = inputs[0];
     
@@ -69,6 +70,7 @@ describe('Integration: Explorer search flow', () => {
   it('triggers search on form submit', async () => {
     const { default: Explorer } = await import('../pages/Explorer');
     renderPage(<Explorer />, '/explorer');
+    await waitFor(() => {});
     const inputs = screen.getAllByRole('textbox');
     const searchInput = inputs[0];
     
@@ -91,6 +93,7 @@ describe('Integration: Endorse form interaction', () => {
   it('renders the endorsement form area', async () => {
     const { default: Endorse } = await import('../pages/Endorse');
     const { container } = renderPage(<Endorse />, '/endorse');
+    await waitFor(() => {});
     
     // The endorse page should render with form elements
     // Note: star buttons may be behind locked overlay when no worker selected
@@ -102,6 +105,7 @@ describe('Integration: Endorse form interaction', () => {
   it('textarea accepts review text', async () => {
     const { default: Endorse } = await import('../pages/Endorse');
     renderPage(<Endorse />, '/endorse');
+    await waitFor(() => {});
     
     // Find the review textarea
     const textareas = document.querySelectorAll('textarea');
@@ -114,6 +118,7 @@ describe('Integration: Endorse form interaction', () => {
   it('character counter updates as user types', async () => {
     const { default: Endorse } = await import('../pages/Endorse');
     renderPage(<Endorse />, '/endorse');
+    await waitFor(() => {});
     
     const textareas = document.querySelectorAll('textarea');
     if (textareas.length > 0) {
@@ -135,6 +140,7 @@ describe('Integration: WorkerRegistration connect flow', () => {
   it('shows connect prompt when disconnected', async () => {
     const { default: WorkerRegistration } = await import('../pages/WorkerRegistration');
     renderPage(<WorkerRegistration />, '/worker');
+    await waitFor(() => {});
     
     const connectBtn = screen.getByRole('button', { name: /connect/i });
     expect(connectBtn).toBeTruthy();
@@ -145,10 +151,14 @@ describe('Integration: WorkerRegistration connect flow', () => {
   it('connect button is clickable', async () => {
     const { default: WorkerRegistration } = await import('../pages/WorkerRegistration');
     renderPage(<WorkerRegistration />, '/worker');
+    await waitFor(() => {});
     
     const connectBtn = screen.getByRole('button', { name: /connect/i });
     // Should not throw
-    fireEvent.click(connectBtn);
+    await act(async () => {
+      fireEvent.click(connectBtn);
+    });
+    await waitFor(() => {});
     expect(connectBtn).toBeTruthy();
   });
 });
@@ -160,6 +170,7 @@ describe('Integration: Verify search interaction', () => {
   it('search input accepts wallet address', async () => {
     const { default: Verify } = await import('../pages/Verify');
     renderPage(<Verify />, '/verify');
+    await waitFor(() => {});
     
     const inputs = screen.getAllByRole('textbox');
     expect(inputs.length).toBeGreaterThan(0);
@@ -171,6 +182,7 @@ describe('Integration: Verify search interaction', () => {
   it('form can be submitted', async () => {
     const { default: Verify } = await import('../pages/Verify');
     renderPage(<Verify />, '/verify');
+    await waitFor(() => {});
     
     const inputs = screen.getAllByRole('textbox');
     fireEvent.change(inputs[0], { target: { value: 'GABCDE' } });
@@ -191,6 +203,7 @@ describe('Integration: Keyboard accessibility', () => {
   it('Escape key is handled on focusable elements', async () => {
     const { default: Explorer } = await import('../pages/Explorer');
     renderPage(<Explorer />, '/explorer');
+    await waitFor(() => {});
     
     const inputs = screen.getAllByRole('textbox');
     // Focus on input and press Escape — should not crash

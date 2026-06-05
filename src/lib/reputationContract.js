@@ -3,7 +3,6 @@ import {
   TransactionBuilder,
   nativeToScVal,
   Address,
-  xdr,
   rpc,
   BASE_FEE,
 } from '@stellar/stellar-sdk';
@@ -92,7 +91,7 @@ async function invokeContract(callerPublicKey, methodName, args) {
  * Helper: read-only contract query (no signing needed).
  * @param {string} methodName - The contract method to invoke
  * @param {Array} args - ScVal arguments
- * @returns {Promise<xdr.ScVal|null>} The return value from the contract
+ * @returns {Promise<Object|null>} The return value from the contract
  */
 async function queryContract(methodName, args) {
   if (!REPUTATION_CONTRACT_ID) {

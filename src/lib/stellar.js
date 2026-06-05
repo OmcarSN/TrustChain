@@ -17,33 +17,6 @@ export const sorobanServer = new rpc.Server(SOROBAN_URL);
 export const networkPassphrase = NETWORK_PASSPHRASE;
 
 /**
- * Requests a fee-bumped transaction from the server-side API.
- * The sponsor secret key is stored server-side only (never in the browser).
- *
- * @param {string} signedXdr - The base64-encoded signed inner transaction XDR
- * @returns {Promise<string|null>} The fee-bumped XDR, or null on failure
- */
-async function requestFeeBump(signedXdr) {
-  try {
-    const response = await fetch('/api/fee-bump', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ innerTxXDR: signedXdr }),
-    });
-    if (!response.ok) {
-      const errData = await response.json().catch(() => ({}));
-      console.warn('Fee bump API error:', errData.error || response.statusText);
-      return null;
-    }
-    const { feeBumpXDR } = await response.json();
-    return feeBumpXDR || null;
-  } catch (err) {
-    console.warn('Fee bump request failed, submitting without sponsorship:', err.message);
-    return null;
-  }
-}
-
-/**
  * Loads account details from the Horizon server.
  */
 export async function loadAccount(publicKey) {
