@@ -3,6 +3,7 @@
 
 [![Level](https://img.shields.io/badge/Level-6_Black_Belt_⚫-black?style=for-the-badge)](#-level-6-black-belt--production-upgrades)
 [![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-trust--chain--mocha.vercel.app-7c3aed?style=for-the-badge)](https://trust-chain-mocha.vercel.app/)
+[![Demo Video](https://img.shields.io/badge/🎥_Demo_Video-YouTube-red?style=for-the-badge&logo=youtube)](https://youtu.be/3d4YxGwsK0U?si=grqwJ_fMEf4PFf07)
 [![Stellar](https://img.shields.io/badge/Built_on-Stellar_Mainnet-blue?style=for-the-badge&logo=stellar)](https://stellar.org)
 [![Soroban](https://img.shields.io/badge/Smart_Contracts-Soroban-orange?style=for-the-badge)](https://soroban.stellar.org)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](./LICENSE)
@@ -129,6 +130,7 @@ Most of these workers don't use LinkedIn or have paper certificates to show thei
 | Resource | Link |
 |----------|------|
 | 🌐 **Live App** | [https://trust-chain-mocha.vercel.app/](https://trust-chain-mocha.vercel.app/) |
+| 🎥 **Demo Video** | [Watch on YouTube](https://youtu.be/3d4YxGwsK0U?si=grqwJ_fMEf4PFf07) |
 | 💻 **GitHub Repo** | [https://github.com/OmcarSN/TrustChain](https://github.com/OmcarSN/TrustChain) |
 | 📊 **Metrics Dashboard** | [trust-chain-mocha.vercel.app/analytics](https://trust-chain-mocha.vercel.app/analytics) |
 | 🔍 **Monitoring Dashboard** | [trust-chain-mocha.vercel.app/admin/logs](https://trust-chain-mocha.vercel.app/admin/logs) |
