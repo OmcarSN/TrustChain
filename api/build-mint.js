@@ -27,6 +27,39 @@ const MAX_BODY_SIZE = 10 * 1024; // 10 KB
 // Increase Vercel function timeout for Mainnet Horizon (slower than Testnet)
 export const config = { maxDuration: 30 };
 
+// ── Rate Limiting ──────────────────────────────────────────────────
+const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
+const RATE_LIMIT_MAX = 5; // max 5 mint requests per window per IP
+const rateLimitMap = new Map();
+
+function isRateLimited(ip) {
+  const now = Date.now();
+  const entry = rateLimitMap.get(ip);
+
+  if (!entry || now - entry.windowStart > RATE_LIMIT_WINDOW_MS) {
+    rateLimitMap.set(ip, { windowStart: now, count: 1 });
+    return false;
+  }
+
+  entry.count++;
+  if (entry.count > RATE_LIMIT_MAX) {
+    return true;
+  }
+  return false;
+}
+
+// ── Allowed Origins ────────────────────────────────────────────────
+const ALLOWED_ORIGINS = [
+  "https://trust-chain-mocha.vercel.app",
+  "http://localhost:5173",
+  "http://localhost:3000",
+];
+
+function getCorsOrigin(reqOrigin) {
+  if (ALLOWED_ORIGINS.includes(reqOrigin)) return reqOrigin;
+  return ALLOWED_ORIGINS[0];
+}
+
 export default async function handler(req, res) {
   // ── Method guard ──────────────────────────────────────────────────
   if (req.method !== "POST") {
@@ -35,12 +68,20 @@ export default async function handler(req, res) {
   }
 
   // ── CORS ──────────────────────────────────────────────────────────
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  const origin = getCorsOrigin(req.headers.origin);
+  res.setHeader("Access-Control-Allow-Origin", origin);
   res.setHeader("Access-Control-Allow-Methods", "POST");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Vary", "Origin");
 
   if (req.method === "OPTIONS") {
     return res.status(204).end();
+  }
+
+  // ── Rate limiting ────────────────────────────────────────────────
+  const clientIp = req.headers["x-forwarded-for"]?.split(",")[0]?.trim() || "unknown";
+  if (isRateLimited(clientIp)) {
+    return res.status(429).json({ error: "Too many requests. Please try again later." });
   }
 
   // ── Read env ──────────────────────────────────────────────────────
@@ -50,8 +91,8 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: "Sponsor not configured" });
   }
 
-  // Determine network from env (same var the frontend uses)
-  const network = (process.env.VITE_STELLAR_NETWORK || "testnet").toLowerCase();
+  // Determine network from env (defaults to mainnet for production)
+  const network = (process.env.STELLAR_NETWORK || "mainnet").toLowerCase();
   const isMainnet = network === "mainnet";
 
   const networkPassphrase = isMainnet

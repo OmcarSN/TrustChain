@@ -11,28 +11,74 @@ import { buildFeeBumpTransaction } from "../src/utils/feeBump.js";
  * Uses the shared `buildFeeBumpTransaction` utility from src/utils/feeBump.js
  * to maintain a single source of truth for the fee-bump build logic.
  *
+ * Security:
+ * - CORS restricted to deployment origin
+ * - In-memory rate limiting (10 req/min per IP)
+ * - Network defaults to mainnet (production)
+ *
  * Request body:  { innerTxXDR: string }
  * Response body: { feeBumpXDR: string } | { error: string }
  */
 
 const MAX_BODY_SIZE = 10 * 1024; // 10 KB — generous limit for a single XDR
 
+// ── Rate Limiting ──────────────────────────────────────────────────
+const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
+const RATE_LIMIT_MAX = 10; // max 10 requests per window per IP
+const rateLimitMap = new Map();
+
+function isRateLimited(ip) {
+  const now = Date.now();
+  const entry = rateLimitMap.get(ip);
+
+  if (!entry || now - entry.windowStart > RATE_LIMIT_WINDOW_MS) {
+    rateLimitMap.set(ip, { windowStart: now, count: 1 });
+    return false;
+  }
+
+  entry.count++;
+  if (entry.count > RATE_LIMIT_MAX) {
+    return true;
+  }
+  return false;
+}
+
+// ── Allowed Origins ────────────────────────────────────────────────
+const ALLOWED_ORIGINS = [
+  "https://trust-chain-mocha.vercel.app",
+  "http://localhost:5173",
+  "http://localhost:3000",
+];
+
+function getCorsOrigin(reqOrigin) {
+  if (ALLOWED_ORIGINS.includes(reqOrigin)) return reqOrigin;
+  return ALLOWED_ORIGINS[0]; // default to production
+}
+
 export const config = { maxDuration: 30 };
 
 export default async function handler(req, res) {
+  // ── CORS ──────────────────────────────────────────────────────────
+  const origin = getCorsOrigin(req.headers.origin);
+  res.setHeader("Access-Control-Allow-Origin", origin);
+  res.setHeader("Access-Control-Allow-Methods", "POST");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Vary", "Origin");
+
+  if (req.method === "OPTIONS") {
+    return res.status(204).end();
+  }
+
   // ── Method guard ──────────────────────────────────────────────────
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  // ── CORS — restrict to same-origin (Vercel serves API + client on same domain) ──
-  res.setHeader("Access-Control-Allow-Origin", "*"); // Vercel same-origin by default
-  res.setHeader("Access-Control-Allow-Methods", "POST");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-
-  if (req.method === "OPTIONS") {
-    return res.status(204).end();
+  // ── Rate limiting ────────────────────────────────────────────────
+  const clientIp = req.headers["x-forwarded-for"]?.split(",")[0]?.trim() || "unknown";
+  if (isRateLimited(clientIp)) {
+    return res.status(429).json({ error: "Too many requests. Please try again later." });
   }
 
   // ── Read env ──────────────────────────────────────────────────────
@@ -56,7 +102,7 @@ export default async function handler(req, res) {
 
   // ── Build fee bump via shared utility ─────────────────────────────
   try {
-    const network = (process.env.VITE_STELLAR_NETWORK || "testnet").toLowerCase();
+    const network = (process.env.STELLAR_NETWORK || "mainnet").toLowerCase();
     const isMainnet = network === "mainnet";
     const networkPassphrase = isMainnet ? Networks.PUBLIC : Networks.TESTNET;
 

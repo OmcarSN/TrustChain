@@ -16,6 +16,30 @@ export default defineConfig({
   define: {
     'global': 'globalThis',
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          // Split the massive Stellar SDK into its own chunk
+          if (id.includes('@stellar/stellar-sdk') || id.includes('stellar-base')) {
+            return 'stellar-sdk';
+          }
+          // Split Supabase client
+          if (id.includes('@supabase')) {
+            return 'supabase';
+          }
+          // Split charting library (only used on /analytics)
+          if (id.includes('recharts') || id.includes('d3-')) {
+            return 'recharts';
+          }
+          // Split animation library
+          if (id.includes('framer-motion')) {
+            return 'framer';
+          }
+        },
+      },
+    },
+  },
   test: {
     globals: true,
     environment: 'jsdom',
