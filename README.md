@@ -1,7 +1,7 @@
 # 🛡️ TrustChain — Verified Economy
 ### *Your Work. Your Reputation. On-Chain Forever.*
 
-[![Level](https://img.shields.io/badge/Level-6_Black_Belt_⚫-black?style=for-the-badge)](#-level-6-black-belt--production-upgrades)
+[![Level](https://img.shields.io/badge/Level-7_Master_Belt_🏆-gold?style=for-the-badge)](#-level-7--startup-track)
 [![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-trust--chain--mocha.vercel.app-7c3aed?style=for-the-badge)](https://trust-chain-mocha.vercel.app/)
 [![Demo Video](https://img.shields.io/badge/🎥_Demo_Video-YouTube-red?style=for-the-badge&logo=youtube)](https://youtu.be/3d4YxGwsK0U?si=grqwJ_fMEf4PFf07)
 [![Stellar](https://img.shields.io/badge/Built_on-Stellar_Mainnet-blue?style=for-the-badge&logo=stellar)](https://stellar.org)
@@ -9,7 +9,7 @@
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](./LICENSE)
 [![Security](https://img.shields.io/badge/Security-Checklist_Passed-brightgreen?style=for-the-badge)](./SECURITY.md)
 
-**TrustChain** is a digital identity system on blockchain built on the **Stellar network**. It helps daily wage workers (like construction workers, house help, and drivers) create digital IDs that can't be faked, and build a work reputation based on employer ratings.
+**TrustChain** is a decentralized identity and reputation platform for the informal economy, built on **Stellar Mainnet**. It gives daily wage workers (construction workers, house help, drivers, plumbers) a tamper-proof digital identity and a portable reputation score — powered by soulbound credentials, on-chain endorsements, and gasless UX.
 
 ## Why I Built This
 
@@ -23,6 +23,7 @@ In India, crores of daily wage workers have no way to show their work history or
 - [Problem Statement](#-problem-statement)
 - [Solution](#-solution)
 - [Key Features](#-key-features)
+- [🏆 Level 7 — Startup Track](#-level-7--startup-track)
 - [Live Demo & Links](#-live-demo--links)
 - [Architecture](#️-architecture)
 - [Tech Stack](#️-tech-stack)
@@ -37,9 +38,9 @@ In India, crores of daily wage workers have no way to show their work history or
 - [Technical Documentation](#-technical-documentation)
 - [Getting Started](#-getting-started)
 - [User Feedback & Validation](#-user-feedback--validation)
-- [Testnet User Wallet Addresses](#-testnet-user-wallet-addresses)
+- [User Wallet Addresses (Bootcamp Phase)](#-user-wallet-addresses-bootcamp-phase)
 - [Community Contribution](#-community-contribution)
-- [Improvement Roadmap](#-improvement-roadmap-based-on-user-feedback)
+- [Startup Roadmap & Milestones](#-startup-roadmap--milestones)
 - [License](#-license)
 
 ---
@@ -122,6 +123,88 @@ Most of these workers don't use LinkedIn or have paper certificates to show thei
 - Full Hindi language localization for informal economy workers
 - Seamless toggle between English and Hindi across the entire platform
 - Culturally relevant translations replacing hardcoded text
+
+---
+
+## 🏆 Level 7 — Startup Track
+
+TrustChain is applying to the **Stellar Startup Track (Level 7 — Master Belt)** as a scalable identity and reputation platform targeting **Financial Inclusion** and **Identity & Compliance** within the Stellar ecosystem.
+
+### 🎯 Ecosystem Alignment
+
+| Focus Area | How TrustChain Fits |
+|---|---|
+| **Financial Inclusion** | Gives 2B+ unbanked informal workers a verifiable digital identity — the first step to accessing financial services |
+| **Identity & Compliance** | Soulbound credentials create a tamper-proof KYW (Know Your Worker) layer for employers and microfinance institutions |
+| **Consumer dApps** | Mobile-friendly, gasless UX designed for workers who've never used crypto |
+| **Wallet Infrastructure** | Gasless onboarding via sponsor wallet — workers get funded accounts automatically |
+
+### 📊 Traction & Milestones Achieved
+
+| Milestone | Status |
+|---|---|
+| MVP completed | ✅ Full-featured product live |
+| Testnet launch | ✅ Completed (migrated to Mainnet) |
+| Mainnet deployment | ✅ 2 Soroban contracts deployed on Stellar Mainnet |
+| User validation | ✅ 30+ user feedback responses collected (4.8/5 avg rating) |
+| Mainnet users | ✅ 11 registered workers, 5 verified phones, 2 endorsements |
+| Security hardening | ✅ Rate limiting, CORS, phone verification, 93 automated tests |
+| CI/CD pipeline | ✅ 8-stage GitHub Actions workflow |
+| Demo video | ✅ [YouTube](https://youtu.be/3d4YxGwsK0U?si=grqwJ_fMEf4PFf07) |
+
+### 💼 Business Model
+
+TrustChain is designed to be sustainable through a **B2B2C model** — free for workers, monetized through employers and institutions:
+
+| Revenue Stream | Description | Target Launch |
+|---|---|---|
+| **Verification API** | Employers and HR platforms pay per-query to verify worker credentials via API. Pricing: ~₹5-10 per verification | Q1 2027 |
+| **Premium Employer Accounts** | Businesses get bulk verification, analytics dashboards, and priority support. SaaS subscription: ₹999-4999/month | Q2 2027 |
+| **Microfinance Partnerships** | Banks and NBFCs use TrustChain reputation scores as an alternative credit signal for microloans to unbanked workers | Q3 2027 |
+| **Staffing Platform Licensing** | White-label TrustChain for staffing agencies (UrbanClap, Apna.co model) who need verified worker profiles | Q4 2027 |
+
+> **Unit Economics:** At ₹5/verification × 1,000 verifications/day = ₹1.5L/month revenue. Stellar transaction costs are near-zero (0.00001 XLM/tx ≈ ₹0.0003), so margins are 99%+.
+
+### 🚀 Go-to-Market Strategy
+
+**Phase 1 — Grassroots (Current)**
+- Onboard workers through direct field outreach in Pune and Mumbai
+- Partner with local labor unions and worker cooperatives
+- Target: 500 registered workers in 3 months
+
+**Phase 2 — Platform Partnerships**
+- Integrate with staffing apps (Apna, WorkIndia, QuikrJobs) as a verification layer
+- Partner with microfinance institutions for reputation-based micro-lending
+- Target: 5,000 workers, 50 employer accounts
+
+**Phase 3 — Scale**
+- Expand to other Indian cities (Delhi, Bangalore, Hyderabad)
+- Launch Verification API for B2B integrations
+- Add regional languages (Marathi, Tamil, Telugu)
+- Target: 50,000 workers, 500 employer accounts
+
+### 🔎 Competitive Analysis
+
+| Feature | TrustChain | LinkedIn | Apna.co | Paper Certificates |
+|---|---|---|---|---|
+| Works for informal workers | ✅ | ❌ | Partial | ✅ |
+| Tamper-proof credentials | ✅ (on-chain) | ❌ | ❌ | ❌ (easily forged) |
+| Zero cost for workers | ✅ (gasless) | ✅ | ✅ | ❌ |
+| Portable across cities | ✅ (blockchain) | ✅ | ❌ | ❌ |
+| Employer verification | ✅ (on-chain) | ❌ | ❌ | ❌ |
+| No app download needed | ✅ (PWA) | ❌ | ❌ | N/A |
+| Decentralized | ✅ | ❌ | ❌ | N/A |
+| Sybil resistant | ✅ (phone OTP) | Partial | Partial | ❌ |
+
+> **Key Differentiator:** TrustChain is the only platform that combines soulbound on-chain credentials + gasless UX + phone-based Sybil resistance specifically designed for workers who have never used crypto.
+
+### 👥 Team
+
+| Role | Name | Contribution |
+|---|---|---|
+| **Founder & Full-Stack Developer** | Devyani Sanjay Gofan | Architecture, smart contracts (Rust/Soroban), React frontend, Vercel backend, UX design, user research |
+
+> Open to onboarding co-founders with expertise in growth, partnerships, and mobile development.
 
 ---
 
@@ -838,9 +921,9 @@ npm run build
 
 ---
 
-## 👛 Testnet User Wallet Addresses (Bootcamp Phase)
+## 👛 User Wallet Addresses (Bootcamp Phase)
 
-> ✅ **30 verified users onboarded with active Stellar Testnet wallets during the RiseIn Bootcamp phase**
+> ✅ **30 verified users onboarded with active Stellar wallets during the RiseIn Bootcamp phase (initially on Testnet, now migrated to Mainnet)**
 
 | # | Name | Wallet Address | Explorer Link |
 |---|------|---------------|---------------|
@@ -889,40 +972,52 @@ npm run build
 
 ---
 
-## 🔄 Improvement Roadmap (Based on User Feedback)
+## 🔄 Startup Roadmap & Milestones
 
-### Iteration 1 — Completed ✅
+### ✅ Completed Milestones
 
-| Improvement | Description | Commit |
-|------------|-------------|--------|
-| Soroban Smart Contracts | Deployed credential & reputation contracts | [b9b11dd](https://github.com/OmcarSN/TrustChain/commit/b9b11dd) |
-| Premium UI Overhaul | Glassmorphism, gradients, Framer Motion animations | [0f1fae7](https://github.com/OmcarSN/TrustChain/commit/0f1fae7) |
-| Dashboard Page | Personal hub with activity feed + reputation ring | [6de8ebe](https://github.com/OmcarSN/TrustChain/commit/6de8ebe) |
-| Worker Discovery | Searchable/filterable worker directory | [6de8ebe](https://github.com/OmcarSN/TrustChain/commit/6de8ebe) |
-| Level 6 Features | Analytics, Explorer, Fee Bump, Security, Monitoring | [2d98a4b](https://github.com/OmcarSN/TrustChain/commit/2d98a4b) |
-| Comprehensive Audit | Fixed FeeBump API, reputation edge cases, CSP headers | [View Commits](https://github.com/OmcarSN/TrustChain/commits/master) |
+| Milestone | Description | Evidence |
+|-----------|-------------|----------|
+| MVP Development | Full-featured credential + endorsement platform | [Live Demo](https://trust-chain-mocha.vercel.app/) |
+| Soroban Smart Contracts | Credential & Reputation contracts in Rust | [View on Stellar Expert](https://stellar.expert/explorer/public/contract/CCBIIOQMO4BOHZ7RTL7FQDQJCLNRUR7JMNWHDBO4L6QMISLB3UZHDTU4) |
+| Mainnet Deployment | Both contracts deployed on Stellar Mainnet | Contract IDs in README |
+| Gasless Onboarding | Sponsor wallet funds new accounts + pays all fees | `/api/build-mint.js` + `/api/fee-bump.js` |
+| Phone Verification | Twilio OTP-based Sybil resistance | `/api/send-otp.js` + `/api/verify-otp.js` |
+| User Validation | 30 real users tested, 4.8/5 avg rating | [user-feedback.xlsx](./user-feedback.xlsx) |
+| Security Hardening | Rate limiting, CORS, input sanitization, 93 automated tests | [SECURITY.md](./SECURITY.md) |
+| CI/CD Pipeline | 8-stage automated GitHub Actions workflow | [ci.yml](./.github/workflows/ci.yml) |
+| Multi-Language Support | English + Hindi localization | `src/locales/` |
+| DAO Governance UI | Full governance dashboard (frontend built) | `src/pages/Governance.jsx` |
+| Community Contribution | Twitter post about TrustChain's mission | [View Post](https://x.com/i/status/2042962447297057275) |
 
-### Iteration 2 — Based on User Feedback (30 Responses)
+### 🔜 Next Milestones (Level 7 — Startup Track)
+
+| Milestone | Target | Timeline |
+|-----------|--------|----------|
+| **User Growth: 500 Workers** | Direct field onboarding in Pune & Mumbai | Month 1-3 |
+| **Governance Contract Deployment** | Deploy DAO governance contract on Mainnet | Month 1 |
+| **QR Code Profile Sharing** | Offline-first sharing for workers without internet | Month 2 |
+| **Verification API (B2B)** | REST API for employers to verify credentials programmatically | Month 3 |
+| **Marathi Language Support** | Expand accessibility for Maharashtra's 80M+ Marathi speakers | Month 2 |
+| **Microfinance Partnership (Pilot)** | Partner with 1 NBFC to use reputation scores as credit signals | Month 4-6 |
+| **Mobile-First Redesign** | PWA optimized for low-end Android devices on 3G/4G | Month 3-4 |
+| **Photo Evidence System** | Workers attach work photos to endorsements for richer profiles | Month 4 |
+| **Employer Dashboard** | Dedicated interface for businesses to manage verifications | Month 5 |
+| **Revenue: First Paying Customer** | Staffing agency or employer account subscription | Month 6 |
+| **AI Worker Matching** | Smart recommendations matching worker skills to job requirements | Month 6-8 |
+| **Multi-City Expansion** | Launch in Delhi, Bangalore, Hyderabad | Month 6-9 |
+| **SCF Grant Application** | Apply to Stellar Community Fund with demonstrated traction | Month 6 |
+
+### 📈 Past Iteration — Based on User Feedback (30 Responses)
 
 | Improvement | Feedback Source | Status |
 |------------|----------------|--------|
-| Analytics Dashboard | Sarthak Kharat: "Add analytics" | ✅ [2d98a4b](https://github.com/OmcarSN/TrustChain/commit/2d98a4b) |
-| Toast Notifications | Sarthak Kharat: "Add notifications" | ✅ [2d98a4b](https://github.com/OmcarSN/TrustChain/commit/2d98a4b) |
-| UI Polish | Thanchan Bhumij, Khushi Nagare, Narayan Mote: "Improve UI" | ✅ [a6b09ce](https://github.com/OmcarSN/TrustChain/commit/a6b09ce) |
-| Multi-Language Support | Priyanka, Stallon, Sudam, Gauri: "Add multiple languages" | ✅ [446c024](https://github.com/OmcarSN/TrustChain/commit/446c024) |
-| QR Code Sharing | Manisha Khatpe, Gauri Shinde: "Add QR code option" | 🔜 [446c024](https://github.com/OmcarSN/TrustChain/commit/446c024) |
-| Worker Contact Details | Sudam Nanavare, Gauri Shinde: "Add contact numbers" | 🔜 [446c024](https://github.com/OmcarSN/TrustChain/commit/446c024) |
-
-### Next Phase Roadmap
-
-1. 📱 **Mobile-First Redesign** — Most informal workers use smartphones
-2. 🌐 **Marathi Language Support** — Planned for accessibility for non-English workers (Hindi completed ✅)
-3. ✅ ~~**Stellar Mainnet Deployment**~~ — **DONE!** Both Credential and Reputation contracts deployed on Mainnet
-4. 📷 **Photo Evidence** — Attach work photos to endorsements
-5. 🔗 **QR Code Sharing** — Print and share profiles offline
-6. 🤖 **AI Worker Matching** — Smart recommendations for employers
-7. 📊 **Advanced Analytics** — Reputation trends and insights
-8. 💬 **In-App Messaging** — Direct employer-worker communication
+| Analytics Dashboard | Sarthak Kharat: "Add analytics" | ✅ Shipped |
+| Toast Notifications | Sarthak Kharat: "Add notifications" | ✅ Shipped |
+| UI Polish | Thanchan, Khushi, Narayan: "Improve UI" | ✅ Shipped |
+| Multi-Language | Priyanka, Stallon, Sudam, Gauri: "Add languages" | ✅ Hindi shipped |
+| QR Code Sharing | Manisha, Gauri: "Add QR code" | 🔜 Planned |
+| Worker Contact Details | Sudam, Gauri: "Add contact numbers" | 🔜 Planned |
 
 ---
 
