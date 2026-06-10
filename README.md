@@ -202,7 +202,7 @@ TrustChain is designed to be sustainable through a **B2B2C model** — free for 
 
 | Role | Name | Contribution |
 |---|---|---|
-| **Founder & Full-Stack Developer** | Devyani Sanjay Gofan | Architecture, smart contracts (Rust/Soroban), React frontend, Vercel backend, UX design, user research |
+| **Founder & Full-Stack Developer** | Omkar Nanaware | Architecture, smart contracts (Rust/Soroban), React frontend, Vercel backend, UX design, user research |
 
 > Open to onboarding co-founders with expertise in growth, partnerships, and mobile development.
 
