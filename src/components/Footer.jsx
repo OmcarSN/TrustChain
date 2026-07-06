@@ -5,7 +5,7 @@ import TrustChainLogo from './TrustChainLogo';
 
 /**
  * Footer — Global site footer.
- * Renders a 4-column layout with branding, platform links, resources,
+ * Renders a premium 4-column layout with branding, platform links, resources,
  * and community links, plus a bottom copyright bar with social links.
  *
  * @returns {React.ReactElement} The Footer component.
@@ -13,35 +13,46 @@ import TrustChainLogo from './TrustChainLogo';
 const Footer = () => {
   const { t } = useTranslation();
   return (
-    <footer style={{ backgroundColor: '#050505', borderTop: '1px solid rgba(255,255,255,0.08)', position: 'relative', zIndex: 1 }}>
+    <footer style={{ backgroundColor: '#050505', position: 'relative', zIndex: 1 }}>
+      {/* Gradient Top Border */}
+      <div className="section-divider" />
+
       <style>{`
         .footer-link {
           font-size: 13px;
-          color: rgba(255,255,255,0.45);
+          color: rgba(255,255,255,0.4);
           display: block;
-          margin-bottom: 10px;
+          margin-bottom: 12px;
           text-decoration: none;
           transition: all 0.2s ease;
         }
         .footer-link:hover {
-          color: #ffffff;
+          color: #22c55e;
           padding-left: 4px;
         }
-        .footer-social {
-          font-size: 11px;
-          letter-spacing: 2px;
-          color: rgba(255,255,255,0.3);
+        .footer-social-btn {
+          width: 36px;
+          height: 36px;
+          border-radius: 8px;
+          border: 1px solid rgba(255,255,255,0.08);
+          background: rgba(255,255,255,0.02);
+          color: rgba(255,255,255,0.4);
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 14px;
           text-decoration: none;
           transition: all 0.2s ease;
-          text-transform: uppercase;
         }
-        .footer-social:hover {
-          color: #ffffff;
+        .footer-social-btn:hover {
+          border-color: rgba(34,197,94,0.3);
+          color: #22c55e;
+          background: rgba(34,197,94,0.05);
         }
       `}</style>
 
       {/* Top Section: 4 Columns */}
-      <div style={{ maxWidth: '1400px', margin: '0 auto', gap: '48px', padding: '64px 24px 48px' }} className="font-inter grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
+      <div style={{ maxWidth: '1200px', margin: '0 auto', gap: '48px', padding: '64px 24px 48px' }} className="font-inter grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
         
         {/* Col 1: Brand */}
         <div>
@@ -51,21 +62,23 @@ const Footer = () => {
               TRUSTCHAIN
             </span>
           </div>
-          <p className="tc-text-dim" style={{ fontSize: '13px', lineHeight: '1.7', maxWidth: '260px' }}>
+          <p style={{ fontSize: '13px', lineHeight: '1.7', color: 'rgba(255,255,255,0.4)', maxWidth: '260px' }}>
             {t('footer_tagline')}
           </p>
           <div style={{
-            fontSize: '10px', color: '#00dc6e', letterSpacing: '1.5px', marginTop: '16px',
-            backgroundColor: 'rgba(0,220,110,0.08)', border: '1px solid rgba(0,220,110,0.2)',
-            padding: '4px 10px', display: 'inline-block', fontWeight: 'bold'
+            fontSize: '10px', color: '#22c55e', letterSpacing: '1.5px', marginTop: '16px',
+            background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.2)',
+            padding: '6px 12px', display: 'inline-flex', alignItems: 'center', gap: '6px',
+            fontWeight: 'bold', borderRadius: '100px',
           }}>
-            ● {t('footer_testnet')}
+            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 6px rgba(34,197,94,0.5)' }} />
+            {t('footer_testnet')}
           </div>
         </div>
 
         {/* Col 2: Platform */}
         <div>
-          <h4 className="font-clash tc-eyebrow tc-mb-md">
+          <h4 className="font-clash" style={{ fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.25)', fontWeight: '700', marginBottom: '20px' }}>
             {t('footer_platform')}
           </h4>
           <Link to="/discover" className="footer-link">{t('nav_find_workers')}</Link>
@@ -77,7 +90,7 @@ const Footer = () => {
 
         {/* Col 3: Resources */}
         <div>
-          <h4 className="font-clash tc-eyebrow tc-mb-md">
+          <h4 className="font-clash" style={{ fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.25)', fontWeight: '700', marginBottom: '20px' }}>
             {t('resources', 'Resources')}
           </h4>
           <a href="https://github.com/OmcarSN/TrustChain" target="_blank" rel="noopener noreferrer" className="footer-link">GitHub</a>
@@ -88,7 +101,7 @@ const Footer = () => {
 
         {/* Col 4: Community */}
         <div>
-          <h4 className="font-clash tc-eyebrow tc-mb-md">
+          <h4 className="font-clash" style={{ fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.25)', fontWeight: '700', marginBottom: '20px' }}>
             {t('community', 'Community')}
           </h4>
           <Link to="/about" className="footer-link">{t('about', 'About')}</Link>
@@ -100,21 +113,17 @@ const Footer = () => {
       {/* Bottom Bar */}
       <div style={{
         borderTop: '1px solid rgba(255,255,255,0.06)',
-        paddingTop: '20px',
-        paddingBottom: '24px',
-        paddingLeft: '24px',
-        paddingRight: '24px',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '24px',
-      }} className="sm:flex-row">
-        <span className="tc-text-sm tc-text-dim tc-ls-wide">
-          © 2026 TRUSTCHAIN PROTOCOL · STELLAR SOROBAN
+        padding: '20px 24px',
+        display: 'flex', flexDirection: 'column', gap: '16px',
+        maxWidth: '1200px', margin: '0 auto',
+      }} className="sm:flex-row sm:items-center sm:justify-between">
+        <span className="font-inter" style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.1em' }}>
+          © 2026 TRUSTCHAIN PROTOCOL · BUILT ON STELLAR
         </span>
-        <div style={{ display:'flex', gap:'24px' }}>
-          <a href="https://github.com/OmcarSN/TrustChain" target="_blank" rel="noopener noreferrer" className="footer-social">GH</a>
-          <a href="https://stellar.org" target="_blank" rel="noopener noreferrer" className="footer-social">ST</a>
-          <a href="https://www.freighter.app/" target="_blank" rel="noopener noreferrer" className="footer-social">FR</a>
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <a href="https://github.com/OmcarSN/TrustChain" target="_blank" rel="noopener noreferrer" className="footer-social-btn" title="GitHub">💻</a>
+          <a href="https://stellar.org" target="_blank" rel="noopener noreferrer" className="footer-social-btn" title="Stellar">⭐</a>
+          <a href="https://www.freighter.app/" target="_blank" rel="noopener noreferrer" className="footer-social-btn" title="Freighter">🔑</a>
         </div>
       </div>
     </footer>

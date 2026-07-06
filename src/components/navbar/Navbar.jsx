@@ -79,7 +79,7 @@ const Navbar = () => {
   return (
     <>
       <nav
-        className="fixed top-0 left-0 w-full z-50 bg-[#050505]/95 backdrop-blur-md transition-all duration-300"
+        className="fixed top-0 left-0 w-full z-50 navbar-glass transition-all duration-300"
         style={{ animation: 'navSlideDown 0.6s cubic-bezier(0.16,1,0.3,1) forwards' }}
         aria-label="Main navigation"
       >
@@ -113,9 +113,10 @@ const Navbar = () => {
           .wallet-btn:hover { background-color: rgba(255,255,255,0.08) !important; border-color: rgba(255,255,255,0.4) !important; transform: translateY(-1px); }
           .connect-btn-refine { transition: all 0.3s cubic-bezier(0.16,1,0.3,1); }
           .connect-btn-refine:hover {
-            background-color: #ffffff !important; border-color: #ffffff !important;
-            color: #000000 !important; transform: translateY(-1px);
-            box-shadow: 0 4px 14px rgba(255,255,255,0.25);
+            background: linear-gradient(135deg, #22c55e, #16a34a) !important;
+            border-color: rgba(34,197,94,0.6) !important;
+            color: #ffffff !important; transform: translateY(-1px);
+            box-shadow: 0 0 20px rgba(34,197,94,0.35), 0 4px 14px rgba(34,197,94,0.2);
           }
           .nav-link { position: relative; color: rgba(255,255,255,0.5); transition: color 0.3s ease; }
           .nav-link:hover { color: #ffffff; }
@@ -151,7 +152,7 @@ const Navbar = () => {
               <TrustChainLogo size={36} />
             </div>
             <div className="flex flex-col leading-none transition-all duration-300 group-hover:opacity-80 group-hover:translate-x-1">
-              <span className="font-clash font-bold text-white text-lg tracking-widest uppercase">TRUSTCHAIN</span>
+              <span className="font-clash font-bold text-lg tracking-widest uppercase" style={{ background: 'linear-gradient(135deg, #ffffff 0%, rgba(255,255,255,0.7) 50%, #22c55e 100%)', backgroundSize: '200% auto', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>TRUSTCHAIN</span>
               <span className="text-[9px] uppercase tracking-[0.25em] text-white/30 font-inter mt-0.5 group-hover:text-[#00dc6e] transition-colors duration-300">
                 {t('nav.verifiedEconomy', 'Verified Economy')}
               </span>

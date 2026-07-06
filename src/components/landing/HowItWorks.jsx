@@ -4,9 +4,7 @@ import { Link } from 'react-router-dom';
 
 /**
  * HowItWorks — "Three Steps to Trust" section on the Landing page.
- * Renders a header with a "View Detailed Guide" CTA link and a 3-column
- * grid of step cards with staggered scroll-reveal animations. Each card
- * shows a step number watermark, label, title, and description.
+ * Premium step cards with gradient accents and connecting line.
  *
  * @param {Object} props
  * @param {Array<Feature>} props.features - Array of step feature objects.
@@ -14,60 +12,93 @@ import { Link } from 'react-router-dom';
  * @param {Function} props.t - i18next translation function.
  * @returns {React.ReactElement} The HowItWorks component.
  */
-const HowItWorks = ({ features, visible, t }) => (
-  <section id="how-it-works" style={{ paddingTop: '80px', paddingBottom: '0px', paddingRight: '64px', paddingLeft: '24px', marginTop: '0px' }}>
-    <style>{`
-      .step-card-new { transition: all 0.3s ease; }
-      .step-card-new:hover { border-color: rgba(255,255,255,0.15) !important; background-color: rgba(255,255,255,0.03) !important; }
-    `}</style>
+const HowItWorks = ({ features, visible, t }) => {
+  const stepColors = ['#22c55e', '#3b82f6', '#a855f7'];
+  const stepIcons = ['🛡️', '⭐', '🔍'];
 
-    <div style={{
-      marginBottom: '48px', paddingLeft: '24px',
-      opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(24px)',
-      transition: 'opacity 0.6s ease, transform 0.6s cubic-bezier(0.22,1,0.36,1)',
-      display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '24px'
-    }}>
-      <div>
-        <p className="font-inter tc-eyebrow tc-mb-sm">
-          {t('landing.howItWorks', 'How It Works')}
-        </p>
-        <h2 className="font-clash tc-fw-black tc-text-white" style={{ fontSize: '2rem' }}>
-          {t('landing.stepsTitleP1', 'Three Steps to')}{' '}{t('landing.stepsTitleP2', 'Trust')}
-        </h2>
-      </div>
-      <Link to="/how-it-works" className="font-inter" style={{
-        fontSize: '11px', fontWeight: '700', letterSpacing: '2px', color: '#00dc6e', textTransform: 'uppercase',
-        display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none',
-        border: '1px solid rgba(0, 220, 110, 0.3)', padding: '10px 20px', transition: 'all 0.3s ease', backgroundColor: 'rgba(0, 220, 110, 0.05)'
-      }}
-      onMouseOver={(e) => { e.currentTarget.style.backgroundColor = 'rgba(0, 220, 110, 0.15)'; e.currentTarget.style.borderColor = '#00dc6e'; }}
-      onMouseOut={(e) => { e.currentTarget.style.backgroundColor = 'rgba(0, 220, 110, 0.05)'; e.currentTarget.style.borderColor = 'rgba(0, 220, 110, 0.3)'; }}
-      >
-        {t('landing.viewDetailedGuide', 'VIEW DETAILED GUIDE')} <span>→</span>
-      </Link>
-    </div>
-
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4" style={{ position: 'relative', paddingBottom: '0px' }}>
-      <div style={{ position: 'absolute', top: '50%', left: '33%', width: '34%', height: '1px', borderTop: '1px dashed rgba(255,255,255,0.08)', zIndex: 0, pointerEvents: 'none' }} />
-      {features.map((feature, idx) => (
-        <div key={idx} className="step-card-new" style={{
-          padding: '32px 28px', paddingBottom: '32px',
-          border: '1px solid rgba(255,255,255,0.07)', backgroundColor: 'rgba(255,255,255,0.02)',
-          display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden',
-          opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(24px)',
-          transition: `opacity 0.6s ease ${idx * 0.1}s, transform 0.6s cubic-bezier(0.22,1,0.36,1) ${idx * 0.1}s, border-color 0.3s ease, background-color 0.3s ease`,
-        }}>
-          <div className="font-clash" style={{ position: 'absolute', bottom: '-20px', right: '-10px', fontSize: '120px', fontWeight: '900', lineHeight: 1, color: 'rgba(255,255,255,0.03)', pointerEvents: 'none', userSelect: 'none', zIndex: 0 }}>{feature.step}</div>
-          <p className="font-inter tc-eyebrow" style={{ letterSpacing: '3px', color: 'rgba(255,255,255,0.2)', marginBottom: '20px' }}>
-            {t('landing.stepLabel')} {feature.step}
+  return (
+    <section id="how-it-works" style={{ padding: '80px 24px 0', maxWidth: '1200px', margin: '0 auto' }}>
+      <div style={{
+        marginBottom: '48px',
+        opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(24px)',
+        transition: 'opacity 0.6s ease, transform 0.6s cubic-bezier(0.22,1,0.36,1)',
+        display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '24px'
+      }}>
+        <div>
+          <p className="font-inter" style={{
+            fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase',
+            color: '#22c55e', fontWeight: '700', marginBottom: '12px',
+          }}>
+            {t('landing.howItWorks', 'How It Works')}
           </p>
-          <h3 className="font-clash tc-fw-bold tc-text-white tc-mb-sm" style={{ fontSize: '15px' }}>{feature.title}</h3>
-          <p className="font-inter tc-text-dim tc-text-base" style={{ lineHeight: '1.7', flex: 1 }}>{feature.description}</p>
+          <h2 className="font-clash" style={{ fontSize: '2rem', fontWeight: '900', color: 'white' }}>
+            {t('landing.stepsTitleP1', 'Three Steps to')}{' '}
+            <span className="text-gradient">{t('landing.stepsTitleP2', 'Trust')}</span>
+          </h2>
         </div>
-      ))}
-    </div>
-  </section>
-);
+        <Link to="/how-it-works" className="btn-outline-glow font-inter" style={{
+          textDecoration: 'none', fontSize: '11px', padding: '10px 20px', borderRadius: '8px',
+        }}>
+          {t('landing.viewDetailedGuide', 'VIEW DETAILED GUIDE')} →
+        </Link>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6" style={{ position: 'relative' }}>
+        {/* Connecting Line (desktop only) */}
+        <div className="hidden md:block" style={{
+          position: 'absolute', top: '80px', left: '20%', width: '60%', height: '2px',
+          background: 'linear-gradient(90deg, #22c55e, #3b82f6, #a855f7)', opacity: 0.15,
+          zIndex: 0, pointerEvents: 'none',
+        }} />
+
+        {features.map((feature, idx) => (
+          <div key={idx} className="step-card-premium" style={{
+            opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(24px)',
+            transition: `opacity 0.6s ease ${idx * 0.15}s, transform 0.6s cubic-bezier(0.22,1,0.36,1) ${idx * 0.15}s`,
+            display: 'flex', flexDirection: 'column', zIndex: 1,
+          }}>
+            {/* Step Number with Gradient Circle */}
+            <div style={{
+              width: '48px', height: '48px', borderRadius: '50%',
+              background: `linear-gradient(135deg, ${stepColors[idx]}20, ${stepColors[idx]}08)`,
+              border: `1px solid ${stepColors[idx]}30`,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: '20px', marginBottom: '20px',
+            }}>
+              {stepIcons[idx]}
+            </div>
+
+            {/* Step Label */}
+            <p className="font-inter" style={{
+              fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase',
+              color: stepColors[idx], fontWeight: '700', marginBottom: '12px',
+            }}>
+              {t('landing.stepLabel')} {feature.step}
+            </p>
+
+            {/* Title */}
+            <h3 className="font-clash" style={{
+              fontSize: '16px', fontWeight: '800', color: 'white', marginBottom: '12px',
+            }}>{feature.title}</h3>
+
+            {/* Description */}
+            <p className="font-inter" style={{
+              fontSize: '13px', color: 'rgba(255,255,255,0.45)', lineHeight: '1.7', flex: 1,
+            }}>{feature.description}</p>
+
+            {/* Watermark Number */}
+            <div className="font-clash" style={{
+              position: 'absolute', bottom: '-15px', right: '-5px',
+              fontSize: '100px', fontWeight: '900', lineHeight: 1,
+              color: stepColors[idx], opacity: 0.04,
+              pointerEvents: 'none', userSelect: 'none',
+            }}>{feature.step}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+};
 
 HowItWorks.propTypes = {
   /** Array of step feature objects with step, title, description, link, linkText. */
@@ -78,7 +109,7 @@ HowItWorks.propTypes = {
     title: PropTypes.string.isRequired,
     /** Step description text. */
     description: PropTypes.string.isRequired,
-    /** Route path for the step’s CTA. */
+    /** Route path for the step's CTA. */
     link: PropTypes.string.isRequired,
     /** CTA button text. */
     linkText: PropTypes.string.isRequired,

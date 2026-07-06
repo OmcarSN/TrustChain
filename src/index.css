@@ -668,3 +668,294 @@ select.field-input option { background: #0c0c0c; color: #fff; }
 .mint-btn:disabled { background: #111; color: #2a2a2a; border: 1px solid #1a1a1a; cursor: not-allowed; }
 .mint-btn:not(:disabled) { background: #ffffff; color: #000000; border: none; }
 .mint-btn:not(:disabled):hover { background: #e5e5e5; }
+
+/* ── Premium Glass Card ─────────────────────────────────────── */
+.glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.glass-card:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+              0 0 0 1px rgba(255, 255, 255, 0.1),
+              inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transform: translateY(-2px);
+}
+
+/* ── Gradient Border Card ───────────────────────────────────── */
+.gradient-border {
+  position: relative;
+  background: rgba(10, 10, 10, 0.8);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.3), rgba(59, 130, 246, 0.3), rgba(168, 85, 247, 0.2));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ── Glow Button ────────────────────────────────────────────── */
+.btn-glow {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  border: none;
+  padding: 14px 32px;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  text-transform: uppercase;
+}
+
+.btn-glow:hover {
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.4),
+              0 0 60px rgba(34, 197, 94, 0.15);
+  transform: translateY(-1px);
+}
+
+.btn-glow::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(transparent, rgba(255, 255, 255, 0.1), transparent);
+  transform: rotate(45deg) translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.btn-glow:hover::after {
+  transform: rotate(45deg) translateX(100%);
+}
+
+/* ── Outline Glow Button ────────────────────────────────────── */
+.btn-outline-glow {
+  background: transparent;
+  color: #e5e5e5;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 14px 32px;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  text-transform: uppercase;
+}
+
+.btn-outline-glow:hover {
+  border-color: rgba(34, 197, 94, 0.5);
+  color: #22c55e;
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.15),
+              inset 0 0 20px rgba(34, 197, 94, 0.05);
+}
+
+/* ── Animated Gradient Background Mesh ──────────────────────── */
+@keyframes meshGradient {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.mesh-bg {
+  background: linear-gradient(-45deg, #050505, #0a1628, #071a12, #0d0520, #050505);
+  background-size: 400% 400%;
+  animation: meshGradient 15s ease infinite;
+}
+
+/* ── Animated Network Lines (Hero Background) ───────────────── */
+@keyframes networkPulse {
+  0%, 100% { opacity: 0.03; }
+  50% { opacity: 0.08; }
+}
+
+.network-bg {
+  background-image:
+    radial-gradient(circle at 20% 50%, rgba(34, 197, 94, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 50% 80%, rgba(168, 85, 247, 0.05) 0%, transparent 50%);
+  animation: networkPulse 8s ease-in-out infinite;
+}
+
+/* ── Gradient Text ──────────────────────────────────────────── */
+.text-gradient {
+  background: linear-gradient(135deg, #22c55e, #3b82f6, #a855f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, #f5c518, #f97316, #ef4444);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Animated Counter Glow ──────────────────────────────────── */
+@keyframes counterGlow {
+  0%, 100% { text-shadow: 0 0 10px rgba(34, 197, 94, 0); }
+  50% { text-shadow: 0 0 20px rgba(34, 197, 94, 0.3); }
+}
+
+.counter-glow {
+  animation: counterGlow 3s ease-in-out infinite;
+}
+
+/* ── Stat Card Premium ──────────────────────────────────────── */
+.stat-card-premium {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 28px 24px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s ease;
+}
+
+.stat-card-premium::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.5), transparent);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.stat-card-premium:hover::before {
+  opacity: 1;
+}
+
+.stat-card-premium:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+/* ── Floating Dots Animation ────────────────────────────────── */
+@keyframes floatDot {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
+  50% { transform: translateY(-15px) scale(1.2); opacity: 0.6; }
+}
+
+/* ── Section Divider Gradient ───────────────────────────────── */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.3), rgba(59, 130, 246, 0.3), transparent);
+  border: none;
+  margin: 0;
+}
+
+/* ── Premium Navbar Glass ───────────────────────────────────── */
+.navbar-glass {
+  background: rgba(5, 5, 5, 0.8) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+/* ── Hover Scale ────────────────────────────────────────────── */
+.hover-scale {
+  transition: transform 0.3s ease;
+}
+.hover-scale:hover {
+  transform: scale(1.02);
+}
+
+/* ── Step Card Premium ──────────────────────────────────────── */
+.step-card-premium {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 36px 28px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.step-card-premium::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #22c55e, #3b82f6);
+  transform: scaleX(0);
+  transition: transform 0.4s ease;
+}
+
+.step-card-premium:hover {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.step-card-premium:hover::after {
+  transform: scaleX(1);
+}
+
+/* ── Tech Card Premium ──────────────────────────────────────── */
+.tech-card-premium {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 28px 16px;
+  text-align: center;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+}
+
+.tech-card-premium:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.04);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+}
+
+.tech-card-premium .tech-icon-premium {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(59, 130, 246, 0.1));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 14px;
+  font-size: 18px;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.6);
+  transition: all 0.3s ease;
+}
+
+.tech-card-premium:hover .tech-icon-premium {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(59, 130, 246, 0.2));
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #22c55e;
+}
