@@ -126,7 +126,7 @@ const HeroSection = ({ t }) => (
         <img src="/hero-workers.png" alt="Diverse workers" style={{
           width: '100%', maxHeight: '80vh', objectFit: 'contain', objectPosition: 'bottom center',
           opacity: 0, animation: 'fadeSlideUp 1s ease forwards', animationDelay: '0.4s',
-          mixBlendMode: 'lighten',
+          mixBlendMode: 'screen',
         }} />
       </div>
     </div>
