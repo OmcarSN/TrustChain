@@ -17,6 +17,7 @@ const HeroSection = ({ t }) => (
     <style>{`
       .hero-inner { display: flex; flex-direction: column; justify-content: center; min-height: 100vh; padding: 100px 24px 40px 24px; overflow: hidden; position: relative; z-index: 10; }
       .hero-left { width: 100%; max-width: 720px; overflow: hidden; display: flex; flex-direction: column; align-items: flex-start; }
+      .hero-right { display: none; }
       .hero-badge { margin-bottom: 24px; }
       .hero-headline-block { margin-bottom: 12px; }
       .hero-subtext { margin-bottom: 40px; line-height: 1.7; }
@@ -24,9 +25,14 @@ const HeroSection = ({ t }) => (
       .hero-headline { font-size: clamp(36px, 9vw, 56px); white-space: normal; overflow: hidden; line-height: 1.1; }
       .hero-ghost { font-size: clamp(28px, 8vw, 50px); white-space: normal; overflow: hidden; margin-bottom: 28px; }
       @media (min-width: 768px) {
-        .hero-inner { padding: 120px 80px 60px 80px; }
+        .hero-inner { padding: 120px 60px 60px 80px; flex-direction: row; align-items: center; gap: 40px; }
+        .hero-left { flex: 1; }
+        .hero-right { display: flex; flex: 0 0 auto; align-items: flex-end; justify-content: center; max-width: 420px; }
         .hero-headline { font-size: clamp(32px, 4.5vw, 72px); white-space: nowrap; }
         .hero-ghost { font-size: clamp(28px, 4vw, 64px); white-space: nowrap; }
+      }
+      @media (min-width: 1024px) {
+        .hero-right { max-width: 480px; }
       }
     `}</style>
 
@@ -112,6 +118,17 @@ const HeroSection = ({ t }) => (
             <span className="font-inter" style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', letterSpacing: '0.05em' }}>ON-CHAIN</span>
           </div>
         </div>
+      </div>
+
+      {/* Hero Illustration — Right Side */}
+      <div className="hero-right">
+        <img src="/hero-workers.png" alt="Diverse workers" style={{
+          width: '100%', maxHeight: '75vh', objectFit: 'contain', objectPosition: 'bottom',
+          opacity: 0, animation: 'fadeSlideUp 1s ease forwards', animationDelay: '0.4s',
+          filter: 'drop-shadow(0 0 40px rgba(0,0,0,0.5))',
+          maskImage: 'linear-gradient(to top, transparent 0%, black 15%)',
+          WebkitMaskImage: 'linear-gradient(to top, transparent 0%, black 15%)',
+        }} />
       </div>
     </div>
   </section>
