@@ -30,64 +30,12 @@ const HeroSection = ({ t }) => (
       }
     `}</style>
 
-    {/* Animated Network SVG Background */}
-    <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 1, opacity: 0.15 }} viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
-      <defs>
-        <radialGradient id="nodeGlow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#22c55e" stopOpacity="0.6" />
-          <stop offset="100%" stopColor="#22c55e" stopOpacity="0" />
-        </radialGradient>
-        <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#22c55e" stopOpacity="0.3" />
-          <stop offset="50%" stopColor="#3b82f6" stopOpacity="0.2" />
-          <stop offset="100%" stopColor="#a855f7" stopOpacity="0.1" />
-        </linearGradient>
-      </defs>
-      {/* Network Lines */}
-      <line x1="200" y1="300" x2="500" y2="200" stroke="url(#lineGrad)" strokeWidth="1">
-        <animate attributeName="opacity" values="0.2;0.6;0.2" dur="4s" repeatCount="indefinite" />
-      </line>
-      <line x1="500" y1="200" x2="800" y2="350" stroke="url(#lineGrad)" strokeWidth="1">
-        <animate attributeName="opacity" values="0.3;0.7;0.3" dur="5s" repeatCount="indefinite" />
-      </line>
-      <line x1="800" y1="350" x2="1050" y2="250" stroke="url(#lineGrad)" strokeWidth="1">
-        <animate attributeName="opacity" values="0.2;0.5;0.2" dur="6s" repeatCount="indefinite" />
-      </line>
-      <line x1="300" y1="500" x2="600" y2="450" stroke="url(#lineGrad)" strokeWidth="1">
-        <animate attributeName="opacity" values="0.1;0.4;0.1" dur="4.5s" repeatCount="indefinite" />
-      </line>
-      <line x1="600" y1="450" x2="900" y2="550" stroke="url(#lineGrad)" strokeWidth="1">
-        <animate attributeName="opacity" values="0.2;0.6;0.2" dur="5.5s" repeatCount="indefinite" />
-      </line>
-      <line x1="200" y1="300" x2="300" y2="500" stroke="url(#lineGrad)" strokeWidth="1">
-        <animate attributeName="opacity" values="0.15;0.5;0.15" dur="3.5s" repeatCount="indefinite" />
-      </line>
-      <line x1="500" y1="200" x2="600" y2="450" stroke="url(#lineGrad)" strokeWidth="1">
-        <animate attributeName="opacity" values="0.1;0.4;0.1" dur="4s" repeatCount="indefinite" />
-      </line>
-      <line x1="800" y1="350" x2="900" y2="550" stroke="url(#lineGrad)" strokeWidth="1">
-        <animate attributeName="opacity" values="0.2;0.5;0.2" dur="5s" repeatCount="indefinite" />
-      </line>
-      {/* Network Nodes */}
-      {[[200,300],[500,200],[800,350],[1050,250],[300,500],[600,450],[900,550],[400,150],[700,500],[150,600]].map(([cx,cy], i) => (
-        <g key={i}>
-          <circle cx={cx} cy={cy} r="20" fill="url(#nodeGlow)">
-            <animate attributeName="r" values="15;25;15" dur={`${3 + i * 0.5}s`} repeatCount="indefinite" />
-          </circle>
-          <circle cx={cx} cy={cy} r="3" fill="#22c55e" opacity="0.8">
-            <animate attributeName="opacity" values="0.4;1;0.4" dur={`${2 + i * 0.3}s`} repeatCount="indefinite" />
-          </circle>
-        </g>
-      ))}
-    </svg>
-
-    {/* Gradient Glow Orbs */}
-    <div style={{ position: 'absolute', top: '20%', left: '60%', width: '600px', height: '600px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(34,197,94,0.08) 0%, transparent 60%)', pointerEvents: 'none', zIndex: 2, filter: 'blur(40px)' }} />
-    <div style={{ position: 'absolute', bottom: '10%', left: '20%', width: '400px', height: '400px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 60%)', pointerEvents: 'none', zIndex: 2 }} />
-    <div style={{ position: 'absolute', top: '60%', right: '10%', width: '300px', height: '300px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(168,85,247,0.05) 0%, transparent 60%)', pointerEvents: 'none', zIndex: 2 }} />
-
-    {/* Grid background */}
-    <div style={{ position: 'absolute', inset: 0, zIndex: 3, pointerEvents: 'none', backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
+    {/* Background Image */}
+    <div style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none' }}>
+      <img src="/hero-bg.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5 }} />
+    </div>
+    {/* Dark overlay for text readability */}
+    <div style={{ position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none', background: 'linear-gradient(to right, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.5) 100%)' }} />
 
     {/* Corner Brackets */}
     <div style={{ position: 'absolute', top: '20px', left: '20px', width: '32px', height: '32px', borderTop: '2px solid rgba(34,197,94,0.3)', borderLeft: '2px solid rgba(34,197,94,0.3)', pointerEvents: 'none', zIndex: 5 }} />
