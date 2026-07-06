@@ -44,12 +44,6 @@ const HowItWorks = ({ features, visible, t }) => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6" style={{ position: 'relative' }}>
-        {/* Connecting Line (desktop only) */}
-        <div className="hidden md:block" style={{
-          position: 'absolute', top: '80px', left: '20%', width: '60%', height: '2px',
-          background: 'linear-gradient(90deg, #22c55e, #3b82f6, #a855f7)', opacity: 0.15,
-          zIndex: 0, pointerEvents: 'none',
-        }} />
 
         {features.map((feature, idx) => (
           <div key={idx} className="step-card-premium" style={{
