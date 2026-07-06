@@ -32,10 +32,10 @@ const HeroSection = ({ t }) => (
 
     {/* Background Image */}
     <div style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none' }}>
-      <img src="/hero-bg.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5 }} />
+      <img src="/hero-bg.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.8 }} />
     </div>
     {/* Dark overlay for text readability */}
-    <div style={{ position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none', background: 'linear-gradient(to right, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.5) 100%)' }} />
+    <div style={{ position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none', background: 'linear-gradient(to right, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.15) 50%, rgba(0,0,0,0.25) 100%)' }} />
 
     {/* Corner Brackets */}
     <div style={{ position: 'absolute', top: '20px', left: '20px', width: '32px', height: '32px', borderTop: '2px solid rgba(34,197,94,0.3)', borderLeft: '2px solid rgba(34,197,94,0.3)', pointerEvents: 'none', zIndex: 5 }} />
