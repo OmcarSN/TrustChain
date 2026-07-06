@@ -124,9 +124,9 @@ const HeroSection = ({ t }) => (
       {/* Hero Illustration — Right Side */}
       <div className="hero-right">
         <img src="/hero-workers.png" alt="Diverse workers" style={{
-          width: '100%', maxHeight: '75vh', objectFit: 'contain', objectPosition: 'bottom',
+          width: '100%', maxHeight: '80vh', objectFit: 'contain', objectPosition: 'bottom center',
           opacity: 0, animation: 'fadeSlideUp 1s ease forwards', animationDelay: '0.4s',
-          borderRadius: '12px 12px 0 0',
+          mixBlendMode: 'lighten',
         }} />
       </div>
     </div>
