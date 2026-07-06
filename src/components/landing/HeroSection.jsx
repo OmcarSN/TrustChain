@@ -125,9 +125,8 @@ const HeroSection = ({ t }) => (
         <img src="/hero-workers.png" alt="Diverse workers" style={{
           width: '100%', maxHeight: '75vh', objectFit: 'contain', objectPosition: 'bottom',
           opacity: 0, animation: 'fadeSlideUp 1s ease forwards', animationDelay: '0.4s',
-          filter: 'drop-shadow(0 0 40px rgba(0,0,0,0.5))',
-          maskImage: 'linear-gradient(to top, transparent 0%, black 15%)',
-          WebkitMaskImage: 'linear-gradient(to top, transparent 0%, black 15%)',
+          filter: 'drop-shadow(0 0 30px rgba(0,0,0,0.3))',
+          mixBlendMode: 'screen',
         }} />
       </div>
     </div>
