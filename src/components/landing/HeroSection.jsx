@@ -25,9 +25,9 @@ const HeroSection = ({ t }) => (
       .hero-headline { font-size: clamp(36px, 9vw, 56px); white-space: normal; overflow: hidden; line-height: 1.1; }
       .hero-ghost { font-size: clamp(28px, 8vw, 50px); white-space: normal; overflow: hidden; margin-bottom: 28px; }
       @media (min-width: 768px) {
-        .hero-inner { padding: 120px 24px 60px 80px; flex-direction: row; align-items: center; gap: 24px; overflow: visible; }
+        .hero-inner { padding: 120px 0 60px 80px; flex-direction: row; align-items: center; gap: 24px; overflow: visible; }
         .hero-left { flex: 1; min-width: 0; }
-        .hero-right { display: flex; flex: 0 0 340px; align-items: flex-end; justify-content: center; overflow: visible; }
+        .hero-right { display: flex; flex: 0 0 340px; align-items: flex-end; justify-content: flex-end; overflow: visible; }
         .hero-headline { font-size: clamp(32px, 4.5vw, 72px); white-space: nowrap; }
         .hero-ghost { font-size: clamp(28px, 4vw, 64px); white-space: nowrap; }
       }
