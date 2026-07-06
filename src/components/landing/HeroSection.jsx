@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
  * @returns {React.ReactElement} The HeroSection component.
  */
 const HeroSection = ({ t }) => (
-  <section className="mesh-bg" style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
+  <section style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', backgroundColor: '#0d0520' }}>
     <style>{`
       .hero-inner { display: flex; flex-direction: column; justify-content: center; min-height: 100vh; padding: 100px 24px 40px 24px; overflow: hidden; position: relative; z-index: 10; }
       .hero-left { width: 100%; max-width: 720px; overflow: hidden; display: flex; flex-direction: column; align-items: flex-start; }
@@ -36,12 +36,13 @@ const HeroSection = ({ t }) => (
       }
     `}</style>
 
-    {/* Background Image */}
-    <div style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none' }}>
-      <img src="/hero-bg.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.8 }} />
-    </div>
-    {/* Dark overlay for text readability */}
-    <div style={{ position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none', background: 'linear-gradient(to right, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.15) 50%, rgba(0,0,0,0.25) 100%)' }} />
+    {/* Background Gradient matching character illustration */}
+    <div style={{
+      position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none',
+      background: 'radial-gradient(ellipse at 70% 30%, #c87840 0%, transparent 50%), radial-gradient(ellipse at 90% 70%, #d060a0 0%, transparent 50%), radial-gradient(ellipse at 40% 80%, #7040b0 0%, transparent 50%), radial-gradient(ellipse at 20% 30%, #d09050 0%, transparent 60%), radial-gradient(ellipse at 60% 50%, #9060c0 0%, transparent 50%), linear-gradient(135deg, #1a0a2e 0%, #0d0520 50%, #1a0a2e 100%)',
+    }} />
+    {/* Dark overlay for text readability — fades out toward right */}
+    <div style={{ position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none', background: 'linear-gradient(to right, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.25) 45%, transparent 70%)' }} />
 
     {/* Corner Brackets */}
     <div style={{ position: 'absolute', top: '20px', left: '20px', width: '32px', height: '32px', borderTop: '2px solid rgba(34,197,94,0.3)', borderLeft: '2px solid rgba(34,197,94,0.3)', pointerEvents: 'none', zIndex: 5 }} />
@@ -125,7 +126,7 @@ const HeroSection = ({ t }) => (
         <img src="/hero-workers.png" alt="Diverse workers" style={{
           width: '100%', maxHeight: '75vh', objectFit: 'contain', objectPosition: 'bottom',
           opacity: 0, animation: 'fadeSlideUp 1s ease forwards', animationDelay: '0.4s',
-          borderRadius: '16px',
+          borderRadius: '12px 12px 0 0',
         }} />
       </div>
     </div>
