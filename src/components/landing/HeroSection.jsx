@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
  * @returns {React.ReactElement} The HeroSection component.
  */
 const HeroSection = ({ t }) => (
-  <section style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', backgroundColor: '#0d0520' }}>
+  <section style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', backgroundColor: '#0d0520', clipPath: 'inset(0)' }}>
     <style>{`
       .hero-inner { display: flex; flex-direction: column; justify-content: center; min-height: 100vh; padding: 100px 24px 40px 24px; overflow: hidden; position: relative; z-index: 10; }
       .hero-left { width: 100%; max-width: 720px; overflow: hidden; display: flex; flex-direction: column; align-items: flex-start; }
@@ -25,9 +25,10 @@ const HeroSection = ({ t }) => (
       .hero-headline { font-size: clamp(36px, 9vw, 56px); white-space: normal; overflow: hidden; line-height: 1.1; }
       .hero-ghost { font-size: clamp(28px, 8vw, 50px); white-space: normal; overflow: hidden; margin-bottom: 28px; }
       @media (min-width: 768px) {
-        .hero-inner { padding: 120px 0 60px 80px; flex-direction: row; align-items: center; gap: 24px; overflow: visible; }
+        .hero-inner { padding: 120px 0 60px 80px; flex-direction: row; align-items: center; gap: 24px; overflow: visible; min-height: 100vh; }
         .hero-left { flex: none; width: 55%; max-width: 600px; min-width: 0; }
-        .hero-right { display: block; position: absolute; right: 0; bottom: 0; width: 340px; overflow: visible; z-index: 5; }
+        .hero-right { display: flex; align-items: flex-end; position: fixed; right: 0; bottom: 0; width: 340px; height: 100vh; pointer-events: none; z-index: 5; }
+        .hero-right img { pointer-events: auto; }
         .hero-headline { font-size: clamp(32px, 4vw, 64px); white-space: normal; word-break: break-word; }
         .hero-ghost { font-size: clamp(24px, 3.2vw, 52px); white-space: normal; word-break: break-word; }
       }
