@@ -13,45 +13,26 @@ import { Link } from 'react-router-dom';
  * @returns {React.ReactElement} The HeroSection component.
  */
 const HeroSection = ({ t }) => (
-  <section style={{ position: 'relative', height: '100vh', display: 'flex', alignItems: 'center', backgroundColor: '#0d0520', overflow: 'hidden' }}>
+  <section style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', backgroundColor: '#0d0520' }}>
     <style>{`
-      .hero-inner { display: flex; flex-direction: column; justify-content: center; height: 100vh; padding: 100px 24px 40px 24px; position: relative; z-index: 10; }
-      .hero-left { width: 100%; max-width: 720px; display: flex; flex-direction: column; align-items: flex-start; }
+      .hero-inner { display: flex; flex-direction: column; justify-content: center; min-height: 100vh; padding: 100px 24px 40px 24px; overflow: hidden; position: relative; z-index: 10; }
+      .hero-left { width: 100%; max-width: 720px; overflow: hidden; display: flex; flex-direction: column; align-items: flex-start; }
       .hero-right { display: none; }
-
-      /* ── Hero Content Container — fixed-size flex column ── */
-      .hero-content {
-        display: flex; flex-direction: column; align-items: flex-start;
-        position: relative; z-index: 10; width: 100%;
-        min-height: 420px;
-      }
-
       .hero-badge { margin-bottom: 24px; }
       .hero-headline-block { margin-bottom: 12px; }
-      .hero-subtext { margin-bottom: 0; line-height: 1.7; }
-      .hero-cta-row { gap: 16px; align-items: center; margin-top: auto; padding-bottom: 8px; }
-      .hero-stats-pill { margin-top: 20px; }
-
-      /* ── Headlines — base (Latin/English) ── */
-      .hero-headline { font-size: clamp(36px, 9vw, 56px); line-height: 1.15; }
-      .hero-ghost { font-size: clamp(28px, 8vw, 50px); margin-bottom: 16px; line-height: 1.15; }
-
-      /* ── Language-specific line-height for Devanagari ── */
-      :root[lang="hi"] .hero-headline,
-      html:lang(hi) .hero-headline { line-height: 1.35; }
-      :root[lang="hi"] .hero-ghost,
-      html:lang(hi) .hero-ghost { line-height: 1.35; }
-
+      .hero-subtext { margin-bottom: 40px; line-height: 1.7; }
+      .hero-cta-row { gap: 16px; align-items: center; }
+      .hero-headline { font-size: clamp(36px, 9vw, 56px); white-space: normal; overflow: hidden; line-height: 1.1; }
+      .hero-ghost { font-size: clamp(28px, 8vw, 50px); white-space: normal; overflow: hidden; margin-bottom: 28px; }
       @media (min-width: 768px) {
-        .hero-inner { padding: 0 0 0 80px; }
-        .hero-left { width: 50%; max-width: 600px; }
-        .hero-right { display: flex; position: absolute; right: 0; bottom: 0; top: 80px; width: 45%; max-width: 420px; align-items: flex-end; justify-content: flex-end; overflow: visible; z-index: 5; }
-        .hero-content { min-height: 480px; }
-        .hero-headline { font-size: clamp(32px, 4.5vw, 72px); }
-        .hero-ghost { font-size: clamp(28px, 4vw, 64px); }
+        .hero-inner { padding: 120px 0 60px 80px; flex-direction: row; align-items: center; gap: 24px; overflow: visible; }
+        .hero-left { flex: 1; min-width: 0; }
+        .hero-right { display: flex; flex: 0 0 340px; align-items: flex-end; justify-content: flex-end; overflow: visible; }
+        .hero-headline { font-size: clamp(32px, 4.5vw, 72px); white-space: nowrap; }
+        .hero-ghost { font-size: clamp(28px, 4vw, 64px); white-space: nowrap; }
       }
       @media (min-width: 1024px) {
-        .hero-right { max-width: 480px; }
+        .hero-right { flex: 0 0 400px; }
       }
     `}</style>
 
@@ -74,8 +55,7 @@ const HeroSection = ({ t }) => (
 
     <div className="hero-inner">
       <div className="hero-left justify-center">
-        {/* ═══ Hero Content — fixed min-height container ═══ */}
-        <div className="hero-content">
+        <div style={{ position: 'relative', zIndex: 10, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'flex-start' }}>
           {/* Badge */}
           <div className="font-inter hero-badge" style={{
             color: '#22c55e', fontWeight: '700', textTransform: 'uppercase',
@@ -90,14 +70,14 @@ const HeroSection = ({ t }) => (
 
           {/* Headlines */}
           <div className="hero-headline-block">
-            <div className="font-clash hero-line-1 hero-headline font-black" style={{ fontWeight: '900', letterSpacing: '0.04em', marginBottom: '0' }}>
+            <div className="font-clash hero-line-1 hero-headline font-black" style={{ fontWeight: '900', letterSpacing: '0.04em', marginBottom: '0', wordBreak: 'break-word' }}>
               <span>{t('landing.titleLine1')}</span>
             </div>
-            <div className="font-clash hero-line-2 hero-headline font-black" style={{ fontWeight: '900', letterSpacing: '0.04em', marginBottom: '0' }}>
+            <div className="font-clash hero-line-2 hero-headline font-black" style={{ fontWeight: '900', letterSpacing: '0.04em', marginBottom: '0', wordBreak: 'break-word' }}>
               {t('landing.titleLine2')}
             </div>
           </div>
-          <div className="font-clash hero-line-3 hero-ghost font-black" style={{ fontWeight: '900', letterSpacing: '0.04em' }}>
+          <div className="font-clash hero-line-3 hero-ghost font-black" style={{ fontWeight: '900', letterSpacing: '0.04em', lineHeight: '1.05', wordBreak: 'break-word' }}>
             {t('landing.titleLine3')}
           </div>
 
@@ -105,20 +85,20 @@ const HeroSection = ({ t }) => (
           <p className="font-inter hero-subtext" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '16px', fontWeight: '400', letterSpacing: '0.02em', maxWidth: '540px', animation: 'fadeSlideUp 0.8s ease forwards', opacity: 0, animationDelay: '0.5s' }}>
             {t('landing.hero_subtext', 'Decentralized credentials for informal economy workers — verified on Stellar blockchain.')}
           </p>
-
-          {/* CTA Buttons — margin-top: auto pins them to bottom of .hero-content */}
-          <div className="flex flex-row flex-nowrap w-full sm:w-auto overflow-x-auto sm:overflow-visible hero-cta-row" style={{ position: 'relative', zIndex: 10, opacity: 0, animation: 'fadeSlideUp 0.6s ease forwards', animationDelay: '0.6s' }}>
-            <Link to="/worker" className="btn-glow font-inter" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', justifyContent: 'center', whiteSpace: 'nowrap', padding: '14px 28px' }}>
-              {t('landing.hero_cta_worker', "I'M A WORKER")} <span style={{ transition: 'transform 0.2s' }}>→</span>
-            </Link>
-            <Link to="/discover" className="btn-outline-glow font-inter" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', whiteSpace: 'nowrap', padding: '14px 28px' }}>
-              {t('landing.hero_cta_find', 'FIND WORKERS')}
-            </Link>
-          </div>
         </div>
 
-        {/* Floating Stats Pill — outside .hero-content so it's always below buttons */}
-        <div className="hero-stats-pill" style={{
+        {/* CTA Buttons */}
+        <div className="flex flex-row flex-nowrap w-full sm:w-auto overflow-x-auto sm:overflow-visible hero-cta-row" style={{ position: 'relative', zIndex: 10, opacity: 0, animation: 'fadeSlideUp 0.6s ease forwards', animationDelay: '0.6s', paddingBottom: '32px' }}>
+          <Link to="/worker" className="btn-glow font-inter" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', minWidth: '180px', justifyContent: 'center' }}>
+            {t('landing.hero_cta_worker', "I'M A WORKER")} <span style={{ transition: 'transform 0.2s' }}>→</span>
+          </Link>
+          <Link to="/discover" className="btn-outline-glow font-inter" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', minWidth: '160px' }}>
+            {t('landing.hero_cta_find', 'FIND WORKERS')}
+          </Link>
+        </div>
+
+        {/* Floating Stats Pill */}
+        <div style={{
           display: 'inline-flex', alignItems: 'center', gap: '24px',
           background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)',
           borderRadius: '100px', padding: '10px 24px', zIndex: 10,
@@ -141,7 +121,7 @@ const HeroSection = ({ t }) => (
         </div>
       </div>
 
-      {/* Hero Illustration — Right Side (absolutely positioned, never moves) */}
+      {/* Hero Illustration — Right Side */}
       <div className="hero-right">
         <img src="/hero-workers.png" alt="Diverse workers" style={{
           width: '100%', maxHeight: '80vh', objectFit: 'contain', objectPosition: 'bottom center',
