@@ -26,15 +26,19 @@ const HeroSection = ({ t }) => (
       .hero-ghost { font-size: clamp(28px, 8vw, 50px); white-space: normal; overflow: hidden; margin-bottom: 28px; }
       @media (min-width: 768px) {
         .hero-inner { padding: 120px 0 60px 80px; flex-direction: row; align-items: center; gap: 24px; overflow: visible; }
-        .hero-left { flex: 1; min-width: 0; }
-        .hero-right { display: flex; flex: 0 0 340px; align-items: flex-end; justify-content: flex-end; overflow: visible; }
+        .hero-left { flex: none; width: 55%; max-width: 600px; min-width: 0; }
+        .hero-right { display: block; position: absolute; right: 0; bottom: 0; width: 340px; overflow: visible; z-index: 5; }
         .hero-headline { font-size: clamp(32px, 4vw, 64px); white-space: normal; word-break: break-word; }
         .hero-ghost { font-size: clamp(24px, 3.2vw, 52px); white-space: normal; word-break: break-word; }
       }
       @media (min-width: 1024px) {
-        .hero-right { flex: 0 0 400px; }
+        .hero-left { width: 50%; max-width: 640px; }
+        .hero-right { width: 420px; }
         .hero-headline { font-size: clamp(36px, 4.5vw, 72px); }
         .hero-ghost { font-size: clamp(28px, 3.8vw, 60px); }
+      }
+      @media (min-width: 1280px) {
+        .hero-right { width: 480px; }
       }
     `}</style>
 
@@ -126,7 +130,7 @@ const HeroSection = ({ t }) => (
       {/* Hero Illustration — Right Side */}
       <div className="hero-right">
         <img src="/hero-workers.png" alt="Diverse workers" style={{
-          width: '100%', maxHeight: '80vh', objectFit: 'contain', objectPosition: 'bottom center',
+          width: '100%', height: 'auto', objectFit: 'contain', objectPosition: 'bottom right',
           opacity: 0, animation: 'fadeSlideUp 1s ease forwards', animationDelay: '0.4s',
         }} />
       </div>
