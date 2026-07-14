@@ -13,26 +13,27 @@ import { Link } from 'react-router-dom';
  * @returns {React.ReactElement} The HeroSection component.
  */
 const HeroSection = ({ t }) => (
-  <section style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', backgroundColor: '#0d0520' }}>
+  <section style={{ position: 'relative', height: '100vh', display: 'flex', alignItems: 'center', backgroundColor: '#0d0520', overflow: 'hidden' }}>
     <style>{`
-      .hero-inner { display: flex; flex-direction: column; justify-content: center; min-height: 100vh; padding: 100px 24px 40px 24px; overflow: hidden; position: relative; z-index: 10; }
+      .hero-inner { display: flex; flex-direction: column; justify-content: center; height: 100vh; padding: 100px 24px 40px 24px; overflow: hidden; position: relative; z-index: 10; }
       .hero-left { width: 100%; max-width: 720px; overflow: hidden; display: flex; flex-direction: column; align-items: flex-start; }
       .hero-right { display: none; }
       .hero-badge { margin-bottom: 24px; }
-      .hero-headline-block { margin-bottom: 12px; }
+      .hero-headline-block { margin-bottom: 12px; height: 140px; overflow: hidden; display: flex; flex-direction: column; justify-content: center; }
       .hero-subtext { margin-bottom: 40px; line-height: 1.7; }
       .hero-cta-row { gap: 16px; align-items: center; }
-      .hero-headline { font-size: clamp(36px, 9vw, 56px); white-space: normal; overflow: hidden; line-height: 1.1; }
-      .hero-ghost { font-size: clamp(28px, 8vw, 50px); white-space: normal; overflow: hidden; margin-bottom: 28px; }
+      .hero-headline { font-size: clamp(28px, 8vw, 48px); white-space: nowrap; overflow: hidden; line-height: 1.15; }
+      .hero-ghost { font-size: clamp(22px, 7vw, 42px); white-space: nowrap; overflow: hidden; margin-bottom: 20px; height: 60px; display: flex; align-items: center; }
       @media (min-width: 768px) {
-        .hero-inner { padding: 120px 0 60px 80px; flex-direction: row; align-items: center; gap: 24px; overflow: visible; }
-        .hero-left { flex: 1; min-width: 0; }
-        .hero-right { display: flex; flex: 0 0 340px; align-items: flex-end; justify-content: flex-end; overflow: visible; }
+        .hero-inner { padding: 0 0 0 80px; }
+        .hero-left { width: 50%; max-width: 600px; }
+        .hero-right { display: flex; position: absolute; right: 0; bottom: 0; top: 80px; width: 45%; max-width: 420px; align-items: flex-end; justify-content: flex-end; overflow: visible; z-index: 5; }
+        .hero-headline-block { height: 180px; }
         .hero-headline { font-size: clamp(32px, 4.5vw, 72px); }
-        .hero-ghost { font-size: clamp(28px, 4vw, 64px); }
+        .hero-ghost { font-size: clamp(26px, 3.8vw, 60px); height: 80px; }
       }
       @media (min-width: 1024px) {
-        .hero-right { flex: 0 0 400px; }
+        .hero-right { max-width: 480px; }
       }
     `}</style>
 
