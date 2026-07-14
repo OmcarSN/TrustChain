@@ -56,7 +56,11 @@ const Explorer = () => {
   const placeholderText = t('explorer.searchPlaceholder');
 
   return (
-    <div className="relative overflow-hidden text-white" style={{ minHeight: '100vh' }}>
+    <div className="relative overflow-hidden text-white" style={{ minHeight: '100vh', background: '#050505' }}>
+      {/* Background Decorations */}
+      <div className="tc-bg-grid" />
+      <div className="tc-orb-green" />
+      <div className="tc-leak-blue" />
 
       {/* Page Wrapper */}
       <div style={{

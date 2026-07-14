@@ -68,7 +68,10 @@ const Analytics = () => {
   ];
 
   return (
-    <div className="relative overflow-hidden text-white min-h-screen">
+    <div className="relative overflow-hidden text-white min-h-screen" style={{ background: '#050505' }}>
+      {/* Background Decorations */}
+      <div className="tc-bg-grid" />
+      <div className="tc-orb-blue" />
 
       {/* Page Wrapper */}
       <div className="tc-page-wide" style={{ paddingTop: '120px', paddingBottom: '48px', maxWidth: '1400px', position: 'relative', zIndex: 10 }}>
@@ -84,7 +87,7 @@ const Analytics = () => {
             <div>
               <p className="font-inter tc-eyebrow tc-mb-xs">NETWORK INSIGHTS</p>
               <h1 className="font-clash tc-heading-hero tc-mb-xs" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.6rem)', textTransform: 'none', letterSpacing: '-0.02em' }}>
-                {t('analytics.headerTitle')}
+                <span className="text-gradient">{t('analytics.headerTitle')}</span>
               </h1>
               <p className="font-inter tc-text-dim tc-text-base">
                 <Globe className="tc-icon-md" style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: '8px', opacity: 0.5 }} />
@@ -128,8 +131,8 @@ const Analytics = () => {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05 + idx * 0.05, duration: 0.45 }}
-                className="tc-card-sm group hover:border-white/[0.2] hover:bg-white/[0.05] hover:-translate-y-0.5"
-                style={{ borderTop: '2px solid rgba(255,255,255,0.12)', cursor: 'default', transition: 'all 0.2s ease' }}
+                className="stat-card-premium group"
+                style={{ cursor: 'default' }}
               >
                 <div className="tc-flex-between tc-mb-xs">
                   <p className="font-inter tc-label tc-text-xs" style={{ letterSpacing: '0.12em' }}>{card.title}</p>
@@ -138,7 +141,7 @@ const Analytics = () => {
                   </div>
                 </div>
                 <div className="tc-flex tc-flex-gap-sm tc-mb-xs" style={{ alignItems: 'baseline' }}>
-                  <h2 className="font-clash tc-stat-hero" style={{ color: card.isGreen ? '#00dc6e' : '#ffffff' }}>
+                  <h2 className="font-clash tc-stat-hero counter-glow" style={{ color: card.isGreen ? '#00dc6e' : '#ffffff' }}>
                     {isStr ? card.value : card.value.toLocaleString()}
                   </h2>
                   {card.trend > 0 && (
@@ -168,7 +171,7 @@ const Analytics = () => {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.5 }}
-            className="tc-card-lg" style={{ padding: '20px 24px' }}
+            className="glass-card" style={{ padding: '20px 24px' }}
           >
             {/* Chart Header */}
             <div className="tc-flex-between tc-mb-xs" style={{ alignItems: 'flex-start' }}>

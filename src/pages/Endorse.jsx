@@ -151,7 +151,7 @@ const Endorse = () => {
         </div>
 
         {/* Two Column Card */}
-        <div className="end-panel-anim w-full max-w-5xl mx-auto flex flex-col md:grid md:grid-cols-[1fr_2fr]" style={{ gap: '0', border: '1px solid rgba(255,255,255,0.08)', backgroundColor: 'rgba(255,255,255,0.02)', borderTop: '2px solid rgba(255,255,255,0.15)', position: 'relative', zIndex: 1, borderRadius: '12px', overflow: 'hidden' }}>
+        <div className="end-panel-anim w-full max-w-5xl mx-auto glass-card flex flex-col md:grid md:grid-cols-[1fr_2fr]" style={{ gap: '0', padding: 0, position: 'relative', zIndex: 1, overflow: 'hidden' }}>
 
           {/* ═══ LEFT PANEL — Find Worker ═══ */}
           <WorkerSearchPanel

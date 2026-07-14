@@ -214,7 +214,7 @@ const Governance = () => {
                 <Shield style={{ width: 12, height: 12, display: 'inline', marginRight: 6, verticalAlign: 'middle' }} />
                 ON-CHAIN GOVERNANCE
               </p>
-              <h1 className="font-clash" style={{ fontSize: '32px', fontWeight: '800', letterSpacing: '-0.02em', lineHeight: 1.1 }}>Governance Dashboard</h1>
+              <h1 className="font-clash" style={{ fontSize: '32px', fontWeight: '800', letterSpacing: '-0.02em', lineHeight: 1.1 }}><span className="text-gradient">Governance Dashboard</span></h1>
               <p className="font-inter" style={{ color: '#666', fontSize: '13px', marginTop: '6px' }}>Decentralized proposals, voting, and contract management</p>
             </div>
             <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
@@ -246,19 +246,19 @@ const Governance = () => {
             { label: 'Council Members', value: council.length, icon: <Users style={{ width: 16, height: 16 }} />, color: '#3b82f6' },
             { label: 'Quorum Required', value: `${quorum}%`, icon: <Vote style={{ width: 16, height: 16 }} />, color: '#a855f7' },
           ].map((stat, i) => (
-            <div key={i} style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '20px' }}>
+            <div key={i} className="stat-card-premium">
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
                 <div style={{ color: stat.color, opacity: 0.7 }}>{stat.icon}</div>
                 <span className="font-inter" style={{ fontSize: '10px', color: 'rgba(255,255,255,0.3)', letterSpacing: '0.15em', fontWeight: '600', textTransform: 'uppercase' }}>{stat.label}</span>
               </div>
-              <span className="font-clash" style={{ fontSize: '28px', fontWeight: '800', color: stat.color }}>{stat.value}</span>
+              <span className="font-clash counter-glow" style={{ fontSize: '28px', fontWeight: '800', color: stat.color }}>{stat.value}</span>
             </div>
           ))}
         </motion.div>
 
         {/* ── Council Panel ── */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
-          style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '20px', marginBottom: '32px' }}>
+          className="glass-card" style={{ marginBottom: '32px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
             <span className="font-inter" style={{ fontSize: '10px', color: 'rgba(255,255,255,0.3)', letterSpacing: '0.15em', fontWeight: '600', textTransform: 'uppercase' }}>
               <Users style={{ width: 12, height: 12, display: 'inline', marginRight: 6, verticalAlign: 'middle' }} />
@@ -285,7 +285,8 @@ const Governance = () => {
         {isUserCouncil && isConnected && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} style={{ marginBottom: '24px' }}>
             <button onClick={() => setShowForm(!showForm)}
-              style={{ background: showForm ? 'rgba(255,255,255,0.05)' : 'linear-gradient(135deg, #22c55e, #16a34a)', color: 'white', border: 'none', borderRadius: '8px', padding: '10px 20px', fontSize: '13px', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontFamily: 'Inter, sans-serif' }}>
+              className={showForm ? 'btn-outline-glow' : 'btn-glow'}
+              style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Plus style={{ width: 16, height: 16 }} /> {showForm ? 'Cancel' : 'Create Proposal'}
             </button>
           </motion.div>
@@ -295,7 +296,7 @@ const Governance = () => {
         <AnimatePresence>
           {showForm && (
             <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
-              style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', padding: '24px', marginBottom: '32px', overflow: 'hidden' }}>
+              className="glass-card" style={{ marginBottom: '32px', overflow: 'hidden' }}>
               <h3 className="font-clash" style={{ fontSize: '18px', fontWeight: '700', marginBottom: '20px' }}>New Proposal</h3>
               <div style={{ display: 'grid', gap: '16px' }}>
                 <div>
@@ -323,7 +324,7 @@ const Governance = () => {
                   </div>
                 </div>
                 <button onClick={handleCreateProposal} disabled={submitting}
-                  style={{ background: 'linear-gradient(135deg, #22c55e, #16a34a)', color: 'white', border: 'none', borderRadius: '8px', padding: '12px', fontSize: '14px', fontWeight: '700', cursor: submitting ? 'wait' : 'pointer', opacity: submitting ? 0.6 : 1, fontFamily: 'Inter, sans-serif' }}>
+                  className="btn-glow" style={{ width: '100%', opacity: submitting ? 0.6 : 1, cursor: submitting ? 'wait' : 'pointer' }}>
                   {submitting ? 'Submitting to blockchain...' : 'Submit Proposal On-Chain'}
                 </button>
               </div>
@@ -340,7 +341,7 @@ const Governance = () => {
           </div>
 
           {proposals.length === 0 ? (
-            <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '60px 20px', textAlign: 'center' }}>
+            <div className="glass-card" style={{ padding: '60px 20px', textAlign: 'center' }}>
               <Vote style={{ width: 32, height: 32, color: 'rgba(255,255,255,0.1)', margin: '0 auto 12px' }} />
               <p className="font-inter" style={{ color: '#444', fontSize: '14px' }}>No proposals yet</p>
               <p className="font-inter" style={{ color: '#333', fontSize: '12px', marginTop: '4px' }}>Council members can create the first proposal</p>
@@ -357,7 +358,7 @@ const Governance = () => {
 
                 return (
                   <motion.div key={p.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 * i }}
-                    style={{ background: 'rgba(255,255,255,0.02)', border: `1px solid ${isActive ? 'rgba(34,197,94,0.15)' : 'rgba(255,255,255,0.06)'}`, borderRadius: '12px', padding: '20px' }}>
+                    className="glass-card" style={{ borderLeft: isActive ? '3px solid #22c55e' : isPassed ? '3px solid #3b82f6' : 'none' }}>
 
                     {/* Header */}
                     <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px', marginBottom: '12px' }}>

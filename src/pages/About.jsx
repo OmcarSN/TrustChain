@@ -56,54 +56,63 @@ const About = () => {
   }, [workerCount, totalEndorsements]);
 
   return (
-    <div className="tc-page" style={{ maxWidth: '800px' }}>
+    <div style={{ position: 'relative', minHeight: '100vh', background: '#050505', overflow: 'hidden' }}>
+      {/* Background Decorations */}
+      <div className="tc-bg-grid" />
+      <div className="tc-orb-green" />
+      <div className="tc-orb-blue" />
+
+      <div className="tc-page" style={{ maxWidth: '800px', position: 'relative', zIndex: 1 }}>
       
-      <h1 className="font-clash tc-heading-hero tc-mb-2xl" style={{ textTransform: 'uppercase' }}>
-        {t('about_trustchain')}
-      </h1>
+        <h1 className="font-clash tc-heading-hero tc-mb-2xl reveal" style={{ textTransform: 'uppercase' }}>
+          <span className="text-gradient">{t('about_trustchain')}</span>
+        </h1>
 
-      <div style={{ marginBottom: '40px' }}>
-        <p className="font-inter tc-body-lg tc-text-dim" style={{ lineHeight: '1.8' }}>
-          {t('about_description')}
-        </p>
-      </div>
+        <div className="glass-card reveal reveal-d1" style={{ marginBottom: '32px', padding: '28px' }}>
+          <p className="font-inter tc-body-lg tc-text-dim" style={{ lineHeight: '1.8' }}>
+            {t('about_description')}
+          </p>
+        </div>
 
-      <div style={{ marginBottom: '40px' }}>
-        <p className="font-inter uppercase tc-eyebrow tc-mb-sm">
-          {t('our_mission')}
-        </p>
-        <p className="font-inter tc-body-lg tc-text-dim" style={{ lineHeight: '1.8' }}>
-          {t('mission_text')}
-        </p>
-      </div>
+        <div className="section-divider" style={{ margin: '32px 0' }} />
 
-      <div style={{ marginBottom: '40px' }}>
-        <p className="font-inter uppercase tc-eyebrow tc-mb-sm">
-          {t('built_by')}
-        </p>
-        <p className="font-inter tc-body-lg tc-text-dim" style={{ lineHeight: '1.8' }}>
-          {t('built_by_text')}
-        </p>
-      </div>
+        <div className="glass-card reveal reveal-d2" style={{ marginBottom: '32px', padding: '28px' }}>
+          <p className="font-inter uppercase tc-eyebrow tc-mb-sm" style={{ color: '#22c55e' }}>
+            {t('our_mission')}
+          </p>
+          <p className="font-inter tc-body-lg tc-text-dim" style={{ lineHeight: '1.8' }}>
+            {t('mission_text')}
+          </p>
+        </div>
 
-      <div style={{ 
-        padding: '16px 20px', 
-        border: '1px solid rgba(255,255,255,0.08)', 
-        backgroundColor: 'rgba(255,255,255,0.02)',
-        display: 'inline-block',
-        marginTop: '20px'
-      }}>
-        <p className="font-inter" style={{ 
-          fontSize: '12px', 
-          letterSpacing: '2px', 
-          color: status === 'fetching' ? '#444444' : 'rgba(255,255,255,0.4)', 
-          textTransform: 'uppercase',
-          transition: 'color 0.3s ease'
+        <div className="section-divider" style={{ margin: '32px 0' }} />
+
+        <div className="glass-card reveal reveal-d3" style={{ marginBottom: '32px', padding: '28px' }}>
+          <p className="font-inter uppercase tc-eyebrow tc-mb-sm" style={{ color: '#22c55e' }}>
+            {t('built_by')}
+          </p>
+          <p className="font-inter tc-body-lg tc-text-dim" style={{ lineHeight: '1.8' }}>
+            {t('built_by_text')}
+          </p>
+        </div>
+
+        <div className="stat-card-premium reveal reveal-d4" style={{ 
+          display: 'inline-block',
+          marginTop: '20px',
+          padding: '16px 24px',
         }}>
-          {status === 'fetching' ? '—' : displayStats.workers} WORKERS · {status === 'fetching' ? '—' : displayStats.reviews} REVIEWS · 100% GASLESS
-        </p>
-      </div>
+          <p className="font-inter counter-glow" style={{ 
+            fontSize: '12px', 
+            letterSpacing: '2px', 
+            color: status === 'fetching' ? '#444444' : 'rgba(255,255,255,0.7)', 
+            textTransform: 'uppercase',
+            transition: 'color 0.3s ease'
+          }}>
+            {status === 'fetching' ? '—' : displayStats.workers} WORKERS · {status === 'fetching' ? '—' : displayStats.reviews} REVIEWS · 100% GASLESS
+          </p>
+        </div>
 
+      </div>
     </div>
   );
 };

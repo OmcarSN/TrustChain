@@ -24,7 +24,9 @@ const AdminLogs = () => {
 
   return (
     <div className="min-h-screen bg-[#050505] pt-28 pb-12 px-6 lg:px-12 relative overflow-hidden text-white">
-      <div className="absolute rounded-full pointer-events-none" style={{ top: '-80px', right: '-80px', width: '400px', height: '400px', background: '#f97316', filter: 'blur(120px)', opacity: 0.04 }} />
+      <div className="tc-bg-grid" />
+      <div className="tc-orb-blue" />
+      <div className="tc-leak-orange" />
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Header */}
@@ -32,12 +34,12 @@ const AdminLogs = () => {
           <div>
             <div className="flex items-center gap-3 mb-3">
               <div className="w-9 h-9 rounded-[2px] bg-white/5 border border-white/10 flex items-center justify-center"><Database className="w-5 h-5 text-white/30" /></div>
-              <h1 className="font-clash text-3xl font-bold tracking-tighter">{t('adminLogs.headerTitle')}</h1>
+              <h1 className="font-clash text-3xl font-bold tracking-tighter"><span className="text-gradient">{t('adminLogs.headerTitle')}</span></h1>
             </div>
             <p className="text-white/30 text-sm max-w-xl font-inter">{t('adminLogs.headerSubtitle')}</p>
           </div>
           <div className="flex items-center gap-3">
-            <button onClick={loadData} className="flex items-center gap-2 px-5 py-2.5 border border-white/10 rounded-[2px] font-bold uppercase tracking-wider text-xs text-white/40 hover:text-white hover:border-white/30 transition-all">
+            <button onClick={loadData} className="btn-outline-glow font-inter" style={{ padding: '10px 20px', fontSize: '11px', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
               <RefreshCcw className="w-4 h-4" /> {t('adminLogs.refreshBtn')}
             </button>
             <button onClick={handleClear} className="flex items-center gap-2 px-5 py-2.5 border border-red-400/20 rounded-[2px] font-bold uppercase tracking-wider text-xs text-red-400/80 hover:bg-red-400/10 transition-all">
@@ -48,7 +50,7 @@ const AdminLogs = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {/* TX Log */}
-          <div className="border border-white/[0.07] rounded-[2px] bg-white/[0.02] overflow-hidden flex flex-col h-[600px]">
+          <div className="glass-card overflow-hidden flex flex-col h-[600px]" style={{ padding: 0 }}>
             <div className="p-5 border-b border-white/5 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-3"><Activity className="w-4 h-4 text-green-400" /><h2 className="text-sm font-bold tracking-tight font-inter uppercase">{t('adminLogs.txLogsTab')}</h2></div>
               <span className="text-xs font-mono text-white/30">{txs.length} Entries</span>
@@ -82,7 +84,7 @@ const AdminLogs = () => {
           </div>
 
           {/* Error Log */}
-          <div className="border border-white/[0.07] rounded-[2px] bg-white/[0.02] overflow-hidden flex flex-col h-[600px]">
+          <div className="glass-card overflow-hidden flex flex-col h-[600px]" style={{ padding: 0 }}>
             <div className="p-5 border-b border-white/5 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-3"><AlertTriangle className="w-4 h-4 text-red-400" /><h2 className="text-sm font-bold tracking-tight font-inter uppercase">{t('adminLogs.errorLogsTab')}</h2></div>
               <span className="text-xs font-mono text-white/30">{errors.length} Entries</span>

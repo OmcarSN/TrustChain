@@ -21,7 +21,11 @@ const HowItWorks = () => {
   };
 
   return (
-    <div className="tc-page">
+    <div style={{ position: 'relative', minHeight: '100vh', background: '#050505', overflow: 'hidden' }}>
+      <div className="tc-bg-grid" />
+      <div className="tc-orb-green" />
+      <div className="tc-orb-blue" />
+    <div className="tc-page" style={{ position: 'relative', zIndex: 1 }}>
       
       <motion.div initial="hidden" animate="visible" variants={fadeIn}>
         <div className="tc-flex tc-flex-gap-sm tc-mb-lg" style={{ alignItems: 'center' }}>
@@ -31,7 +35,7 @@ const HowItWorks = () => {
           </span>
         </div>
         <h1 className="font-clash tc-heading-hero tc-mb-lg">
-          {t('hiw.title', 'HOW IT WORKS')}
+          <span className="text-gradient">{t('hiw.title', 'HOW IT WORKS')}</span>
         </h1>
         <p className="font-inter tc-lead tc-mb-md" style={{ maxWidth: '700px' }}>
           {t('hiw.subtitle1', 'Think of TrustChain as an unfakeable digital report card.')}
@@ -49,7 +53,7 @@ const HowItWorks = () => {
           </motion.h2>
 
           <div className="tc-grid-cards">
-            <motion.div variants={fadeIn} className="tc-card">
+            <motion.div variants={fadeIn} className="step-card-premium">
               <h3 className="font-inter tc-step-label">STEP 1</h3>
               <h4 className="font-clash tc-heading-sm tc-mb-sm">{t('hiw.workers.step1.title', 'Get Your Digital Key')}</h4>
               <p className="font-inter tc-body">
@@ -57,7 +61,7 @@ const HowItWorks = () => {
               </p>
             </motion.div>
             
-            <motion.div variants={fadeIn} className="tc-card">
+            <motion.div variants={fadeIn} className="step-card-premium">
               <h3 className="font-inter tc-step-label">STEP 2</h3>
               <h4 className="font-clash tc-heading-sm tc-mb-sm">{t('hiw.workers.step2.title', 'Verify Your Identity')}</h4>
               <p className="font-inter tc-body">
@@ -65,7 +69,7 @@ const HowItWorks = () => {
               </p>
             </motion.div>
 
-            <motion.div variants={fadeIn} className="tc-card">
+            <motion.div variants={fadeIn} className="step-card-premium">
               <h3 className="font-inter tc-step-label">STEP 3</h3>
               <h4 className="font-clash tc-heading-sm tc-mb-sm">{t('hiw.workers.step3.title', 'Do Great Work')}</h4>
               <p className="font-inter tc-body">
@@ -73,7 +77,7 @@ const HowItWorks = () => {
               </p>
             </motion.div>
 
-            <motion.div variants={fadeIn} className="tc-card">
+            <motion.div variants={fadeIn} className="step-card-premium">
               <h3 className="font-inter tc-step-label">STEP 4</h3>
               <h4 className="font-clash tc-heading-sm tc-mb-sm">{t('hiw.workers.step4.title', 'Collect Your Stars')}</h4>
               <p className="font-inter tc-body">
@@ -90,7 +94,7 @@ const HowItWorks = () => {
           </motion.h2>
 
           <div className="tc-grid-cards">
-            <motion.div variants={fadeIn} className="tc-card">
+            <motion.div variants={fadeIn} className="step-card-premium">
               <h3 className="font-inter tc-step-label">STEP 1</h3>
               <h4 className="font-clash tc-heading-sm tc-mb-sm">{t('hiw.verifiers.step1.title', 'Find The Best People')}</h4>
               <p className="font-inter tc-body">
@@ -98,7 +102,7 @@ const HowItWorks = () => {
               </p>
             </motion.div>
             
-            <motion.div variants={fadeIn} className="tc-card">
+            <motion.div variants={fadeIn} className="step-card-premium">
               <h3 className="font-inter tc-step-label">STEP 2</h3>
               <h4 className="font-clash tc-heading-sm tc-mb-sm">{t('hiw.verifiers.step2.title', 'Trust The Reviews')}</h4>
               <p className="font-inter tc-body">
@@ -106,7 +110,7 @@ const HowItWorks = () => {
               </p>
             </motion.div>
 
-            <motion.div variants={fadeIn} className="tc-card">
+            <motion.div variants={fadeIn} className="step-card-premium">
               <h3 className="font-inter tc-step-label">STEP 3</h3>
               <h4 className="font-clash tc-heading-sm tc-mb-sm">{t('hiw.verifiers.step3.title', 'Leave Your Review')}</h4>
               <p className="font-inter tc-body">
@@ -124,7 +128,7 @@ const HowItWorks = () => {
 
           <div className="tc-grid-wide">
             
-            <motion.div variants={fadeIn} className="tc-card-sm tc-flex-start tc-flex-gap">
+            <motion.div variants={fadeIn} className="glass-card tc-flex-start tc-flex-gap">
               <div className="tc-dot" style={{ marginTop: '8px' }}></div>
               <div>
                 <h4 className="font-clash tc-heading-sm tc-mb-xs">{t('hiw.pages.findWorkers.title', 'Find Workers')}</h4>
@@ -134,7 +138,7 @@ const HowItWorks = () => {
               </div>
             </motion.div>
 
-            <motion.div variants={fadeIn} className="tc-card-sm tc-flex-start tc-flex-gap">
+            <motion.div variants={fadeIn} className="glass-card tc-flex-start tc-flex-gap">
               <div className="tc-dot" style={{ marginTop: '8px' }}></div>
               <div>
                 <h4 className="font-clash tc-heading-sm tc-mb-xs">{t('hiw.pages.workerPortal.title', 'Worker Portal')}</h4>
@@ -144,7 +148,7 @@ const HowItWorks = () => {
               </div>
             </motion.div>
 
-            <motion.div variants={fadeIn} className="tc-card-sm tc-flex-start tc-flex-gap">
+            <motion.div variants={fadeIn} className="glass-card tc-flex-start tc-flex-gap">
               <div className="tc-dot" style={{ marginTop: '8px' }}></div>
               <div>
                 <h4 className="font-clash tc-heading-sm tc-mb-xs">{t('hiw.pages.dashboard.title', 'Dashboard')}</h4>
@@ -154,7 +158,7 @@ const HowItWorks = () => {
               </div>
             </motion.div>
 
-            <motion.div variants={fadeIn} className="tc-card-sm tc-flex-start tc-flex-gap">
+            <motion.div variants={fadeIn} className="glass-card tc-flex-start tc-flex-gap">
               <div className="tc-dot" style={{ marginTop: '8px' }}></div>
               <div>
                 <h4 className="font-clash tc-heading-sm tc-mb-xs">{t('hiw.pages.analytics.title', 'Analytics')}</h4>
@@ -187,6 +191,7 @@ const HowItWorks = () => {
           </p>
         </motion.div>
       </motion.div>
+    </div>
     </div>
   );
 };

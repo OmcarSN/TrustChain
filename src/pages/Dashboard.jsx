@@ -128,7 +128,7 @@ const Dashboard = () => {
           <div className="db-anim" style={{ marginBottom: '32px', animationDelay: '0s' }}>
             <p className="font-inter tc-eyebrow tc-mb-xs">{t('dashboard.eyebrow')}</p>
             <h1 className="font-clash tc-fw-black tc-text-white" style={{ fontSize: 'clamp(1.6rem,3vw,2.4rem)', marginBottom: '4px' }}>
-              {t('dashboard.overview')}
+              <span className="text-gradient">{t('dashboard.overview')}</span>
               {credential && credential.name && credential.name !== 'Worker' && <span className="tc-text-dim">, {credential.name.split(' ')[0]}</span>}
             </h1>
             <p className="font-inter tc-text-dim tc-text-base">{t('dashboard.overviewSub')}</p>
@@ -136,7 +136,7 @@ const Dashboard = () => {
 
           {/* Wallet bar */}
           <div className="db-anim" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '28px', animationDelay: '0.05s' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', border: '1px solid rgba(255,255,255,0.1)', padding: '8px 14px' }}>
+            <div className="glass-card" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 14px' }}>
               <span style={{ width: '6px', height: '6px', backgroundColor: '#00dc6e', borderRadius: '50%' }} />
               <span style={{ fontFamily: 'monospace', fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>{truncAddr(walletAddress)}</span>
               <button onClick={copyAddress} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.2)', display: 'flex', padding: '2px' }}>
