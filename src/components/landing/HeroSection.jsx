@@ -15,8 +15,8 @@ import { Link } from 'react-router-dom';
 const HeroSection = ({ t }) => (
   <section style={{ position: 'relative', height: '100vh', display: 'flex', alignItems: 'center', backgroundColor: '#0d0520', overflow: 'hidden' }}>
     <style>{`
-      .hero-inner { display: flex; flex-direction: column; justify-content: center; height: 100vh; padding: 100px 24px 40px 24px; overflow: hidden; position: relative; z-index: 10; }
-      .hero-left { width: 100%; max-width: 720px; overflow: hidden; display: flex; flex-direction: column; align-items: flex-start; }
+      .hero-inner { display: flex; flex-direction: column; justify-content: center; height: 100vh; padding: 100px 24px 40px 24px; position: relative; z-index: 10; }
+      .hero-left { width: 100%; max-width: 720px; display: flex; flex-direction: column; align-items: flex-start; }
       .hero-right { display: none; }
 
       /* ── Hero Content Container — fixed-size flex column ── */
@@ -33,8 +33,8 @@ const HeroSection = ({ t }) => (
       .hero-stats-pill { margin-top: 20px; }
 
       /* ── Headlines — base (Latin/English) ── */
-      .hero-headline { font-size: clamp(36px, 9vw, 56px); white-space: nowrap; overflow: hidden; line-height: 1.15; }
-      .hero-ghost { font-size: clamp(28px, 8vw, 50px); white-space: nowrap; overflow: hidden; margin-bottom: 16px; line-height: 1.15; }
+      .hero-headline { font-size: clamp(36px, 9vw, 56px); line-height: 1.15; }
+      .hero-ghost { font-size: clamp(28px, 8vw, 50px); margin-bottom: 16px; line-height: 1.15; }
 
       /* ── Language-specific line-height for Devanagari ── */
       :root[lang="hi"] .hero-headline,
@@ -108,10 +108,10 @@ const HeroSection = ({ t }) => (
 
           {/* CTA Buttons — margin-top: auto pins them to bottom of .hero-content */}
           <div className="flex flex-row flex-nowrap w-full sm:w-auto overflow-x-auto sm:overflow-visible hero-cta-row" style={{ position: 'relative', zIndex: 10, opacity: 0, animation: 'fadeSlideUp 0.6s ease forwards', animationDelay: '0.6s' }}>
-            <Link to="/worker" className="btn-glow font-inter" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', minWidth: '180px', justifyContent: 'center' }}>
+            <Link to="/worker" className="btn-glow font-inter" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', justifyContent: 'center', whiteSpace: 'nowrap', padding: '14px 28px' }}>
               {t('landing.hero_cta_worker', "I'M A WORKER")} <span style={{ transition: 'transform 0.2s' }}>→</span>
             </Link>
-            <Link to="/discover" className="btn-outline-glow font-inter" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', minWidth: '160px' }}>
+            <Link to="/discover" className="btn-outline-glow font-inter" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', whiteSpace: 'nowrap', padding: '14px 28px' }}>
               {t('landing.hero_cta_find', 'FIND WORKERS')}
             </Link>
           </div>
