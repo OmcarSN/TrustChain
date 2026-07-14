@@ -413,14 +413,17 @@
 /* ── Buttons ──────────────────────────────────────────────── */
 .tc-btn-primary     { width: 100%; padding: 15px 20px; background-color: #ffffff; color: #000000; border: none; font-size: 11px; letter-spacing: 3px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; text-decoration: none; text-transform: uppercase; }
 .tc-btn-outline     { width: 100%; padding: 13px 20px; border: 1px solid rgba(255,255,255,0.12); background-color: transparent; color: #ffffff; font-size: 11px; letter-spacing: 3px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; text-transform: uppercase; }
-.tc-wallet-btn      { display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 16px; border: 1px solid rgba(255,255,255,0.15); background-color: rgba(255,255,255,0.03); color: rgba(255,255,255,0.85); font-size: 12px; font-weight: 600; letter-spacing: 1px; font-family: monospace; cursor: pointer; border-radius: 2px; }
-.tc-wallet-btn-open { background-color: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.4); color: #ffffff; }
-.tc-connect-btn     { height: 36px; padding: 0 20px; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; border: 1px solid rgba(255,255,255,0.3); background-color: rgba(255,255,255,0.03); color: #ffffff; border-radius: 2px; cursor: pointer; text-transform: uppercase; font-family: 'Inter', sans-serif; }
+.tc-wallet-btn      { display: flex; align-items: center; gap: 10px; height: 38px; padding: 0 18px; border: 1px solid rgba(0,220,110,0.25); background: linear-gradient(135deg, rgba(0,220,110,0.08), rgba(255,255,255,0.03)); color: rgba(255,255,255,0.9); font-size: 12px; font-weight: 600; letter-spacing: 1px; font-family: monospace; cursor: pointer; border-radius: 8px; transition: all 0.3s cubic-bezier(0.16,1,0.3,1); box-shadow: 0 0 12px rgba(0,220,110,0.08); }
+.tc-wallet-btn:hover { border-color: rgba(0,220,110,0.5); box-shadow: 0 0 20px rgba(0,220,110,0.15), 0 4px 12px rgba(0,0,0,0.3); transform: translateY(-1px); background: linear-gradient(135deg, rgba(0,220,110,0.12), rgba(255,255,255,0.06)); }
+.tc-wallet-btn-open { background: linear-gradient(135deg, rgba(0,220,110,0.15), rgba(255,255,255,0.08)); border-color: rgba(0,220,110,0.5); color: #ffffff; box-shadow: 0 0 24px rgba(0,220,110,0.2); }
+.tc-connect-btn     { height: 38px; padding: 0 22px; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; border: 1px solid rgba(0,220,110,0.3); background: linear-gradient(135deg, rgba(0,220,110,0.1), transparent); color: #00dc6e; border-radius: 8px; cursor: pointer; text-transform: uppercase; font-family: 'Inter', sans-serif; transition: all 0.3s ease; }
+.tc-connect-btn:hover { background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; border-color: #22c55e; box-shadow: 0 0 20px rgba(34,197,94,0.3); transform: translateY(-1px); }
 
 /* ── Dropdown ─────────────────────────────────────────────── */
-.tc-dropdown        { position: absolute; top: calc(100% + 8px); right: 0; min-width: 220px; background-color: rgba(10,10,10,0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); border-radius: 2px; box-shadow: 0 24px 60px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.1); z-index: 1000; overflow: hidden; padding: 12px 0; animation: dropdownOpen 0.2s cubic-bezier(0.16,1,0.3,1) forwards; transform-origin: top right; }
-.tc-dropdown-header { padding: 8px 20px 16px 20px; font-size: 12px; color: rgba(255,255,255,0.4); font-family: monospace; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.06); margin-bottom: 8px; }
-.tc-dropdown-dot    { color: #00dc6e; font-size: 10px; text-shadow: 0 0 5px rgba(0,220,110,0.5); }
+.tc-dropdown        { position: absolute; top: calc(100% + 12px); right: 0; min-width: 240px; background: rgba(8,8,12,0.92); backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; box-shadow: 0 24px 60px rgba(0,0,0,0.85), 0 0 1px rgba(255,255,255,0.1), inset 0 1px 0 rgba(255,255,255,0.06); z-index: 1000; overflow: hidden; padding: 8px 0; animation: dropdownOpen 0.25s cubic-bezier(0.16,1,0.3,1) forwards; transform-origin: top right; }
+.tc-dropdown::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, #22c55e, #3b82f6, #a855f7); border-radius: 12px 12px 0 0; }
+.tc-dropdown-header { padding: 12px 20px 14px 20px; font-size: 11px; color: rgba(255,255,255,0.5); font-family: monospace; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.06); margin-bottom: 4px; letter-spacing: 0.5px; }
+.tc-dropdown-dot    { color: #00dc6e; font-size: 8px; text-shadow: 0 0 8px rgba(0,220,110,0.6); animation: verifiedPulse 2s ease-in-out infinite; }
 
 /* ── Profile / Sidebar ────────────────────────────────────── */
 .tc-avatar          { width: 80px; height: 80px; border: 1px solid rgba(255,255,255,0.1); background-color: rgba(255,255,255,0.04); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
@@ -871,10 +874,10 @@ select.field-input option { background: #0c0c0c; color: #fff; }
 
 /* ── Premium Navbar Glass ───────────────────────────────────── */
 .navbar-glass {
-  background: rgba(5, 5, 5, 0.8) !important;
-  backdrop-filter: blur(20px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+  background: rgba(5, 5, 8, 0.75) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  border-bottom: none !important;
 }
 
 /* ── Hover Scale ────────────────────────────────────────────── */

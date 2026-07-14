@@ -1,6 +1,6 @@
 import React, { useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { Wallet, LogOut, LayoutDashboard } from 'lucide-react';
+import { Wallet, LogOut, LayoutDashboard, Briefcase, HelpCircle, BarChart3, Search } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
 
 import PropTypes from 'prop-types';
@@ -93,11 +93,11 @@ const WalletDropdown = ({
                 <span className="tc-dropdown-dot" aria-hidden="true">●</span>
                 {truncate(walletAddress)}
               </div>
-              <Link ref={setItemRef(0)} to="/dashboard" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter" role="menuitem" tabIndex={0}>{t('nav_dashboard', 'Dashboard')}</Link>
-              <Link ref={setItemRef(1)} to="/worker" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter" role="menuitem" tabIndex={0}>{t('nav_worker_portal', 'Worker Portal')}</Link>
-              <Link ref={setItemRef(2)} to="/how-it-works" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter" role="menuitem" tabIndex={0}>{t('nav.howItWorks', 'How It Works')}</Link>
-              <Link ref={setItemRef(3)} to="/analytics" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter" role="menuitem" tabIndex={0}>{t('nav_analytics', 'Analytics')}</Link>
-              <Link ref={setItemRef(4)} to="/explorer" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter" role="menuitem" tabIndex={0}>{t('nav_explorer', 'Explorer')}</Link>
+              <Link ref={setItemRef(0)} to="/dashboard" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter" role="menuitem" tabIndex={0}><LayoutDashboard style={{ width: 14, height: 14, opacity: 0.5 }} />{t('nav_dashboard', 'Dashboard')}</Link>
+              <Link ref={setItemRef(1)} to="/worker" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter" role="menuitem" tabIndex={0}><Briefcase style={{ width: 14, height: 14, opacity: 0.5 }} />{t('nav_worker_portal', 'Worker Portal')}</Link>
+              <Link ref={setItemRef(2)} to="/how-it-works" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter" role="menuitem" tabIndex={0}><HelpCircle style={{ width: 14, height: 14, opacity: 0.5 }} />{t('nav.howItWorks', 'How It Works')}</Link>
+              <Link ref={setItemRef(3)} to="/analytics" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter" role="menuitem" tabIndex={0}><BarChart3 style={{ width: 14, height: 14, opacity: 0.5 }} />{t('nav_analytics', 'Analytics')}</Link>
+              <Link ref={setItemRef(4)} to="/explorer" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter" role="menuitem" tabIndex={0}><Search style={{ width: 14, height: 14, opacity: 0.5 }} />{t('nav_explorer', 'Explorer')}</Link>
               <button
                 ref={setItemRef(5)}
                 onClick={() => { disconnect(); setIsDropdownOpen(false); }}
@@ -106,7 +106,7 @@ const WalletDropdown = ({
                 tabIndex={0}
                 style={{ background: 'none', cursor: 'pointer' }}
               >
-                {t('nav_disconnect', 'Disconnect Wallet')}
+                <LogOut style={{ width: 14, height: 14, opacity: 0.5 }} />{t('nav_disconnect', 'Disconnect Wallet')}
               </button>
             </div>
           )}

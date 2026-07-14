@@ -128,14 +128,14 @@ const Navbar = () => {
           .nav-link:hover::after { transform: scaleX(1); transform-origin: left; }
           .nav-link.active-link::after { transform: scaleX(1); transform-origin: left; background-color: #ffffff; }
           .dropdown-item {
-            padding: 12px 20px; color: rgba(255,255,255,0.6); font-size: 11px;
-            letter-spacing: 1.5px; font-weight: 600; text-transform: uppercase;
-            text-decoration: none; display: block; border-left: 2px solid transparent;
-            transition: all 0.25s cubic-bezier(0.16,1,0.3,1);
+            padding: 11px 20px; color: rgba(255,255,255,0.55); font-size: 12px;
+            letter-spacing: 1px; font-weight: 600; text-transform: uppercase;
+            text-decoration: none; display: flex; align-items: center; gap: 10px; border-left: 2px solid transparent;
+            transition: all 0.25s cubic-bezier(0.16,1,0.3,1); margin: 0 6px; border-radius: 6px;
           }
-          .dropdown-item:hover { background-color: rgba(255,255,255,0.04) !important; color: #ffffff !important; padding-left: 26px; border-left: 2px solid #00dc6e; }
-          .dropdown-disconnect { color: #ef4444 !important; border-top: 1px solid rgba(255,255,255,0.06); margin-top: 4px; padding-top: 14px; }
-          .dropdown-disconnect:hover { background-color: rgba(239,68,68,0.05) !important; color: #ff5555 !important; border-left: 2px solid #ef4444; }
+          .dropdown-item:hover { background: rgba(0,220,110,0.06) !important; color: #ffffff !important; padding-left: 24px; border-left: 2px solid #00dc6e; box-shadow: inset 0 0 20px rgba(0,220,110,0.03); }
+          .dropdown-disconnect { color: #ef4444 !important; border-top: 1px solid rgba(255,255,255,0.06); margin-top: 6px; padding-top: 12px; border-radius: 0 0 6px 6px; }
+          .dropdown-disconnect:hover { background: rgba(239,68,68,0.08) !important; color: #ff5555 !important; border-left: 2px solid #ef4444; box-shadow: inset 0 0 20px rgba(239,68,68,0.03); }
         `}</style>
         <div className="navbar-border-bottom" aria-hidden="true" />
         <div
@@ -171,11 +171,11 @@ const Navbar = () => {
               aria-label={`Switch language to ${i18n.language === 'en' ? 'Hindi' : 'English'}`}
               className="lang-btn font-inter uppercase"
               style={{
-                height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                padding: '7px 12px', backgroundColor: 'rgba(255,255,255,0.02)',
-                border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.7)',
+                height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                padding: '7px 14px', background: 'rgba(255,255,255,0.03)',
+                border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.7)',
                 fontSize: '11px', fontWeight: '600', letterSpacing: '1.5px',
-                cursor: 'pointer', borderRadius: '2px',
+                cursor: 'pointer', borderRadius: '8px',
               }}
             >
               {i18n.language === 'en' ? 'EN ▾' : 'HI ▾'}
