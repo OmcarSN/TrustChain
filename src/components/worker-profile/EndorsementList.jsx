@@ -38,13 +38,14 @@ const EndorsementList = ({ endorsements, t }) => (
         {endorsements.map((e, idx) => (
           <article
             key={idx}
-            className="prof-card prof-anim tc-endorse-card"
+            className="prof-card prof-anim tc-endorse-card glass-card"
             role="listitem"
             aria-label={`${t('profile.endorsementFrom', 'Endorsement from')} ${e.endorser ? `${e.endorser.substring(0, 6)}...` : 'Unknown'} — ${e.rating} ${t('profile.stars', 'stars')}`}
             style={{
-              borderLeft: '2px solid rgba(255,255,255,0.15)',
+              borderLeft: '2px solid rgba(34,197,94,0.4)',
               padding: '20px 24px',
               animationDelay: `${0.2 + idx * 0.08}s`,
+              borderRadius: '12px',
             }}
           >
             {/* Top row: job type + stars */}

@@ -154,7 +154,7 @@ const WorkerProfile = () => {
           {/* Eyebrow + Title */}
           <div className="prof-anim" style={{ marginBottom: '28px', animationDelay: '0.05s' }}>
             <p className="font-inter tc-eyebrow tc-mb-xs">{t('profile.badgePublic')}</p>
-            <h1 className="font-clash tc-fw-black tc-text-white" style={{ fontSize: 'clamp(1.4rem, 2.5vw, 2rem)' }}>{t('profile.reviewsHeader')}</h1>
+            <h1 className="font-clash tc-fw-black tc-text-white" style={{ fontSize: 'clamp(1.4rem, 2.5vw, 2rem)' }}><span className="text-gradient">{t('profile.reviewsHeader')}</span></h1>
           </div>
 
           {/* Stats Row */}

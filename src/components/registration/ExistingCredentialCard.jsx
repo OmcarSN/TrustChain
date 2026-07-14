@@ -34,7 +34,7 @@ const ExistingCredentialCard = ({ existingCredential, walletAddress, copiedAddr,
   ];
 
   return (
-    <div className="relative overflow-hidden text-white min-h-screen">
+    <div className="relative overflow-hidden text-white min-h-screen" style={{ background: '#050505' }}>
       <style>{`
         @keyframes wpFadeSlideUp {
           from { opacity: 0; transform: translateY(20px); }
@@ -47,6 +47,10 @@ const ExistingCredentialCard = ({ existingCredential, walletAddress, copiedAddr,
         .wp-copy-btn:hover { color: #ffffff !important; }
       `}</style>
 
+      <div className="tc-bg-grid" />
+      <div className="tc-orb-1" />
+      <div className="tc-orb-2" />
+
       <div className="min-h-screen px-4 md:px-12 lg:px-24 w-full flex flex-col items-center" role="main" aria-label={t('registration.credentialCardLabel', 'Your existing credential')} style={{ paddingTop: '100px', paddingBottom: '60px', position: 'relative', zIndex: 10 }}>
         {/* Page Header */}
         <div style={{ width: '100%', maxWidth: '1100px', textAlign: 'center' }} className="tc-mb-xl">
@@ -54,7 +58,7 @@ const ExistingCredentialCard = ({ existingCredential, walletAddress, copiedAddr,
             {t('nav.workerPortal')}
           </p>
           <h1 className="wp-anim font-clash tc-heading-hero tc-mb-xs" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.6rem)', textAlign: 'center', animationDelay: '0.08s', letterSpacing: '-0.02em' }}>
-            {t('dashboard.myCredential')}
+            <span className="text-gradient">{t('dashboard.myCredential')}</span>
           </h1>
           <p className="wp-anim font-inter tc-text-dim tc-text-base" style={{ textAlign: 'center', animationDelay: '0.14s' }}>
             {t('registration.headerSubtitle')}
@@ -62,13 +66,13 @@ const ExistingCredentialCard = ({ existingCredential, walletAddress, copiedAddr,
         </div>
 
         {/* Credential Card */}
-        <div className="wp-anim tc-panel" role="region" aria-label={t('registration.credentialDetails', 'Credential details')} style={{ width: '100%', maxWidth: '1100px', borderTop: '2px solid rgba(255,255,255,0.15)', boxShadow: '0 0 0 1px rgba(255,255,255,0.04), 0 24px 48px rgba(0,0,0,0.4)', overflow: 'hidden', borderRadius: '2px', animationDelay: '0.22s', animationDuration: '0.5s' }}>
+        <div className="wp-anim glass-card" role="region" aria-label={t('registration.credentialDetails', 'Credential details')} style={{ width: '100%', maxWidth: '1100px', borderTop: '2px solid rgba(34,197,94,0.3)', overflow: 'hidden', borderRadius: '12px', animationDelay: '0.22s', animationDuration: '0.5s' }}>
           {/* Card Header Bar */}
           <div className="tc-feed-header tc-flex-between">
             <span className="font-inter tc-label tc-ls-wider">
               {t('dashboard.myCredential')}
             </span>
-            <span className="tc-verified-badge tc-text-xs tc-ls-wide" style={{ padding: '4px 12px' }}>
+            <span className="tc-verified-badge tc-text-xs tc-ls-wide" style={{ padding: '4px 12px', boxShadow: '0 0 12px rgba(0,220,110,0.15)' }}>
               ● {t('discover.badgeOnChain')}
             </span>
           </div>
@@ -108,7 +112,7 @@ const ExistingCredentialCard = ({ existingCredential, walletAddress, copiedAddr,
           </div>
 
           {/* Update Button */}
-          <button onClick={onUpdate} className="wp-update-btn font-inter tc-btn-primary" aria-label={t('registration.updateBtnLabel', 'Update your credential')} style={{ backgroundColor: 'transparent', color: '#ffffff', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+          <button onClick={onUpdate} className="wp-update-btn font-inter btn-glow" aria-label={t('registration.updateBtnLabel', 'Update your credential')} style={{ width: '100%', borderRadius: '0 0 12px 12px' }}>
             <PenLine className="tc-icon-md tc-icon-accent" aria-hidden="true" /> {t('registration.updateCredential')}
           </button>
         </div>

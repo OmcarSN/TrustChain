@@ -64,10 +64,10 @@ const ProfileStatsRow = ({ statAvgRating, statTotalReviews, statHighestScore, st
 
   return (
     <div
-      className="prof-anim tc-stat-grid tc-mb-2xl"
+      className="prof-anim tc-stat-grid tc-mb-2xl glass-card"
       role="region"
       aria-label={t('profile.statsRegion', 'Reputation statistics')}
-      style={{ animationDelay: '0.1s' }}
+      style={{ animationDelay: '0.1s', borderRadius: '12px' }}
     >
       {stats.map((stat, i, arr) => (
         <div key={i} className={`prof-stat tc-stat-cell ${i < arr.length - 1 ? 'tc-stat-cell-border' : ''}`}>

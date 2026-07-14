@@ -29,10 +29,10 @@ const ProfileSidebar = ({
   copiedAddr, copiedShare, copyAddr, shareProfile, t
 }) => (
   <div
-    className="prof-anim tc-sidebar-width tc-sticky-side"
+    className="prof-anim tc-sidebar-width tc-sticky-side glass-card"
     role="complementary"
     aria-label={t('profile.sidebarLabel', 'Worker profile details')}
-    style={{ animationDelay: '0s' }}
+    style={{ animationDelay: '0s', borderRadius: '16px', padding: '28px 24px' }}
   >
     {/* Avatar */}
     <div className="tc-avatar">
@@ -41,7 +41,7 @@ const ProfileSidebar = ({
 
     {/* Verified badge */}
     {endorsements.length > 0 && (
-      <div className="tc-verified-badge font-inter">
+      <div className="tc-verified-badge font-inter" style={{ boxShadow: '0 0 16px rgba(0,220,110,0.2)' }}>
         <ShieldCheck className="tc-icon-sm" aria-hidden="true" /> {t('profile.badgeVerified')}
       </div>
     )}
@@ -50,7 +50,7 @@ const ProfileSidebar = ({
     <h2 className="font-clash tc-heading-xl tc-mb-md">{profile.name}</h2>
 
     {/* Primary Action: Endorse */}
-    <Link to={`/endorse?worker=${address}`} className="prof-endorse-btn font-inter tc-btn-primary tc-mb-lg" aria-label={t('profile.endorseBtnLabel', `Endorse ${profile.name}`)}>
+    <Link to={`/endorse?worker=${address}`} className="prof-endorse-btn font-inter btn-glow tc-mb-lg" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }} aria-label={t('profile.endorseBtnLabel', `Endorse ${profile.name}`)}>
       <Award className="tc-icon-md" aria-hidden="true" /> {t('profile.endorseBtn')}
     </Link>
 
