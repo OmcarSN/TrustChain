@@ -138,7 +138,11 @@ const DiscoverWorkers = () => {
     (animRatingRaw === calculatedBase ? calculatedBase.toFixed(1) : animRatingRaw.toFixed(1));
 
   return (
-    <div className="relative overflow-hidden text-white min-h-screen">
+    <div className="relative overflow-hidden text-white min-h-screen" style={{ background: '#050505' }}>
+      {/* Background Decorations */}
+      <div className="tc-bg-grid" />
+      <div className="tc-orb-green" />
+      <div className="tc-orb-blue" />
       <style>{`
         @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(24px); filter: blur(3px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }
         @keyframes fadeSlideRight { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
@@ -182,19 +186,19 @@ const DiscoverWorkers = () => {
             <p className="font-inter tc-eyebrow tc-mb-sm" style={{ animation: 'fadeSlideRight 0.5s ease both', animationDelay: '0ms' }}>{t('discover.eyebrow')}</p>
             <h1 className="font-clash tc-heading-hero tc-mb-sm" style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)', letterSpacing: '-0.02em' }}>
               {t('discover.title', 'Discover Verified Workers').split(' ').map((word, i) => (
-                <span key={i} style={{ display: 'inline-block', marginRight: '0.25em', animation: 'wordUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both', animationDelay: `${i * 80}ms` }}>{word}</span>
+                <span key={i} className="text-gradient" style={{ display: 'inline-block', marginRight: '0.25em', animation: 'wordUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both', animationDelay: `${i * 80}ms` }}>{word}</span>
               ))}
             </h1>
             <p className="font-inter tc-text-dimmer" style={{ fontSize: '13px', maxWidth: '500px', lineHeight: '1.6', animation: 'slideUpFade 0.5s ease both', animationDelay: '400ms' }}>{t('discover.subtitle')}</p>
           </div>
-          <div className="grid grid-cols-3 gap-2 md:gap-4 tc-panel" style={{ flexShrink: 0, animation: 'fadeSlideLeft 0.6s ease both', animationDelay: '200ms' }}>
+          <div className="glass-card grid grid-cols-3 gap-2 md:gap-4" style={{ flexShrink: 0, animation: 'fadeSlideLeft 0.6s ease both', animationDelay: '200ms', padding: '20px 24px' }}>
             {[
               { value: totalWorkers, label: t('discover.workers', 'WORKERS') },
               { value: avgRating, label: t('discover.avgRatingLabel', 'AVG RATING') },
               { value: totalEndorsements, label: t('discover.reviewsLabel', 'REVIEWS') },
             ].map((s, i, arr) => (
               <div key={i} className="tc-stat-cell" style={{ borderRight: i < arr.length - 1 ? '1px solid rgba(255,255,255,0.08)' : 'none' }}>
-                <p className="font-clash text-xl md:text-3xl font-black text-white leading-none mb-1">{s.value}</p>
+                <p className="font-clash text-xl md:text-3xl font-black text-white leading-none mb-1 counter-glow">{s.value}</p>
                 <p className="font-inter tc-caption">{s.label}</p>
               </div>
             ))}

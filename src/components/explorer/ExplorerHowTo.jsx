@@ -30,8 +30,8 @@ const ExplorerHowTo = ({ t }) => (
         { step: '02', icon: FileSearch, title: t('explorer.howToStep2Title') || 'Search', desc: t('explorer.howToStep2'), delay: '0.4s' },
         { step: '03', icon: ShieldCheck, title: t('explorer.howToStep3Title') || 'Verify', desc: t('explorer.howToStep3'), delay: '0.45s' },
       ].map((item, i, arr) => (
-        <div key={i} className="ex-anim ex-step tc-card-lg" role="listitem" style={{
-          borderRight: i < arr.length - 1 ? 'none' : '1px solid rgba(255,255,255,0.08)',
+        <div key={i} className="ex-anim ex-step glass-card" role="listitem" style={{
+          borderRight: i < arr.length - 1 ? 'none' : undefined,
           animationDelay: item.delay,
         }}>
           {i < arr.length - 1 && (

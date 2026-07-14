@@ -30,7 +30,7 @@ const ExplorerSearchHero = ({ searchQuery, setSearchQuery, isValidAddress, loadi
 
     {/* Title */}
     <h1 className="ex-anim font-clash tc-fw-black tc-text-white tc-mb-lg" style={{ fontSize: 'clamp(3rem, 7vw, 5.5rem)', textAlign: 'center', letterSpacing: '-2px', lineHeight: '1', animationDelay: '0.08s' }}>
-      {t('explorer.title')}
+      <span className="text-gradient">{t('explorer.title')}</span>
     </h1>
 
     {/* Subtitle */}
@@ -41,7 +41,7 @@ const ExplorerSearchHero = ({ searchQuery, setSearchQuery, isValidAddress, loadi
     {/* Search Bar */}
     <div className="ex-anim tc-mb-4xl" style={{ width: '100%', maxWidth: '680px', animationDelay: '0.22s', animationDuration: '0.45s' }}>
       <form onSubmit={handleSearch} role="search" aria-label={t('explorer.searchLabel', 'Search for worker credentials')}>
-        <div className="tc-panel" style={{ display: 'flex', gap: '0', border: '1px solid rgba(255,255,255,0.12)' }}>
+        <div className="glass-card" style={{ display: 'flex', gap: '0', padding: 0, overflow: 'hidden' }}>
           <div style={{ flex: 1, display: 'flex', alignItems: 'center', paddingLeft: '20px' }}>
             <Search className="tc-icon-lg tc-icon-dimmer" style={{ flexShrink: 0, marginRight: '10px' }} aria-hidden="true" />
             <input
@@ -63,16 +63,13 @@ const ExplorerSearchHero = ({ searchQuery, setSearchQuery, isValidAddress, loadi
           <button
             type="submit"
             disabled={loading || !searchQuery.trim() || !isValidAddress}
-            className="ex-search-btn font-inter"
+            className="btn-glow font-inter"
             aria-label={t('explorer.searchBtnLabel', 'Search credentials')}
             style={{
-              padding: '18px 32px',
-              backgroundColor: '#ffffff', color: '#000000',
-              border: 'none', borderLeft: '1px solid rgba(255,255,255,0.1)',
-              fontSize: '11px', letterSpacing: '3px', fontWeight: '800',
+              padding: '18px 32px', borderRadius: 0,
               cursor: (!searchQuery.trim() || !isValidAddress) ? 'not-allowed' : 'pointer',
               opacity: (!searchQuery.trim() || !isValidAddress) ? 0.4 : 1,
-              textTransform: 'uppercase', flexShrink: 0,
+              flexShrink: 0,
             }}
           >
             {loading ? <Loader2 className="w-4 h-4 animate-spin" aria-label={t('explorer.searching', 'Searching')} /> : t('explorer.searchBtnShort')}
