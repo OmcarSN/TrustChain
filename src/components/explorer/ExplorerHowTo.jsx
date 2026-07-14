@@ -24,7 +24,7 @@ const ExplorerHowTo = ({ t }) => (
     </div>
 
     {/* 3 Step Cards */}
-    <div className="tc-grid-3" style={{ gap: '0', position: 'relative' }} role="list" aria-label={t('explorer.stepsLabel', 'Verification steps')}>
+    <div className="tc-grid-3" style={{ gap: '16px', position: 'relative' }} role="list" aria-label={t('explorer.stepsLabel', 'Verification steps')}>
       {[
         { step: '01', icon: UserCheck, title: t('explorer.howToStep1Title') || 'Get Worker ID', desc: t('explorer.howToStep1'), delay: '0.35s' },
         { step: '02', icon: FileSearch, title: t('explorer.howToStep2Title') || 'Search', desc: t('explorer.howToStep2'), delay: '0.4s' },
