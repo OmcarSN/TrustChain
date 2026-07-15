@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Users, Star, MessageSquare, Zap } from 'lucide-react';
 
 /**
  * StatsBar — Animated platform metrics bar on the Landing page.
@@ -12,17 +13,21 @@ import PropTypes from 'prop-types';
  */
 const StatsBar = ({ stats, visible }) => {
   const accents = ['#22c55e', '#f5c518', '#3b82f6', '#22c55e'];
-  const icons = ['👷', '⭐', '✍️', '⚡'];
+  const Icons = [Users, Star, MessageSquare, Zap];
 
   return (
     <section style={{ padding: '0 24px', marginTop: '80px' }}>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4" style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        {stats.map((stat, i) => (
+        {stats.map((stat, i) => {
+          const Icon = Icons[i];
+          return (
           <div key={i} className="stat-card-premium" style={{
             opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(20px)',
             transition: `opacity 0.6s ease ${i * 0.1}s, transform 0.6s cubic-bezier(0.22,1,0.36,1) ${i * 0.1}s`,
           }}>
-            <div style={{ fontSize: '20px', marginBottom: '12px' }}>{icons[i]}</div>
+            <div style={{ marginBottom: '16px', display: 'flex', justifyContent: 'center' }}>
+              <Icon size={24} color={accents[i]} opacity={0.8} />
+            </div>
             <p className="font-clash" style={{
               fontSize: '2rem', fontWeight: '900', color: accents[i],
               lineHeight: '1', margin: '0 0 8px 0',
@@ -37,7 +42,8 @@ const StatsBar = ({ stats, visible }) => {
               {stat.label}
             </p>
           </div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );
