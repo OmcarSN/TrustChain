@@ -75,16 +75,16 @@ const MobileMenu = ({
           aria-modal="true"
           aria-label={t('nav.mobileMenuLabel', 'Mobile navigation menu')}
         >
-          <div className="px-6 pt-[100px] pb-6 border-b border-white/10">
-            <div className="flex items-center gap-3 mb-2">
-              <TrustChainLogo size={28} />
-              <span className="font-clash font-bold text-lg tracking-widest uppercase text-white">TRUSTCHAIN</span>
+          <div className="px-8 pt-[120px] pb-8 border-b border-white/10">
+            <div className="flex items-center gap-4 mb-4">
+              <TrustChainLogo size={32} />
+              <span className="font-clash font-bold text-xl tracking-widest uppercase text-white">TRUSTCHAIN</span>
             </div>
-            <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-[#00dc6e]/70">{t('nav.navigationMenu', 'Navigation Menu')}</p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#00dc6e]/70">{t('nav.navigationMenu', 'Navigation Menu')}</p>
           </div>
 
           {/* Nav Links */}
-          <nav className="flex-1 overflow-y-auto px-6 py-8" style={{ scrollbarWidth: 'none' }} aria-label={t('nav.mobileNavLabel', 'Mobile navigation links')}>
+          <nav className="flex-1 overflow-y-auto px-6 pt-10 pb-8" style={{ scrollbarWidth: 'none' }} aria-label={t('nav.mobileNavLabel', 'Mobile navigation links')}>
             <style>{`
               .mobile-nav-item { transition: all 0.25s cubic-bezier(0.16,1,0.3,1); border-left: 2px solid transparent; }
               .mobile-nav-item:hover:not(.active-mobile-link) {
