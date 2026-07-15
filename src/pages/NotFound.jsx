@@ -24,14 +24,15 @@ const NotFound = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="text-center max-w-md relative z-10"
+        className="text-center max-w-md relative z-10 glass-card"
+        style={{ padding: '40px', borderRadius: '24px' }}
       >
         {/* Large 404 */}
         <h1 className="font-clash select-none text-gradient" style={{ opacity: '0.15', fontSize: '20vw', fontWeight: '900', lineHeight: 1, margin: 0 }}>
           404
         </h1>
 
-        <h2 className="font-clash" style={{ fontSize: '16px', color: 'rgba(255,255,255,0.4)', letterSpacing: '2px', marginBottom: '32px', marginTop: '0', textTransform: 'uppercase' }}>
+        <h2 className="font-clash" style={{ fontSize: '18px', color: 'rgba(255,255,255,0.7)', letterSpacing: '2px', marginBottom: '40px', marginTop: '0', textTransform: 'uppercase' }}>
           {t('notFound.subtitle', 'Route Not Found')}
         </h2>
 

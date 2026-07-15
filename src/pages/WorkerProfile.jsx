@@ -149,7 +149,7 @@ const WorkerProfile = () => {
         />
 
         {/* ═══ RIGHT MAIN AREA ═══ */}
-        <div style={{ flex: 1, paddingLeft: '40px', borderLeft: '1px solid rgba(255,255,255,0.06)' }} role="main" aria-label={t('profile.mainContent', 'Worker reputation and reviews')}>
+        <div className="glass-card" style={{ flex: 1, padding: '40px', borderLeft: '1px solid rgba(255,255,255,0.06)', borderRadius: '24px' }} role="main" aria-label={t('profile.mainContent', 'Worker reputation and reviews')}>
 
           {/* Eyebrow + Title */}
           <div className="prof-anim" style={{ marginBottom: '28px', animationDelay: '0.05s' }}>

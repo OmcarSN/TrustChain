@@ -119,11 +119,11 @@ const Endorse = () => {
         @keyframes btnPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.15); } 50% { box-shadow: 0 0 0 8px rgba(255,255,255,0); } }
         .end-anim { opacity: 0; animation: fadeSlideUp 0.6s ease forwards; }
         .end-panel-anim { opacity: 0; animation: fadeSlideUp 0.5s 0.2s ease forwards; }
-        .end-input { transition: all 0.2s ease; border: 1px solid rgba(255,255,255,0.15); background-color: rgba(255,255,255,0.03); color: #ffffff; border-radius: 8px; padding: 14px 16px; font-size: 14px; }
-        .end-input:focus { border-color: rgba(255,255,255,0.3) !important; box-shadow: 0 0 16px rgba(255,255,255,0.04) !important; }
-        .end-input-dropdown { border: 1px solid rgba(255,255,255,0.12) !important; background-color: rgba(255,255,255,0.04) !important; color: rgba(255,255,255,0.6) !important; border-radius: 8px !important; padding: 14px 16px !important; }
-        .end-input-textarea { border: 1px solid rgba(255,255,255,0.1) !important; background-color: rgba(255,255,255,0.03) !important; color: #ffffff !important; line-height: 1.6; resize: vertical !important; min-height: 120px !important; border-radius: 8px !important; padding: 14px 16px !important; }
-        .end-input-textarea:focus { box-shadow: 0 0 20px rgba(255,255,255,0.03) !important; }
+        .end-input { transition: all 0.2s ease; border: 1px solid rgba(255,255,255,0.15); background-color: rgba(255,255,255,0.03); color: #ffffff; border-radius: 8px; padding: 14px 16px; font-size: 14px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .end-input:focus { border-color: rgba(255,255,255,0.3) !important; box-shadow: 0 0 16px rgba(255,255,255,0.04) !important; background-color: rgba(255,255,255,0.06); }
+        .end-input-dropdown { border: 1px solid rgba(255,255,255,0.12) !important; background-color: rgba(255,255,255,0.04) !important; color: rgba(255,255,255,0.6) !important; border-radius: 8px !important; padding: 14px 16px !important; backdrop-filter: blur(12px); }
+        .end-input-textarea { border: 1px solid rgba(255,255,255,0.1) !important; background-color: rgba(255,255,255,0.03) !important; color: #ffffff !important; line-height: 1.6; resize: vertical !important; min-height: 120px !important; border-radius: 8px !important; padding: 14px 16px !important; backdrop-filter: blur(12px); }
+        .end-input-textarea:focus { box-shadow: 0 0 20px rgba(255,255,255,0.03) !important; background-color: rgba(255,255,255,0.06) !important; }
         .end-input::placeholder { color: rgba(255,255,255,0.2); }
         .end-star { transition: 0.15s ease; cursor: pointer; color: rgba(255,255,255,0.15); font-size: 28px; }
         .end-star:hover { transform: scale(1.2); color: #f5c518 !important; }
@@ -146,7 +146,7 @@ const Endorse = () => {
         {/* Page Header */}
         <div className="end-anim" style={{ textAlign: 'center', marginBottom: '16px', paddingTop: '72px', paddingBottom: '16px', animationDelay: '0s' }}>
           <p className="font-inter tc-eyebrow" style={{ marginBottom: '8px', fontWeight: '600' }}>{t('nav.workerPortal')}</p>
-          <h1 className="font-clash shimmer-text" style={{ fontSize: 'clamp(1.8rem, 3vw, 2.5rem)', fontWeight: '900', marginBottom: '6px' }}>{t('endorse.header')}</h1>
+          <h1 className="font-clash text-gradient" style={{ fontSize: 'clamp(1.8rem, 3vw, 2.5rem)', fontWeight: '900', marginBottom: '6px' }}>{t('endorse.header')}</h1>
           <p className="font-inter tc-text-dim" style={{ fontSize: '13px', letterSpacing: '1px', marginBottom: '12px' }}>{t('endorse.headerSubtitle')}</p>
         </div>
 

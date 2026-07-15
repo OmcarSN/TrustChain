@@ -78,7 +78,7 @@ const RegistrationForm = ({
     </div>
 
     {/* Form Card */}
-    <motion.div className="form-card reg-anim" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.5 }}
+    <motion.div className="form-card reg-anim glass-card" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.5 }}
       role="form" aria-label={t('registration.formLabel', 'Worker registration form')}
     >
       {/* Card Header */}
@@ -143,7 +143,7 @@ const RegistrationForm = ({
               <div className="gasless-subtitle font-inter">{t('registration.gaslessDesc')}</div>
             </div>
             {/* Mint Button */}
-            <button onClick={handleMint} disabled={isMinting || filled !== 5} className="mint-btn font-inter" aria-label={isMinting ? t('registration.mintingLabel', 'Minting in progress') : t('registration.mintBtnLabel', 'Mint credential on-chain')}>
+            <button onClick={handleMint} disabled={isMinting || filled !== 5} className="mint-btn font-inter btn-glow" aria-label={isMinting ? t('registration.mintingLabel', 'Minting in progress') : t('registration.mintBtnLabel', 'Mint credential on-chain')} style={{ width: '100%', marginTop: '16px' }}>
               {isMinting ? <><Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" /> {t('registration.btnMinting')}</> : filled === 5 ? <><ShieldCheck className="w-4 h-4" aria-hidden="true" /> {t('registration.btnSubmit')}</> : <span>{t('registration.completeAllFields')}</span>}
             </button>
           </motion.div>

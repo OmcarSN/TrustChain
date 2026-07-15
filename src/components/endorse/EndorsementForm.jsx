@@ -157,7 +157,7 @@ const EndorsementForm = ({
               </a>
             </motion.div>
           ) : (
-            <button key="submit" onClick={handleEndorse} disabled={!canSubmit || isSigning} className="end-submit font-inter"
+            <button key="submit" onClick={handleEndorse} disabled={!canSubmit || isSigning} className={`end-submit font-inter ${canSubmit ? 'btn-glow' : ''}`}
               aria-label={isSigning ? 'Submitting endorsement' : 'Submit endorsement on-chain'}
               style={{
                 width: '100%', padding: '16px',
