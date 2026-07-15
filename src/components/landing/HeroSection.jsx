@@ -30,17 +30,17 @@ const HeroSection = ({ t }) => (
       .hero-headline { font-size: clamp(36px, 9vw, 56px); white-space: normal; overflow: visible; line-height: 1.1; }
       .hero-ghost { font-size: clamp(28px, 8vw, 50px); white-space: normal; overflow: visible; margin-bottom: 28px; }
       @media (min-width: 768px) {
-        .hero-inner { padding: 120px 0 60px 80px; flex-direction: row; align-items: center; justify-content: space-between; gap: 24px; overflow: visible; }
+        .hero-inner { padding: 120px 40px 60px 80px; flex-direction: row; align-items: center; justify-content: space-between; gap: 24px; overflow: visible; }
         .hero-left { flex: 1; min-width: 0; }
-        .hero-right { display: flex; flex: 0 0 340px; align-items: flex-end; justify-content: flex-end; overflow: visible; }
+        .hero-right { display: flex; flex: 0 0 340px; align-items: flex-end; justify-content: flex-end; overflow: visible; margin-bottom: -60px; }
         .hero-headline { font-size: clamp(32px, 4.5vw, 72px); white-space: nowrap; }
         .hero-ghost { font-size: clamp(28px, 4vw, 64px); white-space: nowrap; }
       }
       @media (min-width: 1024px) {
-        .hero-right { flex: 0 0 500px; }
+        .hero-right { flex: 0 0 450px; }
       }
       @media (min-width: 1280px) {
-        .hero-right { flex: 0 0 600px; }
+        .hero-right { flex: 0 0 540px; }
       }
     `}</style>
 
@@ -174,7 +174,7 @@ const HeroSection = ({ t }) => (
       {/* Hero Illustration — Right Side */}
       <div className="hero-right">
         <img src="/hero-workers.png" alt="Diverse workers" style={{
-          width: '100%', maxHeight: '80vh', objectFit: 'contain', objectPosition: 'bottom center',
+          width: '100%', maxHeight: '95vh', objectFit: 'contain', objectPosition: 'bottom center',
           opacity: 0, animation: 'fadeSlideUp 1s ease forwards', animationDelay: '0.4s',
           filter: 'drop-shadow(0 0 40px rgba(34,197,94,0.1))',
         }} />
