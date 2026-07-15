@@ -37,7 +37,10 @@ const HeroSection = ({ t }) => (
         .hero-ghost { font-size: clamp(28px, 4vw, 64px); white-space: nowrap; }
       }
       @media (min-width: 1024px) {
-        .hero-right { flex: 0 0 400px; }
+        .hero-right { flex: 0 0 500px; }
+      }
+      @media (min-width: 1280px) {
+        .hero-right { flex: 0 0 600px; }
       }
     `}</style>
 
