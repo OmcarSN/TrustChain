@@ -9,6 +9,8 @@
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](./LICENSE)
 [![Security](https://img.shields.io/badge/Security-Checklist_Passed-brightgreen?style=for-the-badge)](./SECURITY.md)
 
+> **Note:** Demo video shows full feature set — UI refresh in progress, updated video coming in final submission.
+
 **TrustChain** is a decentralized identity and reputation platform for the informal economy, built on **Stellar Mainnet**. It gives daily wage workers (construction workers, house help, drivers, plumbers) a tamper-proof digital identity and a portable reputation score — powered by soulbound credentials, on-chain endorsements, and gasless UX.
 
 ## Why I Built This
