@@ -115,10 +115,10 @@ const MobileMenu = ({
                       onClick={() => setIsMobileMenuOpen(false)}
                       role="menuitem"
                       aria-current={isActive ? 'page' : undefined}
-                      className={`mobile-nav-item flex items-center gap-4 px-4 py-4 rounded-[6px] font-inter font-bold uppercase tracking-[0.15em] text-[11px] ${isActive ? 'active-mobile-link' : 'text-white/50'}`}
+                      className={`mobile-nav-item flex items-center gap-4 px-4 py-5 rounded-[6px] font-inter font-bold uppercase tracking-[0.15em] text-[12px] ${isActive ? 'active-mobile-link' : 'text-white/50 bg-white/5'}`}
                     >
                       {link.name}
-                      {isActive && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-[#00dc6e] shadow-[0_0_8px_rgba(0,220,110,0.8)]" aria-hidden="true" />}
+                      {isActive && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-[#00dc6e] shadow-[0_0_12px_rgba(0,220,110,1)]" aria-hidden="true" />}
                     </Link>
                   </motion.div>
                 );
