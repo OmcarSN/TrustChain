@@ -70,12 +70,12 @@ const MobileMenu = ({
           animate={{ x: 0 }}
           exit={{ x: '100%' }}
           transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-          className="fixed top-0 right-0 h-full w-[85%] max-w-sm bg-[#050505]/95 backdrop-blur-2xl border-l border-white/10 z-[55] flex flex-col"
+          className="fixed top-0 right-0 h-full w-full bg-[#050505]/95 backdrop-blur-2xl border-l border-white/10 z-[55] flex flex-col"
           role="dialog"
           aria-modal="true"
           aria-label={t('nav.mobileMenuLabel', 'Mobile navigation menu')}
         >
-          <div className="px-8 pt-20 pb-6 border-b border-white/10">
+          <div className="px-6 pt-[100px] pb-6 border-b border-white/10">
             <div className="flex items-center gap-3 mb-2">
               <TrustChainLogo size={28} />
               <span className="font-clash font-bold text-lg tracking-widest uppercase text-white">TRUSTCHAIN</span>
@@ -84,7 +84,7 @@ const MobileMenu = ({
           </div>
 
           {/* Nav Links */}
-          <nav className="flex-1 overflow-y-auto px-6 py-6" style={{ scrollbarWidth: 'none' }} aria-label={t('nav.mobileNavLabel', 'Mobile navigation links')}>
+          <nav className="flex-1 overflow-y-auto px-6 py-8" style={{ scrollbarWidth: 'none' }} aria-label={t('nav.mobileNavLabel', 'Mobile navigation links')}>
             <style>{`
               .mobile-nav-item { transition: all 0.25s cubic-bezier(0.16,1,0.3,1); border-left: 2px solid transparent; }
               .mobile-nav-item:hover:not(.active-mobile-link) {
@@ -100,7 +100,7 @@ const MobileMenu = ({
                 box-shadow: inset 0 0 12px rgba(0,220,110,0.05); 
               }
             `}</style>
-            <div className="space-y-2" role="menu">
+            <div className="space-y-4" role="menu">
               {navLinks.map((link, idx) => {
                 const isActive = location.pathname === link.path;
                 return (
