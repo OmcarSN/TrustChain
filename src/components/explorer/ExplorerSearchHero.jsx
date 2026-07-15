@@ -40,8 +40,9 @@ const ExplorerSearchHero = ({ searchQuery, setSearchQuery, isValidAddress, loadi
 
     {/* Search Bar */}
     <div className="ex-anim tc-mb-4xl" style={{ width: '100%', maxWidth: '680px', animationDelay: '0.22s', animationDuration: '0.45s' }}>
+      {/* Gradient border wrapper for premium search bar */}
       <form onSubmit={handleSearch} role="search" aria-label={t('explorer.searchLabel', 'Search for worker credentials')}>
-        <div className="glass-card" style={{ display: 'flex', gap: '0', padding: 0, overflow: 'hidden' }}>
+        <div className="glass-card gradient-border" style={{ display: 'flex', gap: '0', padding: 0, overflow: 'hidden', boxShadow: '0 4px 30px rgba(0,0,0,0.3), 0 0 60px rgba(34,197,94,0.04)' }}>
           <div style={{ flex: 1, display: 'flex', alignItems: 'center', paddingLeft: '20px' }}>
             <Search className="tc-icon-lg tc-icon-dimmer" style={{ flexShrink: 0, marginRight: '10px' }} aria-hidden="true" />
             <input
@@ -57,6 +58,7 @@ const ExplorerSearchHero = ({ searchQuery, setSearchQuery, isValidAddress, loadi
                 backgroundColor: 'transparent', border: 'none',
                 color: '#ffffff', fontSize: '14px',
                 fontFamily: 'monospace', outline: 'none',
+                letterSpacing: '0.5px',
               }}
             />
           </div>
@@ -77,7 +79,13 @@ const ExplorerSearchHero = ({ searchQuery, setSearchQuery, isValidAddress, loadi
         </div>
       </form>
       {!isValidAddress && searchQuery.trim().length > 0 && (
-        <p className="font-inter tc-form-error tc-ls-wide" role="alert" style={{ marginTop: '12px', textAlign: 'left' }}>
+        <p className="font-inter tc-form-error tc-ls-wide" role="alert" style={{
+          marginTop: '12px', textAlign: 'left',
+          padding: '10px 16px', borderRadius: '8px',
+          background: 'rgba(239,68,68,0.06)',
+          border: '1px solid rgba(239,68,68,0.15)',
+          backdropFilter: 'blur(8px)',
+        }}>
           ⚠ {t('explorer.validationWarning')}
         </p>
       )}

@@ -24,40 +24,42 @@ const ExplorerResultsTable = ({ results, loading, error, searchQuery, t }) => {
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-      className="tc-panel tc-mb-lg" style={{ width: '100%', maxWidth: '1100px', padding: '0', overflow: 'hidden' }}
+      className="glass-card tc-mb-lg" style={{ width: '100%', maxWidth: '1100px', padding: '0', overflow: 'hidden', boxShadow: '0 8px 40px rgba(0,0,0,0.3), 0 0 80px rgba(34,197,94,0.03)' }}
       role="region"
       aria-label={t('explorer.resultsRegion', 'Search results')}
     >
       {loading ? (
-        <div className="p-16 flex flex-col items-center justify-center text-white/40" role="status" aria-label={t('explorer.queryingHorizon')}>
-          <Loader2 className="w-6 h-6 animate-spin mb-4 text-white/50" aria-hidden="true" />
-          <p className="font-bold uppercase tracking-widest text-xs font-inter">{t('explorer.queryingHorizon')}</p>
+        <div className="p-16 flex flex-col items-center justify-center" role="status" aria-label={t('explorer.queryingHorizon')} style={{ padding: '64px 16px' }}>
+          <Loader2 className="w-6 h-6 animate-spin mb-4" style={{ color: '#22c55e' }} aria-hidden="true" />
+          <p className="font-bold uppercase tracking-widest text-xs font-inter" style={{ color: 'rgba(255,255,255,0.4)', letterSpacing: '3px' }}>{t('explorer.queryingHorizon')}</p>
         </div>
       ) : error ? (
-        <div className="p-12 text-center text-red-400/70" role="alert"><p className="font-bold font-inter">{error}</p></div>
+        <div role="alert" style={{ padding: '48px 16px', textAlign: 'center' }}><p className="font-bold font-inter" style={{ color: 'rgba(239,68,68,0.7)', padding: '12px 20px', borderRadius: '8px', background: 'rgba(239,68,68,0.05)', border: '1px solid rgba(239,68,68,0.12)', display: 'inline-block' }}>{error}</p></div>
       ) : results.length === 0 ? (
-        <div className="p-16 text-center" role="status">
-          <Database className="w-10 h-10 text-white/10 mx-auto mb-4" aria-hidden="true" />
-          <p className="text-white/50 font-bold mb-2 font-inter">{t('explorer.noWorkers')}</p>
-          <p className="text-sm text-white/25 font-inter">{t('explorer.noWorkersSub')}</p>
+        <div role="status" style={{ padding: '64px 16px', textAlign: 'center' }}>
+          <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+            <Database style={{ width: '24px', height: '24px', color: 'rgba(255,255,255,0.15)' }} aria-hidden="true" />
+          </div>
+          <p className="font-inter" style={{ color: 'rgba(255,255,255,0.5)', fontWeight: '700', marginBottom: '8px' }}>{t('explorer.noWorkers')}</p>
+          <p className="font-inter" style={{ fontSize: '13px', color: 'rgba(255,255,255,0.25)' }}>{t('explorer.noWorkersSub')}</p>
         </div>
       ) : (
         <div className="overflow-x-auto">
           {/* Results Header */}
-          <div className="tc-flex-between tc-feed-header">
+          <div className="tc-flex-between tc-feed-header" style={{ background: 'linear-gradient(135deg, rgba(34,197,94,0.04), rgba(59,130,246,0.02), rgba(255,255,255,0.02))', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
             <div className="font-inter tc-eyebrow" style={{ letterSpacing: '2px' }}>
-              {t('explorer.showing')} {results.length} {t('explorer.credentials')} · <span className="tc-mono" style={{ color: 'rgba(255,255,255,0.6)' }}>{truncate(searchQuery)}</span>
+              <span className="text-gradient" style={{ fontWeight: '700' }}>{t('explorer.showing')} {results.length} {t('explorer.credentials')}</span> · <span className="tc-mono" style={{ color: 'rgba(255,255,255,0.6)' }}>{truncate(searchQuery)}</span>
             </div>
-            <div className="flex items-center gap-2">
-              <ShieldCheck className="w-3.5 h-3.5 text-[#00dc6e]" aria-hidden="true" />
-              <span className="font-inter tc-text-accent" style={{ fontSize: '10px', letterSpacing: '1px', fontWeight: '700', opacity: 0.6 }}>{t('explorer.onChainVerified')}</span>
+            <div className="flex items-center gap-2" style={{ padding: '4px 12px', borderRadius: '20px', background: 'rgba(34,197,94,0.06)', border: '1px solid rgba(34,197,94,0.12)' }}>
+              <ShieldCheck style={{ width: '14px', height: '14px', color: '#22c55e' }} aria-hidden="true" />
+              <span className="font-inter" style={{ fontSize: '10px', letterSpacing: '1px', fontWeight: '700', color: '#22c55e', opacity: 0.8 }}>{t('explorer.onChainVerified')}</span>
             </div>
           </div>
 
           {/* Table */}
           <div className="w-full min-w-[800px]" role="table" aria-label={t('explorer.credentialsTable', 'Credentials table')}>
             {/* Header Row */}
-            <div className="tc-table-header" role="row">
+            <div className="tc-table-header" role="row" style={{ background: 'rgba(255,255,255,0.02)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
               <div className="font-inter tc-label" role="columnheader">{t('explorer.credentialType')}</div>
               <div className="font-inter tc-label" role="columnheader">{t('explorer.issuedOn')}</div>
               <div className="font-inter tc-label" role="columnheader">{t('explorer.txHash')}</div>
@@ -77,7 +79,9 @@ const ExplorerResultsTable = ({ results, loading, error, searchQuery, t }) => {
                     role="row"
                     aria-label={`${cred.credentialType} credential`}
                     className="tc-table-row hover:bg-white/[0.03] transition-all duration-150 group result-row"
-                    style={{ animationDelay: `${idx * 0.04}s` }}
+                    style={{ animationDelay: `${idx * 0.04}s`, borderLeft: '2px solid transparent', transition: 'all 0.2s ease' }}
+                    onMouseEnter={(e) => { e.currentTarget.style.borderLeftColor = '#22c55e'; e.currentTarget.style.background = 'rgba(34,197,94,0.02)'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.borderLeftColor = 'transparent'; e.currentTarget.style.background = 'transparent'; }}
                   >
                     <div role="cell">
                       <div className="flex items-center">
@@ -141,8 +145,8 @@ const ExplorerResultsTable = ({ results, loading, error, searchQuery, t }) => {
               })}
             </div>
           </div>
-          <div className="tc-label" style={{ padding: '16px', textAlign: 'center', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-            {t('explorer.showing')} {results.length} {t('explorer.historicalCredentials')}
+          <div className="tc-label" style={{ padding: '16px', textAlign: 'center', borderTop: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.01)' }}>
+            <span style={{ opacity: 0.6 }}>{t('explorer.showing')} {results.length} {t('explorer.historicalCredentials')}</span>
           </div>
         </div>
       )}

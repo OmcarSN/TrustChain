@@ -121,6 +121,7 @@ const Footer = () => {
           © 2026 TRUSTCHAIN PROTOCOL · BUILT ON STELLAR
         </span>
         <div style={{ display: 'flex', gap: '10px' }}>
+          <a href="https://x.com/omcarnanavare" target="_blank" rel="noopener noreferrer" className="footer-social-btn" title="X / Twitter">𝕏</a>
           <a href="https://github.com/OmcarSN/TrustChain" target="_blank" rel="noopener noreferrer" className="footer-social-btn" title="GitHub">💻</a>
           <a href="https://stellar.org" target="_blank" rel="noopener noreferrer" className="footer-social-btn" title="Stellar">⭐</a>
           <a href="https://www.freighter.app/" target="_blank" rel="noopener noreferrer" className="footer-social-btn" title="Freighter">🔑</a>

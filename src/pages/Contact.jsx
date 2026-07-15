@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Github, Globe, ExternalLink } from 'lucide-react';
+import { Github, Globe, ExternalLink, Twitter } from 'lucide-react';
 
 /**
  * Contact — External links page for GitHub, Stellar, and Freighter.
@@ -33,6 +33,17 @@ const Contact = () => {
             <div>
               <p className="font-inter tc-label tc-mb-xs" style={{ letterSpacing: '2px' }}>GitHub</p>
               <p className="font-inter text-white/60 group-hover:text-white transition-colors" style={{ fontSize: '15px' }}>github.com/OmcarSN/TrustChain</p>
+            </div>
+          </a>
+
+          {/* X / Twitter */}
+          <a href="https://x.com/omcarnanavare" target="_blank" rel="noopener noreferrer" className="glass-card hover-scale group" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '16px', padding: '20px 24px' }}>
+            <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05))', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <Twitter className="w-5 h-5 text-white/70 group-hover:text-white transition-colors" />
+            </div>
+            <div>
+              <p className="font-inter tc-label tc-mb-xs" style={{ letterSpacing: '2px' }}>X / Twitter</p>
+              <p className="font-inter text-white/60 group-hover:text-white transition-colors" style={{ fontSize: '15px' }}>x.com/omcarnanavare</p>
             </div>
           </a>
 

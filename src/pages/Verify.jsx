@@ -70,7 +70,7 @@ const Verify = () => {
       <div className="tc-leak-orange" />
       <div className="tc-leak-blue" />
 
-      <div className="max-w-6xl mx-auto relative z-10">
+      <div className="max-w-6xl mx-auto relative z-10 glass-card p-6 md:p-10 rounded-2xl">
         {/* Search Header */}
         <VerifySearchHeader
           workerSearch={workerSearch}

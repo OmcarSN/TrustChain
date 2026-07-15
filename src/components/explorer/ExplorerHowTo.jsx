@@ -17,7 +17,7 @@ const ExplorerHowTo = ({ t }) => (
     {/* Section label with lines */}
     <div className="ex-anim tc-separator tc-mb-xl" style={{ animationDelay: '0.3s' }}>
       <div style={{ flex: 1 }} className="tc-divider" role="separator" />
-      <span className="font-inter tc-eyebrow" style={{ whiteSpace: 'nowrap', color: 'rgba(255,255,255,0.25)' }}>
+      <span className="font-inter tc-eyebrow text-gradient" style={{ whiteSpace: 'nowrap' }}>
         {t('explorer.howToTitle')}
       </span>
       <div style={{ flex: 1 }} className="tc-divider" role="separator" />
@@ -30,7 +30,7 @@ const ExplorerHowTo = ({ t }) => (
         { step: '02', icon: FileSearch, title: t('explorer.howToStep2Title') || 'Search', desc: t('explorer.howToStep2'), delay: '0.4s' },
         { step: '03', icon: ShieldCheck, title: t('explorer.howToStep3Title') || 'Verify', desc: t('explorer.howToStep3'), delay: '0.45s' },
       ].map((item, i, arr) => (
-        <div key={i} className="ex-anim ex-step glass-card" role="listitem" style={{
+        <div key={i} className="ex-anim ex-step step-card-premium" role="listitem" style={{
           borderRight: i < arr.length - 1 ? 'none' : undefined,
           animationDelay: item.delay,
         }}>
@@ -38,8 +38,8 @@ const ExplorerHowTo = ({ t }) => (
             <span className="tc-text-dimmer" style={{ position: 'absolute', right: '-7px', top: '50%', transform: 'translateY(-50%)', fontSize: '12px', zIndex: 1, pointerEvents: 'none' }} aria-hidden="true">→</span>
           )}
           <div className="tc-flex-between tc-mb-xl" style={{ alignItems: 'flex-start' }}>
-            <div className="tc-activity-icon" style={{ width: '40px', height: '40px' }}>
-              <item.icon className="tc-icon-xl tc-icon-accent" aria-hidden="true" />
+            <div className="tc-activity-icon" style={{ width: '40px', height: '40px', background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.15)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <item.icon style={{ width: '18px', height: '18px', color: '#22c55e' }} aria-hidden="true" />
             </div>
             <span className="font-inter tc-label">{t('explorer.step')} {item.step}</span>
           </div>
@@ -50,16 +50,18 @@ const ExplorerHowTo = ({ t }) => (
     </div>
 
     {/* Security Banner */}
-    <div className="ex-anim tc-flex tc-flex-gap-lg" role="status" aria-label={t('explorer.securityBanner', 'Security information')} style={{
+    <div className="ex-anim glass-card tc-flex tc-flex-gap-lg" role="status" aria-label={t('explorer.securityBanner', 'Security information')} style={{
       marginTop: '48px', padding: '24px 32px',
       background: 'linear-gradient(135deg, rgba(0,220,110,0.05) 0%, rgba(255,255,255,0.02) 100%)',
-      border: '1px solid rgba(0,220,110,0.15)',
-      borderLeft: '3px solid rgba(0,220,110,0.4)',
+      borderLeft: '3px solid rgba(34,197,94,0.4)',
       alignItems: 'center',
       animation: 'securityPulse 3s ease infinite, exFadeUp 0.4s ease forwards',
       animationDelay: '0.5s', opacity: 0,
+      boxShadow: '0 4px 24px rgba(0,0,0,0.2), 0 0 40px rgba(34,197,94,0.03)',
     }}>
-      <ShieldCheck style={{ color: '#00dc6e', width: '24px', height: '24px', flexShrink: 0 }} aria-hidden="true" />
+      <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+        <ShieldCheck style={{ color: '#22c55e', width: '20px', height: '20px' }} aria-hidden="true" />
+      </div>
       <div>
         <p className="font-inter tc-mb-xs tc-fw-bold" style={{ fontSize: '14px', color: 'rgba(255,255,255,0.7)' }}>
           {t('explorer.securityTitle')}
