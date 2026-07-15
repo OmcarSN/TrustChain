@@ -22,7 +22,8 @@ const HeroSection = ({ t }) => (
       @keyframes meshShift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
       .hero-inner { display: flex; flex-direction: column; justify-content: center; min-height: 100vh; padding: 100px 24px 40px 24px; overflow: hidden; position: relative; z-index: 10; width: 100%; max-width: 1400px; margin: 0 auto; }
       .hero-left { width: 100%; max-width: 720px; overflow: hidden; display: flex; flex-direction: column; align-items: flex-start; }
-      .hero-right { display: none; }
+      .hero-right { display: flex; width: 100%; justify-content: center; align-items: flex-end; margin-top: 40px; margin-bottom: -40px; }
+      .hero-image { width: 100%; max-height: 45vh; object-fit: contain; object-position: bottom center; }
       .hero-badge { margin-bottom: 24px; }
       .hero-headline-block { margin-bottom: 12px; }
       .hero-subtext { margin-bottom: 40px; line-height: 1.7; }
@@ -32,7 +33,8 @@ const HeroSection = ({ t }) => (
       @media (min-width: 768px) {
         .hero-inner { padding: 120px 40px 60px 80px; flex-direction: row; align-items: center; justify-content: space-between; gap: 24px; overflow: visible; }
         .hero-left { flex: 1; min-width: 0; }
-        .hero-right { display: flex; flex: 0 0 340px; align-items: flex-end; justify-content: flex-end; overflow: visible; margin-bottom: -60px; }
+        .hero-right { display: flex; flex: 0 0 340px; align-items: flex-end; justify-content: flex-end; overflow: visible; margin-bottom: -60px; margin-top: 0; }
+        .hero-image { max-height: 95vh; }
         .hero-headline { font-size: clamp(32px, 4.5vw, 72px); white-space: nowrap; }
         .hero-ghost { font-size: clamp(28px, 4vw, 64px); white-space: nowrap; }
       }
@@ -173,8 +175,7 @@ const HeroSection = ({ t }) => (
 
       {/* Hero Illustration — Right Side */}
       <div className="hero-right">
-        <img src="/hero-workers.png" alt="Diverse workers" style={{
-          width: '100%', maxHeight: '95vh', objectFit: 'contain', objectPosition: 'bottom center',
+        <img src="/hero-workers.png" alt="Diverse workers" className="hero-image" style={{
           opacity: 0, animation: 'fadeSlideUp 1s ease forwards', animationDelay: '0.4s',
           filter: 'drop-shadow(0 0 40px rgba(34,197,94,0.1))',
         }} />
