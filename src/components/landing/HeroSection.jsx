@@ -20,7 +20,7 @@ const HeroSection = ({ t }) => (
       @keyframes heroPulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.8; } }
       @keyframes heroFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
       @keyframes meshShift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
-      .hero-inner { display: flex; flex-direction: column; justify-content: center; min-height: 100vh; padding: 100px 24px 40px 24px; overflow: hidden; position: relative; z-index: 10; }
+      .hero-inner { display: flex; flex-direction: column; justify-content: center; min-height: 100vh; padding: 100px 24px 40px 24px; overflow: hidden; position: relative; z-index: 10; width: 100%; max-width: 1400px; margin: 0 auto; }
       .hero-left { width: 100%; max-width: 720px; overflow: hidden; display: flex; flex-direction: column; align-items: flex-start; }
       .hero-right { display: none; }
       .hero-badge { margin-bottom: 24px; }
