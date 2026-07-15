@@ -805,6 +805,8 @@ select.field-input option { background: #0c0c0c; color: #fff; }
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  padding-top: 0.1em;
+  padding-bottom: 0.1em;
 }
 
 .text-gradient-gold {
@@ -812,6 +814,8 @@ select.field-input option { background: #0c0c0c; color: #fff; }
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  padding-top: 0.1em;
+  padding-bottom: 0.1em;
 }
 
 /* ── Animated Counter Glow ──────────────────────────────────── */

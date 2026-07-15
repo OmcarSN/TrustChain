@@ -27,8 +27,8 @@ const HeroSection = ({ t }) => (
       .hero-headline-block { margin-bottom: 12px; }
       .hero-subtext { margin-bottom: 40px; line-height: 1.7; }
       .hero-cta-row { gap: 16px; align-items: center; }
-      .hero-headline { font-size: clamp(36px, 9vw, 56px); white-space: normal; overflow: hidden; line-height: 1.1; }
-      .hero-ghost { font-size: clamp(28px, 8vw, 50px); white-space: normal; overflow: hidden; margin-bottom: 28px; }
+      .hero-headline { font-size: clamp(36px, 9vw, 56px); white-space: normal; overflow: visible; line-height: 1.1; }
+      .hero-ghost { font-size: clamp(28px, 8vw, 50px); white-space: normal; overflow: visible; margin-bottom: 28px; }
       @media (min-width: 768px) {
         .hero-inner { padding: 120px 0 60px 80px; flex-direction: row; align-items: center; gap: 24px; overflow: visible; }
         .hero-left { flex: 1; min-width: 0; }
