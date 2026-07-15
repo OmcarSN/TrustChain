@@ -139,11 +139,11 @@ const HeroSection = ({ t }) => (
         </div>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row w-full sm:w-auto hero-cta-row" style={{ position: 'relative', zIndex: 10, opacity: 0, animation: 'fadeSlideUp 0.6s ease forwards', animationDelay: '0.6s', paddingBottom: '32px' }}>
-          <Link to="/worker" className="btn-glow font-inter w-full sm:w-auto" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', minWidth: '160px', justifyContent: 'center', whiteSpace: 'nowrap' }}>
+        <div className="flex flex-row flex-nowrap w-full sm:w-auto overflow-x-auto sm:overflow-visible hero-cta-row" style={{ position: 'relative', zIndex: 10, opacity: 0, animation: 'fadeSlideUp 0.6s ease forwards', animationDelay: '0.6s', paddingBottom: '32px' }}>
+          <Link to="/worker" className="btn-glow font-inter" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', minWidth: '160px', justifyContent: 'center', whiteSpace: 'nowrap' }}>
             {t('landing.hero_cta_worker', "I'M A WORKER")} <span style={{ transition: 'transform 0.2s' }}>→</span>
           </Link>
-          <Link to="/discover" className="btn-outline-glow font-inter w-full sm:w-auto" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', minWidth: '140px', whiteSpace: 'nowrap' }}>
+          <Link to="/discover" className="btn-outline-glow font-inter" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', minWidth: '140px', whiteSpace: 'nowrap' }}>
             {t('landing.hero_cta_find', 'FIND WORKERS')}
           </Link>
         </div>
