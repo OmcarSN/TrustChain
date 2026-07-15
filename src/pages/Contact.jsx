@@ -37,13 +37,15 @@ const Contact = () => {
           </a>
 
           {/* X / Twitter */}
-          <a href="https://x.com/omcarnanavare" target="_blank" rel="noopener noreferrer" className="glass-card hover-scale group" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '16px', padding: '20px 24px' }}>
-            <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05))', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <Twitter className="w-5 h-5 text-white/70 group-hover:text-white transition-colors" />
+          <a href="https://x.com/TrustChainXLM" target="_blank" rel="noopener noreferrer" className="glass-card hover-scale group" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '16px', padding: '20px 24px' }}>
+            <div className="flex items-center justify-center bg-[#00dc6e]/10 group-hover:bg-[#00dc6e]/20 transition-colors" style={{ width: '48px', height: '48px', borderRadius: '12px' }}>
+              <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: '20px', height: '20px', color: '#00dc6e' }}>
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 22.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+              </svg>
             </div>
             <div>
-              <p className="font-inter tc-label tc-mb-xs" style={{ letterSpacing: '2px' }}>X / Twitter</p>
-              <p className="font-inter text-white/60 group-hover:text-white transition-colors" style={{ fontSize: '15px' }}>x.com/omcarnanavare</p>
+              <p className="font-clash font-bold text-white tracking-widest uppercase mb-1" style={{ fontSize: '12px' }}>X (Twitter)</p>
+              <p className="font-inter text-white/60 group-hover:text-white transition-colors" style={{ fontSize: '15px' }}>x.com/TrustChainXLM</p>
             </div>
           </a>
 
