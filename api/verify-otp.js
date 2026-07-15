@@ -96,14 +96,11 @@ export default async function handler(req, res) {
   // ── Main logic ────────────────────────────────────────────────────
   try {
     // --- SECURE DEMO BYPASS ---
-    let isValidOTP = false;
     const demoPhone = process.env.DEMO_BYPASS_PHONE;
     const demoOtp = process.env.DEMO_BYPASS_OTP;
 
     if (demoPhone && phone === demoPhone) {
-      if (demoOtp && otp === demoOtp) {
-        isValidOTP = true;
-      } else {
+      if (demoOtp && otp !== demoOtp) {
         return res.status(400).json({ error: "Invalid Demo OTP" });
       }
     } else {
@@ -133,8 +130,6 @@ export default async function handler(req, res) {
         }
         return res.status(400).json({ error: "Invalid OTP" });
       }
-
-      isValidOTP = true;
     }
     // --------------------------
 
