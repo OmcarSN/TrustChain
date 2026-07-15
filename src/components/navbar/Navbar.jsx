@@ -79,14 +79,25 @@ const Navbar = () => {
   return (
     <>
       <nav
-        className="fixed top-4 left-0 w-full z-50 flex justify-center px-4 md:px-8 transition-all duration-300"
-        style={{ animation: 'navSlideDown 0.6s cubic-bezier(0.16,1,0.3,1) forwards', pointerEvents: 'none' }}
+        className="fixed top-0 left-0 w-full z-50 navbar-glass transition-all duration-300"
+        style={{ animation: 'navSlideDown 0.6s cubic-bezier(0.16,1,0.3,1) forwards' }}
         aria-label="Main navigation"
       >
         <style>{`
           @keyframes navSlideDown {
             from { transform: translateY(-100%); opacity: 0; }
             to   { transform: translateY(0);     opacity: 1; }
+          }
+          @keyframes gradientSlide {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+          }
+          .navbar-border-bottom {
+            height: 1px; width: 100%; position: absolute; bottom: 0; left: 0;
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.1) 20%, rgba(0,220,110,0.3) 50%, rgba(255,255,255,0.1) 80%, transparent 100%);
+            background-size: 200% auto;
+            animation: gradientSlide 4s linear infinite;
+            pointer-events: none; z-index: 0;
           }
           @keyframes verifiedPulse {
             0%, 100% { box-shadow: 0 0 0 0 rgba(0,220,110,0.4); }
@@ -120,15 +131,13 @@ const Navbar = () => {
           .dropdown-disconnect { color: #ef4444 !important; border-top: 1px solid rgba(255,255,255,0.06); margin-top: 6px; padding-top: 12px; border-radius: 0 0 6px 6px; }
           .dropdown-disconnect:hover { background: rgba(239,68,68,0.08) !important; color: #ff5555 !important; border-left: 2px solid #ef4444; box-shadow: inset 0 0 20px rgba(239,68,68,0.03); }
         `}</style>
+        <div className="navbar-border-bottom" aria-hidden="true" />
         <div
-          className="navbar-glass"
+          className="h-[80px]"
           style={{
-            pointerEvents: 'auto',
             display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-            width: '100%', boxSizing: 'border-box', maxWidth: '1000px',
-            margin: '0 auto', padding: '0 24px', height: '72px',
-            borderRadius: '100px', border: '1px solid rgba(255,255,255,0.08)',
-            boxShadow: '0 16px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1)'
+            width: '100%', boxSizing: 'border-box', maxWidth: '1400px',
+            margin: '0 auto', paddingLeft: '3vw', paddingRight: '3vw'
           }}
         >
           {/* Logo + Brand */}
