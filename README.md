@@ -598,17 +598,24 @@ The analytics dashboard provides real-time network metrics by querying the Stell
 
 ### Screenshots
 
-![Landing Page](https://github.com/user-attachments/assets/12b378c8-4e24-4e61-a776-e58f46efb306)
+<img width="960" height="540" alt="Screenshot 2026-07-16 123610" src="https://github.com/user-attachments/assets/83196e57-3c28-45ac-b88e-50feb5c076bc" />
 
-![Analytics Dashboard](https://github.com/user-attachments/assets/0c1d0dc3-efdc-4693-8a2d-b1ac0daaf135)
 
-![Discover Workers](https://github.com/user-attachments/assets/f00c9419-3e2a-4e09-b332-bd7036363d0a)
+<img width="960" height="540" alt="Screenshot 2026-07-16 130425" src="https://github.com/user-attachments/assets/8bbc118c-680a-4ebc-8cb8-00dee5b81f78" />
 
-![Credential Explorer](https://github.com/user-attachments/assets/b1826d39-c564-4690-91b1-1b5705ed466f)
 
-![Dashboard](https://github.com/user-attachments/assets/a59bc5b6-08f4-4048-8151-c152f9f86a7a)
+<img width="960" height="540" alt="Screenshot 2026-07-16 130459" src="https://github.com/user-attachments/assets/cd7f5ad0-d187-44e5-ba4a-70ad65253f6f" />
 
-![Worker Credential](https://github.com/user-attachments/assets/807f62f7-8604-4f04-8091-3c87d04b1f25)
+
+<img width="960" height="540" alt="Screenshot 2026-07-16 130532" src="https://github.com/user-attachments/assets/a3bd582b-ad39-43a8-98d5-c5d429dd2034" />
+
+
+<img width="960" height="540" alt="Screenshot 2026-07-16 130547" src="https://github.com/user-attachments/assets/68984662-7450-41fd-91fa-4fde96753a2c" />
+
+
+<img width="960" height="540" alt="Screenshot 2026-07-16 130613" src="https://github.com/user-attachments/assets/9c44c346-88ef-43c9-9749-265bbadc6d7a" />
+
+
 ---
 
 ## 🔍 Monitoring Dashboard
