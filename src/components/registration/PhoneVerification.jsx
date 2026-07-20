@@ -141,7 +141,7 @@ const PhoneVerification = ({ walletAddress, onVerified, t }) => {
       {/* Header */}
       <div className="form-card-header">
         <h2 className="form-card-title font-inter" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <ShieldCheck className="w-4 h-4" style={{ color: '#22c55e' }} />
+          <ShieldCheck className="w-4 h-4" style={{ color: '#4F6BED' }} />
           {t('phoneVerify.title')}
         </h2>
         <span className="form-progress-badge font-inter uppercase">
@@ -193,16 +193,16 @@ const PhoneVerification = ({ walletAddress, onVerified, t }) => {
           <motion.div key="otp-step" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <div style={{
               padding: '12px 16px',
-              background: '#0a1a0f',
-              border: '1px solid rgba(34,197,94,0.15)',
+              background: '#0b0e20',
+              border: '1px solid rgba(79,107,237,0.15)',
               borderRadius: '4px',
               marginBottom: '20px',
               display: 'flex',
               alignItems: 'center',
               gap: '8px'
             }}>
-              <CheckCircle2 className="w-4 h-4" style={{ color: '#22c55e', flexShrink: 0 }} />
-              <span className="font-inter" style={{ fontSize: '11px', color: '#22c55e' }}>
+              <CheckCircle2 className="w-4 h-4" style={{ color: '#4F6BED', flexShrink: 0 }} />
+              <span className="font-inter" style={{ fontSize: '11px', color: '#7C93F2' }}>
                 {t('phoneVerify.codeSent')} <strong>{phone}</strong>
               </span>
             </div>
@@ -274,12 +274,12 @@ const PhoneVerification = ({ walletAddress, onVerified, t }) => {
           >
             <div style={{
               width: '56px', height: '56px',
-              backgroundColor: 'rgba(34,197,94,0.1)',
+              backgroundColor: 'rgba(22,163,74,0.1)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               margin: '0 auto 16px', borderRadius: '50%',
-              border: '1px solid rgba(34,197,94,0.2)',
+              border: '1px solid rgba(22,163,74,0.2)',
             }}>
-              <CheckCircle2 style={{ width: '28px', height: '28px', color: '#22c55e' }} />
+              <CheckCircle2 style={{ width: '28px', height: '28px', color: '#16A34A' }} />
             </div>
             <h3 className="font-clash" style={{ fontSize: '16px', fontWeight: '800', color: '#fff', marginBottom: '4px' }}>
               {t('phoneVerify.successTitle')}

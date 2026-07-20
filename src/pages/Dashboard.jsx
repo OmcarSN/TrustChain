@@ -101,7 +101,7 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#050505] relative overflow-hidden text-white">
+    <div className="min-h-screen bg-[#05060A] relative overflow-hidden text-white">
       {/* Background Graphics */}
       <div className="tc-bg-grid" />
       <div className="tc-orb-blue" />
@@ -137,7 +137,7 @@ const Dashboard = () => {
           {/* Wallet bar */}
           <div className="db-anim" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '28px', animationDelay: '0.05s' }}>
             <div className="glass-card" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 14px' }}>
-              <span style={{ width: '6px', height: '6px', backgroundColor: '#00dc6e', borderRadius: '50%' }} />
+              <span style={{ width: '6px', height: '6px', backgroundColor: '#4F6BED', borderRadius: '50%' }} />
               <span style={{ fontFamily: 'monospace', fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>{truncAddr(walletAddress)}</span>
               <button onClick={copyAddress} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.2)', display: 'flex', padding: '2px' }}>
               {copied ? <Check className="tc-icon-sm" /> : <Copy className="tc-icon-sm" />}

@@ -164,25 +164,25 @@ const Governance = () => {
   const trunc = (addr) => addr ? `${addr.slice(0, 6)}...${addr.slice(-4)}` : '—';
 
   const statusColor = (status) => {
-    const colors = { 0: '#22c55e', 1: '#3b82f6', 2: '#ef4444', 3: '#a855f7', 4: '#6b7280' };
+    const colors = { 0: '#4F6BED', 1: '#7C93F2', 2: '#ef4444', 3: '#3D56C9', 4: '#6b7280' };
     return colors[status] || '#6b7280';
   };
 
   const statusBg = (status) => {
-    const colors = { 0: 'rgba(34,197,94,0.12)', 1: 'rgba(59,130,246,0.12)', 2: 'rgba(239,68,68,0.12)', 3: 'rgba(168,85,247,0.12)', 4: 'rgba(107,114,128,0.12)' };
+    const colors = { 0: 'rgba(79,107,237,0.12)', 1: 'rgba(124,147,242,0.12)', 2: 'rgba(239,68,68,0.12)', 3: 'rgba(61,86,201,0.12)', 4: 'rgba(107,114,128,0.12)' };
     return colors[status] || 'rgba(107,114,128,0.12)';
   };
 
   // ── Not Available ──
   if (!isGovernanceContractAvailable()) {
     return (
-      <div className="min-h-screen bg-[#050505] relative overflow-hidden text-white">
+      <div className="min-h-screen bg-[#05060A] relative overflow-hidden text-white">
         <div className="tc-bg-grid" /><div className="tc-orb-blue" /><div className="tc-orb-green" />
         <div style={{ paddingTop: '120px', textAlign: 'center', position: 'relative', zIndex: 10 }}>
           <Shield style={{ width: 48, height: 48, color: 'rgba(255,255,255,0.15)', margin: '0 auto 20px' }} />
           <h1 className="font-clash" style={{ fontSize: '28px', fontWeight: '800', marginBottom: '8px' }}>Governance</h1>
           <p className="font-inter" style={{ color: '#666', fontSize: '14px', maxWidth: '400px', margin: '0 auto' }}>
-            The governance contract has not been deployed yet. Deploy the contract and set the <code style={{ color: '#22c55e' }}>VITE_GOVERNANCE_CONTRACT_ID</code> environment variable to enable this page.
+            The governance contract has not been deployed yet. Deploy the contract and set the <code style={{ color: '#7C93F2' }}>VITE_GOVERNANCE_CONTRACT_ID</code> environment variable to enable this page.
           </p>
         </div>
       </div>
@@ -192,8 +192,8 @@ const Governance = () => {
   // ── Loading ──
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#050505] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#22c55e]" />
+      <div className="min-h-screen bg-[#05060A] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#4F6BED]" />
       </div>
     );
   }
@@ -201,7 +201,7 @@ const Governance = () => {
   const activeCount = proposals.filter(p => p.status === 0).length;
 
   return (
-    <div className="min-h-screen bg-[#050505] relative overflow-hidden text-white">
+    <div className="min-h-screen bg-[#05060A] relative overflow-hidden text-white">
       <div className="tc-bg-grid" /><div className="tc-orb-blue" /><div className="tc-orb-green" /><div className="tc-leak-orange" /><div className="tc-leak-blue" />
 
       <div style={{ paddingTop: '90px', paddingBottom: '64px', paddingLeft: '60px', paddingRight: '60px', position: 'relative', zIndex: 10, maxWidth: '1200px', margin: '0 auto' }}>
@@ -210,7 +210,7 @@ const Governance = () => {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ marginBottom: '40px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
             <div>
-              <p className="font-inter" style={{ color: '#22c55e', fontSize: '11px', letterSpacing: '0.2em', fontWeight: '600', textTransform: 'uppercase', marginBottom: '8px' }}>
+              <p className="font-inter" style={{ color: '#7C93F2', fontSize: '11px', letterSpacing: '0.2em', fontWeight: '600', textTransform: 'uppercase', marginBottom: '8px' }}>
                 <Shield style={{ width: 12, height: 12, display: 'inline', marginRight: 6, verticalAlign: 'middle' }} />
                 ON-CHAIN GOVERNANCE
               </p>
@@ -224,12 +224,12 @@ const Governance = () => {
                 </span>
               )}
               {isUserCouncil && (
-                <span style={{ background: 'rgba(34,197,94,0.12)', color: '#22c55e', fontSize: '10px', fontWeight: '700', padding: '4px 10px', borderRadius: '4px', letterSpacing: '0.1em' }}>
+                <span style={{ background: 'rgba(79,107,237,0.12)', color: '#7C93F2', fontSize: '10px', fontWeight: '700', padding: '4px 10px', borderRadius: '4px', letterSpacing: '0.1em' }}>
                   ✓ COUNCIL MEMBER
                 </span>
               )}
               {isUserAdmin && (
-                <span style={{ background: 'rgba(168,85,247,0.12)', color: '#a855f7', fontSize: '10px', fontWeight: '700', padding: '4px 10px', borderRadius: '4px', letterSpacing: '0.1em' }}>
+                <span style={{ background: 'rgba(61,86,201,0.12)', color: '#7C93F2', fontSize: '10px', fontWeight: '700', padding: '4px 10px', borderRadius: '4px', letterSpacing: '0.1em' }}>
                   ★ ADMIN
                 </span>
               )}
@@ -241,10 +241,10 @@ const Governance = () => {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
           style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '32px' }}>
           {[
-            { label: 'Total Proposals', value: proposalCount, icon: <Hash style={{ width: 16, height: 16 }} />, color: '#22c55e' },
+            { label: 'Total Proposals', value: proposalCount, icon: <Hash style={{ width: 16, height: 16 }} />, color: '#4F6BED' },
             { label: 'Active', value: activeCount, icon: <Clock style={{ width: 16, height: 16 }} />, color: '#f5a623' },
-            { label: 'Council Members', value: council.length, icon: <Users style={{ width: 16, height: 16 }} />, color: '#3b82f6' },
-            { label: 'Quorum Required', value: `${quorum}%`, icon: <Vote style={{ width: 16, height: 16 }} />, color: '#a855f7' },
+            { label: 'Council Members', value: council.length, icon: <Users style={{ width: 16, height: 16 }} />, color: '#7C93F2' },
+            { label: 'Quorum Required', value: `${quorum}%`, icon: <Vote style={{ width: 16, height: 16 }} />, color: '#3D56C9' },
           ].map((stat, i) => (
             <div key={i} className="stat-card-premium">
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
@@ -266,7 +266,7 @@ const Governance = () => {
             </span>
             {admin && (
               <span className="font-inter" style={{ fontSize: '10px', color: 'rgba(255,255,255,0.2)' }}>
-                Admin: <span style={{ color: '#a855f7' }}>{trunc(admin)}</span>
+                Admin: <span style={{ color: '#7C93F2' }}>{trunc(admin)}</span>
               </span>
             )}
           </div>
@@ -274,8 +274,8 @@ const Governance = () => {
             {council.length === 0 ? (
               <span className="font-inter" style={{ color: '#444', fontSize: '13px' }}>No council members yet</span>
             ) : council.map((addr, i) => (
-              <div key={i} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', fontFamily: 'monospace', color: addr === walletAddress ? '#22c55e' : 'rgba(255,255,255,0.5)' }}>
-                {trunc(addr)} {addr === walletAddress && <span style={{ fontSize: '9px', color: '#22c55e' }}>(you)</span>}
+              <div key={i} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', fontFamily: 'monospace', color: addr === walletAddress ? '#7C93F2' : 'rgba(255,255,255,0.5)' }}>
+                {trunc(addr)} {addr === walletAddress && <span style={{ fontSize: '9px', color: '#7C93F2' }}>(you)</span>}
               </div>
             ))}
           </div>
@@ -358,7 +358,7 @@ const Governance = () => {
 
                 return (
                   <motion.div key={p.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 * i }}
-                    className="glass-card" style={{ borderLeft: isActive ? '3px solid #22c55e' : isPassed ? '3px solid #3b82f6' : 'none' }}>
+                    className="glass-card" style={{ borderLeft: isActive ? '3px solid #4F6BED' : isPassed ? '3px solid #7C93F2' : 'none' }}>
 
                     {/* Header */}
                     <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px', marginBottom: '12px' }}>
@@ -392,12 +392,12 @@ const Governance = () => {
                     {tally && (
                       <div style={{ marginBottom: '14px' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', marginBottom: '6px' }}>
-                          <span className="font-inter" style={{ color: '#22c55e', fontWeight: '700' }}>YES {tally.yesVotes}</span>
+                          <span className="font-inter" style={{ color: '#7C93F2', fontWeight: '700' }}>YES {tally.yesVotes}</span>
                           <span className="font-inter" style={{ color: 'rgba(255,255,255,0.2)' }}>{totalVotes}/{tally.totalEligible} voted</span>
                           <span className="font-inter" style={{ color: '#ef4444', fontWeight: '700' }}>NO {tally.noVotes}</span>
                         </div>
                         <div style={{ height: '6px', background: 'rgba(255,255,255,0.05)', borderRadius: '3px', overflow: 'hidden', display: 'flex' }}>
-                          <div style={{ width: `${yesPercent}%`, background: 'linear-gradient(90deg, #22c55e, #16a34a)', borderRadius: '3px 0 0 3px', transition: 'width 0.5s ease' }} />
+                          <div style={{ width: `${yesPercent}%`, background: 'linear-gradient(90deg, #4F6BED, #3D56C9)', borderRadius: '3px 0 0 3px', transition: 'width 0.5s ease' }} />
                           <div style={{ flex: 1, background: totalVotes > 0 ? 'rgba(239,68,68,0.3)' : 'transparent', borderRadius: '0 3px 3px 0' }} />
                         </div>
                       </div>
@@ -410,7 +410,7 @@ const Governance = () => {
                         {isActive && isUserCouncil && !userVoted && (
                           <>
                             <button onClick={() => handleVote(p.id, true)} disabled={votingId === p.id}
-                              style={{ background: 'rgba(34,197,94,0.12)', color: '#22c55e', border: '1px solid rgba(34,197,94,0.2)', borderRadius: '6px', padding: '6px 14px', fontSize: '12px', fontWeight: '600', cursor: 'pointer', fontFamily: 'Inter, sans-serif', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                              style={{ background: 'rgba(79,107,237,0.12)', color: '#7C93F2', border: '1px solid rgba(79,107,237,0.2)', borderRadius: '6px', padding: '6px 14px', fontSize: '12px', fontWeight: '600', cursor: 'pointer', fontFamily: 'Inter, sans-serif', display: 'flex', alignItems: 'center', gap: '4px' }}>
                               {votingId === p.id ? <Loader2 style={{ width: 12, height: 12, animation: 'spin 1s linear infinite' }} /> : <CheckCircle2 style={{ width: 12, height: 12 }} />} Vote YES
                             </button>
                             <button onClick={() => handleVote(p.id, false)} disabled={votingId === p.id}
@@ -432,7 +432,7 @@ const Governance = () => {
                         {/* Execute */}
                         {isPassed && isUserAdmin && (
                           <button onClick={() => handleExecute(p.id)} disabled={votingId === p.id}
-                            style={{ background: 'linear-gradient(135deg, #a855f7, #7c3aed)', color: 'white', border: 'none', borderRadius: '6px', padding: '6px 14px', fontSize: '12px', fontWeight: '600', cursor: 'pointer', fontFamily: 'Inter, sans-serif', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            style={{ background: 'linear-gradient(135deg, #4F6BED, #3D56C9)', color: 'white', border: 'none', borderRadius: '6px', padding: '6px 14px', fontSize: '12px', fontWeight: '600', cursor: 'pointer', fontFamily: 'Inter, sans-serif', display: 'flex', alignItems: 'center', gap: '4px' }}>
                             {votingId === p.id ? <Loader2 style={{ width: 12, height: 12, animation: 'spin 1s linear infinite' }} /> : <Shield style={{ width: 12, height: 12 }} />} Execute
                           </button>
                         )}

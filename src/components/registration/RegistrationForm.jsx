@@ -125,12 +125,12 @@ const RegistrationForm = ({
       {/* Submit Area */}
       <AnimatePresence mode="wait">
         {txResult ? (
-          <motion.div key="s" initial={{ opacity: 0 }} animate={{ opacity: 1 }} role="status" aria-label={t('registration.successLabel', 'Credential minted successfully')} style={{ border: '1px solid rgba(0,220,110,0.15)', backgroundColor: 'rgba(0,220,110,0.03)', padding: '24px', textAlign: 'center', marginTop: '36px', borderRadius: '6px' }}>
-            <div style={{ width: '48px', height: '48px', backgroundColor: 'rgba(0,220,110,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', borderRadius: '50%' }}>
-              <CheckCircle2 style={{ width: '24px', height: '24px', color: '#00dc6e' }} aria-hidden="true" />
+          <motion.div key="s" initial={{ opacity: 0 }} animate={{ opacity: 1 }} role="status" aria-label={t('registration.successLabel', 'Credential minted successfully')} style={{ border: '1px solid rgba(22,163,74,0.15)', backgroundColor: 'rgba(22,163,74,0.03)', padding: '24px', textAlign: 'center', marginTop: '36px', borderRadius: '6px' }}>
+            <div style={{ width: '48px', height: '48px', backgroundColor: 'rgba(22,163,74,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', borderRadius: '50%' }}>
+              <CheckCircle2 style={{ width: '24px', height: '24px', color: '#16A34A' }} aria-hidden="true" />
             </div>
             <h3 className="font-clash" style={{ fontSize: '18px', fontWeight: '800', marginBottom: '4px', color: '#fff' }}>Credential Minted!</h3>
-            <p className="font-inter" style={{ fontSize: '10px', color: 'rgba(0,220,110,0.5)', marginBottom: '16px' }}>Sealed on Stellar</p>
+            <p className="font-inter" style={{ fontSize: '10px', color: 'rgba(22,163,74,0.5)', marginBottom: '16px' }}>Sealed on Stellar</p>
             <a href={explorerTxUrl(txResult.hash)} target="_blank" rel="noopener noreferrer" aria-label={t('registration.viewExplorerLabel', 'View transaction on Stellar Explorer')} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '10px', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', border: '1px solid rgba(255,255,255,0.1)', padding: '10px 20px', textDecoration: 'none', transition: 'color 0.2s', borderRadius: '4px' }}>
               <ExternalLink style={{ width: '12px', height: '12px' }} aria-hidden="true" /> {t('registration.viewOnExplorer')}
             </a>

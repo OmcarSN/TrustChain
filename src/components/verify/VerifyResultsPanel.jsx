@@ -42,7 +42,7 @@ const VerifyResultsPanel = ({
             {!isSearching && profile && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}
                 role="status" aria-label={t('verify.verifiedBanner', 'Worker is verified on-chain')}
-                className="mb-6 p-4 rounded-xl flex items-center justify-between border border-green-400/20 bg-green-400/[0.05] backdrop-blur-md shadow-[0_0_30px_-5px_rgba(34,197,94,0.15)]">
+                className="mb-6 p-4 rounded-xl flex items-center justify-between border border-green-400/20 bg-green-400/[0.05] backdrop-blur-md shadow-[0_0_30px_-5px_rgba(22,163,74,0.15)]">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-[2px] bg-green-400/10 flex items-center justify-center">
                     <ShieldCheck className="w-4 h-4 text-green-400" aria-hidden="true" />
@@ -147,10 +147,10 @@ const VerifyResultsPanel = ({
                         <div className="shrink-0 relative" role="img" aria-label={`${t('verify.score')}: ${profile.reputation.average} out of 5`}>
                           <div className="w-24 h-24 rounded-full relative flex items-center justify-center">
                             <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 96 96" aria-hidden="true">
-                              <circle cx="48" cy="48" r="42" fill="none" stroke="rgba(34,197,94,0.08)" strokeWidth="4" />
+                              <circle cx="48" cy="48" r="42" fill="none" stroke="rgba(79,107,237,0.08)" strokeWidth="4" />
                               <circle cx="48" cy="48" r="42" fill="none" stroke="url(#scoreGradient)" strokeWidth="4" strokeLinecap="round"
                                 strokeDasharray={`${(profile.reputation.average / 5) * 264} 264`} />
-                              <defs><linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#22c55e" /><stop offset="100%" stopColor="#3b82f6" /></linearGradient></defs>
+                              <defs><linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#4F6BED" /><stop offset="100%" stopColor="#7C93F2" /></linearGradient></defs>
                             </svg>
                             <div className="text-center z-10">
                               <div className="font-clash text-2xl font-bold">{profile.reputation.average || '0.0'}</div>

@@ -60,7 +60,7 @@ const Verify = () => {
   const navigateToEndorse = (address) => navigate(`/endorse?address=${address}`);
 
   return (
-    <div className="min-h-screen bg-[#050505] pt-28 pb-12 px-6 lg:px-12 relative overflow-hidden text-white">
+    <div className="min-h-screen bg-[#05060A] pt-28 pb-12 px-6 lg:px-12 relative overflow-hidden text-white">
       {/* Background Graphics (Grid & Orbs) */}
       <div className="tc-bg-grid" />
       <div className="tc-orb-blue" />

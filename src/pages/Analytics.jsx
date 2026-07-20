@@ -68,7 +68,7 @@ const Analytics = () => {
   ];
 
   return (
-    <div className="relative overflow-hidden text-white min-h-screen" style={{ background: '#050505' }}>
+    <div className="relative overflow-hidden text-white min-h-screen" style={{ background: '#05060A' }}>
       {/* Background Decorations */}
       <div className="tc-bg-grid" />
       <div className="tc-orb-blue" />
@@ -141,7 +141,7 @@ const Analytics = () => {
                   </div>
                 </div>
                 <div className="tc-flex tc-flex-gap-sm tc-mb-xs" style={{ alignItems: 'baseline' }}>
-                  <h2 className="font-clash tc-stat-hero counter-glow" style={{ color: card.isGreen ? '#00dc6e' : '#ffffff' }}>
+                  <h2 className="font-clash tc-stat-hero counter-glow" style={{ color: card.isGreen ? '#7C93F2' : '#ffffff' }}>
                     {isStr ? card.value : card.value.toLocaleString()}
                   </h2>
                   {card.trend > 0 && (
@@ -222,7 +222,7 @@ const Analytics = () => {
                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.03)" vertical={false} />
                     <XAxis dataKey="day" stroke="none" tick={{ fill: 'rgba(255,255,255,0.25)', fontSize: 10, fontWeight: 700 }} axisLine={false} tickLine={false} dy={10} />
                     <YAxis stroke="none" tick={{ fill: 'rgba(255,255,255,0.15)', fontSize: 10 }} axisLine={false} tickLine={false} allowDecimals={false} dx={-8} />
-                    <Area type="monotone" dataKey="issuances" stroke="rgba(255,255,255,0.4)" strokeWidth={2} fill="url(#areaFill)" dot={{ fill: '#050505', stroke: 'rgba(255,255,255,0.5)', strokeWidth: 2, r: 4 }} activeDot={{ fill: '#fff', stroke: '#050505', strokeWidth: 3, r: 6 }} />
+                    <Area type="monotone" dataKey="issuances" stroke="rgba(255,255,255,0.4)" strokeWidth={2} fill="url(#areaFill)" dot={{ fill: '#05060A', stroke: 'rgba(255,255,255,0.5)', strokeWidth: 2, r: 4 }} activeDot={{ fill: '#fff', stroke: '#05060A', strokeWidth: 3, r: 6 }} />
                   </AreaChart>
                 </ResponsiveContainer>
               ) : (

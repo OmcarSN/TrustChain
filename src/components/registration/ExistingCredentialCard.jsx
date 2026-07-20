@@ -34,7 +34,7 @@ const ExistingCredentialCard = ({ existingCredential, walletAddress, copiedAddr,
   ];
 
   return (
-    <div className="relative overflow-hidden text-white min-h-screen" style={{ background: '#050505' }}>
+    <div className="relative overflow-hidden text-white min-h-screen" style={{ background: '#05060A' }}>
       <style>{`
         @keyframes wpFadeSlideUp {
           from { opacity: 0; transform: translateY(20px); }
@@ -42,7 +42,7 @@ const ExistingCredentialCard = ({ existingCredential, walletAddress, copiedAddr,
         }
         .wp-anim { opacity: 0; animation: wpFadeSlideUp 0.4s ease forwards; }
         .wp-update-btn { transition: all 0.2s ease; border-top: 1px solid rgba(255,255,255,0.08); }
-        .wp-update-btn:hover { background-color: rgba(255,255,255,0.04) !important; color: #00dc6e !important; border-top-color: rgba(0,220,110,0.2); }
+        .wp-update-btn:hover { background-color: rgba(255,255,255,0.04) !important; color: #7C93F2 !important; border-top-color: rgba(79,107,237,0.2); }
         .wp-copy-btn { transition: color 0.2s ease; }
         .wp-copy-btn:hover { color: #ffffff !important; }
       `}</style>
@@ -66,13 +66,13 @@ const ExistingCredentialCard = ({ existingCredential, walletAddress, copiedAddr,
         </div>
 
         {/* Credential Card */}
-        <div className="wp-anim glass-card" role="region" aria-label={t('registration.credentialDetails', 'Credential details')} style={{ width: '100%', maxWidth: '1100px', borderTop: '2px solid rgba(34,197,94,0.3)', overflow: 'hidden', borderRadius: '12px', animationDelay: '0.22s', animationDuration: '0.5s' }}>
+        <div className="wp-anim glass-card" role="region" aria-label={t('registration.credentialDetails', 'Credential details')} style={{ width: '100%', maxWidth: '1100px', borderTop: '2px solid rgba(79,107,237,0.3)', overflow: 'hidden', borderRadius: '12px', animationDelay: '0.22s', animationDuration: '0.5s' }}>
           {/* Card Header Bar */}
           <div className="tc-feed-header tc-flex-between">
             <span className="font-inter tc-label tc-ls-wider">
               {t('dashboard.myCredential')}
             </span>
-            <span className="tc-verified-badge tc-text-xs tc-ls-wide" style={{ padding: '4px 12px', boxShadow: '0 0 12px rgba(0,220,110,0.15)' }}>
+            <span className="tc-verified-badge tc-text-xs tc-ls-wide" style={{ padding: '4px 12px', boxShadow: '0 0 12px rgba(22,163,74,0.15)' }}>
               ● {t('discover.badgeOnChain')}
             </span>
           </div>

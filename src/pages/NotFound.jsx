@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 const NotFound = () => {
   const { t } = useTranslation();
   return (
-    <div className="min-h-screen bg-[#050505] px-6 lg:px-12 flex items-start justify-center relative overflow-hidden text-white" style={{ paddingTop: '120px', textAlign: 'center' }}>
+    <div className="min-h-screen bg-[#05060A] px-6 lg:px-12 flex items-start justify-center relative overflow-hidden text-white" style={{ paddingTop: '120px', textAlign: 'center' }}>
       {/* Background Decorations */}
       <div className="tc-bg-grid" />
       <div className="tc-orb-green" />

@@ -45,12 +45,12 @@ class ErrorBoundary extends React.Component {
 
   render() {
     if (this.state.isReloading) {
-      return <div className="min-h-screen bg-[#050505]" />;
+      return <div className="min-h-screen bg-[#05060A]" />;
     }
 
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen bg-[#050505] flex items-center justify-center p-6 text-white text-center">
+        <div className="min-h-screen bg-[#05060A] flex items-center justify-center p-6 text-white text-center">
           <div className="max-w-md w-full p-10 rounded-[2px] bg-white/[0.02] border border-white/10 relative overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-px bg-red-400" />
             <div className="w-16 h-16 rounded-[2px] bg-red-400/10 flex items-center justify-center mx-auto mb-8 border border-red-400/20">

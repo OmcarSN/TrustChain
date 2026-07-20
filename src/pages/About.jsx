@@ -56,7 +56,7 @@ const About = () => {
   }, [workerCount, totalEndorsements]);
 
   return (
-    <div style={{ position: 'relative', minHeight: '100vh', background: '#050505', overflow: 'hidden' }}>
+    <div style={{ position: 'relative', minHeight: '100vh', background: '#05060A', overflow: 'hidden' }}>
       {/* Background Decorations */}
       <div className="tc-bg-grid" />
       <div className="tc-orb-green" />
@@ -77,7 +77,7 @@ const About = () => {
         <div className="section-divider" style={{ margin: '32px 0' }} />
 
         <div className="glass-card reveal reveal-d2" style={{ marginBottom: '32px', padding: '28px' }}>
-          <p className="font-inter uppercase tc-eyebrow tc-mb-sm" style={{ color: '#22c55e' }}>
+          <p className="font-inter uppercase tc-eyebrow tc-mb-sm" style={{ color: '#7C93F2' }}>
             {t('our_mission')}
           </p>
           <p className="font-inter tc-body-lg tc-text-dim" style={{ lineHeight: '1.8' }}>
@@ -88,7 +88,7 @@ const About = () => {
         <div className="section-divider" style={{ margin: '32px 0' }} />
 
         <div className="glass-card reveal reveal-d3" style={{ marginBottom: '32px', padding: '28px' }}>
-          <p className="font-inter uppercase tc-eyebrow tc-mb-sm" style={{ color: '#22c55e' }}>
+          <p className="font-inter uppercase tc-eyebrow tc-mb-sm" style={{ color: '#7C93F2' }}>
             {t('built_by')}
           </p>
           <p className="font-inter tc-body-lg tc-text-dim" style={{ lineHeight: '1.8' }}>

@@ -100,7 +100,7 @@ const Endorse = () => {
   const labelStyle = { fontSize: '10px', letterSpacing: '3px', color: 'rgba(255,255,255,0.3)', fontWeight: '700', textTransform: 'uppercase', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' };
 
   return (
-    <div className="min-h-screen bg-[#050505] relative overflow-hidden text-white">
+    <div className="min-h-screen bg-[#05060A] relative overflow-hidden text-white">
       {/* Background Graphics (Grid & Orbs) */}
       <div className="tc-bg-grid" />
       <div className="tc-orb-blue" />
@@ -134,11 +134,11 @@ const Endorse = () => {
         .end-submit:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,255,255,0.15); background-color: #e8e8e8 !important; }
         .spinner { animation: spin 0.8s linear infinite; }
         .shimmer-text { background: linear-gradient(to right, #ffffff 20%, #888888 50%, #ffffff 80%); background-size: 200% auto; color: transparent; -webkit-background-clip: text; animation: shimmer 3s linear infinite; }
-        .pulse-glow { box-shadow: 0 0 8px rgba(0,220,110,0.4); animation: pulseGlow 2s infinite; }
-        @keyframes pulseGlow { 0% { box-shadow: 0 0 8px rgba(0,220,110,0.2); } 50% { box-shadow: 0 0 12px rgba(0,220,110,0.6); } 100% { box-shadow: 0 0 8px rgba(0,220,110,0.2); } }
+        .pulse-glow { box-shadow: 0 0 8px rgba(22,163,74,0.4); animation: pulseGlow 2s infinite; }
+        @keyframes pulseGlow { 0% { box-shadow: 0 0 8px rgba(22,163,74,0.2); } 50% { box-shadow: 0 0 12px rgba(22,163,74,0.6); } 100% { box-shadow: 0 0 8px rgba(22,163,74,0.2); } }
         .worker-card-anim { animation: workerCardIn 0.4s ease forwards; }
         .badge-fade-in { opacity: 0; animation: fadeSlideUp 0.6s ease forwards; animation-delay: 0.6s; }
-        @keyframes verifiedPulse { 0% { box-shadow: 0 0 0 0 rgba(0,220,110, 0.4); } 70% { box-shadow: 0 0 0 6px rgba(0,220,110, 0); } 100% { box-shadow: 0 0 0 0 rgba(0,220,110, 0); } }
+        @keyframes verifiedPulse { 0% { box-shadow: 0 0 0 0 rgba(22,163,74, 0.4); } 70% { box-shadow: 0 0 0 6px rgba(22,163,74, 0); } 100% { box-shadow: 0 0 0 0 rgba(22,163,74, 0); } }
       `}</style>
 
       <div className="px-4 md:px-10" style={{ paddingTop: '24px', paddingBottom: '80px', display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh', position: 'relative', zIndex: 10 }}>

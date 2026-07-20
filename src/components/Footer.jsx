@@ -13,7 +13,7 @@ import TrustChainLogo from './TrustChainLogo';
 const Footer = () => {
   const { t } = useTranslation();
   return (
-    <footer style={{ backgroundColor: '#050505', position: 'relative', zIndex: 1 }}>
+    <footer style={{ backgroundColor: '#05060A', position: 'relative', zIndex: 1 }}>
       {/* Gradient Top Border */}
       <div className="section-divider" />
 
@@ -27,7 +27,7 @@ const Footer = () => {
           transition: all 0.2s ease;
         }
         .footer-link:hover {
-          color: #22c55e;
+          color: #7C93F2;
           padding-left: 4px;
         }
         .footer-social-btn {
@@ -45,9 +45,9 @@ const Footer = () => {
           transition: all 0.2s ease;
         }
         .footer-social-btn:hover {
-          border-color: rgba(34,197,94,0.3);
-          color: #22c55e;
-          background: rgba(34,197,94,0.05);
+          border-color: rgba(79,107,237,0.3);
+          color: #7C93F2;
+          background: rgba(79,107,237,0.05);
         }
       `}</style>
 
@@ -66,12 +66,12 @@ const Footer = () => {
             {t('footer_tagline')}
           </p>
           <div style={{
-            fontSize: '10px', color: '#22c55e', letterSpacing: '1.5px', marginTop: '16px',
-            background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.2)',
+            fontSize: '10px', color: '#7C93F2', letterSpacing: '1.5px', marginTop: '16px',
+            background: 'rgba(79,107,237,0.08)', border: '1px solid rgba(79,107,237,0.2)',
             padding: '6px 12px', display: 'inline-flex', alignItems: 'center', gap: '6px',
             fontWeight: 'bold', borderRadius: '100px',
           }}>
-            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 6px rgba(34,197,94,0.5)' }} />
+            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#4F6BED', boxShadow: '0 0 6px rgba(79,107,237,0.5)' }} />
             {t('footer_testnet')}
           </div>
         </div>

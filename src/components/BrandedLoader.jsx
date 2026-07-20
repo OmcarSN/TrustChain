@@ -14,7 +14,7 @@ import PropTypes from 'prop-types';
  */
 const BrandedLoader = ({ message = 'Loading...' }) => {
   return (
-    <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center" style={{ background: '#050505' }}>
+    <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center" style={{ background: '#05060A' }}>
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}

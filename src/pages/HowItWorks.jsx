@@ -21,7 +21,7 @@ const HowItWorks = () => {
   };
 
   return (
-    <div style={{ position: 'relative', minHeight: '100vh', background: '#050505', overflow: 'hidden' }}>
+    <div style={{ position: 'relative', minHeight: '100vh', background: '#05060A', overflow: 'hidden' }}>
       <div className="tc-bg-grid" />
       <div className="tc-orb-green" />
       <div className="tc-orb-blue" />

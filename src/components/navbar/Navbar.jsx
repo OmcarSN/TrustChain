@@ -94,14 +94,14 @@ const Navbar = () => {
           }
           .navbar-border-bottom {
             height: 1px; width: 100%; position: absolute; bottom: 0; left: 0;
-            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.1) 20%, rgba(0,220,110,0.3) 50%, rgba(255,255,255,0.1) 80%, transparent 100%);
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.1) 20%, rgba(79,107,237,0.3) 50%, rgba(255,255,255,0.1) 80%, transparent 100%);
             background-size: 200% auto;
             animation: gradientSlide 4s linear infinite;
             pointer-events: none; z-index: 0;
           }
           @keyframes verifiedPulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(0,220,110,0.4); }
-            50%       { box-shadow: 0 0 0 6px rgba(0,220,110,0); }
+            0%, 100% { box-shadow: 0 0 0 0 rgba(79,107,237,0.4); }
+            50%       { box-shadow: 0 0 0 6px rgba(79,107,237,0); }
           }
           @keyframes dropdownOpen {
             from { opacity: 0; transform: translateY(-8px) scale(0.98); }
@@ -113,21 +113,21 @@ const Navbar = () => {
           .wallet-btn:hover { background-color: rgba(255,255,255,0.08) !important; border-color: rgba(255,255,255,0.4) !important; transform: translateY(-1px); }
           .connect-btn-refine { transition: all 0.3s cubic-bezier(0.16,1,0.3,1); }
           .connect-btn-refine:hover {
-            background: linear-gradient(135deg, #22c55e, #16a34a) !important;
-            border-color: rgba(34,197,94,0.6) !important;
+            background: linear-gradient(135deg, #4F6BED, #3D56C9) !important;
+            border-color: rgba(79,107,237,0.6) !important;
             color: #ffffff !important; transform: translateY(-1px);
-            box-shadow: 0 0 20px rgba(34,197,94,0.35), 0 4px 14px rgba(34,197,94,0.2);
+            box-shadow: 0 0 20px rgba(79,107,237,0.35), 0 4px 14px rgba(79,107,237,0.2);
           }
           .nav-link { position: relative; color: rgba(255,255,255,0.5); transition: all 0.3s ease; padding: 8px 16px; border-radius: 100px; margin: 0 -8px; }
           .nav-link:hover { color: #ffffff; background: rgba(255,255,255,0.05); }
-          .nav-link.active-link { color: #00dc6e; background: rgba(0,220,110,0.1); box-shadow: inset 0 0 12px rgba(0,220,110,0.05); }
+          .nav-link.active-link { color: #7C93F2; background: rgba(79,107,237,0.1); box-shadow: inset 0 0 12px rgba(79,107,237,0.05); }
           .dropdown-item {
             padding: 11px 20px; color: rgba(255,255,255,0.55); font-size: 12px;
             letter-spacing: 1px; font-weight: 600; text-transform: uppercase;
             text-decoration: none; display: flex; align-items: center; gap: 10px; border-left: 2px solid transparent;
             transition: all 0.25s cubic-bezier(0.16,1,0.3,1); margin: 0 6px; border-radius: 6px;
           }
-          .dropdown-item:hover { background: rgba(0,220,110,0.06) !important; color: #ffffff !important; padding-left: 24px; border-left: 2px solid #00dc6e; box-shadow: inset 0 0 20px rgba(0,220,110,0.03); }
+          .dropdown-item:hover { background: rgba(79,107,237,0.06) !important; color: #ffffff !important; padding-left: 24px; border-left: 2px solid #4F6BED; box-shadow: inset 0 0 20px rgba(79,107,237,0.03); }
           .dropdown-disconnect { color: #ef4444 !important; border-top: 1px solid rgba(255,255,255,0.06); margin-top: 6px; padding-top: 12px; border-radius: 0 0 6px 6px; }
           .dropdown-disconnect:hover { background: rgba(239,68,68,0.08) !important; color: #ff5555 !important; border-left: 2px solid #ef4444; box-shadow: inset 0 0 20px rgba(239,68,68,0.03); }
         `}</style>
@@ -146,8 +146,8 @@ const Navbar = () => {
               <TrustChainLogo size={36} />
             </div>
             <div className="flex flex-col leading-none transition-all duration-300 group-hover:opacity-80 group-hover:translate-x-1">
-              <span className="font-clash font-bold text-lg tracking-widest uppercase" style={{ background: 'linear-gradient(135deg, #ffffff 0%, rgba(255,255,255,0.7) 50%, #22c55e 100%)', backgroundSize: '200% auto', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>TRUSTCHAIN</span>
-              <span className="text-[9px] uppercase tracking-[0.25em] text-white/30 font-inter mt-0.5 group-hover:text-[#00dc6e] transition-colors duration-300">
+              <span className="font-clash font-bold text-lg tracking-widest uppercase" style={{ background: 'linear-gradient(135deg, #ffffff 0%, rgba(255,255,255,0.7) 50%, #4F6BED 100%)', backgroundSize: '200% auto', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>TRUSTCHAIN</span>
+              <span className="text-[9px] uppercase tracking-[0.25em] text-white/30 font-inter mt-0.5 group-hover:text-[#7C93F2] transition-colors duration-300">
                 {t('nav.verifiedEconomy', 'Verified Economy')}
               </span>
             </div>

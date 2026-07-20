@@ -122,9 +122,9 @@ const EndorsementForm = ({
         {/* Feature tags */}
         <div className="badge-fade-in tc-badge-row">
           {[
-            { icon: ShieldCheck, text: t('endorse.badgeOnChain'), color: '#00dc6e' },
+            { icon: ShieldCheck, text: t('endorse.badgeOnChain'), color: '#16A34A' },
             { icon: Clock, text: t('endorse.badgePermanent'), color: '#ffffff' },
-            { icon: Sparkles, text: t('endorse.badgeStellar'), color: '#4b9fff' },
+            { icon: Sparkles, text: t('endorse.badgeStellar'), color: '#7C93F2' },
           ].map((b, i, arr) => (
             <React.Fragment key={i}>
               <span className="font-inter tc-eyebrow tc-text-xs tc-ls-wide tc-flex" style={{ color: 'rgba(255,255,255,0.25)', alignItems: 'center', gap: '5px' }}>
@@ -141,7 +141,7 @@ const EndorsementForm = ({
             <motion.div key="success" initial={{ opacity: 0 }} animate={{ opacity: 1 }}
               className="tc-success-card">
               <div className="tc-flex tc-flex-gap tc-mb-sm" style={{ alignItems: 'center' }}>
-                <CheckCircle2 className="tc-icon-xl" style={{ color: '#00dc6e' }} />
+                <CheckCircle2 className="tc-icon-xl" style={{ color: '#16A34A' }} />
                 <div>
                   <h4 className="tc-text-white tc-text-md tc-fw-bold">{t('endorse.endorsementRecorded')}</h4>
                   <p className="font-inter tc-text-accent tc-text-xs" style={{ opacity: 0.5 }}>{t('endorse.sealedOnStellar')}</p>

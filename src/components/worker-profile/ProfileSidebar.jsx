@@ -41,7 +41,7 @@ const ProfileSidebar = ({
 
     {/* Verified badge */}
     {endorsements.length > 0 && (
-      <div className="tc-verified-badge font-inter" style={{ boxShadow: '0 0 16px rgba(0,220,110,0.2)' }}>
+      <div className="tc-verified-badge font-inter" style={{ boxShadow: '0 0 16px rgba(22,163,74,0.2)' }}>
         <ShieldCheck className="tc-icon-sm" aria-hidden="true" /> {t('profile.badgeVerified')}
       </div>
     )}
@@ -60,7 +60,7 @@ const ProfileSidebar = ({
       <div className="tc-addr-block">
         <span className="tc-addr-text">{address}</span>
         <button onClick={copyAddr} className="prof-copy tc-copy-btn" aria-label={t('profile.copyAddress', 'Copy wallet address')}>
-          {copiedAddr ? <Check className="tc-icon-sm" style={{ color: '#00dc6e' }} aria-hidden="true" /> : <Copy className="tc-icon-sm" aria-hidden="true" />}
+          {copiedAddr ? <Check className="tc-icon-sm" style={{ color: '#4F6BED' }} aria-hidden="true" /> : <Copy className="tc-icon-sm" aria-hidden="true" />}
         </button>
       </div>
     </div>
@@ -102,7 +102,7 @@ const ProfileSidebar = ({
 
     {/* Share Profile Button */}
     <button onClick={shareProfile} className="prof-share-btn font-inter tc-btn-outline" aria-label={t('profile.shareBtnLabel', 'Share this profile')}>
-      {copiedShare ? <><Check className="tc-icon-md" style={{ color: '#00dc6e' }} aria-hidden="true" /> {t('profile.copied')}</> : <><Share2 className="tc-icon-md" aria-hidden="true" /> {t('profile.shareProfile')}</>}
+      {copiedShare ? <><Check className="tc-icon-md" style={{ color: '#4F6BED' }} aria-hidden="true" /> {t('profile.copied')}</> : <><Share2 className="tc-icon-md" aria-hidden="true" /> {t('profile.shareProfile')}</>}
     </button>
   </div>
 );

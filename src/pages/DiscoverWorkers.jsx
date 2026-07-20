@@ -138,7 +138,7 @@ const DiscoverWorkers = () => {
     (animRatingRaw === calculatedBase ? calculatedBase.toFixed(1) : animRatingRaw.toFixed(1));
 
   return (
-    <div className="relative overflow-hidden text-white min-h-screen" style={{ background: '#050505' }}>
+    <div className="relative overflow-hidden text-white min-h-screen" style={{ background: '#05060A' }}>
       {/* Background Decorations */}
       <div className="tc-bg-grid" />
       <div className="tc-orb-green" />

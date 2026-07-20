@@ -70,7 +70,7 @@ const MobileMenu = ({
           animate={{ x: 0 }}
           exit={{ x: '100%' }}
           transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-          className="fixed top-0 right-0 h-full w-full bg-[#050505]/95 backdrop-blur-2xl border-l border-white/10 z-[55] flex flex-col"
+          className="fixed top-0 right-0 h-full w-full bg-[#05060A]/95 backdrop-blur-2xl border-l border-white/10 z-[55] flex flex-col"
           role="dialog"
           aria-modal="true"
           aria-label={t('nav.mobileMenuLabel', 'Mobile navigation menu')}
@@ -80,7 +80,7 @@ const MobileMenu = ({
               <TrustChainLogo size={32} />
               <span className="font-clash font-bold text-xl tracking-widest uppercase text-white">TRUSTCHAIN</span>
             </div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#00dc6e]/70">{t('nav.navigationMenu', 'Navigation Menu')}</p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#7C93F2]/70">{t('nav.navigationMenu', 'Navigation Menu')}</p>
           </div>
 
           {/* Nav Links */}
@@ -91,13 +91,13 @@ const MobileMenu = ({
                 background-color: rgba(255,255,255,0.04);
                 color: #ffffff !important;
                 padding-left: 24px;
-                border-left: 2px solid #00dc6e;
+                border-left: 2px solid #4F6BED;
               }
-              .active-mobile-link { 
-                background-color: rgba(0,220,110,0.1); 
-                color: #00dc6e !important; 
-                border-left: 2px solid #00dc6e; 
-                box-shadow: inset 0 0 12px rgba(0,220,110,0.05); 
+              .active-mobile-link {
+                background-color: rgba(79,107,237,0.1);
+                color: #7C93F2 !important;
+                border-left: 2px solid #4F6BED;
+                box-shadow: inset 0 0 12px rgba(79,107,237,0.05);
               }
             `}</style>
             <div className="space-y-4" role="menu">
@@ -118,7 +118,7 @@ const MobileMenu = ({
                       className={`mobile-nav-item flex items-center gap-4 px-4 py-5 rounded-[6px] font-inter font-bold uppercase tracking-[0.15em] text-[12px] ${isActive ? 'active-mobile-link' : 'text-white/50 bg-white/5'}`}
                     >
                       {link.name}
-                      {isActive && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-[#00dc6e] shadow-[0_0_12px_rgba(0,220,110,1)]" aria-hidden="true" />}
+                      {isActive && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-[#4F6BED] shadow-[0_0_12px_rgba(79,107,237,1)]" aria-hidden="true" />}
                     </Link>
                   </motion.div>
                 );
@@ -131,7 +131,7 @@ const MobileMenu = ({
             {isConnected ? (
               <div className="space-y-3">
                 <div className="flex items-center gap-3 px-4 py-3 border border-white/10 rounded-[6px] bg-white/5">
-                  <span className="w-2 h-2 rounded-full bg-[#00dc6e] shadow-[0_0_8px_rgba(0,220,110,0.6)]" aria-hidden="true" />
+                  <span className="w-2 h-2 rounded-full bg-[#4F6BED] shadow-[0_0_8px_rgba(79,107,237,0.6)]" aria-hidden="true" />
                   <span className="font-mono text-xs text-white/80">{truncate(walletAddress)}</span>
                 </div>
                 <Link to="/dashboard" className="w-full py-4 bg-white/10 border border-white/20 text-white rounded-[6px] font-bold uppercase tracking-[0.15em] text-[11px] transition-all flex items-center justify-center gap-2 hover:bg-white/15" onClick={() => setIsMobileMenuOpen(false)}>
@@ -142,7 +142,7 @@ const MobileMenu = ({
                 </button>
               </div>
             ) : (
-              <button onClick={() => { connect(); setIsMobileMenuOpen(false); }} aria-label={t('nav.connectMobileLabel', 'Connect Freighter wallet')} className="w-full py-4 text-white rounded-[6px] font-bold uppercase tracking-[0.15em] text-[11px] transition-all flex items-center justify-center gap-2" style={{ background: 'linear-gradient(135deg, #22c55e, #16a34a)', boxShadow: '0 0 20px rgba(34,197,94,0.3)', border: '1px solid rgba(34,197,94,0.5)' }}>
+              <button onClick={() => { connect(); setIsMobileMenuOpen(false); }} aria-label={t('nav.connectMobileLabel', 'Connect Freighter wallet')} className="w-full py-4 text-white rounded-[6px] font-bold uppercase tracking-[0.15em] text-[11px] transition-all flex items-center justify-center gap-2" style={{ background: 'linear-gradient(135deg, #4F6BED, #3D56C9)', boxShadow: '0 0 20px rgba(79,107,237,0.3)', border: '1px solid rgba(79,107,237,0.5)' }}>
                 <Wallet className="w-4 h-4" aria-hidden="true" /> {t('nav.connectFreighter', 'Connect Freighter')}
               </button>
             )}

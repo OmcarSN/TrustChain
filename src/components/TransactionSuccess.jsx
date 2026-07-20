@@ -25,17 +25,17 @@ const TransactionSuccess = ({ txHash, title, subtitle, borderRadius = '2px' }) =
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       style={{
-        border: '1px solid rgba(0,220,110,0.15)',
-        backgroundColor: 'rgba(0,220,110,0.03)',
+        border: '1px solid rgba(22,163,74,0.15)',
+        backgroundColor: 'rgba(22,163,74,0.03)',
         padding: '20px',
         borderRadius,
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-        <CheckCircle2 style={{ width: '18px', height: '18px', color: '#00dc6e' }} />
+        <CheckCircle2 style={{ width: '18px', height: '18px', color: '#16A34A' }} />
         <div>
           <h4 style={{ fontSize: '14px', fontWeight: '700' }}>{title}</h4>
-          <p className="font-inter" style={{ fontSize: '10px', color: 'rgba(0,220,110,0.5)' }}>{subtitle}</p>
+          <p className="font-inter" style={{ fontSize: '10px', color: 'rgba(22,163,74,0.5)' }}>{subtitle}</p>
         </div>
       </div>
       <div style={{ border: '1px solid rgba(255,255,255,0.06)', padding: '10px 14px', marginBottom: '8px', borderRadius: '6px' }}>

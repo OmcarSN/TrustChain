@@ -45,7 +45,7 @@ const FilterBar = ({
         className="group flex items-center gap-3 transition-all"
         style={{ cursor: 'pointer', background: 'transparent', border: 'none', padding: 0 }}
       >
-        <div className={`flex items-center justify-center w-8 h-8 rounded-[2px] border transition-all duration-300 ${showFilters ? 'bg-white border-white text-black' : 'bg-[#0a0a0a] border-white/10 text-white/40 group-hover:border-[#00dc6e]/50 group-hover:text-[#00dc6e]'}`}>
+        <div className={`flex items-center justify-center w-8 h-8 rounded-[2px] border transition-all duration-300 ${showFilters ? 'bg-white border-white text-black' : 'bg-[#0a0a0a] border-white/10 text-white/40 group-hover:border-[#4F6BED]/50 group-hover:text-[#4F6BED]'}`}>
           <SlidersHorizontal className="w-4 h-4" />
         </div>
         <div className="flex flex-col items-start leading-none">
@@ -53,7 +53,7 @@ const FilterBar = ({
             {t('discover.filters')}
           </span>
           {!showFilters && hasActiveFilters && (
-            <span className="text-[8px] font-bold tracking-widest text-[#00dc6e] mt-1 uppercase">Active</span>
+            <span className="text-[8px] font-bold tracking-widest text-[#4F6BED] mt-1 uppercase">Active</span>
           )}
         </div>
       </button>
@@ -107,9 +107,9 @@ const FilterBar = ({
                   <button key={opt.value} onClick={() => setMinRating(opt.value)} className={isActive ? '' : 'dw-rating-btn'}
                     style={{
                       padding: '9px 16px', fontSize: '12px', letterSpacing: '0.5px',
-                      border: isActive ? '1px solid #00dc6e' : '1px solid rgba(255,255,255,0.1)',
-                      backgroundColor: isActive ? 'rgba(0,220,110,0.1)' : 'rgba(255,255,255,0.02)',
-                      color: isActive ? '#00dc6e' : 'rgba(255,255,255,0.5)',
+                      border: isActive ? '1px solid #4F6BED' : '1px solid rgba(255,255,255,0.1)',
+                      backgroundColor: isActive ? 'rgba(79,107,237,0.1)' : 'rgba(255,255,255,0.02)',
+                      color: isActive ? '#4F6BED' : 'rgba(255,255,255,0.5)',
                       fontWeight: isActive ? '600' : '400', cursor: 'pointer', borderRadius: '2px', transition: 'all 0.25s ease'
                     }}>
                     {t('ratings.' + opt.labelKey)}

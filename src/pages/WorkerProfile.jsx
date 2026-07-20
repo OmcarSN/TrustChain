@@ -58,7 +58,7 @@ const WorkerProfile = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#050505] relative overflow-hidden text-white" role="status" aria-label={t('profile.loading', 'Loading profile')} style={{ paddingTop: '100px', paddingBottom: '80px', paddingLeft: '48px', paddingRight: '48px' }}>
+      <div className="min-h-screen bg-[#05060A] relative overflow-hidden text-white" role="status" aria-label={t('profile.loading', 'Loading profile')} style={{ paddingTop: '100px', paddingBottom: '80px', paddingLeft: '48px', paddingRight: '48px' }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
           <div className="animate-pulse space-y-6">
             <div className="h-6 w-48 bg-white/5 rounded-[2px]" />
@@ -71,7 +71,7 @@ const WorkerProfile = () => {
 
   if (!profile) {
     return (
-      <div className="min-h-screen bg-[#050505] flex items-center justify-center relative text-white" role="alert" aria-label={t('profile.notFound')} style={{ paddingTop: '100px', paddingBottom: '80px', paddingLeft: '48px', paddingRight: '48px', overflow: 'clip' }}>
+      <div className="min-h-screen bg-[#05060A] flex items-center justify-center relative text-white" role="alert" aria-label={t('profile.notFound')} style={{ paddingTop: '100px', paddingBottom: '80px', paddingLeft: '48px', paddingRight: '48px', overflow: 'clip' }}>
         {/* Background Graphics (Grid & Orbs) */}
         <div className="tc-bg-grid fixed" />
         <div className="tc-orb-blue fixed" />
@@ -99,7 +99,7 @@ const WorkerProfile = () => {
   const statWeightedScore = reputation?.weightedScore || (Number(statAvgRating) * statTotalReviews).toFixed(1);
 
   return (
-    <div className="bg-[#050505] text-white" style={{ overflow: 'clip', position: 'relative', minHeight: '100vh' }}>
+    <div className="bg-[#05060A] text-white" style={{ overflow: 'clip', position: 'relative', minHeight: '100vh' }}>
       {/* Background Graphics (Grid & Orbs) */}
       <div className="tc-bg-grid fixed" />
       <div className="tc-orb-blue fixed" />
@@ -107,7 +107,7 @@ const WorkerProfile = () => {
       
       {/* Light leaks */}
       <div className="tc-leak-orange fixed" style={{ right: '-80px', left: 'auto' }} />
-      <div className="rounded-full pointer-events-none" style={{ position: 'fixed', bottom: '-80px', left: '-80px', width: '400px', height: '400px', background: '#1e3a8a', filter: 'blur(120px)', opacity: 0.05, zIndex: 0 }} />
+      <div className="rounded-full pointer-events-none" style={{ position: 'fixed', bottom: '-80px', left: '-80px', width: '400px', height: '400px', background: '#3D56C9', filter: 'blur(120px)', opacity: 0.05, zIndex: 0 }} />
 
       <style>{`
         @keyframes profFadeUp {
