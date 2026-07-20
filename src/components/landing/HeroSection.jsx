@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
  * @returns {React.ReactElement} The HeroSection component.
  */
 const HeroSection = ({ t }) => (
-  <section style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', background: '#050505', overflow: 'hidden' }}>
+  <section style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', background: '#05060A', overflow: 'hidden' }}>
     <style>{`
       @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
       @keyframes slowRotate { from { transform: translate(-50%,-50%) rotate(0deg); } to { transform: translate(-50%,-50%) rotate(360deg); } }
@@ -49,7 +49,7 @@ const HeroSection = ({ t }) => (
     {/* Animated Mesh Gradient Background */}
     <div style={{
       position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none',
-      background: 'linear-gradient(-45deg, #050505, #0a1628, #071a12, #0d0520, #050505)',
+      background: 'linear-gradient(-45deg, #05060A, #0b1024, #0E1017, #131634, #05060A)',
       backgroundSize: '400% 400%',
       animation: 'meshShift 15s ease infinite',
     }} />
@@ -58,13 +58,13 @@ const HeroSection = ({ t }) => (
     <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 2, opacity: 0.12 }} viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
       <defs>
         <radialGradient id="nodeGlow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#22c55e" stopOpacity="0.6" />
-          <stop offset="100%" stopColor="#22c55e" stopOpacity="0" />
+          <stop offset="0%" stopColor="#4F6BED" stopOpacity="0.6" />
+          <stop offset="100%" stopColor="#4F6BED" stopOpacity="0" />
         </radialGradient>
         <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#22c55e" stopOpacity="0.4" />
-          <stop offset="50%" stopColor="#3b82f6" stopOpacity="0.3" />
-          <stop offset="100%" stopColor="#a855f7" stopOpacity="0.2" />
+          <stop offset="0%" stopColor="#4F6BED" stopOpacity="0.4" />
+          <stop offset="50%" stopColor="#7C93F2" stopOpacity="0.3" />
+          <stop offset="100%" stopColor="#4F6BED" stopOpacity="0.2" />
         </linearGradient>
       </defs>
       {/* Network Lines */}
@@ -79,7 +79,7 @@ const HeroSection = ({ t }) => (
           <circle cx={cx} cy={cy} r="20" fill="url(#nodeGlow)">
             <animate attributeName="r" values="15;25;15" dur={`${3 + i * 0.5}s`} repeatCount="indefinite" />
           </circle>
-          <circle cx={cx} cy={cy} r="3" fill="#22c55e" opacity="0.8">
+          <circle cx={cx} cy={cy} r="3" fill="#4F6BED" opacity="0.8">
             <animate attributeName="opacity" values="0.3;1;0.3" dur={`${2 + i * 0.3}s`} repeatCount="indefinite" />
           </circle>
         </g>
@@ -87,18 +87,18 @@ const HeroSection = ({ t }) => (
     </svg>
 
     {/* Gradient Glow Orbs */}
-    <div style={{ position: 'absolute', top: '15%', right: '10%', width: '500px', height: '500px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(34,197,94,0.08) 0%, transparent 60%)', pointerEvents: 'none', zIndex: 3, filter: 'blur(40px)', animation: 'heroFloat 8s ease-in-out infinite' }} />
-    <div style={{ position: 'absolute', bottom: '10%', left: '15%', width: '400px', height: '400px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 60%)', pointerEvents: 'none', zIndex: 3, animation: 'heroFloat 10s ease-in-out infinite 2s' }} />
-    <div style={{ position: 'absolute', top: '50%', right: '30%', width: '300px', height: '300px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(168,85,247,0.05) 0%, transparent 60%)', pointerEvents: 'none', zIndex: 3, animation: 'heroFloat 12s ease-in-out infinite 4s' }} />
+    <div style={{ position: 'absolute', top: '15%', right: '10%', width: '500px', height: '500px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(79,107,237,0.10) 0%, transparent 60%)', pointerEvents: 'none', zIndex: 3, filter: 'blur(40px)', animation: 'heroFloat 8s ease-in-out infinite' }} />
+    <div style={{ position: 'absolute', bottom: '10%', left: '15%', width: '400px', height: '400px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(79,107,237,0.06) 0%, transparent 60%)', pointerEvents: 'none', zIndex: 3, animation: 'heroFloat 10s ease-in-out infinite 2s' }} />
+    <div style={{ position: 'absolute', top: '50%', right: '30%', width: '300px', height: '300px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(124,147,242,0.05) 0%, transparent 60%)', pointerEvents: 'none', zIndex: 3, animation: 'heroFloat 12s ease-in-out infinite 4s' }} />
 
     {/* Grid Pattern Overlay */}
     <div style={{ position: 'absolute', inset: 0, zIndex: 4, pointerEvents: 'none', backgroundImage: 'linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
 
     {/* Corner Brackets */}
-    <div style={{ position: 'absolute', top: '20px', left: '20px', width: '32px', height: '32px', borderTop: '2px solid rgba(34,197,94,0.3)', borderLeft: '2px solid rgba(34,197,94,0.3)', pointerEvents: 'none', zIndex: 15 }} />
-    <div style={{ position: 'absolute', bottom: '20px', right: '20px', width: '32px', height: '32px', borderBottom: '2px solid rgba(34,197,94,0.3)', borderRight: '2px solid rgba(34,197,94,0.3)', pointerEvents: 'none', zIndex: 15 }} />
-    <div style={{ position: 'absolute', top: '20px', right: '20px', width: '32px', height: '32px', borderTop: '2px solid rgba(59,130,246,0.2)', borderRight: '2px solid rgba(59,130,246,0.2)', pointerEvents: 'none', zIndex: 15 }} />
-    <div style={{ position: 'absolute', bottom: '20px', left: '20px', width: '32px', height: '32px', borderBottom: '2px solid rgba(59,130,246,0.2)', borderLeft: '2px solid rgba(59,130,246,0.2)', pointerEvents: 'none', zIndex: 15 }} />
+    <div style={{ position: 'absolute', top: '20px', left: '20px', width: '32px', height: '32px', borderTop: '2px solid rgba(79,107,237,0.35)', borderLeft: '2px solid rgba(79,107,237,0.35)', pointerEvents: 'none', zIndex: 15 }} />
+    <div style={{ position: 'absolute', bottom: '20px', right: '20px', width: '32px', height: '32px', borderBottom: '2px solid rgba(79,107,237,0.35)', borderRight: '2px solid rgba(79,107,237,0.35)', pointerEvents: 'none', zIndex: 15 }} />
+    <div style={{ position: 'absolute', top: '20px', right: '20px', width: '32px', height: '32px', borderTop: '2px solid rgba(124,147,242,0.2)', borderRight: '2px solid rgba(124,147,242,0.2)', pointerEvents: 'none', zIndex: 15 }} />
+    <div style={{ position: 'absolute', bottom: '20px', left: '20px', width: '32px', height: '32px', borderBottom: '2px solid rgba(124,147,242,0.2)', borderLeft: '2px solid rgba(124,147,242,0.2)', pointerEvents: 'none', zIndex: 15 }} />
 
     {/* Slowly Rotating Logo Watermark */}
     <img src="/trustchain-logo.png" alt="" style={{ position: 'absolute', top: '48%', left: '50%', transform: 'translate(-50%, -50%)', width: '420px', height: '420px', opacity: 0.04, zIndex: 5, filter: 'invert(1)', pointerEvents: 'none', userSelect: 'none', mixBlendMode: 'screen', animation: 'slowRotate 60s linear infinite' }} />
@@ -108,14 +108,14 @@ const HeroSection = ({ t }) => (
         <div style={{ position: 'relative', zIndex: 10, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'flex-start' }}>
           {/* Badge */}
           <div className="font-inter hero-badge" style={{
-            color: '#22c55e', fontWeight: '700', textTransform: 'uppercase',
+            color: '#7C93F2', fontWeight: '700', textTransform: 'uppercase',
             fontSize: '11px', letterSpacing: '0.2em',
             display: 'inline-flex', alignItems: 'center', gap: '8px',
-            background: 'rgba(34, 197, 94, 0.06)', border: '1px solid rgba(34, 197, 94, 0.2)',
+            background: 'rgba(79, 107, 237, 0.08)', border: '1px solid rgba(79, 107, 237, 0.22)',
             padding: '8px 16px', borderRadius: '100px',
             backdropFilter: 'blur(8px)',
           }}>
-            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 8px rgba(34,197,94,0.6)', animation: 'heroPulse 2s ease-in-out infinite' }} />
+            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#16A34A', boxShadow: '0 0 8px rgba(22,163,74,0.6)', animation: 'heroPulse 2s ease-in-out infinite' }} />
             {t('landing.hero_badge', 'LIVE ON STELLAR MAINNET')}
           </div>
 
@@ -157,17 +157,17 @@ const HeroSection = ({ t }) => (
           opacity: 0, animation: 'fadeSlideUp 0.8s ease forwards', animationDelay: '0.8s',
         }} className="no-scrollbar">
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap' }}>
-            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 6px rgba(34,197,94,0.5)', flexShrink: 0 }} />
+            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#4F6BED', boxShadow: '0 0 6px rgba(79,107,237,0.5)', flexShrink: 0 }} />
             <span className="font-inter" style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', letterSpacing: '0.05em' }}>GASLESS</span>
           </div>
           <div style={{ width: '1px', height: '16px', background: 'rgba(255,255,255,0.1)', flexShrink: 0 }} />
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap' }}>
-            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#3b82f6', boxShadow: '0 0 6px rgba(59,130,246,0.5)', flexShrink: 0 }} />
+            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#7C93F2', boxShadow: '0 0 6px rgba(124,147,242,0.5)', flexShrink: 0 }} />
             <span className="font-inter" style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', letterSpacing: '0.05em' }}>SOULBOUND</span>
           </div>
           <div style={{ width: '1px', height: '16px', background: 'rgba(255,255,255,0.1)', flexShrink: 0 }} />
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap' }}>
-            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#a855f7', boxShadow: '0 0 6px rgba(168,85,247,0.5)', flexShrink: 0 }} />
+            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#16A34A', boxShadow: '0 0 6px rgba(22,163,74,0.5)', flexShrink: 0 }} />
             <span className="font-inter" style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', letterSpacing: '0.05em' }}>ON-CHAIN</span>
           </div>
         </div>
@@ -177,7 +177,7 @@ const HeroSection = ({ t }) => (
       <div className="hero-right">
         <img src="/hero-workers.png" alt="Diverse workers" className="hero-image" style={{
           opacity: 0, animation: 'fadeSlideUp 1s ease forwards', animationDelay: '0.4s',
-          filter: 'drop-shadow(0 0 40px rgba(34,197,94,0.1))',
+          filter: 'drop-shadow(0 0 40px rgba(79,107,237,0.12))',
         }} />
       </div>
     </div>

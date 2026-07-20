@@ -57,7 +57,7 @@ const Landing = () => {
   ];
 
   return (
-    <div className="relative bg-[#050505] overflow-hidden text-white">
+    <div className="relative bg-[#05060A] overflow-hidden text-white">
       <style>{`
         @keyframes heroLineIn { from { opacity: 0; transform: translateY(40px); filter: blur(4px); } to { opacity: 1; transform: translateY(0); filter: blur(0px); } }
         @keyframes slowRotate { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
@@ -72,14 +72,14 @@ const Landing = () => {
         .hero-line-2 { background: linear-gradient(90deg, #ffffff 0%, #ffffff 35%, #888888 45%, #ffffff 55%, #ffffff 100%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; opacity: 0; animation: heroLineIn 0.8s cubic-bezier(0.16,1,0.3,1) 0.25s forwards, textShimmer 4s 1.3s linear infinite; }
         .hero-line-3 { background: linear-gradient(90deg, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.45) 30%, rgba(255,255,255,0.75) 45%, rgba(255,255,255,0.45) 60%, rgba(255,255,255,0.45) 100%); background-size: 300% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; opacity: 0; animation: heroLineIn 0.8s cubic-bezier(0.16,1,0.3,1) 0.4s forwards, mutedFlow 5s 2.5s ease-in-out infinite; }
         .animated-cta-border { position: absolute; inset: 0; pointer-events: none; padding: 1px; -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; z-index: 10; }
-        .animated-cta-border::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(from 0deg, transparent 70%, rgba(255,255,255,0.8) 80%, transparent 100%); animation: borderRotate 4s linear infinite; }
+        .animated-cta-border::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(from 0deg, transparent 65%, rgba(124,147,242,0.9) 80%, transparent 100%); animation: borderRotate 4s linear infinite; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
 
       {/* Atmospheric Light Leaks */}
-      <div className="absolute rounded-full pointer-events-none" style={{ top: '-100px', left: '-100px', width: '500px', height: '500px', background: '#f97316', filter: 'blur(120px)', opacity: 0.05 }} />
-      <div className="absolute rounded-full pointer-events-none" style={{ bottom: '-100px', right: '-100px', width: '500px', height: '500px', background: '#1e3a8a', filter: 'blur(120px)', opacity: 0.06 }} />
+      <div className="absolute rounded-full pointer-events-none" style={{ top: '-100px', left: '-100px', width: '500px', height: '500px', background: '#4F6BED', filter: 'blur(120px)', opacity: 0.06 }} />
+      <div className="absolute rounded-full pointer-events-none" style={{ bottom: '-100px', right: '-100px', width: '500px', height: '500px', background: '#3D56C9', filter: 'blur(120px)', opacity: 0.07 }} />
 
       {/* ═══ HERO ═══ */}
       <HeroSection t={t} />
@@ -88,11 +88,11 @@ const Landing = () => {
       <div style={{ width: '100%', background: '#0a0a0a', borderTop: '1px solid #1a1a1a', borderBottom: '1px solid #1a1a1a' }}>
         <div className="flex flex-row md:justify-center justify-start overflow-x-auto whitespace-nowrap hide-scrollbar" style={{ gap: '40px', padding: '14px 24px', alignItems: 'center' }}>
           <span className="font-inter tc-text-sm tc-ls-wide" style={{ color: '#333', fontWeight: '500', textTransform: 'uppercase' }}>✦ {t('landing.trust_stellar', 'BUILT ON STELLAR MAINNET')}</span>
-          <span style={{ color: '#22c55e', fontSize: '11px' }}>✦</span>
+          <span style={{ color: '#7C93F2', fontSize: '11px' }}>✦</span>
           <span className="font-inter tc-text-sm tc-ls-wide" style={{ color: '#333', fontWeight: '500', textTransform: 'uppercase' }}>{t('landing.trust_gasless', '100% GASLESS')}</span>
-          <span style={{ color: '#22c55e', fontSize: '11px' }}>✦</span>
+          <span style={{ color: '#7C93F2', fontSize: '11px' }}>✦</span>
           <span className="font-inter tc-text-sm tc-ls-wide" style={{ color: '#333', fontWeight: '500', textTransform: 'uppercase' }}>{t('landing.trust_soulbound', 'SOULBOUND CREDENTIALS')}</span>
-          <span style={{ color: '#22c55e', fontSize: '11px' }}>✦</span>
+          <span style={{ color: '#7C93F2', fontSize: '11px' }}>✦</span>
           <span className="font-inter tc-text-sm tc-ls-wide" style={{ color: '#333', fontWeight: '500', textTransform: 'uppercase' }}>{t('landing.trust_opensource', 'OPEN SOURCE')}</span>
         </div>
       </div>
@@ -111,9 +111,9 @@ const Landing = () => {
       <section style={{
         margin: '60px 24px 0', padding: '56px 32px',
         position: 'relative', overflow: 'hidden', borderRadius: '24px',
-        background: 'linear-gradient(135deg, rgba(255,255,255,0.05), rgba(0,0,0,0.2))',
+        background: 'linear-gradient(135deg, rgba(79,107,237,0.08), rgba(0,0,0,0.2))',
         backdropFilter: 'blur(10px)',
-        border: '1px solid rgba(255,255,255,0.1)',
+        border: '1px solid rgba(79,107,237,0.18)',
         opacity: 0, animation: 'ctaFadeUp 0.6s ease forwards', animationDelay: '0.4s',
       }}>
         <div className="animated-cta-border" style={{ borderRadius: '24px' }} />

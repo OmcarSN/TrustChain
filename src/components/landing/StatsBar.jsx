@@ -12,7 +12,7 @@ import { Users, Star, MessageSquare, Zap } from 'lucide-react';
  * @returns {React.ReactElement} The StatsBar component.
  */
 const StatsBar = ({ stats, visible }) => {
-  const accents = ['#22c55e', '#f5c518', '#3b82f6', '#22c55e'];
+  const accents = ['#7C93F2', '#4F6BED', '#7C93F2', '#4F6BED'];
   const Icons = [Users, Star, MessageSquare, Zap];
 
   return (

@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
  * @returns {React.ReactElement} The HowItWorks component.
  */
 const HowItWorks = ({ features, visible, t }) => {
-  const stepColors = ['#22c55e', '#3b82f6', '#a855f7'];
+  const stepColors = ['#7C93F2', '#4F6BED', '#3D56C9'];
   const stepIcons = ['🛡️', '⭐', '🔍'];
 
   return (
@@ -27,7 +27,7 @@ const HowItWorks = ({ features, visible, t }) => {
         <div>
           <p className="font-inter" style={{
             fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase',
-            color: '#22c55e', fontWeight: '700', marginBottom: '12px',
+            color: '#7C93F2', fontWeight: '700', marginBottom: '12px',
           }}>
             {t('landing.howItWorks', 'How It Works')}
           </p>

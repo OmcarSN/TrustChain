@@ -12,11 +12,11 @@ import PropTypes from 'prop-types';
  */
 const TechStack = ({ visible, t }) => {
   const techs = [
-    { name: 'Stellar', icon: '✦', desc: t('landing.techBlockchain', 'Blockchain'), color: '#3b82f6' },
-    { name: 'Soroban', icon: '◆', desc: t('landing.techSmartContracts', 'Smart Contracts'), color: '#f97316' },
-    { name: 'React', icon: '⚛', desc: t('landing.techFrontend', 'Frontend'), color: '#61dafb' },
-    { name: 'Freighter', icon: '🔑', desc: t('landing.techWallet', 'Wallet'), color: '#a855f7' },
-    { name: 'Rust', icon: '⚙', desc: t('landing.techBackend', 'Backend'), color: '#ef4444' },
+    { name: 'Stellar', icon: '✦', desc: t('landing.techBlockchain', 'Blockchain'), color: '#7C93F2' },
+    { name: 'Soroban', icon: '◆', desc: t('landing.techSmartContracts', 'Smart Contracts'), color: '#6B84F0' },
+    { name: 'React', icon: '⚛', desc: t('landing.techFrontend', 'Frontend'), color: '#5A75EE' },
+    { name: 'Freighter', icon: '🔑', desc: t('landing.techWallet', 'Wallet'), color: '#4F6BED' },
+    { name: 'Rust', icon: '⚙', desc: t('landing.techBackend', 'Backend'), color: '#7C93F2' },
   ];
 
   return (
