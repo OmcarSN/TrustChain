@@ -8,6 +8,7 @@
 [![Soroban](https://img.shields.io/badge/Smart_Contracts-Soroban-orange?style=for-the-badge)](https://soroban.stellar.org)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](./LICENSE)
 [![Security](https://img.shields.io/badge/Security-Checklist_Passed-brightgreen?style=for-the-badge)](./SECURITY.md)
+[![Follow on X](https://img.shields.io/badge/Follow_on-X-black?style=for-the-badge&logo=x)](https://x.com/TrustChainXLM)
 
 > **Note:** Demo video shows full feature set — UI refresh in progress, updated video coming in final submission.
 
@@ -402,7 +403,7 @@ TrustChain has been upgraded to **Level 7 Master Belt** with production-grade fe
 
 ### 🌍 Community Contribution
 
-> 📢 **Twitter/X Post:** [View on X/Twitter](https://x.com/i/status/2042962447297057275)
+> 📢 **Official X Profile:** [View on X/Twitter](https://x.com/TrustChainXLM)
 >
 > Posted about TrustChain's mission with screenshots of Analytics dashboard + homepage to empower 2B+ informal economy workers with decentralized, verifiable credentials on Stellar.
 
@@ -975,7 +976,7 @@ npm run build
 
 ## 🐦 Community Contribution
 
-> 📢 **Twitter/X Post:** [View on X/Twitter](https://x.com/i/status/2042962447297057275)
+> 📢 **Official X Profile:** [View on X/Twitter](https://x.com/TrustChainXLM)
 >
 > Posted about TrustChain's mission with screenshots of Analytics dashboard + homepage to empower 2B+ informal economy workers with decentralized, verifiable credentials on Stellar.
 
@@ -997,7 +998,7 @@ npm run build
 | CI/CD Pipeline | 8-stage automated GitHub Actions workflow | [ci.yml](./.github/workflows/ci.yml) |
 | Multi-Language Support | English + Hindi localization | `src/locales/` |
 | DAO Governance UI | Full governance dashboard (frontend built) | `src/pages/Governance.jsx` |
-| Community Contribution | Twitter post about TrustChain's mission | [View Post](https://x.com/i/status/2042962447297057275) |
+| Community Contribution | Official TrustChain X Profile | [View Post](https://x.com/TrustChainXLM) |
 
 ### 🔜 Next Milestones (Level 7 — Startup Track)
 
