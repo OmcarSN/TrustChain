@@ -403,7 +403,7 @@ TrustChain has been upgraded to **Level 7 Master Belt** with production-grade fe
 
 ### 🌍 Community Contribution
 
-> 📢 **Official X Profile:** [View on X/Twitter](https://x.com/TrustChainXLM)
+> 📢 **Official X Profile:** [@TrustChainXLM](https://x.com/TrustChainXLM)
 >
 > Posted about TrustChain's mission with screenshots of Analytics dashboard + homepage to empower 2B+ informal economy workers with decentralized, verifiable credentials on Stellar.
 
@@ -976,7 +976,7 @@ npm run build
 
 ## 🐦 Community Contribution
 
-> 📢 **Official X Profile:** [View on X/Twitter](https://x.com/TrustChainXLM)
+> 📢 **Official X Profile:** [@TrustChainXLM](https://x.com/TrustChainXLM)
 >
 > Posted about TrustChain's mission with screenshots of Analytics dashboard + homepage to empower 2B+ informal economy workers with decentralized, verifiable credentials on Stellar.
 
