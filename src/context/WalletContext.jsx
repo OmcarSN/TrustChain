@@ -107,18 +107,32 @@ export const WalletProvider = ({ children }) => {
       {/* Global Network Warning */}
       <AnimatePresence>
         {isWrongNetwork && isConnected && (
-          <motion.div 
+          <motion.div
             initial={{ y: -100 }}
             animate={{ y: 0 }}
             exit={{ y: -100 }}
-            className="fixed top-0 left-0 right-0 z-[10000] bg-red-600 text-white py-3 px-6 flex items-center justify-center gap-4 shadow-xl"
+            role="alert"
+            className="fixed top-0 left-0 right-0 z-[10000] flex items-center justify-center gap-4 py-3 px-6 text-white"
+            style={{
+              background: 'linear-gradient(180deg, rgba(30,10,10,0.96), rgba(20,7,7,0.96))',
+              backdropFilter: 'blur(16px)',
+              WebkitBackdropFilter: 'blur(16px)',
+              borderBottom: '1px solid rgba(239,68,68,0.5)',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.5), 0 0 24px rgba(239,68,68,0.25), inset 0 1px 0 rgba(239,68,68,0.15)',
+            }}
           >
-            <ShieldAlert className="w-5 h-5 animate-pulse" />
-            <p className="text-xs font-black uppercase tracking-widest">
-              Action Required: Switch Freighter to <span className="underline decoration-2 underline-offset-4">{NETWORK}</span> to use TrustChain.
+            <ShieldAlert className="w-5 h-5 animate-pulse" style={{ color: 'var(--color-danger)', flexShrink: 0 }} />
+            <p className="text-xs font-black uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.95)' }}>
+              Action Required: Switch Freighter to <span className="underline decoration-2 underline-offset-4" style={{ color: '#FCA5A5', textDecorationColor: 'var(--color-danger)' }}>{NETWORK}</span> to use TrustChain.
             </p>
-            <div className="flex items-center gap-2 ml-4 bg-white/10 px-3 py-1 rounded-lg border border-white/20">
-               <span className="text-[9px] font-bold">CURRENT: {network || 'UNKNOWN'}</span>
+            <div
+              className="flex items-center gap-2 ml-4 px-3 py-1 rounded-lg"
+              style={{
+                background: 'rgba(239,68,68,0.12)',
+                border: '1px solid rgba(239,68,68,0.35)',
+              }}
+            >
+               <span className="text-[9px] font-bold" style={{ color: '#FCA5A5' }}>CURRENT: {network || 'UNKNOWN'}</span>
             </div>
           </motion.div>
         )}
