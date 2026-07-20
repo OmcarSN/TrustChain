@@ -24,13 +24,13 @@ const ExplorerResultsTable = ({ results, loading, error, searchQuery, t }) => {
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-      className="glass-card tc-mb-lg" style={{ width: '100%', maxWidth: '1100px', padding: '0', overflow: 'hidden', boxShadow: '0 8px 40px rgba(0,0,0,0.3), 0 0 80px rgba(34,197,94,0.03)' }}
+      className="glass-card tc-mb-lg" style={{ width: '100%', maxWidth: '1100px', padding: '0', overflow: 'hidden', boxShadow: '0 8px 40px rgba(0,0,0,0.3), 0 0 80px rgba(79,107,237,0.04)' }}
       role="region"
       aria-label={t('explorer.resultsRegion', 'Search results')}
     >
       {loading ? (
         <div className="p-16 flex flex-col items-center justify-center" role="status" aria-label={t('explorer.queryingHorizon')} style={{ padding: '64px 16px' }}>
-          <Loader2 className="w-6 h-6 animate-spin mb-4" style={{ color: '#22c55e' }} aria-hidden="true" />
+          <Loader2 className="w-6 h-6 animate-spin mb-4" style={{ color: '#7C93F2' }} aria-hidden="true" />
           <p className="font-bold uppercase tracking-widest text-xs font-inter" style={{ color: 'rgba(255,255,255,0.4)', letterSpacing: '3px' }}>{t('explorer.queryingHorizon')}</p>
         </div>
       ) : error ? (
@@ -46,13 +46,13 @@ const ExplorerResultsTable = ({ results, loading, error, searchQuery, t }) => {
       ) : (
         <div className="overflow-x-auto">
           {/* Results Header */}
-          <div className="tc-flex-between tc-feed-header" style={{ background: 'linear-gradient(135deg, rgba(34,197,94,0.04), rgba(59,130,246,0.02), rgba(255,255,255,0.02))', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+          <div className="tc-flex-between tc-feed-header" style={{ background: 'linear-gradient(135deg, rgba(79,107,237,0.05), rgba(124,147,242,0.02), rgba(255,255,255,0.02))', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
             <div className="font-inter tc-eyebrow" style={{ letterSpacing: '2px' }}>
               <span className="text-gradient" style={{ fontWeight: '700' }}>{t('explorer.showing')} {results.length} {t('explorer.credentials')}</span> · <span className="tc-mono" style={{ color: 'rgba(255,255,255,0.6)' }}>{truncate(searchQuery)}</span>
             </div>
-            <div className="flex items-center gap-2" style={{ padding: '4px 12px', borderRadius: '20px', background: 'rgba(34,197,94,0.06)', border: '1px solid rgba(34,197,94,0.12)' }}>
-              <ShieldCheck style={{ width: '14px', height: '14px', color: '#22c55e' }} aria-hidden="true" />
-              <span className="font-inter" style={{ fontSize: '10px', letterSpacing: '1px', fontWeight: '700', color: '#22c55e', opacity: 0.8 }}>{t('explorer.onChainVerified')}</span>
+            <div className="flex items-center gap-2" style={{ padding: '4px 12px', borderRadius: '20px', background: 'rgba(22,163,74,0.06)', border: '1px solid rgba(22,163,74,0.12)' }}>
+              <ShieldCheck style={{ width: '14px', height: '14px', color: '#16A34A' }} aria-hidden="true" />
+              <span className="font-inter" style={{ fontSize: '10px', letterSpacing: '1px', fontWeight: '700', color: '#16A34A', opacity: 0.9 }}>{t('explorer.onChainVerified')}</span>
             </div>
           </div>
 
@@ -80,7 +80,7 @@ const ExplorerResultsTable = ({ results, loading, error, searchQuery, t }) => {
                     aria-label={`${cred.credentialType} credential`}
                     className="tc-table-row hover:bg-white/[0.03] transition-all duration-150 group result-row"
                     style={{ animationDelay: `${idx * 0.04}s`, borderLeft: '2px solid transparent', transition: 'all 0.2s ease' }}
-                    onMouseEnter={(e) => { e.currentTarget.style.borderLeftColor = '#22c55e'; e.currentTarget.style.background = 'rgba(34,197,94,0.02)'; }}
+                    onMouseEnter={(e) => { e.currentTarget.style.borderLeftColor = '#4F6BED'; e.currentTarget.style.background = 'rgba(79,107,237,0.03)'; }}
                     onMouseLeave={(e) => { e.currentTarget.style.borderLeftColor = 'transparent'; e.currentTarget.style.background = 'transparent'; }}
                   >
                     <div role="cell">

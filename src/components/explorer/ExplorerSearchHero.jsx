@@ -42,7 +42,7 @@ const ExplorerSearchHero = ({ searchQuery, setSearchQuery, isValidAddress, loadi
     <div className="ex-anim tc-mb-4xl" style={{ width: '100%', maxWidth: '680px', animationDelay: '0.22s', animationDuration: '0.45s' }}>
       {/* Gradient border wrapper for premium search bar */}
       <form onSubmit={handleSearch} role="search" aria-label={t('explorer.searchLabel', 'Search for worker credentials')}>
-        <div className="glass-card gradient-border" style={{ display: 'flex', gap: '0', padding: 0, overflow: 'hidden', boxShadow: '0 4px 30px rgba(0,0,0,0.3), 0 0 60px rgba(34,197,94,0.04)' }}>
+        <div className="glass-card gradient-border" style={{ display: 'flex', gap: '0', padding: 0, overflow: 'hidden', boxShadow: '0 4px 30px rgba(0,0,0,0.3), 0 0 60px rgba(79,107,237,0.06)' }}>
           <div style={{ flex: 1, display: 'flex', alignItems: 'center', paddingLeft: '20px' }}>
             <Search className="tc-icon-lg tc-icon-dimmer" style={{ flexShrink: 0, marginRight: '10px' }} aria-hidden="true" />
             <input

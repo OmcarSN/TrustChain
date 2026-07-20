@@ -38,8 +38,8 @@ const ExplorerHowTo = ({ t }) => (
             <span className="tc-text-dimmer" style={{ position: 'absolute', right: '-7px', top: '50%', transform: 'translateY(-50%)', fontSize: '12px', zIndex: 1, pointerEvents: 'none' }} aria-hidden="true">→</span>
           )}
           <div className="tc-flex-between tc-mb-xl" style={{ alignItems: 'flex-start' }}>
-            <div className="tc-activity-icon" style={{ width: '40px', height: '40px', background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.15)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <item.icon style={{ width: '18px', height: '18px', color: '#22c55e' }} aria-hidden="true" />
+            <div className="tc-activity-icon" style={{ width: '40px', height: '40px', background: 'rgba(79,107,237,0.08)', border: '1px solid rgba(79,107,237,0.15)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <item.icon style={{ width: '18px', height: '18px', color: '#7C93F2' }} aria-hidden="true" />
             </div>
             <span className="font-inter tc-label">{t('explorer.step')} {item.step}</span>
           </div>
@@ -52,15 +52,15 @@ const ExplorerHowTo = ({ t }) => (
     {/* Security Banner */}
     <div className="ex-anim glass-card tc-flex tc-flex-gap-lg" role="status" aria-label={t('explorer.securityBanner', 'Security information')} style={{
       marginTop: '48px', padding: '24px 32px',
-      background: 'linear-gradient(135deg, rgba(0,220,110,0.05) 0%, rgba(255,255,255,0.02) 100%)',
-      borderLeft: '3px solid rgba(34,197,94,0.4)',
+      background: 'linear-gradient(135deg, rgba(22,163,74,0.05) 0%, rgba(255,255,255,0.02) 100%)',
+      borderLeft: '3px solid rgba(22,163,74,0.4)',
       alignItems: 'center',
       animation: 'securityPulse 3s ease infinite, exFadeUp 0.4s ease forwards',
       animationDelay: '0.5s', opacity: 0,
-      boxShadow: '0 4px 24px rgba(0,0,0,0.2), 0 0 40px rgba(34,197,94,0.03)',
+      boxShadow: '0 4px 24px rgba(0,0,0,0.2), 0 0 40px rgba(22,163,74,0.03)',
     }}>
-      <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-        <ShieldCheck style={{ color: '#22c55e', width: '20px', height: '20px' }} aria-hidden="true" />
+      <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'rgba(22,163,74,0.1)', border: '1px solid rgba(22,163,74,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+        <ShieldCheck style={{ color: '#16A34A', width: '20px', height: '20px' }} aria-hidden="true" />
       </div>
       <div>
         <p className="font-inter tc-mb-xs tc-fw-bold" style={{ fontSize: '14px', color: 'rgba(255,255,255,0.7)' }}>
