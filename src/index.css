@@ -130,12 +130,6 @@
   50% { background-position: 100% center; }
 }
 
-/* ── Shimmer Sweep (for CTA buttons) ─────────────────────── */
-@keyframes tc-shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-
 /* ── Floating animation for hero elements ─────────────────── */
 @keyframes tc-float {
   0%, 100% { transform: translateY(0px); }
@@ -791,18 +785,6 @@ select.field-input option { background: #0c0c0c; color: #fff; }
   background: rgba(232, 160, 76, 0.08);
 }
 
-/* ── Animated Gradient Background Mesh ──────────────────────── */
-@keyframes meshGradient {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-.mesh-bg {
-  background: linear-gradient(-45deg, #05060A, #0b1024, #0a0f22, #10152e, #05060A);
-  background-size: 400% 400%;
-  animation: meshGradient 15s ease infinite;
-}
-
 /* ── Animated Network Lines (Hero Background) ───────────────── */
 @keyframes networkPulse {
   0%, 100% { opacity: 0.03; }
@@ -879,12 +861,6 @@ select.field-input option { background: #0c0c0c; color: #fff; }
   background: rgba(255, 255, 255, 0.04);
   border-color: rgba(255, 255, 255, 0.1);
   transform: translateY(-2px);
-}
-
-/* ── Floating Dots Animation ────────────────────────────────── */
-@keyframes floatDot {
-  0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
-  50% { transform: translateY(-15px) scale(1.2); opacity: 0.6; }
 }
 
 /* ── Section Divider Gradient ───────────────────────────────── */

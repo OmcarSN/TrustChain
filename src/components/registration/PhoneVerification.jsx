@@ -81,7 +81,7 @@ const PhoneVerification = ({ walletAddress, onVerified, t }) => {
       const textResponse = await res.text();
       try {
         data = JSON.parse(textResponse);
-      } catch (e) {
+      } catch {
         throw new Error('Server returned an invalid response. If running locally, you must use vercel dev to test actual SMS.');
       }
 
@@ -143,7 +143,7 @@ const PhoneVerification = ({ walletAddress, onVerified, t }) => {
       const textResponse = await res.text();
       try {
         data = JSON.parse(textResponse);
-      } catch (e) {
+      } catch {
         throw new Error('Server returned an invalid response. If running locally, you must use vercel dev to test actual SMS.');
       }
 

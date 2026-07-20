@@ -16,7 +16,6 @@ const HeroSection = ({ t }) => (
   <section style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', background: '#05060A', overflow: 'hidden' }}>
     <style>{`
       @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-      @keyframes slowRotate { from { transform: translate(-50%,-50%) rotate(0deg); } to { transform: translate(-50%,-50%) rotate(360deg); } }
       @keyframes heroPulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.8; } }
       @keyframes heroFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
       /* Mesh drift runs on the compositor (transform only) so it never repaints
