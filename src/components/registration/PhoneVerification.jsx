@@ -59,13 +59,31 @@ const PhoneVerification = ({ walletAddress, onVerified, t }) => {
     setError('');
 
     try {
+      // Local dev bypass for magic testing number
+      if (formatted === '+910000000000') {
+        setTimeout(() => {
+          setPhone(formatted);
+          setStep('otp');
+          setCountdown(60);
+          setLoading(false);
+        }, 500);
+        return;
+      }
+
       const res = await fetch('/api/send-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phone: formatted, walletAddress }),
       });
 
-      const data = await res.json();
+      // Safely handle empty or HTML responses (like Vite 404)
+      let data;
+      const textResponse = await res.text();
+      try {
+        data = JSON.parse(textResponse);
+      } catch (e) {
+        throw new Error('Server returned an invalid response. If running locally, you must use vercel dev to test actual SMS.');
+      }
 
       if (!res.ok) {
         setError(data.error || t('phoneVerify.errSendFail'));
@@ -100,13 +118,34 @@ const PhoneVerification = ({ walletAddress, onVerified, t }) => {
     setError('');
 
     try {
+      // Local dev bypass for magic testing number
+      if (phone === '+910000000000' && otp === '000000') {
+        setTimeout(() => {
+          setStep('verified');
+          setLoading(false);
+          setTimeout(() => onVerified(phone), 800);
+        }, 500);
+        return;
+      } else if (phone === '+910000000000') {
+        setError('Invalid test OTP. Use 000000');
+        setLoading(false);
+        return;
+      }
+
       const res = await fetch('/api/verify-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phone, otp, walletAddress }),
       });
 
-      const data = await res.json();
+      // Safely handle empty or HTML responses
+      let data;
+      const textResponse = await res.text();
+      try {
+        data = JSON.parse(textResponse);
+      } catch (e) {
+        throw new Error('Server returned an invalid response. If running locally, you must use vercel dev to test actual SMS.');
+      }
 
       if (!res.ok) {
         setError(data.error || t('phoneVerify.errVerifyFail'));

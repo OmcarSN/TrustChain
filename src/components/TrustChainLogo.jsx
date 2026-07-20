@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import logoSrc from '../assets/trustchain-logo.png';
+import logoSrc from '../assets/blue-logo.png.png';
 
 /**
  * TrustChainLogo — Official TrustChain brand logo component.

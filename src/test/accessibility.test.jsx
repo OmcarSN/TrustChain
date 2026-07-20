@@ -17,7 +17,7 @@ import SkipToContent from '../components/SkipToContent';
 import { StarInput } from '../components/StarRating';
 
 // Mocks
-vi.mock('../assets/trustchain-logo.png', () => ({ default: 'mock-logo.png' }));
+vi.mock('../assets/transparent-logo.webp', () => ({ default: 'mock-logo.png' }));
 
 // Mock WalletContext for Navbar tests
 vi.mock('../context/WalletContext', () => ({

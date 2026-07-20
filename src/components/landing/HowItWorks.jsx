@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
  * @returns {React.ReactElement} The HowItWorks component.
  */
 const HowItWorks = ({ features, visible, t }) => {
-  const stepColors = ['#7C93F2', '#4F6BED', '#3D56C9'];
+  const stepColors = ['#7C93F2', '#E8A04C', '#4F6BED'];
   const stepIcons = ['🛡️', '⭐', '🔍'];
 
   return (

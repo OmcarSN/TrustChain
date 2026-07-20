@@ -107,7 +107,7 @@ const WorkerProfile = () => {
       
       {/* Light leaks */}
       <div className="tc-leak-orange fixed" style={{ right: '-80px', left: 'auto' }} />
-      <div className="rounded-full pointer-events-none" style={{ position: 'fixed', bottom: '-80px', left: '-80px', width: '400px', height: '400px', background: '#3D56C9', filter: 'blur(120px)', opacity: 0.05, zIndex: 0 }} />
+      <div className="rounded-full pointer-events-none" style={{ position: 'fixed', bottom: '-80px', left: '-80px', width: '400px', height: '400px', background: 'radial-gradient(circle, rgba(61,86,201,0.05) 0%, transparent 70%)', willChange: 'transform', zIndex: 0 }} />
 
       <style>{`
         @keyframes profFadeUp {
@@ -134,7 +134,7 @@ const WorkerProfile = () => {
       `}</style>
 
       {/* Page Wrapper */}
-      <div style={{ paddingTop: '100px', paddingBottom: '80px', paddingLeft: '48px', paddingRight: '48px', maxWidth: '1400px', margin: '0 auto', display: 'flex', gap: '0', minHeight: '100vh', position: 'relative', zIndex: 10 }}>
+      <div className="tc-profile-shell" style={{ paddingTop: '100px', paddingBottom: '80px', paddingLeft: '48px', paddingRight: '48px', maxWidth: '1400px', margin: '0 auto', display: 'flex', gap: '0', minHeight: '100vh', position: 'relative', zIndex: 10 }}>
 
         {/* ═══ LEFT SIDEBAR ═══ */}
         <ProfileSidebar
@@ -149,7 +149,7 @@ const WorkerProfile = () => {
         />
 
         {/* ═══ RIGHT MAIN AREA ═══ */}
-        <div className="glass-card" style={{ flex: 1, padding: '40px', borderLeft: '1px solid rgba(255,255,255,0.06)', borderRadius: '24px' }} role="main" aria-label={t('profile.mainContent', 'Worker reputation and reviews')}>
+        <div className="glass-card tc-profile-main" style={{ flex: 1, padding: '40px', borderLeft: '1px solid rgba(255,255,255,0.06)', borderRadius: '24px' }} role="main" aria-label={t('profile.mainContent', 'Worker reputation and reviews')}>
 
           {/* Eyebrow + Title */}
           <div className="prof-anim" style={{ marginBottom: '28px', animationDelay: '0.05s' }}>

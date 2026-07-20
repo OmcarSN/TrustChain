@@ -10,7 +10,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '../i18n';
 
-vi.mock('../assets/trustchain-logo.png', () => ({ default: 'mock-logo.png' }));
+vi.mock('../assets/transparent-logo.webp', () => ({ default: 'mock-logo.png' }));
 
 const wrap = (ui) =>
   render(

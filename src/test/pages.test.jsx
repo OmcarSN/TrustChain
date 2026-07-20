@@ -21,7 +21,7 @@ vi.mock('../lib/freighter', () => ({
   getFreighterNetwork: vi.fn().mockResolvedValue('TESTNET'),
   connectWallet: vi.fn().mockResolvedValue('GABCDE'),
 }));
-vi.mock('../assets/trustchain-logo.png', () => ({ default: 'mock-logo.png' }));
+vi.mock('../assets/transparent-logo.webp', () => ({ default: 'mock-logo.png' }));
 vi.mock('../lib/toast', () => ({ registerToastInstance: vi.fn() }));
 
 // ── Provide all required contexts ──

@@ -12,7 +12,8 @@ import { Users, Star, MessageSquare, Zap } from 'lucide-react';
  * @returns {React.ReactElement} The StatsBar component.
  */
 const StatsBar = ({ stats, visible }) => {
-  const accents = ['#7C93F2', '#4F6BED', '#7C93F2', '#4F6BED'];
+  // Indigo-dominant, with one warm-amber highlight on the rating stat for human warmth.
+  const accents = ['#4F6BED', '#E8A04C', '#7C93F2', '#4F6BED'];
   const Icons = [Users, Star, MessageSquare, Zap];
 
   return (

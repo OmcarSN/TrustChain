@@ -71,15 +71,14 @@ const Landing = () => {
         .hero-line-1 { background: linear-gradient(90deg, #ffffff 0%, #ffffff 35%, #888888 45%, #ffffff 55%, #ffffff 100%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; opacity: 0; animation: heroLineIn 0.8s cubic-bezier(0.16,1,0.3,1) 0.1s forwards, textShimmer 4s 0s linear infinite; }
         .hero-line-2 { background: linear-gradient(90deg, #ffffff 0%, #ffffff 35%, #888888 45%, #ffffff 55%, #ffffff 100%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; opacity: 0; animation: heroLineIn 0.8s cubic-bezier(0.16,1,0.3,1) 0.25s forwards, textShimmer 4s 1.3s linear infinite; }
         .hero-line-3 { background: linear-gradient(90deg, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.45) 30%, rgba(255,255,255,0.75) 45%, rgba(255,255,255,0.45) 60%, rgba(255,255,255,0.45) 100%); background-size: 300% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; opacity: 0; animation: heroLineIn 0.8s cubic-bezier(0.16,1,0.3,1) 0.4s forwards, mutedFlow 5s 2.5s ease-in-out infinite; }
-        .animated-cta-border { position: absolute; inset: 0; pointer-events: none; padding: 1px; -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; z-index: 10; }
-        .animated-cta-border::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(from 0deg, transparent 65%, rgba(124,147,242,0.9) 80%, transparent 100%); animation: borderRotate 4s linear infinite; }
+        .animated-cta-border { position: absolute; inset: 0; pointer-events: none; padding: 1px; border-radius: inherit; background: linear-gradient(135deg, rgba(124,147,242,0.6) 0%, rgba(124,147,242,0.1) 100%); z-index: 10; opacity: 0.5; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
 
       {/* Atmospheric Light Leaks */}
-      <div className="absolute rounded-full pointer-events-none" style={{ top: '-100px', left: '-100px', width: '500px', height: '500px', background: '#4F6BED', filter: 'blur(120px)', opacity: 0.06 }} />
-      <div className="absolute rounded-full pointer-events-none" style={{ bottom: '-100px', right: '-100px', width: '500px', height: '500px', background: '#3D56C9', filter: 'blur(120px)', opacity: 0.07 }} />
+      <div className="absolute rounded-full pointer-events-none" style={{ top: '-100px', left: '-100px', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(79,107,237,0.06) 0%, transparent 70%)', willChange: 'transform', zIndex: 0 }} />
+      <div className="absolute rounded-full pointer-events-none" style={{ bottom: '-100px', right: '-100px', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(61,86,201,0.07) 0%, transparent 70%)', willChange: 'transform', zIndex: 0 }} />
 
       {/* ═══ HERO ═══ */}
       <HeroSection t={t} />

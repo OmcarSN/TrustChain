@@ -15,7 +15,7 @@ import ErrorBoundary from '../components/ErrorBoundary';
 import TrustChainLogo from '../components/TrustChainLogo';
 
 // Mock image imports for Vitest/jsdom
-vi.mock('../assets/trustchain-logo.png', () => ({ default: 'mock-logo.png' }));
+vi.mock('../assets/transparent-logo.webp', () => ({ default: 'mock-logo.png' }));
 
 const renderWithProviders = (ui) =>
   render(

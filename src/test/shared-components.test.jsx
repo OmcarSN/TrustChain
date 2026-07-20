@@ -17,7 +17,7 @@ import TransactionSuccess from '../components/TransactionSuccess';
 import SkipToContent from '../components/SkipToContent';
 
 // Mock image imports for Vitest/jsdom
-vi.mock('../assets/trustchain-logo.png', () => ({ default: 'mock-logo.png' }));
+vi.mock('../assets/transparent-logo.webp', () => ({ default: 'mock-logo.png' }));
 
 // Mock WalletContext for ConnectWalletPrompt
 vi.mock('../context/WalletContext', () => ({

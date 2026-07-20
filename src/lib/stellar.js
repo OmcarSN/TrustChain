@@ -119,25 +119,44 @@ export async function mintWorkerCredential(publicKey, data) {
     const dataValue = truncateToBytes(data.skill || data.skillCategory || 'Worker', 64);
 
     // Step 1: Request the backend to build a sponsor-signed transaction
-    const buildResponse = await fetch('/api/build-mint', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ publicKey, dataKey, dataValue }),
-    });
+    let txXDR, accountCreated;
+    try {
+      const buildResponse = await fetch('/api/build-mint', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ publicKey, dataKey, dataValue }),
+      });
 
-    if (!buildResponse.ok) {
-      const errData = await buildResponse.json().catch(() => ({}));
-      throw new Error(errData.error || `Build-mint API failed (${buildResponse.status})`);
-    }
+      if (!buildResponse.ok) {
+        throw new Error(`Build-mint API failed (${buildResponse.status})`);
+      }
 
-    const { txXDR, accountCreated } = await buildResponse.json();
+      const resData = await buildResponse.json();
+      txXDR = resData.txXDR;
+      accountCreated = resData.accountCreated;
 
-    if (!txXDR) {
-      throw new Error('Build-mint API returned empty transaction');
-    }
-
-    if (accountCreated) {
-      console.log('[TrustChain] Sponsor is creating account for new user:', publicKey);
+      if (!txXDR) throw new Error('Build-mint API returned empty transaction');
+      if (accountCreated) console.log('[TrustChain] Sponsor is creating account for new user:', publicKey);
+      
+    } catch (apiError) {
+      console.warn('Backend build-mint API unavailable. Falling back to local self-funded minting...', apiError.message);
+      
+      // Local fallback: Build self-funded transaction directly on the client
+      const account = await loadAccount(publicKey);
+      const builder = new TransactionBuilder(account, {
+        fee: BASE_FEE,
+        networkPassphrase,
+      });
+      
+      builder.addOperation(Operation.manageData({
+        name: dataKey,
+        value: dataValue,
+        source: publicKey
+      }));
+      
+      const tx = builder.setTimeout(300).build();
+      txXDR = tx.toXDR();
+      accountCreated = false;
     }
 
     // Step 2: User co-signs via Freighter (authorizes the ManageData operation)
