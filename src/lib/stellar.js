@@ -128,7 +128,19 @@ export async function mintWorkerCredential(publicKey, data) {
       });
 
       if (!buildResponse.ok) {
-        throw new Error(`Build-mint API failed (${buildResponse.status})`);
+        let errMsg = `Build-mint API failed (${buildResponse.status})`;
+        try {
+          const errData = await buildResponse.json();
+          if (errData.error) errMsg = errData.error;
+        } catch(e) {}
+        
+        // If it's a definitive business logic rejection (e.g. 403 Unverified), bubble it up
+        if (buildResponse.status === 403 || buildResponse.status === 400) {
+          const backendErr = new Error(errMsg);
+          backendErr.isBackendRejection = true;
+          throw backendErr;
+        }
+        throw new Error(errMsg);
       }
 
       const resData = await buildResponse.json();
@@ -139,6 +151,9 @@ export async function mintWorkerCredential(publicKey, data) {
       if (accountCreated) console.log('[TrustChain] Sponsor is creating account for new user:', publicKey);
       
     } catch (apiError) {
+      if (apiError.isBackendRejection) {
+        throw apiError; // Throw immediately, don't fallback to self-funded
+      }
       console.warn('Backend build-mint API unavailable. Falling back to local self-funded minting...', apiError.message);
       
       // Local fallback: Build self-funded transaction directly on the client
