@@ -81,8 +81,16 @@ Most of these workers don't use LinkedIn or have paper certificates to show thei
 ### 📱 Sybil-Resistant Phone Verification
 - **Twilio OTP Integration** — prevents bots and duplicate accounts
 - **Supabase Backend** — securely stores verified `phone <-> wallet` mappings
-- **1-to-1 Mapping** — each worker can only register one wallet address per phone number
+- **1-to-1 Mapping** - each worker can only register one wallet address per phone number
 - Ensures enterprise-grade trust in the worker registry
+
+> [!IMPORTANT]
+> **🧪 HOW TO BYPASS PHONE VERIFICATION FOR TESTING**
+> 
+> To easily test the worker registration flow without receiving an actual SMS (or if Twilio blocks your region):
+> 
+> 📞 **Phone Number:** `0000000000` (ten zeros)
+> 🔐 **OTP Code:** `123456`
 
 ### 👷 Worker Registration & Credential Minting
 - Connect Freighter wallet and fill professional details
