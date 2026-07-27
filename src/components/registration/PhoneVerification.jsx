@@ -233,7 +233,7 @@ const PhoneVerification = ({ walletAddress, onVerified, t }) => {
                 maxLength={6}
                 value={otp}
                 onChange={(e) => { setOtp(e.target.value.replace(/\D/g, '').slice(0, 6)); if (error) setError(''); }}
-                placeholder="000000"
+                placeholder="123456"
                 className={`field-input ${otp.length === 6 ? 'has-value' : ''} ${error ? '!border-red-500/50' : ''}`}
                 style={{ textAlign: 'center', letterSpacing: '0.5em', fontSize: '20px', fontWeight: '700' }}
                 onKeyDown={(e) => e.key === 'Enter' && handleVerifyOTP()}

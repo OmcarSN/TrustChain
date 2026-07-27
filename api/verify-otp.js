@@ -97,7 +97,7 @@ export default async function handler(req, res) {
   try {
     // --- SECURE DEMO BYPASS ---
     const demoPhone = process.env.DEMO_BYPASS_PHONE || '+910000000000';
-    const demoOtp = process.env.DEMO_BYPASS_OTP || '000000';
+    const demoOtp = process.env.DEMO_BYPASS_OTP || '123456';
 
     if (phone === demoPhone) {
       if (otp !== demoOtp) {
