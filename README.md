@@ -22,6 +22,42 @@ In India, crores of daily wage workers have no way to show their work history or
 
 ---
 
+## 🆕 Level 7 Updates (Iterated from User Feedback)
+
+> **These are new smart-contract changes shipped for the Level 7 Master Track — direct product iteration based on feedback from real workers and employers using TrustChain.**
+
+During our bootcamp testing phase, workers and employers gave us clear feedback. We turned that feedback into concrete **on-chain** changes in our Soroban smart contracts (`contracts/credential` and `contracts/reputation`):
+
+### 1. 👷 Worker Availability Status Toggles
+**Feedback:** Workers told us employers kept contacting them even when they were already busy on a job or taking a break. There was no way to signal "I'm open for work" vs "I'm busy."
+
+**What we shipped (on-chain):**
+- Added a `status` field to `WorkerData` in the **credential contract** — `0 = Available`, `1 = Busy`, `2 = Inactive`.
+- New `update_status(worker, status)` function so a worker can flip their availability directly on the ledger. It is guarded by `worker.require_auth()` (only the worker can change their own status), rejects invalid values, and blocks updates on revoked credentials.
+- New `get_status(worker)` reader. New credentials default to **Available**, and the status is preserved across credential updates and renewals.
+- Emits a `"status"` event so indexers and the UI can react in real time.
+
+### 2. 💬 Endorsement Reply Functionality
+**Feedback:** Workers wanted a "right of reply." If an employer left a rating, the worker had no way to add their side of the story — the review was one-sided.
+
+**What we shipped (on-chain):**
+- Added a `worker_reply` field to the `Endorsement` struct in the **reputation contract**.
+- New `reply_to_endorsement(worker, endorsement_index, reply)` function lets a worker attach a public reply to any endorsement they received. Guarded by `worker.require_auth()`, length-limited (`MAX_FEEDBACK_LEN`), and validates the endorsement index exists.
+- Emits a `"reply"` event. This makes reputation a **two-way conversation** instead of a one-way review.
+
+### 3. 🔐 Critical Authentication Security Fixes
+**Feedback:** Security review during testing found that verification upgrades were not properly authenticated.
+
+**What we shipped (on-chain):**
+- Added the missing `worker.require_auth()` to `upgrade_verification` in the **credential contract**. Before this fix, the authorization check was not enforced on that path. Now every verification-level change requires the worker's own signed authorization.
+
+### ✅ Verification
+- **Credential contract:** 20/20 unit tests pass.
+- **Reputation contract:** 18/18 unit tests pass.
+- Both contracts rebuilt to WebAssembly (`cargo build --target wasm32-unknown-unknown --release`); the compiled `.wasm` artifacts are committed at [`contracts/credential/wasm/`](./contracts/credential/wasm/) and [`contracts/reputation/wasm/`](./contracts/reputation/wasm/).
+
+---
+
 ## 📋 Table of Contents
 - [Problem Statement](#-problem-statement)
 - [Solution](#-solution)

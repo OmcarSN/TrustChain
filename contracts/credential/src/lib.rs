@@ -47,6 +47,15 @@ const VERIFICATION_PEER: u32 = 1;
 const VERIFICATION_COMMUNITY: u32 = 2;
 const VERIFICATION_ADMIN: u32 = 3;
 
+// ─── Worker Availability Status ────────────────────────────────
+// Iterated from user feedback: workers asked to signal when they are
+// open for jobs vs. busy vs. taking a break, directly on-chain.
+/// 0 = Available (open for jobs)
+/// 1 = Busy (currently on a job)
+/// 2 = Inactive (not taking jobs)
+const STATUS_AVAILABLE: u32 = 0;
+const STATUS_INACTIVE: u32 = 2;
+
 // ─── Constants ─────────────────────────────────────────────────
 const CREDENTIAL_VALIDITY_SECS: u64 = 365 * 24 * 60 * 60; // 1 year
 const MAX_NAME_LEN: u32 = 64;
@@ -69,6 +78,7 @@ pub struct WorkerData {
     pub updated_at: u64,
     pub expires_at: u64,         // NEW: expiry timestamp
     pub renewal_count: u32,      // NEW: how many times renewed
+    pub status: u32,             // NEW: availability (0=Available, 1=Busy, 2=Inactive)
 }
 
 // ─── Contract ──────────────────────────────────────────────────
@@ -157,6 +167,7 @@ impl CredentialContract {
             updated_at: now,
             expires_at,
             renewal_count: 0,
+            status: STATUS_AVAILABLE, // new workers default to Available
         };
 
         env.storage().persistent().set(&DataKey::Credential(worker.clone()), &data);
@@ -235,10 +246,47 @@ impl CredentialContract {
             updated_at: now,
             expires_at: existing.expires_at,
             renewal_count: existing.renewal_count,
+            status: existing.status, // preserve availability across edits
         };
 
         env.storage().persistent().set(&DataKey::Credential(worker.clone()), &updated);
         env.events().publish((Symbol::new(&env, "update"),), worker);
+
+        Ok(())
+    }
+
+    /// Worker-only: toggle availability status without touching the rest
+    /// of the credential. Iterated from user feedback — workers wanted a
+    /// lightweight way to signal Available / Busy / Inactive on-chain.
+    /// status: 0 = Available, 1 = Busy, 2 = Inactive.
+    pub fn update_status(env: Env, worker: Address, status: u32) -> Result<(), ContractError> {
+        // Enforce Circuit Breaker
+        if env.storage().persistent().get(&DataKey::Paused).unwrap_or(false) {
+            return Err(ContractError::ContractPaused);
+        }
+
+        // Only the worker may change their own status.
+        worker.require_auth();
+
+        // Validate the status is a known value.
+        if status > STATUS_INACTIVE {
+            return Err(ContractError::InvalidInput);
+        }
+
+        let mut data: WorkerData = env.storage().persistent()
+            .get(&DataKey::Credential(worker.clone()))
+            .ok_or(ContractError::NotFound)?;
+
+        // Cannot change status on a revoked credential.
+        if env.storage().persistent().has(&DataKey::Revoked(worker.clone())) {
+            return Err(ContractError::CredentialRevoked);
+        }
+
+        data.status = status;
+        data.updated_at = env.ledger().timestamp();
+
+        env.storage().persistent().set(&DataKey::Credential(worker.clone()), &data);
+        env.events().publish((Symbol::new(&env, "status"),), (worker, status));
 
         Ok(())
     }
@@ -361,12 +409,22 @@ impl CredentialContract {
 
     /// Upgrade a worker's verification level based on endorsement metrics.
     /// Called externally (e.g., by reputation contract or frontend).
+    ///
+    /// SECURITY FIX (Level 7): previously ANY caller could push a
+    /// verification upgrade for ANY worker, since no authorization was
+    /// required. We now demand the worker's own signature so a malicious
+    /// third party can no longer forge verification-tier upgrades on
+    /// someone else's behalf.
     pub fn upgrade_verification(
         env: Env,
         worker: Address,
         endorsement_count: u32,
         avg_rating: u32, // scaled by 100 (e.g., 350 = 3.50)
     ) -> Result<u32, ContractError> {
+        // Only the worker (or an invoker they authorize) may trigger an
+        // upgrade of their own credential's verification level.
+        worker.require_auth();
+
         // Credential must exist and not be revoked
         if !env.storage().persistent().has(&DataKey::Credential(worker.clone())) {
             return Err(ContractError::NotFound);
@@ -574,6 +632,15 @@ impl CredentialContract {
         env.storage().persistent()
             .get(&DataKey::VerificationLevel(worker))
             .unwrap_or(VERIFICATION_UNVERIFIED)
+    }
+
+    /// Returns a worker's availability status (0=Available, 1=Busy, 2=Inactive).
+    /// Defaults to Available when no credential exists.
+    pub fn get_status(env: Env, worker: Address) -> u32 {
+        env.storage().persistent()
+            .get::<_, WorkerData>(&DataKey::Credential(worker))
+            .map(|d| d.status)
+            .unwrap_or(STATUS_AVAILABLE)
     }
 
     /// Check if a credential has expired.
@@ -812,5 +879,71 @@ mod tests {
 
         let result = client.try_update_credential(&worker, &name, &skill, &city, &exp, &bio);
         assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_default_status_is_available() {
+        let (env, client, _) = setup();
+        let (worker, name, skill, city, exp, bio) = make_worker_data(&env);
+        client.issue_credential(&worker, &name, &skill, &city, &exp, &bio);
+
+        // Newly minted workers are Available (0) by default.
+        assert_eq!(client.get_status(&worker), 0);
+        assert_eq!(client.get_credential(&worker).unwrap().status, 0);
+    }
+
+    #[test]
+    fn test_update_status() {
+        let (env, client, _) = setup();
+        let (worker, name, skill, city, exp, bio) = make_worker_data(&env);
+        client.issue_credential(&worker, &name, &skill, &city, &exp, &bio);
+
+        // Toggle to Busy (1)
+        client.update_status(&worker, &1u32);
+        assert_eq!(client.get_status(&worker), 1);
+
+        // Toggle to Inactive (2)
+        client.update_status(&worker, &2u32);
+        assert_eq!(client.get_status(&worker), 2);
+
+        // Back to Available (0)
+        client.update_status(&worker, &0u32);
+        assert_eq!(client.get_status(&worker), 0);
+    }
+
+    #[test]
+    fn test_update_status_invalid_fails() {
+        let (env, client, _) = setup();
+        let (worker, name, skill, city, exp, bio) = make_worker_data(&env);
+        client.issue_credential(&worker, &name, &skill, &city, &exp, &bio);
+
+        // Anything above 2 is not a valid status.
+        let result = client.try_update_status(&worker, &3u32);
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_update_status_no_credential_fails() {
+        let (env, client, _) = setup();
+        let worker = Address::generate(&env);
+
+        // Cannot set status without an existing credential.
+        let result = client.try_update_status(&worker, &1u32);
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_status_preserved_across_update() {
+        let (env, client, _) = setup();
+        let (worker, name, skill, city, exp, bio) = make_worker_data(&env);
+        client.issue_credential(&worker, &name, &skill, &city, &exp, &bio);
+
+        // Set Busy, then edit the credential's other fields.
+        client.update_status(&worker, &1u32);
+        let new_bio = String::from_str(&env, "Senior plumber");
+        client.update_credential(&worker, &name, &skill, &city, &7u32, &new_bio);
+
+        // Availability must survive a credential edit.
+        assert_eq!(client.get_status(&worker), 1);
     }
 }

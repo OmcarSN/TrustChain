@@ -61,6 +61,7 @@ pub struct Endorsement {
     pub timestamp: u64,
     pub weight: u32,     // NEW: computed weight (100 = full, decays over time)
     pub is_disputed: bool, // NEW: dispute flag
+    pub worker_reply: String, // NEW: worker's public response to this review
 }
 
 #[contracttype]
@@ -170,6 +171,7 @@ impl ReputationContract {
             timestamp: now,
             weight: 100, // Full weight when new
             is_disputed: false,
+            worker_reply: String::from_str(&env, ""), // no reply yet
         };
 
         // ── Store endorsement ──
@@ -197,6 +199,57 @@ impl ReputationContract {
             .set(&DataKey::TotalEndorsements, &(global + 1));
 
         env.events().publish((Symbol::new(&env, "endorse"),), (endorser, worker));
+
+        Ok(())
+    }
+
+    /// Worker replies to a review left about them. Iterated from user
+    /// feedback — workers wanted the right to respond publicly to an
+    /// endorsement (e.g. thank a client, or add context to criticism).
+    /// Only the worker being reviewed may reply, and only to an existing
+    /// endorsement index on their own record.
+    pub fn reply_to_endorsement(
+        env: Env,
+        worker: Address,
+        endorsement_index: u32,
+        reply: String,
+    ) -> Result<(), ReputationError> {
+        // Enforce Circuit Breaker (Contract Pause)
+        if env.storage().persistent().get(&DataKey::Paused).unwrap_or(false) {
+            return Err(ReputationError::ContractPaused);
+        }
+
+        // Only the worker may respond to reviews on their own profile.
+        worker.require_auth();
+
+        // Reuse the feedback length cap for replies.
+        if reply.len() > MAX_FEEDBACK_LEN {
+            return Err(ReputationError::InvalidInput);
+        }
+
+        let mut endorsements: Vec<Endorsement> = env
+            .storage()
+            .persistent()
+            .get(&DataKey::Endorsements(worker.clone()))
+            .ok_or(ReputationError::NotFound)?;
+
+        // Bounds-check the index.
+        if endorsement_index >= endorsements.len() {
+            return Err(ReputationError::EndorsementNotFound);
+        }
+
+        let mut e = endorsements.get(endorsement_index).unwrap();
+        e.worker_reply = reply;
+        endorsements.set(endorsement_index, e);
+
+        env.storage()
+            .persistent()
+            .set(&DataKey::Endorsements(worker.clone()), &endorsements);
+
+        env.events().publish(
+            (Symbol::new(&env, "reply"),),
+            (worker, endorsement_index),
+        );
 
         Ok(())
     }
@@ -797,6 +850,65 @@ mod tests {
         // Try to dispute index 5 (doesn't exist)
         let reason = String::from_str(&env, "Fake");
         let result = client.try_file_dispute(&worker, &worker, &5, &reason);
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_endorsement_default_reply_empty() {
+        let (env, client, _) = setup();
+        let endorser = Address::generate(&env);
+        let worker = Address::generate(&env);
+        let job = String::from_str(&env, "Plumbing");
+        let feedback = String::from_str(&env, "Great work!");
+
+        client.submit_endorsement(&endorser, &worker, &4, &job, &feedback);
+
+        // A fresh endorsement carries no worker reply.
+        let e = client.get_endorsements(&worker).get(0).unwrap();
+        assert_eq!(e.worker_reply, String::from_str(&env, ""));
+    }
+
+    #[test]
+    fn test_reply_to_endorsement() {
+        let (env, client, _) = setup();
+        let endorser = Address::generate(&env);
+        let worker = Address::generate(&env);
+        let job = String::from_str(&env, "Plumbing");
+        let feedback = String::from_str(&env, "Great work!");
+
+        client.submit_endorsement(&endorser, &worker, &4, &job, &feedback);
+
+        let reply = String::from_str(&env, "Thank you, was a pleasure!");
+        client.reply_to_endorsement(&worker, &0, &reply);
+
+        let e = client.get_endorsements(&worker).get(0).unwrap();
+        assert_eq!(e.worker_reply, reply);
+    }
+
+    #[test]
+    fn test_reply_invalid_index_fails() {
+        let (env, client, _) = setup();
+        let endorser = Address::generate(&env);
+        let worker = Address::generate(&env);
+        let job = String::from_str(&env, "Plumbing");
+        let feedback = String::from_str(&env, "Great work!");
+
+        client.submit_endorsement(&endorser, &worker, &4, &job, &feedback);
+
+        // Index 5 does not exist.
+        let reply = String::from_str(&env, "Reply");
+        let result = client.try_reply_to_endorsement(&worker, &5, &reply);
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_reply_no_endorsements_fails() {
+        let (env, client, _) = setup();
+        let worker = Address::generate(&env);
+
+        // No endorsements exist for this worker at all.
+        let reply = String::from_str(&env, "Reply");
+        let result = client.try_reply_to_endorsement(&worker, &0, &reply);
         assert!(result.is_err());
     }
 }
