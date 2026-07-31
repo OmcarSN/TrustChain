@@ -389,8 +389,8 @@ Verifier searches → Indexer queries Horizon → Parses ManageData → Displays
 TrustChain has been upgraded to **Level 7 Master Belt** with production-grade features including gasless transactions, real-time analytics, on-chain credential exploration, comprehensive security hardening, and production monitoring.
 
 ### ⚡ Advanced Smart Contracts
-- **Credential Contract:** Added expiry functionality, verification tiers (Bronze to Platinum), batch operations, and dispute resolution logic. Protected by 14 comprehensive unit tests.
-- **Reputation Contract:** Rewritten with robust duplicate endorsement prevention, time-decay weighted scores (newer reviews weigh more), and total trust tiers. Protected by 13 comprehensive unit tests.
+- **Credential Contract:** Added expiry functionality, verification tiers (Bronze to Platinum), batch operations, and dispute resolution logic. Protected by 20 comprehensive unit tests.
+- **Reputation Contract:** Rewritten with robust duplicate endorsement prevention, time-decay weighted scores (newer reviews weigh more), and total trust tiers. Protected by 18 comprehensive unit tests.
 
 ### 🔄 Production CI/CD Pipeline
 - **Automated Workflow (`.github/workflows/ci.yml`)**: 8-stage professional pipeline triggering on push to main.
@@ -471,8 +471,8 @@ TrustChain has been upgraded to **Level 7 Master Belt** with production-grade fe
 | `SECURITY.md` | Comprehensive security checklist |
 | `user-feedback.xlsx` | 30 user feedback responses |
 | `.github/workflows/ci.yml` | Production 8-job CI/CD Pipeline |
-| `contracts/credential/src/lib.rs` | Upgraded to Level 7 Advanced (14 tests) |
-| `contracts/reputation/src/lib.rs` | Upgraded to Level 7 Advanced (13 tests) |
+| `contracts/credential/src/lib.rs` | Upgraded to Level 7 Advanced (20 tests) |
+| `contracts/reputation/src/lib.rs` | Upgraded to Level 7 Advanced (18 tests) |
 
 ### 🧪 Code Quality & Production Readiness
 
