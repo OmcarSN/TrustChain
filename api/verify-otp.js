@@ -95,11 +95,15 @@ export default async function handler(req, res) {
 
   // ── Main logic ────────────────────────────────────────────────────
   try {
-    // --- SECURE DEMO BYPASS ---
+    // --- SECURE DEMO BYPASS (testnet only) ---
+    // On mainnet the demo phone falls through to the real Twilio check so no
+    // hardcoded OTP can ever mint a real, judge-facing credential.
+    const network = (process.env.STELLAR_NETWORK || "mainnet").toLowerCase();
+    const isMainnet = network === "mainnet";
     const demoPhone = process.env.DEMO_BYPASS_PHONE || '+910000000000';
     const demoOtp = process.env.DEMO_BYPASS_OTP || '123456';
 
-    if (phone === demoPhone) {
+    if (!isMainnet && phone === demoPhone) {
       if (otp !== demoOtp) {
         return res.status(400).json({ error: "Invalid Demo OTP" });
       }
@@ -144,7 +148,7 @@ export default async function handler(req, res) {
 
     if (insertError) {
       console.error("[verify-otp] Upsert verified_phones error:", insertError.message, insertError.details, insertError.hint);
-      return res.status(500).json({ error: `Failed to save verification: ${insertError.message}` });
+      return res.status(500).json({ error: "Failed to save verification" });
     }
 
     return res.status(200).json({ success: true, verified: true });

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
+import HowItWorksBackground from '../components/HowItWorksBackground';
 
 const HowItWorks = () => {
   const { t } = useTranslation();
@@ -25,6 +26,8 @@ const HowItWorks = () => {
       <div className="tc-bg-grid" />
       <div className="tc-orb-green" />
       <div className="tc-orb-blue" />
+      {/* Scroll-driven cinematic logo — assembles at centre, flies apart into a watermark */}
+      <HowItWorksBackground />
     <div className="tc-page" style={{ position: 'relative', zIndex: 1 }}>
       
       <motion.div initial="hidden" animate="visible" variants={fadeIn}>

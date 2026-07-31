@@ -238,6 +238,6 @@ export default async function handler(req, res) {
       "[REDACTED]"
     );
     console.error("[build-mint] Error:", safeMessage);
-    return res.status(500).json({ error: `Transaction build failed: ${safeMessage}` });
+    return res.status(500).json({ error: "Transaction build failed" });
   }
 }

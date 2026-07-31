@@ -10,6 +10,7 @@ import RegistrationConnectPrompt from '../components/registration/RegistrationCo
 import ExistingCredentialCard from '../components/registration/ExistingCredentialCard';
 import RegistrationForm from '../components/registration/RegistrationForm';
 import PhoneVerification from '../components/registration/PhoneVerification';
+import PageBackground from '../components/PageBackground';
 
 /**
  * WorkerRegistration — Orchestrator page for minting worker credentials.
@@ -114,14 +115,10 @@ const WorkerRegistration = () => {
   if (!isPhoneVerified) {
     return (
       <div className="min-h-screen bg-[#05060A] relative overflow-hidden text-white">
-        <div className="tc-bg-grid" />
-        <div className="tc-orb-blue" />
-        <div className="tc-orb-green" />
-        <div className="tc-leak-orange" />
-        <div className="tc-leak-blue" />
+        <PageBackground />
 
-        <div className="min-h-screen w-full" style={{ paddingTop: '80px', paddingBottom: '64px', paddingLeft: '60px', paddingRight: '60px', position: 'relative', zIndex: 10 }}>
-          <div className="reg-anim" style={{ textAlign: 'center', padding: '40px 60px 0 60px', width: '100%', animationDelay: '0s' }}>
+        <div className="min-h-screen w-full px-4 md:px-[60px]" style={{ paddingTop: '80px', paddingBottom: '64px', position: 'relative', zIndex: 10 }}>
+          <div className="reg-anim px-0 md:px-[60px]" style={{ textAlign: 'center', paddingTop: '40px', width: '100%', animationDelay: '0s' }}>
             <p className="font-inter tc-eyebrow" style={{ color: '#7C93F2', marginBottom: '12px' }}>{t('nav.workerPortal')}</p>
             <h1 className="font-clash" style={{ fontSize: '28px', fontWeight: '800', marginBottom: '4px', letterSpacing: '-0.02em', lineHeight: '1.1' }}><span className="text-gradient">{t('registration.headerTitle')}</span></h1>
             <p className="font-inter" style={{ fontSize: '13px', color: '#666', marginTop: '6px' }}>{t('registration.headerSubtitle')}</p>
@@ -167,22 +164,13 @@ const WorkerRegistration = () => {
   // ── Registration Form ──
   return (
     <div className="min-h-screen bg-[#05060A] relative overflow-hidden text-white">
-      {/* Background Graphics (Grid & Orbs) */}
-      <div className="tc-bg-grid" />
-      <div className="tc-orb-blue" />
-      <div className="tc-orb-green" />
-      
-      {/* Atmospheric Light Leaks */}
-      <div className="tc-leak-orange" />
-      <div className="tc-leak-blue" />
+      <PageBackground />
 
-
-
-      <div className="min-h-screen w-full" style={{ paddingTop: '80px', paddingBottom: '64px', paddingLeft: '60px', paddingRight: '60px', position: 'relative', zIndex: 10 }}>
+      <div className="min-h-screen w-full px-4 md:px-[60px]" style={{ paddingTop: '80px', paddingBottom: '64px', position: 'relative', zIndex: 10 }}>
         {/* Page Header */}
-        <div className="reg-anim" style={{ textAlign: 'center', padding: '40px 60px 0 60px', width: '100%', animationDelay: '0s' }}>
-          <p className="font-inter" style={{ color: '#7C93F2', fontSize: '11px', letterSpacing: '0.2em', marginBottom: '12px', textTransform: 'uppercase', fontWeight: '600' }}>{t('nav.workerPortal')}</p>
-          <h1 className="font-clash" style={{ fontSize: '28px', fontWeight: '800', marginBottom: '4px', letterSpacing: '-0.02em', lineHeight: '1.1' }}>{t('registration.headerTitle')}</h1>
+        <div className="reg-anim px-0 md:px-[60px]" style={{ textAlign: 'center', paddingTop: '40px', width: '100%', animationDelay: '0s' }}>
+          <p className="font-inter tc-eyebrow" style={{ color: '#7C93F2', marginBottom: '12px' }}>{t('nav.workerPortal')}</p>
+          <h1 className="font-clash" style={{ fontSize: '28px', fontWeight: '800', marginBottom: '4px', letterSpacing: '-0.02em', lineHeight: '1.1' }}><span className="text-gradient">{t('registration.headerTitle')}</span></h1>
           <p className="font-inter" style={{ fontSize: '13px', color: '#666', marginTop: '6px' }}>{t('registration.headerSubtitle')}</p>
         </div>
 

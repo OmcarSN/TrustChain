@@ -90,12 +90,14 @@ export default async function handler(req, res) {
 
   // ── Main logic ────────────────────────────────────────────────────
   try {
-    // --- SECURE DEMO BYPASS ---
+    // --- SECURE DEMO BYPASS (testnet only) ---
+    const network = (process.env.STELLAR_NETWORK || "mainnet").toLowerCase();
+    const isMainnet = network === "mainnet";
     const demoPhone = process.env.DEMO_BYPASS_PHONE || '+910000000000';
-    if (phone === demoPhone) {
+    if (!isMainnet && phone === demoPhone) {
       return res.status(200).json({ success: true, message: "Demo OTP sent successfully" });
     }
-    // --------------------------
+    // -----------------------------------------
 
     // 1a. Check if this wallet already has a verified phone
     const { data: existingWallet, error: walletLookupError } = await supabase
@@ -120,37 +122,10 @@ export default async function handler(req, res) {
       // Same wallet + same phone = allow re-verification (they might need to re-verify)
     }
 
-    // 1b. Check if phone is already used by a DIFFERENT wallet
-    const { data: existingPhone, error: lookupError } = await supabase
-      .from("verified_phones")
-      .select("phone, wallet_address")
-      .eq("phone", phone)
-      .maybeSingle();
-
-    if (lookupError) {
-      console.error("[send-otp] Supabase lookup error:", lookupError.message);
-      return res.status(500).json({ error: "Database lookup failed" });
-    }
-
-    // If this phone was already verified (even with a different wallet),
-    // auto-relink it to the new wallet — no OTP needed again
-    if (existingPhone && existingPhone.wallet_address !== walletAddress) {
-      const { error: updateError } = await supabase
-        .from("verified_phones")
-        .update({ wallet_address: walletAddress })
-        .eq("phone", phone);
-
-      if (updateError) {
-        console.error("[send-otp] Relink error:", updateError.message);
-        return res.status(500).json({ error: "Failed to relink phone" });
-      }
-
-      return res.status(200).json({
-        success: true,
-        alreadyVerified: true,
-        message: "Phone already verified — linked to your current wallet",
-      });
-    }
+    // Note: we intentionally do NOT block or silently relink when this phone
+    // is already tied to a different wallet. The user must prove ownership by
+    // passing a fresh OTP; the wallet_address is only moved in verify-otp once
+    // that code is confirmed (upsert on phone). So we just send a fresh OTP.
 
     // 2. Send OTP via Twilio Verify API
     const verifyUrl = `https://verify.twilio.com/v2/Services/${verifyServiceSid}/Verifications`;

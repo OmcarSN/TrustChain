@@ -10,6 +10,7 @@ import {
   finalizeProposal, executeProposal, isGovernanceContractAvailable,
   STATUS_LABELS, TYPE_LABELS
 } from '../lib/governanceContract';
+import PageBackground from '../components/PageBackground';
 
 /**
  * Governance — DAO-style governance dashboard for TrustChain.
@@ -177,7 +178,7 @@ const Governance = () => {
   if (!isGovernanceContractAvailable()) {
     return (
       <div className="min-h-screen bg-[#05060A] relative overflow-hidden text-white">
-        <div className="tc-bg-grid" /><div className="tc-orb-blue" /><div className="tc-orb-green" />
+        <PageBackground />
         <div style={{ paddingTop: '120px', textAlign: 'center', position: 'relative', zIndex: 10 }}>
           <Shield style={{ width: 48, height: 48, color: 'rgba(255,255,255,0.15)', margin: '0 auto 20px' }} />
           <h1 className="font-clash" style={{ fontSize: '28px', fontWeight: '800', marginBottom: '8px' }}>Governance</h1>
@@ -202,7 +203,7 @@ const Governance = () => {
 
   return (
     <div className="min-h-screen bg-[#05060A] relative overflow-hidden text-white">
-      <div className="tc-bg-grid" /><div className="tc-orb-blue" /><div className="tc-orb-green" /><div className="tc-leak-orange" /><div className="tc-leak-blue" />
+      <PageBackground />
 
       <div style={{ paddingTop: '90px', paddingBottom: '64px', paddingLeft: '60px', paddingRight: '60px', position: 'relative', zIndex: 10, maxWidth: '1200px', margin: '0 auto' }}>
 
@@ -239,7 +240,7 @@ const Governance = () => {
 
         {/* ── Stats Row ── */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-          style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '32px' }}>
+          style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '16px', marginBottom: '32px' }}>
           {[
             { label: 'Total Proposals', value: proposalCount, icon: <Hash style={{ width: 16, height: 16 }} />, color: '#4F6BED' },
             { label: 'Active', value: activeCount, icon: <Clock style={{ width: 16, height: 16 }} />, color: '#f5a623' },

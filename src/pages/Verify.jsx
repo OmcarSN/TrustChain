@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { getEndorsements } from '../lib/supabaseData';
 import VerifySearchHeader from '../components/verify/VerifySearchHeader';
 import VerifyResultsPanel from '../components/verify/VerifyResultsPanel';
+import PageBackground from '../components/PageBackground';
 
 /**
  * Verify — Orchestrator page for verifying a worker's on-chain credential.
@@ -61,14 +62,8 @@ const Verify = () => {
 
   return (
     <div className="min-h-screen bg-[#05060A] pt-28 pb-12 px-6 lg:px-12 relative overflow-hidden text-white">
-      {/* Background Graphics (Grid & Orbs) */}
-      <div className="tc-bg-grid" />
-      <div className="tc-orb-blue" />
-      <div className="tc-orb-green" />
-      
-      {/* Atmospheric Light Leaks */}
-      <div className="tc-leak-orange" />
-      <div className="tc-leak-blue" />
+      {/* Background Graphics */}
+      <PageBackground />
 
       <div className="max-w-6xl mx-auto relative z-10 glass-card p-6 md:p-10 rounded-2xl">
         {/* Search Header */}

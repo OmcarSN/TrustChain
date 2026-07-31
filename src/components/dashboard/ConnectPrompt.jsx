@@ -41,7 +41,7 @@ const ConnectPrompt = ({ connect, t }) => (
           <Wallet className="tc-icon-lg" /> {t('dashboard.connectBtn')}
         </button>
       </div>
-      <div className="conn-anim font-inter" style={{ display: 'flex', gap: '32px', marginTop: '48px', opacity: 0.4, animationDelay: '0.6s' }}>
+      <div className="conn-anim font-inter" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '16px 20px', marginTop: '48px', opacity: 0.4, animationDelay: '0.6s' }}>
         <span className="tc-text-sm tc-ls-wide tc-fw-bold">✓ VIEW STATS</span>
         <span className="tc-text-sm tc-ls-wide tc-fw-bold">✓ MANAGE PROFILE</span>
         <span className="tc-text-sm tc-ls-wide tc-fw-bold">✓ TRACK ENDORSEMENTS</span>

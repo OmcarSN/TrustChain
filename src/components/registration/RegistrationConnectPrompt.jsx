@@ -40,7 +40,7 @@ const RegistrationConnectPrompt = ({ connect, t }) => (
         </button>
       </div>
 
-      <div className="conn-anim font-inter" style={{ display: 'flex', gap: '32px', marginTop: '48px', opacity: 0.4, animationDelay: '0.6s' }} aria-label={t('registration.features', 'Platform features')}>
+      <div className="conn-anim font-inter" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '16px 20px', marginTop: '48px', opacity: 0.4, animationDelay: '0.6s' }} aria-label={t('registration.features', 'Platform features')}>
         <span className="tc-text-sm tc-ls-wide tc-fw-bold">✓ MINT CREDENTIAL</span>
         <span className="tc-text-sm tc-ls-wide tc-fw-bold">✓ BUILD REPUTATION</span>
         <span className="tc-text-sm tc-ls-wide tc-fw-bold">✓ GET ENDORSED</span>

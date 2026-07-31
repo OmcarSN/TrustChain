@@ -10,6 +10,7 @@ import { validateWalletAddress } from '../utils/validation';
 import ConnectWalletPrompt from '../components/ConnectWalletPrompt';
 import WorkerSearchPanel from '../components/endorse/WorkerSearchPanel';
 import EndorsementForm from '../components/endorse/EndorsementForm';
+import PageBackground from '../components/PageBackground';
 
 /**
  * Endorse — Page for endorsing a registered worker.
@@ -101,14 +102,8 @@ const Endorse = () => {
 
   return (
     <div className="min-h-screen bg-[#05060A] relative overflow-hidden text-white">
-      {/* Background Graphics (Grid & Orbs) */}
-      <div className="tc-bg-grid" />
-      <div className="tc-orb-blue" />
-      <div className="tc-orb-green" />
-      
-      {/* Atmospheric Light Leaks */}
-      <div className="tc-leak-orange" />
-      <div className="tc-leak-blue" />
+      {/* Background Graphics */}
+      <PageBackground />
 
       <style>{`
         @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(24px); filter: blur(3px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }

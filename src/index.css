@@ -1003,6 +1003,20 @@ select.field-input option { background: #0c0c0c; color: #fff; }
   .tc-sidebar-width   { width: 100% !important; padding-right: 0 !important; }
   .tc-sticky-side     { position: static !important; top: auto !important; }
   .tc-profile-main    { border-left: none !important; padding: 24px !important; }
+
+  /* Registration + endorse forms: single-column fields, tighter padding */
+  .form-grid          { grid-template-columns: 1fr; gap: 20px; }
+  .form-card          { padding: 24px 20px 28px 20px; }
+
+  /* Stat grids stop forcing 4 rigid columns */
+  .tc-stat-grid       { grid-template-columns: 1fr 1fr; }
+
+  /* Endorse form panel: drop the accent border + heavy padding */
+  .tc-form-panel      { padding: 20px; border-left: none; }
+  .tc-badge-row       { flex-wrap: wrap; gap: 10px 14px; }
+
+  /* Wide auto-fit grids collapse cleanly instead of overflowing */
+  .tc-grid-wide       { grid-template-columns: 1fr; }
 }
 
 /* Extra-small phones (<= 400px): minimal gutters */
@@ -1010,6 +1024,7 @@ select.field-input option { background: #0c0c0c; color: #fff; }
   .tc-page,
   .tc-page-wide       { padding-left: 12px; padding-right: 12px; }
   .tc-heading-xl      { font-size: clamp(1.2rem, 6vw, 1.6rem); }
+  .tc-stat-grid       { grid-template-columns: 1fr; }
 }
 
 /* ── Global reduced-motion safety net ─────────────────────────

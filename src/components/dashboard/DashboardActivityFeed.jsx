@@ -26,7 +26,7 @@ import { explorerTxUrl } from '../../lib/networkConfig';
  */
 const DashboardActivityFeed = ({ filteredEvents, activeTab, setActiveTab, loading, t }) => (
   <div className="db-anim" style={{ animationDelay: '0.25s' }}>
-    <div className="tc-flex-between tc-mb-md">
+    <div className="tc-flex-between tc-mb-md" style={{ flexWrap: 'wrap', gap: '8px' }}>
       <span className="font-inter tc-label tc-ls-wider">{t('dashboard.activityFeed')}</span>
       <div className="tc-flex">
         {[

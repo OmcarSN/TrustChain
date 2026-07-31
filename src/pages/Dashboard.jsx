@@ -10,6 +10,7 @@ import { getWorker, getEndorsements, getEndorsementsGiven } from '../lib/supabas
 import ConnectPrompt from '../components/dashboard/ConnectPrompt';
 import DashboardSidebar from '../components/dashboard/DashboardSidebar';
 import DashboardActivityFeed from '../components/dashboard/DashboardActivityFeed';
+import PageBackground from '../components/PageBackground';
 
 /**
  * Dashboard — Authenticated user's command center page.
@@ -103,11 +104,7 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-[#05060A] relative overflow-hidden text-white">
       {/* Background Graphics */}
-      <div className="tc-bg-grid" />
-      <div className="tc-orb-blue" />
-      <div className="tc-orb-green" />
-      <div className="tc-leak-orange" />
-      <div className="tc-leak-blue" />
+      <PageBackground />
 
 
       <div className="db-layout" style={{ display: 'flex', paddingTop: '100px', paddingLeft: '24px', paddingRight: '24px', minHeight: '100vh', position: 'relative', zIndex: 10 }}>

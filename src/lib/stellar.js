@@ -132,7 +132,7 @@ export async function mintWorkerCredential(publicKey, data) {
         try {
           const errData = await buildResponse.json();
           if (errData.error) errMsg = errData.error;
-        } catch(e) {}
+        } catch { /* response body was not JSON */ }
         
         // If it's a definitive business logic rejection (e.g. 403 Unverified), bubble it up
         if (buildResponse.status === 403 || buildResponse.status === 400) {

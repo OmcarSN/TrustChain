@@ -189,13 +189,13 @@ const VerifyResultsPanel = ({
 
                 {/* Stats Row */}
                 {!isSearching && profile && (
-                  <div className="grid grid-cols-3 gap-3" role="region" aria-label={t('verify.statsRegion', 'Worker statistics')}>
+                  <div className="grid grid-cols-3 gap-2 sm:gap-3" role="region" aria-label={t('verify.statsRegion', 'Worker statistics')}>
                     {[
                       { value: profile.reputation.total, label: t('verify.totalJobs') },
                       { value: profile.experience ? `${profile.experience}yr` : '—', label: t('verify.experience') },
                       { value: profile.timestamp ? new Date(profile.timestamp).toLocaleDateString(undefined, { month: 'short', year: '2-digit' }) : '—', label: t('verify.memberSince') },
                     ].map((stat, i) => (
-                      <div key={i} className="stat-card-premium p-5 text-center rounded-xl">
+                      <div key={i} className="stat-card-premium p-3 sm:p-5 text-center rounded-xl">
                         <p className="font-clash text-xl font-bold mb-0.5">{stat.value}</p>
                         <p className="text-[8px] font-bold uppercase tracking-[0.2em] text-white/20 font-inter">{stat.label}</p>
                       </div>
