@@ -90,14 +90,15 @@ export default async function handler(req, res) {
 
   // ── Main logic ────────────────────────────────────────────────────
   try {
-    // --- SECURE DEMO BYPASS (testnet only) ---
-    const network = (process.env.STELLAR_NETWORK || "mainnet").toLowerCase();
-    const isMainnet = network === "mainnet";
+    // --- DEMO BYPASS (all networks, for hackathon judging) ---
+    // The magic testing number is published in the README so judges can test
+    // registration without receiving a real SMS. Any credential minted this way
+    // is demo data, not a phone-verified worker.
     const demoPhone = process.env.DEMO_BYPASS_PHONE || '+910000000000';
-    if (!isMainnet && phone === demoPhone) {
+    if (phone === demoPhone) {
       return res.status(200).json({ success: true, message: "Demo OTP sent successfully" });
     }
-    // -----------------------------------------
+    // ----------------------------------------------------------
 
     // 1a. Check if this wallet already has a verified phone
     const { data: existingWallet, error: walletLookupError } = await supabase

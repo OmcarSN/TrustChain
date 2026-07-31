@@ -95,15 +95,14 @@ export default async function handler(req, res) {
 
   // ── Main logic ────────────────────────────────────────────────────
   try {
-    // --- SECURE DEMO BYPASS (testnet only) ---
-    // On mainnet the demo phone falls through to the real Twilio check so no
-    // hardcoded OTP can ever mint a real, judge-facing credential.
-    const network = (process.env.STELLAR_NETWORK || "mainnet").toLowerCase();
-    const isMainnet = network === "mainnet";
+    // --- DEMO BYPASS (all networks, for hackathon judging) ---
+    // The magic testing number + OTP are published in the README so judges can
+    // test registration without a real SMS. Any credential minted this way is
+    // demo data, not a phone-verified worker.
     const demoPhone = process.env.DEMO_BYPASS_PHONE || '+910000000000';
     const demoOtp = process.env.DEMO_BYPASS_OTP || '123456';
 
-    if (!isMainnet && phone === demoPhone) {
+    if (phone === demoPhone) {
       if (otp !== demoOtp) {
         return res.status(400).json({ error: "Invalid Demo OTP" });
       }
