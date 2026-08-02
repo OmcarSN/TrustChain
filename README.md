@@ -265,8 +265,8 @@ TrustChain is designed to be sustainable through a **B2B2C model** — free for 
 | 📊 **Metrics Dashboard** | [trust-chain-mocha.vercel.app/analytics](https://trust-chain-mocha.vercel.app/analytics) |
 | 🔍 **Monitoring Dashboard** | [trust-chain-mocha.vercel.app/admin/logs](https://trust-chain-mocha.vercel.app/admin/logs) |
 | 🔒 **Security Checklist** | [SECURITY.md](./SECURITY.md) |
-| 🔭 **Credential Contract** | [View on Stellar Expert](https://stellar.expert/explorer/public/contract/CCBIIOQMO4BOHZ7RTL7FQDQJCLNRUR7JMNWHDBO4L6QMISLB3UZHDTU4) |
-| 🔭 **Reputation Contract** | [View on Stellar Expert](https://stellar.expert/explorer/public/contract/CBSGD23P6GB4BJBB3ZM5CPTN6EPV2FUWXKC72SMOITNWPCGLMLLSDLYT) |
+| 🔭 **Credential Contract** | [View on Stellar Expert](https://stellar.expert/explorer/public/contract/CCFRAOH3L2Q7N4OWXG2GGUHL7NH4RD4XX57VZLCJ37P4YTAMNDAK5T63) |
+| 🔭 **Reputation Contract** | [View on Stellar Expert](https://stellar.expert/explorer/public/contract/CBEIPVBJDHGCGTIPLR6XEVK6LQZVMTCC6PKUP5Y5KKVUZRL5OE7L7QDW) |
 | 📝 **Feedback Form** | [Google Form](https://docs.google.com/forms/d/e/1FAIpQLSc9x0prppbJZpEPGv_HJmZESKKAikCJ5IH1SUXl5aX20ekWLQ/viewform?usp=publish-editor) |
 | 🌐 **Credential Explorer** | [trust-chain-mocha.vercel.app/explorer](https://trust-chain-mocha.vercel.app/explorer) |
 | 📊 **User Feedback Excel** | [user-feedback.xlsx](./user-feedback.xlsx) (30 responses) |
@@ -340,8 +340,8 @@ Verifier searches → Indexer queries Horizon → Parses ManageData → Displays
 ### Smart Contract Addresses
 | Contract | Address |
 |----------|---------| 
-| Credential Contract | `CCBIIOQMO4BOHZ7RTL7FQDQJCLNRUR7JMNWHDBO4L6QMISLB3UZHDTU4` |
-| Reputation Contract | `CBSGD23P6GB4BJBB3ZM5CPTN6EPV2FUWXKC72SMOITNWPCGLMLLSDLYT` |
+| Credential Contract | `CCFRAOH3L2Q7N4OWXG2GGUHL7NH4RD4XX57VZLCJ37P4YTAMNDAK5T63` |
+| Reputation Contract | `CBEIPVBJDHGCGTIPLR6XEVK6LQZVMTCC6PKUP5Y5KKVUZRL5OE7L7QDW` |
 
 ---
 
@@ -372,15 +372,15 @@ Verifier searches → Indexer queries Horizon → Parses ManageData → Displays
 - Manages worker credential operations
 - Stores credential metadata on-chain
 - Soulbound — non-transferable by design
-- Address: `CCBIIOQMO4BOHZ7RTL7FQDQJCLNRUR7JMNWHDBO4L6QMISLB3UZHDTU4`
-- [View on Stellar Expert](https://stellar.expert/explorer/public/contract/CCBIIOQMO4BOHZ7RTL7FQDQJCLNRUR7JMNWHDBO4L6QMISLB3UZHDTU4)
+- Address: `CCFRAOH3L2Q7N4OWXG2GGUHL7NH4RD4XX57VZLCJ37P4YTAMNDAK5T63`
+- [View on Stellar Expert](https://stellar.expert/explorer/public/contract/CCFRAOH3L2Q7N4OWXG2GGUHL7NH4RD4XX57VZLCJ37P4YTAMNDAK5T63)
 
 ### Reputation Contract
 - Handles reputation score computation
 - Aggregates endorsement data
 - Produces queryable scores
-- Address: `CBSGD23P6GB4BJBB3ZM5CPTN6EPV2FUWXKC72SMOITNWPCGLMLLSDLYT`
-- [View on Stellar Expert](https://stellar.expert/explorer/public/contract/CBSGD23P6GB4BJBB3ZM5CPTN6EPV2FUWXKC72SMOITNWPCGLMLLSDLYT)
+- Address: `CBEIPVBJDHGCGTIPLR6XEVK6LQZVMTCC6PKUP5Y5KKVUZRL5OE7L7QDW`
+- [View on Stellar Expert](https://stellar.expert/explorer/public/contract/CBEIPVBJDHGCGTIPLR6XEVK6LQZVMTCC6PKUP5Y5KKVUZRL5OE7L7QDW)
 
 ---
 
@@ -1033,7 +1033,7 @@ npm run build
 | Milestone | Description | Evidence |
 |-----------|-------------|----------|
 | MVP Development | Full-featured credential + endorsement platform | [Live Demo](https://trust-chain-mocha.vercel.app/) |
-| Soroban Smart Contracts | Credential & Reputation contracts in Rust | [View on Stellar Expert](https://stellar.expert/explorer/public/contract/CCBIIOQMO4BOHZ7RTL7FQDQJCLNRUR7JMNWHDBO4L6QMISLB3UZHDTU4) |
+| Soroban Smart Contracts | Credential & Reputation contracts in Rust | [View on Stellar Expert](https://stellar.expert/explorer/public/contract/CCFRAOH3L2Q7N4OWXG2GGUHL7NH4RD4XX57VZLCJ37P4YTAMNDAK5T63) |
 | Mainnet Deployment | Both contracts deployed on Stellar Mainnet | Contract IDs in README |
 | Gasless Onboarding | Sponsor wallet funds new accounts + pays all fees | `/api/build-mint.js` + `/api/fee-bump.js` |
 | Phone Verification | Twilio OTP-based Sybil resistance | `/api/send-otp.js` + `/api/verify-otp.js` |
