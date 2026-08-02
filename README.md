@@ -1088,3 +1088,5 @@ MIT License — see [LICENSE](./LICENSE) for details.
 [![Stellar](https://img.shields.io/badge/Powered_by-Stellar-7c3aed?style=flat-square&logo=stellar)](https://stellar.org)
 [![Soroban](https://img.shields.io/badge/Smart_Contracts-Soroban-orange?style=flat-square)](https://soroban.stellar.org)
 [![Freighter](https://img.shields.io/badge/Wallet-Freighter-blue?style=flat-square)](https://freighter.app)
+
+<!-- mainnet redeploy: reputation contract CBEIPVBJ (2026-08-02) -->
