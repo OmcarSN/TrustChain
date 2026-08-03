@@ -137,9 +137,9 @@ const HowItWorks = () => {
             {t('hiw.pages.title', '03. WHAT DOES EACH PAGE DO?')}
           </motion.h2>
 
-          <div className="tc-grid-wide">
+          <div className="tc-grid-wide" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
             
-            <motion.div variants={fadeIn} className="glass-card tc-flex-start tc-flex-gap">
+            <motion.div variants={fadeIn} className="glass-card tc-flex-start tc-flex-gap" style={{ minHeight: '140px' }}>
               <div className="tc-dot" style={{ marginTop: '8px' }}></div>
               <div>
                 <h4 className="font-clash tc-heading-sm tc-mb-xs">{t('hiw.pages.findWorkers.title', 'Find Workers')}</h4>
@@ -149,7 +149,7 @@ const HowItWorks = () => {
               </div>
             </motion.div>
 
-            <motion.div variants={fadeIn} className="glass-card tc-flex-start tc-flex-gap">
+            <motion.div variants={fadeIn} className="glass-card tc-flex-start tc-flex-gap" style={{ minHeight: '140px' }}>
               <div className="tc-dot" style={{ marginTop: '8px' }}></div>
               <div>
                 <h4 className="font-clash tc-heading-sm tc-mb-xs">{t('hiw.pages.workerPortal.title', 'Worker Portal')}</h4>
@@ -159,7 +159,7 @@ const HowItWorks = () => {
               </div>
             </motion.div>
 
-            <motion.div variants={fadeIn} className="glass-card tc-flex-start tc-flex-gap">
+            <motion.div variants={fadeIn} className="glass-card tc-flex-start tc-flex-gap" style={{ minHeight: '140px' }}>
               <div className="tc-dot" style={{ marginTop: '8px' }}></div>
               <div>
                 <h4 className="font-clash tc-heading-sm tc-mb-xs">{t('hiw.pages.dashboard.title', 'Dashboard')}</h4>
@@ -169,7 +169,7 @@ const HowItWorks = () => {
               </div>
             </motion.div>
 
-            <motion.div variants={fadeIn} className="glass-card tc-flex-start tc-flex-gap">
+            <motion.div variants={fadeIn} className="glass-card tc-flex-start tc-flex-gap" style={{ minHeight: '140px' }}>
               <div className="tc-dot" style={{ marginTop: '8px' }}></div>
               <div>
                 <h4 className="font-clash tc-heading-sm tc-mb-xs">{t('hiw.pages.analytics.title', 'Analytics')}</h4>
@@ -179,7 +179,7 @@ const HowItWorks = () => {
               </div>
             </motion.div>
 
-            <motion.div variants={fadeIn} className="tc-card-sm tc-flex-start tc-flex-gap tc-full-span">
+            <motion.div variants={fadeIn} className="glass-card tc-flex-start tc-flex-gap" style={{ minHeight: '140px' }}>
               <div className="tc-dot" style={{ marginTop: '8px' }}></div>
               <div>
                 <h4 className="font-clash tc-heading-sm tc-mb-xs">{t('hiw.pages.explorer.title', 'Explorer')}</h4>
