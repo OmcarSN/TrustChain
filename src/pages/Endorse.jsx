@@ -37,13 +37,14 @@ const Endorse = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [txHash, setTxHash] = useState('');
   const [error, setError] = useState(null);
+  const [alreadyEndorsed, setAlreadyEndorsed] = useState(false);
 
-  const canSubmit = isConnected && foundWorker && rating > 0 && jobType && feedback.length >= 20;
+  const canSubmit = isConnected && foundWorker && !alreadyEndorsed && rating > 0 && jobType && feedback.length >= 20;
 
   const handleSearch = async () => {
     if (!validateWalletAddress(workerSearch.trim())) { toast.error(t('endorse.invalidAddress')); return; }
     if (workerSearch.trim() === walletAddress) { toast.error(t('endorse.cannotEndorseSelf')); return; }
-    setIsSearching(true); setError(null); setFoundWorker(null);
+    setIsSearching(true); setError(null); setFoundWorker(null); setAlreadyEndorsed(false);
     try {
       const credential = await fetchWorkerCredential(workerSearch.trim());
       const localData = await getWorker(workerSearch.trim());
@@ -56,12 +57,30 @@ const Endorse = () => {
         credential.phone = localData.phone || '';
       }
       setFoundWorker({ ...credential, address: workerSearch });
-      toast.success(t('endorse.workerFound'));
+
+      // Check if this wallet already endorsed this worker
+      const prev = await getEndorsements(workerSearch.trim());
+      const given = await getEndorsementsGiven(walletAddress);
+      if (prev.some(e => e.endorser === walletAddress) || given.some(e => e.worker === workerSearch.trim())) {
+        setAlreadyEndorsed(true);
+        toast.error(t('endorse.alreadyEndorsed'));
+      } else {
+        toast.success(t('endorse.workerFound'));
+      }
     } catch (err) {
       const localData = await getWorker(workerSearch);
       if (localData) {
         setFoundWorker({ name: localData.name || localData.fullName || 'Worker', skill: localData.skill || localData.skillCategory || '—', city: localData.city || 'Unknown', bio: localData.bio || '', experience: localData.experience || '—', address: workerSearch });
-        toast.success(t('endorse.workerFound'));
+
+        // Check if this wallet already endorsed this worker
+        const prevLocal = await getEndorsements(workerSearch.trim());
+        const givenLocal = await getEndorsementsGiven(walletAddress);
+        if (prevLocal.some(e => e.endorser === walletAddress) || givenLocal.some(e => e.worker === workerSearch.trim())) {
+          setAlreadyEndorsed(true);
+          toast.error(t('endorse.alreadyEndorsed'));
+        } else {
+          toast.success(t('endorse.workerFound'));
+        }
       } else { setError(err.message || 'Worker not found'); toast.error(err.message || 'Search failed'); }
     } finally { setIsSearching(false); }
   };
