@@ -115,9 +115,17 @@ const HowItWorks = () => {
 
             <motion.div variants={fadeIn} className="step-card-premium">
               <h3 className="font-inter tc-step-label">STEP 3</h3>
-              <h4 className="font-clash tc-heading-sm tc-mb-sm">{t('hiw.verifiers.step3.title', 'Leave Your Review')}</h4>
+              <h4 className="font-clash tc-heading-sm tc-mb-sm">{t('hiw.verifiers.step3.title', 'Contact & Hire')}</h4>
               <p className="font-inter tc-body">
-                {t('hiw.verifiers.step3.desc', 'When the worker finishes your job, you leave a review. This rewards them for their hard work and helps the next person know they are reliable.')}
+                {t('hiw.verifiers.step3.desc', 'Found the right worker? Click "Contact Worker" on their profile to reveal their phone number. Call them directly or message them on WhatsApp to discuss the job and hire them.')}
+              </p>
+            </motion.div>
+
+            <motion.div variants={fadeIn} className="step-card-premium">
+              <h3 className="font-inter tc-step-label">STEP 4</h3>
+              <h4 className="font-clash tc-heading-sm tc-mb-sm">{t('hiw.verifiers.step4.title', 'Leave Your Review')}</h4>
+              <p className="font-inter tc-body">
+                {t('hiw.verifiers.step4.desc', 'When the worker finishes your job, leave a review. This rewards them for their hard work and helps the next person know they are reliable. Each review is sealed on the blockchain forever.')}
               </p>
             </motion.div>
           </div>
