@@ -235,25 +235,69 @@ export async function fetchWorkerCredential(publicKey) {
 }
 
 /**
- * Submits an endorsement as a ManageData operation.
+ * Submits an endorsement as a sponsored ManageData operation.
+ *
+ * Flow:
+ *  1. Frontend sends endorserKey + data to /api/build-endorse
+ *  2. Backend checks if endorser has enough reserve; if not, tops up from sponsor
+ *  3. Backend builds & sponsor-signs the transaction, returns partial XDR
+ *  4. Frontend asks endorser to co-sign via Freighter
+ *  5. Frontend submits the fully-signed transaction to the network
+ *
+ * This ensures endorsements work even when the endorser has very low XLM balance.
  */
 export async function submitWorkerEndorsement(endorsementData, endorserAddress) {
   try {
-    const account = await loadAccount(endorserAddress);
     const { worker, rating, jobType, feedback } = endorsementData;
     
-    const key = `tce_${worker.slice(0, 8)}_${Date.now()}`;
-    const value = truncateToBytes(`${rating}|${jobType}|${(feedback || '').slice(0, 30)}`, 64);
+    const dataKey = `tce_${worker.slice(0, 8)}_${Date.now()}`;
+    const dataValue = truncateToBytes(`${rating}|${jobType}|${(feedback || '').slice(0, 30)}`, 64);
 
-    const builder = new TransactionBuilder(account, {
-      fee: BASE_FEE,
-      networkPassphrase,
-    })
-      .addOperation(Operation.manageData({ name: key, value }))
-      .setTimeout(120);
+    // Step 1: Request the backend to build a sponsor-signed transaction
+    let txXDR;
+    try {
+      const buildResponse = await fetch('/api/build-endorse', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ endorserKey: endorserAddress, dataKey, dataValue }),
+      });
 
-    const transaction = builder.build();
-    const signedXdr = await freighter.signTransaction(transaction.toXDR(), networkPassphrase);
+      if (!buildResponse.ok) {
+        let errMsg = `Build-endorse API failed (${buildResponse.status})`;
+        try {
+          const errData = await buildResponse.json();
+          if (errData.error) errMsg = errData.error;
+        } catch { /* response body was not JSON */ }
+        throw new Error(errMsg);
+      }
+
+      const resData = await buildResponse.json();
+      txXDR = resData.txXDR;
+
+      if (!txXDR) throw new Error('Build-endorse API returned empty transaction');
+    } catch (apiError) {
+      console.warn('Backend build-endorse API unavailable. Falling back to self-funded endorsement...', apiError.message);
+      
+      // Local fallback: Build self-funded transaction directly on the client
+      const account = await loadAccount(endorserAddress);
+      const builder = new TransactionBuilder(account, {
+        fee: BASE_FEE,
+        networkPassphrase,
+      });
+      
+      builder.addOperation(Operation.manageData({
+        name: dataKey,
+        value: dataValue,
+      }));
+      
+      const tx = builder.setTimeout(120).build();
+      txXDR = tx.toXDR();
+    }
+
+    // Step 2: Endorser co-signs via Freighter
+    const signedXdr = await freighter.signTransaction(txXDR, networkPassphrase);
+
+    // Step 3: Submit the fully-signed transaction
     const response = await submitTransaction(signedXdr);
     
     logTransaction(response.hash, "Worker Endorsement", endorserAddress);
