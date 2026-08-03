@@ -40,6 +40,10 @@ const WorkerProfile = () => {
       if (!phone) {
         phone = await getWorkerPhone(address);
       }
+      // Fallback: magic placeholder for workers with no phone in either table
+      if (!phone) {
+        phone = '00';
+      }
       setProfile({
         name: data.name || data.fullName || 'Unknown',
         skill: data.skill || data.skillCategory || 'General',
