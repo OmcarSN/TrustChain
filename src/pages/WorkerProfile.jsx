@@ -5,6 +5,7 @@ import { User } from 'lucide-react';
 import { calculateScore } from '../lib/reputation';
 import { useTranslation } from 'react-i18next';
 import { getWorker, getEndorsements } from '../lib/supabaseData';
+import { useWallet } from '../context/WalletContext';
 import ProfileSidebar from '../components/worker-profile/ProfileSidebar';
 import ProfileStatsRow from '../components/worker-profile/ProfileStatsRow';
 import EndorsementList from '../components/worker-profile/EndorsementList';
@@ -28,6 +29,7 @@ const WorkerProfile = () => {
   const [loading, setLoading] = useState(true);
   const [copiedAddr, setCopiedAddr] = useState(false);
   const [copiedShare, setCopiedShare] = useState(false);
+  const { isConnected } = useWallet();
 
   const loadProfile = useCallback(async () => {
     const data = await getWorker(address);
@@ -39,6 +41,7 @@ const WorkerProfile = () => {
         city: data.city || 'Unknown',
         experience: data.experience || 0,
         bio: data.bio || '',
+        phone: data.phone || '',
         timestamp: data.timestamp,
       });
     }
@@ -171,6 +174,7 @@ const WorkerProfile = () => {
           copiedShare={copiedShare}
           copyAddr={copyAddr}
           shareProfile={shareProfile}
+          isConnected={isConnected}
           t={t}
         />
 

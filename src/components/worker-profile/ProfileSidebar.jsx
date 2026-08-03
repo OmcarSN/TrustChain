@@ -1,33 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { explorerAccountUrl } from '../../lib/networkConfig';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import {
   User, Briefcase, MapPin, Calendar, Award,
-  Copy, Check, ExternalLink, Share2, ShieldCheck
+  Copy, Check, ExternalLink, Share2, ShieldCheck, Phone
 } from 'lucide-react';
 
 /**
  * ProfileSidebar — Left sidebar on the WorkerProfile page.
  * Displays the worker avatar, verified badge (if endorsed), name,
- * endorse CTA, wallet address with copy button, Stellar Explorer link,
+ * endorse CTA, contact button (phone visible to logged-in users),
+ * wallet address with copy button, Stellar Explorer link,
  * skill/city metadata, experience, bio quote, and a share button.
  *
  * @param {Object} props
- * @param {Object} props.profile - Worker profile data (name, skill, city, experience, bio).
+ * @param {Object} props.profile - Worker profile data (name, skill, city, experience, bio, phone).
  * @param {string} props.address - Stellar wallet address.
  * @param {Array} props.endorsements - Array of endorsement objects.
  * @param {boolean} props.copiedAddr - Whether the address was recently copied.
  * @param {boolean} props.copiedShare - Whether the share link was recently copied.
  * @param {Function} props.copyAddr - Callback to copy wallet address.
  * @param {Function} props.shareProfile - Callback to share profile link.
+ * @param {boolean} props.isConnected - Whether the viewer has a connected wallet.
  * @param {Function} props.t - i18next translation function.
  * @returns {React.ReactElement} The ProfileSidebar component.
  */
 const ProfileSidebar = ({
   profile, address, endorsements,
-  copiedAddr, copiedShare, copyAddr, shareProfile, t
-}) => (
+  copiedAddr, copiedShare, copyAddr, shareProfile, isConnected, t
+}) => {
+  const [showPhone, setShowPhone] = useState(false);
+
+  const hasPhone = profile.phone && profile.phone.length > 0;
+  const whatsappLink = hasPhone ? `https://wa.me/${profile.phone.replace(/[^0-9]/g, '')}` : null;
+
+  return (
   <div
     className="prof-anim tc-sidebar-width tc-sticky-side glass-card"
     role="complementary"
@@ -53,6 +61,73 @@ const ProfileSidebar = ({
     <Link to={`/endorse?worker=${address}`} className="prof-endorse-btn font-inter btn-glow tc-mb-lg" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }} aria-label={t('profile.endorseBtnLabel', `Endorse ${profile.name}`)}>
       <Award className="tc-icon-md" aria-hidden="true" /> {t('profile.endorseBtn')}
     </Link>
+
+    {/* Contact Worker Button */}
+    {isConnected ? (
+      hasPhone ? (
+        <div className="tc-mb-lg">
+          {!showPhone ? (
+            <button
+              onClick={() => setShowPhone(true)}
+              className="font-inter"
+              style={{
+                width: '100%', padding: '10px 16px', display: 'flex', alignItems: 'center',
+                justifyContent: 'center', gap: '8px', background: 'rgba(34,197,94,0.1)',
+                border: '1px solid rgba(34,197,94,0.3)', borderRadius: '8px', color: '#22c55e',
+                fontSize: '12px', fontWeight: '700', letterSpacing: '1.5px', textTransform: 'uppercase',
+                cursor: 'pointer', transition: 'all 0.2s ease',
+              }}
+              onMouseEnter={(e) => { e.target.style.background = 'rgba(34,197,94,0.2)'; }}
+              onMouseLeave={(e) => { e.target.style.background = 'rgba(34,197,94,0.1)'; }}
+            >
+              <Phone style={{ width: '14px', height: '14px' }} /> Contact Worker
+            </button>
+          ) : (
+            <div style={{
+              background: 'rgba(34,197,94,0.05)', border: '1px solid rgba(34,197,94,0.2)',
+              borderRadius: '8px', padding: '12px 16px',
+            }}>
+              <p className="font-inter" style={{ fontSize: '10px', fontWeight: '600', letterSpacing: '1.5px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: '6px' }}>
+                Phone Number
+              </p>
+              <p className="font-inter" style={{ fontSize: '15px', fontWeight: '600', color: '#ffffff', marginBottom: '10px', letterSpacing: '0.5px' }}>
+                {profile.phone}
+              </p>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <a href={`tel:${profile.phone}`} className="font-inter" style={{
+                  flex: 1, padding: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
+                  borderRadius: '6px', color: '#ffffff', fontSize: '10px', fontWeight: '700', letterSpacing: '1px',
+                  textTransform: 'uppercase', textAlign: 'center', textDecoration: 'none', display: 'flex',
+                  alignItems: 'center', justifyContent: 'center', gap: '4px',
+                }}>
+                  <Phone style={{ width: '12px', height: '12px' }} /> Call
+                </a>
+                {whatsappLink && (
+                  <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="font-inter" style={{
+                    flex: 1, padding: '8px', background: 'rgba(37,211,102,0.1)', border: '1px solid rgba(37,211,102,0.3)',
+                    borderRadius: '6px', color: '#25d366', fontSize: '10px', fontWeight: '700', letterSpacing: '1px',
+                    textTransform: 'uppercase', textAlign: 'center', textDecoration: 'none',
+                  }}>
+                    WhatsApp
+                  </a>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      ) : null
+    ) : (
+      <div className="tc-mb-lg">
+        <div className="font-inter" style={{
+          width: '100%', padding: '10px 16px', display: 'flex', alignItems: 'center',
+          justifyContent: 'center', gap: '8px', background: 'rgba(255,255,255,0.03)',
+          border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', color: 'rgba(255,255,255,0.35)',
+          fontSize: '11px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase',
+        }}>
+          <Phone style={{ width: '14px', height: '14px' }} /> Connect Wallet to Contact
+        </div>
+      </div>
+    )}
 
     {/* Wallet Address block */}
     <div className="tc-mb-xs">
@@ -105,7 +180,8 @@ const ProfileSidebar = ({
       {copiedShare ? <><Check className="tc-icon-md" style={{ color: '#4F6BED' }} aria-hidden="true" /> {t('profile.copied')}</> : <><Share2 className="tc-icon-md" aria-hidden="true" /> {t('profile.shareProfile')}</>}
     </button>
   </div>
-);
+  );
+};
 
 ProfileSidebar.propTypes = {
   /** Worker profile data object. */
@@ -115,6 +191,7 @@ ProfileSidebar.propTypes = {
     city: PropTypes.string,
     experience: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     bio: PropTypes.string,
+    phone: PropTypes.string,
   }).isRequired,
   /** Stellar wallet address of the worker. */
   address: PropTypes.string.isRequired,
@@ -128,6 +205,8 @@ ProfileSidebar.propTypes = {
   copyAddr: PropTypes.func.isRequired,
   /** Callback to share the profile link. */
   shareProfile: PropTypes.func.isRequired,
+  /** Whether the viewer has a connected wallet. */
+  isConnected: PropTypes.bool,
   /** i18next translation function. */
   t: PropTypes.func.isRequired,
 };
