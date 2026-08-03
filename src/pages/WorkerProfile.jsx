@@ -134,7 +134,7 @@ const WorkerProfile = () => {
       `}</style>
 
       {/* Page Wrapper */}
-      <div className="tc-profile-shell" style={{ paddingTop: '100px', paddingBottom: '80px', paddingLeft: '48px', paddingRight: '48px', maxWidth: '1400px', margin: '0 auto', display: 'flex', gap: '0', minHeight: '100vh', position: 'relative', zIndex: 10 }}>
+      <div className="tc-profile-shell" style={{ paddingTop: '100px', paddingBottom: '80px', paddingLeft: '48px', paddingRight: '48px', maxWidth: '1400px', margin: '0 auto', display: 'flex', gap: '32px', minHeight: '100vh', position: 'relative', zIndex: 10 }}>
 
         {/* ═══ LEFT SIDEBAR ═══ */}
         <ProfileSidebar
