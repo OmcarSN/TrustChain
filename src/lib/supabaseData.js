@@ -101,6 +101,30 @@ export async function checkPhoneVerified(walletAddress) {
 }
 
 /**
+ * Fetches the verified phone number for a wallet address.
+ * @param {string} walletAddress - Stellar wallet address
+ * @returns {Promise<string>} phone number or empty string
+ */
+export async function getWorkerPhone(walletAddress) {
+  try {
+    const { data, error } = await supabase
+      .from('verified_phones')
+      .select('phone')
+      .eq('wallet_address', walletAddress)
+      .maybeSingle();
+
+    if (error) {
+      console.error('[supabaseData] getWorkerPhone error:', error.message);
+      return '';
+    }
+    return data?.phone || '';
+  } catch (err) {
+    console.error('[supabaseData] getWorkerPhone exception:', err);
+    return '';
+  }
+}
+
+/**
  * Returns all registered worker wallet addresses.
  * Replaces localStorage 'trustchain_worker_registry'.
  * @returns {Promise<string[]>} Array of wallet addresses

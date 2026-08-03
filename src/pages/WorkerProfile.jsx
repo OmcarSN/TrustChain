@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { User } from 'lucide-react';
 import { calculateScore } from '../lib/reputation';
 import { useTranslation } from 'react-i18next';
-import { getWorker, getEndorsements } from '../lib/supabaseData';
+import { getWorker, getEndorsements, getWorkerPhone } from '../lib/supabaseData';
 import { useWallet } from '../context/WalletContext';
 import ProfileSidebar from '../components/worker-profile/ProfileSidebar';
 import ProfileStatsRow from '../components/worker-profile/ProfileStatsRow';
@@ -35,13 +35,18 @@ const WorkerProfile = () => {
     const data = await getWorker(address);
     const endorse = await getEndorsements(address);
     if (data) {
+      let phone = data.phone || '';
+      // Fallback: fetch phone from verified_phones table if workers table doesn't have it
+      if (!phone) {
+        phone = await getWorkerPhone(address);
+      }
       setProfile({
         name: data.name || data.fullName || 'Unknown',
         skill: data.skill || data.skillCategory || 'General',
         city: data.city || 'Unknown',
         experience: data.experience || 0,
         bio: data.bio || '',
-        phone: data.phone || '',
+        phone,
         timestamp: data.timestamp,
       });
     }
