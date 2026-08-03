@@ -52,7 +52,7 @@ const WorkerCard = ({ worker, index }) => {
         </div>
         <div className="shrink-0 flex items-center justify-center min-w-[80px]">
           {isVerified ? (
-            <span className="text-[10px] font-bold tracking-widest px-2 py-0.5 rounded-full border border-green-800 text-green-500 bg-green-950/40">VERIFIED</span>
+            <span className="text-[10px] font-bold tracking-widest px-3 py-1 rounded-full border border-green-800 text-green-500 bg-green-950/40">VERIFIED</span>
           ) : (
             <span style={{ fontSize: '10px', fontWeight: 'bold', letterSpacing: '0.1em', color: '#2a2a2a' }}>UNVERIFIED</span>
           )}
