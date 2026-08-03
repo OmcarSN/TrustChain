@@ -42,7 +42,7 @@ const WorkerProfile = () => {
       }
       // Fallback: magic placeholder for workers with no phone in either table
       if (!phone) {
-        phone = '00';
+        phone = '+910000000000';
       }
       setProfile({
         name: data.name || data.fullName || 'Unknown',
