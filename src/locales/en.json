@@ -543,8 +543,12 @@
         "desc": "Unlike normal websites where anyone can write fake 5-star reviews, every review on TrustChain is verified and locked. You know you are looking at real work history."
       },
       "step3": {
+        "title": "Contact & Hire",
+        "desc": "Found the right worker? Click \"Contact Worker\" on their profile to reveal their phone number. Call them directly or message them on WhatsApp to discuss the job and hire them."
+      },
+      "step4": {
         "title": "Leave Your Review",
-        "desc": "When the worker finishes your job, you leave a review. This rewards them for their hard work and helps the next person know they are reliable."
+        "desc": "When the worker finishes your job, leave a review. This rewards them for their hard work and helps the next person know they are reliable. Each review is sealed on the blockchain forever."
       }
     },
     "pages": {
