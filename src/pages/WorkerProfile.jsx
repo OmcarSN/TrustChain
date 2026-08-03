@@ -59,10 +59,36 @@ const WorkerProfile = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#05060A] relative overflow-hidden text-white" role="status" aria-label={t('profile.loading', 'Loading profile')} style={{ paddingTop: '100px', paddingBottom: '80px', paddingLeft: '48px', paddingRight: '48px' }}>
-        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-          <div className="animate-pulse space-y-6">
-            <div className="h-6 w-48 bg-white/5 rounded-[2px]" />
-            <div className="h-40 bg-white/5 rounded-[2px]" />
+        <div className="tc-bg-grid fixed" />
+        <div className="tc-orb-blue fixed" />
+        <div className="tc-orb-green fixed" />
+        <div style={{ maxWidth: '1400px', margin: '0 auto', display: 'flex', gap: '32px', position: 'relative', zIndex: 10 }}>
+          {/* Skeleton Sidebar */}
+          <div style={{ width: '280px', flexShrink: 0 }}>
+            <div className="animate-pulse" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '2px', padding: '32px 24px' }}>
+              <div style={{ width: '64px', height: '64px', background: 'rgba(255,255,255,0.05)', borderRadius: '2px', marginBottom: '20px' }} />
+              <div style={{ width: '80px', height: '12px', background: 'rgba(255,255,255,0.05)', borderRadius: '2px', marginBottom: '12px' }} />
+              <div style={{ width: '140px', height: '24px', background: 'rgba(255,255,255,0.05)', borderRadius: '2px', marginBottom: '24px' }} />
+              <div style={{ width: '100%', height: '40px', background: 'rgba(255,255,255,0.05)', borderRadius: '2px', marginBottom: '20px' }} />
+              <div style={{ width: '100%', height: '14px', background: 'rgba(255,255,255,0.03)', borderRadius: '2px', marginBottom: '8px' }} />
+              <div style={{ width: '60%', height: '14px', background: 'rgba(255,255,255,0.03)', borderRadius: '2px' }} />
+            </div>
+          </div>
+          {/* Skeleton Content */}
+          <div style={{ flex: 1 }}>
+            <div className="animate-pulse" style={{ marginBottom: '24px' }}>
+              <div style={{ width: '120px', height: '12px', background: 'rgba(255,255,255,0.05)', borderRadius: '2px', marginBottom: '12px' }} />
+              <div style={{ width: '320px', height: '32px', background: 'rgba(255,255,255,0.05)', borderRadius: '2px' }} />
+            </div>
+            <div className="animate-pulse" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '2px', padding: '24px', display: 'flex', gap: '32px', marginBottom: '32px' }}>
+              {[1,2,3,4].map(i => (
+                <div key={i} style={{ flex: 1, textAlign: 'center' }}>
+                  <div style={{ width: '48px', height: '28px', background: 'rgba(255,255,255,0.05)', borderRadius: '2px', margin: '0 auto 8px' }} />
+                  <div style={{ width: '80px', height: '10px', background: 'rgba(255,255,255,0.03)', borderRadius: '2px', margin: '0 auto' }} />
+                </div>
+              ))}
+            </div>
+            <div className="animate-pulse" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '2px', padding: '24px', height: '120px' }} />
           </div>
         </div>
       </div>
