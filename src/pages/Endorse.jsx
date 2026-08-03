@@ -5,7 +5,7 @@ import { useWallet } from '../context/WalletContext';
 import { useToast } from '../context/ToastContext';
 import { useTranslation } from 'react-i18next';
 import { notifyStatsUpdated } from '../hooks/usePlatformStats';
-import { getWorker, getEndorsements, addEndorsement } from '../lib/supabaseData';
+import { getWorker, getEndorsements, getEndorsementsGiven, addEndorsement } from '../lib/supabaseData';
 import { validateWalletAddress } from '../utils/validation';
 import ConnectWalletPrompt from '../components/ConnectWalletPrompt';
 import WorkerSearchPanel from '../components/endorse/WorkerSearchPanel';
@@ -68,8 +68,14 @@ const Endorse = () => {
 
   const handleEndorse = async () => {
     if (!canSubmit) return;
+
+    // Duplicate check 1: Check endorsements received by this worker
     const prev = await getEndorsements(foundWorker.address);
     if (prev.some(e => e.endorser === walletAddress)) { toast.error(t('endorse.alreadyEndorsed')); return; }
+
+    // Duplicate check 2: Check endorsements given BY this wallet (safety net)
+    const given = await getEndorsementsGiven(walletAddress);
+    if (given.some(e => e.worker === foundWorker.address)) { toast.error(t('endorse.alreadyEndorsed')); return; }
     setIsSigning(true); setError(null);
     try {
       const response = await submitWorkerEndorsement({ worker: foundWorker.address, rating, jobType, feedback }, walletAddress);
