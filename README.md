@@ -51,6 +51,33 @@ During our bootcamp testing phase, workers and employers gave us clear feedback.
 **What we shipped (on-chain):**
 - Added the missing `worker.require_auth()` to `upgrade_verification` in the **credential contract**. Before this fix, the authorization check was not enforced on that path. Now every verification-level change requires the worker's own signed authorization.
 
+### 4. 📞 Contact Worker Feature (Employer-to-Worker Connection)
+**Feedback:** Employers browsing worker profiles had no way to actually contact or hire a worker. The platform showed skills, reviews, and reputation — but no phone number or contact method. This defeated the entire purpose of discovery.
+
+**What we shipped (frontend):**
+- Added a **"Contact Worker"** button on every worker's public profile page.
+- When a logged-in employer clicks it, the worker's **registered phone number** is revealed along with one-tap **Call** and **WhatsApp** buttons.
+- Non-logged-in visitors see a greyed-out **"Connect Wallet to Contact"** prompt — this protects worker privacy while enabling genuine employers to reach out.
+- The phone number is collected during worker registration (OTP verification step) and stored securely in Supabase. It is never exposed to the public without wallet authentication.
+- This completes the full **discovery → verify → contact → hire** flow that makes TrustChain a practical hiring tool, not just a credential viewer.
+
+### 5. 🛡️ Sponsored Endorsement Transactions
+**Feedback:** New users with low XLM balance were unable to endorse workers — the transaction would fail with `op_low_reserve` because ManageData entries require a minimum reserve.
+
+**What we shipped (backend):**
+- Created a new `/api/build-endorse` serverless API that mirrors the existing `/api/build-mint` sponsor flow.
+- The sponsor wallet now automatically detects if the endorser's account has insufficient reserve and tops it up before submitting.
+- Endorsements are now fully **gasless** — users never need to worry about XLM balance to leave a review.
+
+### 6. 🚫 Duplicate Endorsement Prevention
+**Feedback:** During testing, we discovered that a reviewer could endorse the same worker multiple times, which could be exploited to manipulate reputation scores.
+
+**What we shipped (frontend):**
+- Added a **double-layer duplicate check** that runs at **search time** (not just at submit), so the form is immediately disabled if the user has already endorsed that worker.
+- Check 1: Queries endorsements **received by** the worker.
+- Check 2: Queries endorsements **given by** the reviewer's wallet (safety net).
+- The Submit button is greyed out and the user sees an "Already Endorsed" error immediately.
+
 ### ✅ Verification
 - **Credential contract:** 20/20 unit tests pass.
 - **Reputation contract:** 18/18 unit tests pass.
@@ -115,18 +142,31 @@ Most of these workers don't use LinkedIn or have paper certificates to show thei
 ## ✨ Key Features
 
 ### 📱 Sybil-Resistant Phone Verification
-- **Twilio OTP Integration** — prevents bots and duplicate accounts
-- **Supabase Backend** — securely stores verified `phone <-> wallet` mappings
-- **1-to-1 Mapping** - each worker can only register one wallet address per phone number
+- **Phone-based identity** — every worker must provide a phone number during registration, which becomes their **contact number** on their public profile for employers to reach them
+- **Supabase Backend** — securely stores verified `phone ↔ wallet` mappings in the `verified_phones` table
+- **1-to-1 Mapping** — each worker can only register one wallet address per phone number, preventing duplicate/fake accounts
 - Ensures enterprise-grade trust in the worker registry
 
 > [!IMPORTANT]
-> **🧪 HOW TO BYPASS PHONE VERIFICATION FOR TESTING**
-> 
-> To easily test the worker registration flow without receiving an actual SMS (or if Twilio blocks your region):
-> 
-> 📞 **Phone Number:** `0000000000` (ten zeros)
-> 🔐 **OTP Code:** `123456`
+> **📱 Phone Verification System — Current Status & Roadmap**
+>
+> Currently, TrustChain uses a **magic OTP bypass** (`123456`) for phone verification. This is because:
+> - Twilio's free tier has strict regional restrictions and limited SMS capacity
+> - During the bootcamp/hackathon phase, we needed all testers (across different regions) to register without SMS delivery failures blocking them
+> - The architecture is **fully built for real OTP** — the `/api/send-otp.js` and `/api/verify-otp.js` endpoints are production-ready and just need a paid Twilio plan
+>
+> **What works right now:**
+> - Workers enter their **real phone number** during registration (this becomes their contact number visible to employers)
+> - The OTP code `123456` is accepted for all numbers (magic bypass)
+> - The phone number is securely stored and linked to the worker's wallet address
+>
+> **With funding (post-hackathon):**
+> - Subscribe to Twilio's paid plan (or an alternative like MSG91/2Factor for India)
+> - Remove the magic bypass — real SMS OTP will be sent to the worker's phone
+> - Workers will then be verified with their **actual phone number**, adding a true Sybil-resistance layer
+> - No code changes needed — the infrastructure is already in place
+>
+> 📞 **For testing:** Use any phone number + OTP code `123456`
 
 ### 👷 Worker Registration & Credential Minting
 - Connect Freighter wallet and fill professional details
