@@ -59,7 +59,13 @@ jobs:
 
       - name: 🧪 Run Vitest unit tests with coverage
         run: npx vitest run --reporter=verbose --coverage
-        continue-on-error: false
+        env:
+          VITE_STELLAR_NETWORK: testnet
+          VITE_CREDENTIAL_CONTRACT_ID: CCQG7ZFOQX4H7OSUXDU2FE2J73XCUQLXP2FONFUMKXXDUP253J3JP6HZ
+          VITE_REPUTATION_CONTRACT_ID: CAHH72L2C7XN32IKOIBLNODWQF4MLUJTJRZWFCU4JIUQEXLEEX3E52GI
+          VITE_SPONSOR_PUBLIC_KEY: GAPTP3YBWMIGE3GT3FDRAOOCLO6ZLZ2U7IIGK2VQBGDL2NLVAZX5E57A
+          VITE_SUPABASE_URL: https://lvmbedzvyncvkewmgutk.supabase.co
+          VITE_SUPABASE_ANON_KEY: test_key
 
       - name: 📊 Test summary
         if: always()
@@ -90,11 +96,12 @@ jobs:
       - name: 🏗️ Build production bundle
         run: npm run build
         env:
-          VITE_SOROBAN_CONTRACT_ID: ${{ secrets.VITE_SOROBAN_CONTRACT_ID }}
-          VITE_REPUTATION_CONTRACT_ID: ${{ secrets.VITE_REPUTATION_CONTRACT_ID }}
-          VITE_SPONSOR_PUBLIC_KEY: ${{ secrets.VITE_SPONSOR_PUBLIC_KEY }}
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          VITE_STELLAR_NETWORK: mainnet
+          VITE_CREDENTIAL_CONTRACT_ID: ${{ secrets.VITE_SOROBAN_CONTRACT_ID || 'CCFRAOH3L2Q7N4OWXG2GGUHL7NH4RD4XX57VZLCJ37P4YTAMNDAK5T63' }}
+          VITE_REPUTATION_CONTRACT_ID: ${{ secrets.VITE_REPUTATION_CONTRACT_ID || 'CBEIPVBJDHGCGTIPLR6XEVK6LQZVMTCC6PKUP5Y5KKVUZRL5OE7L7QDW' }}
+          VITE_SPONSOR_PUBLIC_KEY: ${{ secrets.VITE_SPONSOR_PUBLIC_KEY || 'GAPTP3YBWMIGE3GT3FDRAOOCLO6ZLZ2U7IIGK2VQBGDL2NLVAZX5E57A' }}
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL || 'https://lvmbedzvyncvkewmgutk.supabase.co' }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY || 'sb_publishable_1eb6lJVw8NUspgplLHoNmQ_-3d3V8qL' }}
 
       - name: 📊 Report bundle size
         run: |
