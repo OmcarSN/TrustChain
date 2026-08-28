@@ -1,6 +1,10 @@
 name: Build & Deploy Soroban Contracts
 
 on:
+  push:
+    branches: [main, master]
+    paths:
+      - 'contracts/**'
   workflow_dispatch:
     inputs:
       deploy_network:

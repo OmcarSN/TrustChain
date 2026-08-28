@@ -94,7 +94,7 @@ During our bootcamp testing phase, workers and employers gave us clear feedback.
 - [Architecture](#️-architecture)
 - [Tech Stack](#️-tech-stack)
 - [Smart Contracts](#-smart-contracts)
-- [⚫ Level 7 Master Belt — Production Upgrades](#-level-6-black-belt--production-upgrades)
+- [⚫ Level 7 Master Belt — Production Upgrades](#-level-7-updates-iterated-from-user-feedback)
 - [Advanced Feature: Fee Sponsorship](#-advanced-feature-fee-sponsorship-gasless-transactions)
 - [Data Indexing](#-data-indexing)
 - [Metrics Dashboard](#-metrics-dashboard)
