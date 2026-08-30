@@ -36,6 +36,7 @@ const FilterBar = ({
   selectedSkill, setSelectedSkill, skillOptions,
   selectedCity, setSelectedCity, cities,
   minRating, setMinRating, ratingOptions,
+  availabilityFilter, setAvailabilityFilter,
   clearFilters, t,
 }) => (
   <>
@@ -119,6 +120,31 @@ const FilterBar = ({
             </div>
           </div>
 
+          {/* Divider */}
+          <div className="hidden sm:block" style={{ width: '1px', height: '36px', backgroundColor: 'rgba(255,255,255,0.08)', alignSelf: 'center', margin: '0 8px' }} />
+
+          {/* Availability filter */}
+          <div className="w-full sm:w-auto">
+            <label className="font-inter tc-label tc-text-xs tc-ls-wide tc-fw-bold tc-mb-xs" style={{ display: 'block', textTransform: 'uppercase' }}>Availability</label>
+            <div className="flex flex-wrap gap-2">
+              {['All', 'Available', 'Unavailable'].map((opt) => {
+                const isActive = availabilityFilter === opt;
+                return (
+                  <button key={opt} onClick={() => setAvailabilityFilter(opt)} className={isActive ? '' : 'dw-rating-btn'}
+                    style={{
+                      padding: '9px 16px', fontSize: '12px', letterSpacing: '0.5px',
+                      border: isActive ? '1px solid #4F6BED' : '1px solid rgba(255,255,255,0.1)',
+                      backgroundColor: isActive ? 'rgba(79,107,237,0.1)' : 'rgba(255,255,255,0.02)',
+                      color: isActive ? '#4F6BED' : 'rgba(255,255,255,0.5)',
+                      fontWeight: isActive ? '600' : '400', cursor: 'pointer', borderRadius: '2px', transition: 'all 0.25s ease'
+                    }}>
+                    {opt}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           {/* Clear filters */}
           {hasActiveFilters && (
             <button onClick={clearFilters} className="ml-auto mt-4 sm:mt-0" style={{ padding: '9px 16px', fontSize: '11px', letterSpacing: '1px', border: '1px solid rgba(255,80,80,0.3)', color: 'rgba(255,100,100,0.8)', backgroundColor: 'rgba(255,80,80,0.05)', borderRadius: '2px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', transition: 'all 0.2s ease' }}>
@@ -161,6 +187,10 @@ FilterBar.propTypes = {
     /** Minimum rating value for this preset. */
     value: PropTypes.number.isRequired,
   })).isRequired,
+  /** Current availability filter value ('All', 'Available', 'Unavailable'). */
+  availabilityFilter: PropTypes.string,
+  /** Setter callback for availability filter. */
+  setAvailabilityFilter: PropTypes.func,
   /** Handler to reset all filters to defaults. */
   clearFilters: PropTypes.func.isRequired,
   /** i18next translation function. */

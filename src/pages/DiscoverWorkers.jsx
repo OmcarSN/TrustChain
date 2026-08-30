@@ -86,6 +86,7 @@ const DiscoverWorkers = () => {
   const [selectedSkill, setSelectedSkill] = useState('All');
   const [selectedCity, setSelectedCity] = useState('');
   const [minRating, setMinRating] = useState(0);
+  const [availabilityFilter, setAvailabilityFilter] = useState('All');
   const [sortBy, setSortBy] = useState('Rating');
   const [showFilters, setShowFilters] = useState(true);
   const { t } = useTranslation();
@@ -108,6 +109,14 @@ const DiscoverWorkers = () => {
       if (selectedSkill !== 'All' && w.skill !== selectedSkill) return false;
       if (selectedCity && selectedCity !== 'All Cities' && w.city !== selectedCity) return false;
       if (minRating > 0 && w.rating < minRating) return false;
+      if (availabilityFilter !== 'All') {
+        try {
+          const saved = localStorage.getItem(`tc_status_${w.address}`);
+          const status = saved !== null ? Number(saved) : 0;
+          if (availabilityFilter === 'Available' && status !== 0) return false;
+          if (availabilityFilter === 'Unavailable' && status === 0) return false;
+        } catch { /* treat as available by default */ }
+      }
       if (searchQuery) {
         const q = searchQuery.toLowerCase();
         if (!w.name.toLowerCase().includes(q) && !w.skill.toLowerCase().includes(q) && !w.city.toLowerCase().includes(q)) return false;
@@ -119,10 +128,10 @@ const DiscoverWorkers = () => {
       if (sortBy === 'Name') return a.name.localeCompare(b.name);
       return 0;
     });
-  }, [workers, selectedSkill, selectedCity, minRating, searchQuery, sortBy]);
+  }, [workers, selectedSkill, selectedCity, minRating, availabilityFilter, searchQuery, sortBy]);
 
-  const clearFilters = () => { setSearchQuery(''); setSelectedSkill('All'); setSelectedCity(''); setMinRating(0); };
-  const hasActiveFilters = searchQuery || selectedSkill !== 'All' || (selectedCity && selectedCity !== 'All Cities') || minRating > 0;
+  const clearFilters = () => { setSearchQuery(''); setSelectedSkill('All'); setSelectedCity(''); setMinRating(0); setAvailabilityFilter('All'); };
+  const hasActiveFilters = searchQuery || selectedSkill !== 'All' || (selectedCity && selectedCity !== 'All Cities') || minRating > 0 || availabilityFilter !== 'All';
 
   const totalWorkersBase = workers.length;
   const ratedWorkers = workers.filter(w => parseFloat(w.rating || 0) > 0);
@@ -219,6 +228,7 @@ const DiscoverWorkers = () => {
             selectedSkill={selectedSkill} setSelectedSkill={setSelectedSkill} skillOptions={SKILL_OPTIONS}
             selectedCity={selectedCity} setSelectedCity={setSelectedCity} cities={cities}
             minRating={minRating} setMinRating={setMinRating} ratingOptions={RATING_OPTIONS}
+            availabilityFilter={availabilityFilter} setAvailabilityFilter={setAvailabilityFilter}
             clearFilters={clearFilters} t={t}
           />
         </div>
