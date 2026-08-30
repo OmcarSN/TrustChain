@@ -172,6 +172,24 @@ export async function fileDisputeOnChain(filerAddress, workerAddress, endorsemen
   return { hash };
 }
 
+/**
+ * Reply to an endorsement on-chain (worker's right of reply).
+ * @param {string} workerAddress - The worker replying
+ * @param {number} endorsementIndex - Index of the endorsement to reply to
+ * @param {string} replyText - The reply text
+ * @returns {Promise<{hash: string}>}
+ */
+export async function replyToEndorsementOnChain(workerAddress, endorsementIndex, replyText) {
+  const args = [
+    new Address(workerAddress).toScVal(),
+    nativeToScVal(endorsementIndex, { type: 'u32' }),
+    nativeToScVal(replyText, { type: 'string' }),
+  ];
+
+  const { hash } = await invokeContract(workerAddress, 'reply_to_endorsement', args);
+  return { hash };
+}
+
 // ═══════════════════════════════════════════════════════════════
 // PUBLIC API — READ OPERATIONS
 // ═══════════════════════════════════════════════════════════════

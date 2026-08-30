@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { explorerAccountUrl } from '../../lib/networkConfig';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import {
   User, Briefcase, MapPin, Calendar, Award,
-  Copy, Check, ExternalLink, Share2, ShieldCheck, Phone
+  Copy, Check, ExternalLink, Share2, ShieldCheck, Phone, Circle, Activity
 } from 'lucide-react';
+import { getWorkerStatus, updateWorkerStatus } from '../../lib/credentialContract';
 
 /**
  * ProfileSidebar — Left sidebar on the WorkerProfile page.
@@ -28,9 +29,52 @@ import {
  */
 const ProfileSidebar = ({
   profile, address, endorsements,
-  copiedAddr, copiedShare, copyAddr, shareProfile, isConnected, t
+  copiedAddr, copiedShare, copyAddr, shareProfile, isConnected, viewerAddress, t
 }) => {
   const [showPhone, setShowPhone] = useState(false);
+  const [currentStatus, setCurrentStatus] = useState(0);
+  const [statusLoading, setStatusLoading] = useState(false);
+  const [statusError, setStatusError] = useState(null);
+
+  useEffect(() => {
+    let mounted = true;
+    const fetchStatus = async () => {
+      try {
+        const { status } = await getWorkerStatus(address);
+        if (mounted) setCurrentStatus(status);
+      } catch (err) {
+        if (mounted) setCurrentStatus(0);
+      }
+    };
+    fetchStatus();
+    return () => { mounted = false; };
+  }, [address]);
+
+  const handleStatusChange = async (newStatus) => {
+    if (newStatus === currentStatus || statusLoading) return;
+    setStatusLoading(true);
+    setStatusError(null);
+    try {
+      await updateWorkerStatus(address, newStatus);
+      setCurrentStatus(newStatus);
+    } catch (err) {
+      console.error(err);
+      setStatusError('Failed to update status');
+    } finally {
+      setStatusLoading(false);
+    }
+  };
+
+  const getStatusColor = (statusNum) => {
+    switch (statusNum) {
+      case 0: return { bg: 'rgba(34,197,94,0.1)', border: 'rgba(34,197,94,0.3)', color: '#22c55e', text: 'Available' };
+      case 1: return { bg: 'rgba(245,158,11,0.1)', border: 'rgba(245,158,11,0.3)', color: '#f59e0b', text: 'Busy' };
+      case 2: return { bg: 'rgba(255,255,255,0.05)', border: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.5)', text: 'Inactive' };
+      default: return { bg: 'rgba(34,197,94,0.1)', border: 'rgba(34,197,94,0.3)', color: '#22c55e', text: 'Available' };
+    }
+  };
+
+  const currentStyle = getStatusColor(currentStatus);
 
   const hasPhone = profile.phone && profile.phone.length > 0;
   const whatsappLink = hasPhone ? `https://wa.me/${profile.phone.replace(/[^0-9]/g, '')}` : null;
@@ -53,6 +97,52 @@ const ProfileSidebar = ({
         <ShieldCheck className="tc-icon-sm" aria-hidden="true" /> {t('profile.badgeVerified')}
       </div>
     )}
+
+    {/* Worker Status Toggle / Badge */}
+    <div className="tc-mb-md" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      {viewerAddress && viewerAddress === address ? (
+        <div style={{ display: 'flex', gap: '8px', background: 'rgba(0,0,0,0.2)', padding: '6px', borderRadius: '100px', border: '1px solid rgba(255,255,255,0.05)' }}>
+          {[
+            { s: 0, c: '#22c55e', l: 'Available' },
+            { s: 1, c: '#f59e0b', l: 'Busy' },
+            { s: 2, c: 'rgba(255,255,255,0.5)', l: 'Inactive' }
+          ].map((opt) => (
+            <button
+              key={opt.s}
+              onClick={() => handleStatusChange(opt.s)}
+              disabled={statusLoading}
+              className="font-inter"
+              style={{
+                display: 'flex', alignItems: 'center', gap: '6px',
+                padding: '4px 12px', borderRadius: '100px',
+                fontSize: '11px', fontWeight: '600',
+                background: currentStatus === opt.s ? `rgba(${opt.s===0?'34,197,94':opt.s===1?'245,158,11':'255,255,255'},0.1)` : 'transparent',
+                border: `1px solid ${currentStatus === opt.s ? opt.c : 'transparent'}`,
+                color: currentStatus === opt.s ? opt.c : 'rgba(255,255,255,0.4)',
+                cursor: statusLoading ? 'not-allowed' : 'pointer',
+                transition: 'all 0.2s ease',
+                opacity: statusLoading && currentStatus !== opt.s ? 0.5 : 1
+              }}
+            >
+              <Circle style={{ width: '8px', height: '8px', fill: currentStatus === opt.s ? opt.c : 'transparent', color: currentStatus === opt.s ? opt.c : 'rgba(255,255,255,0.4)' }} />
+              {opt.l}
+            </button>
+          ))}
+        </div>
+      ) : (
+        <div className="font-inter" style={{
+          display: 'inline-flex', alignItems: 'center', gap: '6px',
+          padding: '6px 14px', borderRadius: '100px',
+          background: currentStyle.bg, border: `1px solid ${currentStyle.border}`,
+          color: currentStyle.color, fontSize: '11px', fontWeight: '600',
+          letterSpacing: '0.5px', textTransform: 'uppercase'
+        }}>
+          <Circle style={{ width: '8px', height: '8px', fill: currentStyle.color, color: currentStyle.color }} />
+          {currentStyle.text}
+        </div>
+      )}
+      {statusError && <p className="font-inter" style={{ color: '#ef4444', fontSize: '10px', marginTop: '8px' }}>{statusError}</p>}
+    </div>
 
     {/* Worker Name */}
     <h2 className="font-clash tc-heading-xl tc-mb-md">{profile.name}</h2>
@@ -207,6 +297,8 @@ ProfileSidebar.propTypes = {
   shareProfile: PropTypes.func.isRequired,
   /** Whether the viewer has a connected wallet. */
   isConnected: PropTypes.bool,
+  /** The stellar address of the person viewing this profile. */
+  viewerAddress: PropTypes.string,
   /** i18next translation function. */
   t: PropTypes.func.isRequired,
 };

@@ -29,7 +29,7 @@ const WorkerProfile = () => {
   const [loading, setLoading] = useState(true);
   const [copiedAddr, setCopiedAddr] = useState(false);
   const [copiedShare, setCopiedShare] = useState(false);
-  const { isConnected } = useWallet();
+  const { isConnected, walletAddress } = useWallet();
 
   const loadProfile = useCallback(async () => {
     const data = await getWorker(address);
@@ -184,6 +184,7 @@ const WorkerProfile = () => {
           copyAddr={copyAddr}
           shareProfile={shareProfile}
           isConnected={isConnected}
+          viewerAddress={walletAddress}
           t={t}
         />
 
@@ -206,7 +207,7 @@ const WorkerProfile = () => {
           />
 
           {/* Endorsements Section */}
-          <EndorsementList endorsements={endorsements} t={t} />
+          <EndorsementList endorsements={endorsements} t={t} workerAddress={address} viewerAddress={walletAddress} />
         </div>
       </div>
     </div>
