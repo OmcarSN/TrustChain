@@ -32,36 +32,42 @@ const ProfileSidebar = ({
   copiedAddr, copiedShare, copyAddr, shareProfile, isConnected, viewerAddress, t
 }) => {
   const [showPhone, setShowPhone] = useState(false);
-  const [currentStatus, setCurrentStatus] = useState(0);
-  const [statusLoading, setStatusLoading] = useState(false);
-  const [statusError, setStatusError] = useState(null);
 
+  // Read initial status from localStorage (instant, no network call)
+  const storageKey = `tc_status_${address}`;
+  const [currentStatus, setCurrentStatus] = useState(() => {
+    try {
+      const saved = localStorage.getItem(storageKey);
+      return saved !== null ? Number(saved) : 0;
+    } catch { return 0; }
+  });
+  const [statusLoading, setStatusLoading] = useState(false);
+
+  // On mount, try reading from contract (background, non-blocking)
   useEffect(() => {
     let mounted = true;
-    const fetchStatus = async () => {
-      try {
-        const { status } = await getWorkerStatus(address);
-        if (mounted) setCurrentStatus(status);
-      } catch (err) {
-        if (mounted) setCurrentStatus(0);
-      }
-    };
-    fetchStatus();
+    getWorkerStatus(address)
+      .then(({ status }) => {
+        if (mounted) {
+          setCurrentStatus(status);
+          try { localStorage.setItem(storageKey, String(status)); } catch {}
+        }
+      })
+      .catch(() => {}); // silently fallback to localStorage value
     return () => { mounted = false; };
-  }, [address]);
+  }, [address, storageKey]);
 
-  const handleStatusChange = async (newStatus) => {
+  const handleStatusChange = (newStatus) => {
     if (newStatus === currentStatus || statusLoading) return;
+    // Optimistic update — instant UI change
+    setCurrentStatus(newStatus);
+    try { localStorage.setItem(storageKey, String(newStatus)); } catch {}
+
+    // Fire-and-forget Soroban call in background
     setStatusLoading(true);
-    setStatusError(null);
-    try {
-      await updateWorkerStatus(address, newStatus);
-      setCurrentStatus(newStatus);
-    } catch (err) {
-      console.error('[CredentialContract] Status update failed:', err);
-    } finally {
-      setStatusLoading(false);
-    }
+    updateWorkerStatus(address, newStatus)
+      .catch((err) => console.error('[CredentialContract] Status update (background):', err))
+      .finally(() => setStatusLoading(false));
   };
 
 
