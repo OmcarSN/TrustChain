@@ -58,8 +58,7 @@ const ProfileSidebar = ({
       await updateWorkerStatus(address, newStatus);
       setCurrentStatus(newStatus);
     } catch (err) {
-      console.error(err);
-      setStatusError('Failed to update status');
+      console.error('[CredentialContract] Status update failed:', err);
     } finally {
       setStatusLoading(false);
     }
@@ -89,46 +88,37 @@ const ProfileSidebar = ({
     )}
 
     {/* Worker Availability Status */}
-    <div className="tc-mb-md" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
-      {viewerAddress && viewerAddress === address ? (
-        /* ── Worker's own profile: Toggle switch ── */
+    {viewerAddress && viewerAddress === address ? (
+      /* ── Worker's own profile: Toggle switch ── */
+      <div className="tc-mb-md">
         <button
           onClick={() => handleStatusChange(currentStatus === 0 ? 2 : 0)}
           disabled={statusLoading}
           className="font-inter"
           style={{
             width: '100%',
-            padding: '12px 16px',
+            padding: '10px 14px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            background: currentStatus === 0 ? 'rgba(34,197,94,0.08)' : 'rgba(255,255,255,0.03)',
-            border: `1px solid ${currentStatus === 0 ? 'rgba(34,197,94,0.25)' : 'rgba(255,255,255,0.08)'}`,
+            background: 'rgba(255,255,255,0.03)',
+            border: '1px solid rgba(255,255,255,0.08)',
             borderRadius: '10px',
             cursor: statusLoading ? 'not-allowed' : 'pointer',
             transition: 'all 0.3s ease',
             opacity: statusLoading ? 0.6 : 1,
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{
-              width: '10px', height: '10px', borderRadius: '50%',
-              background: currentStatus === 0 ? '#22c55e' : 'rgba(255,255,255,0.2)',
-              boxShadow: currentStatus === 0 ? '0 0 8px rgba(34,197,94,0.5)' : 'none',
-              transition: 'all 0.3s ease',
-            }} />
-            <span style={{
-              fontSize: '12px', fontWeight: '700', letterSpacing: '1px', textTransform: 'uppercase',
-              color: currentStatus === 0 ? '#22c55e' : 'rgba(255,255,255,0.4)',
-              transition: 'color 0.3s ease',
-            }}>
-              {statusLoading ? 'Updating...' : currentStatus === 0 ? 'Available for Work' : 'Unavailable'}
-            </span>
-          </div>
+          <span style={{
+            fontSize: '11px', fontWeight: '600', letterSpacing: '1.2px', textTransform: 'uppercase',
+            color: 'rgba(255,255,255,0.5)',
+          }}>
+            {statusLoading ? 'Updating...' : currentStatus === 0 ? 'Available' : 'Unavailable'}
+          </span>
           {/* Toggle track */}
           <div style={{
             width: '36px', height: '20px', borderRadius: '10px',
-            background: currentStatus === 0 ? 'rgba(34,197,94,0.3)' : 'rgba(255,255,255,0.1)',
+            background: currentStatus === 0 ? 'rgba(34,197,94,0.35)' : 'rgba(255,255,255,0.1)',
             position: 'relative', transition: 'background 0.3s ease',
             flexShrink: 0,
           }}>
@@ -138,41 +128,14 @@ const ProfileSidebar = ({
               position: 'absolute', top: '2px',
               left: currentStatus === 0 ? '18px' : '2px',
               transition: 'all 0.3s ease',
-              boxShadow: currentStatus === 0 ? '0 0 6px rgba(34,197,94,0.4)' : 'none',
             }} />
           </div>
         </button>
-      ) : (
-        /* ── Visitor view: Static status badge ── */
-        currentStatus === 0 ? (
-          <div className="font-inter" style={{
-            display: 'inline-flex', alignItems: 'center', gap: '8px',
-            padding: '6px 16px', borderRadius: '100px',
-            background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.25)',
-            color: '#22c55e', fontSize: '11px', fontWeight: '700',
-            letterSpacing: '1px', textTransform: 'uppercase',
-          }}>
-            <div style={{
-              width: '8px', height: '8px', borderRadius: '50%',
-              background: '#22c55e', boxShadow: '0 0 6px rgba(34,197,94,0.5)',
-            }} />
-            Available for Hire
-          </div>
-        ) : (
-          <div className="font-inter" style={{
-            display: 'inline-flex', alignItems: 'center', gap: '8px',
-            padding: '6px 16px', borderRadius: '100px',
-            background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)',
-            color: 'rgba(255,255,255,0.35)', fontSize: '11px', fontWeight: '700',
-            letterSpacing: '1px', textTransform: 'uppercase',
-          }}>
-            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'rgba(255,255,255,0.2)' }} />
-            Currently Unavailable
-          </div>
-        )
-      )}
-      {statusError && <p className="font-inter" style={{ color: '#ef4444', fontSize: '10px', marginTop: '4px' }}>{statusError}</p>}
-    </div>
+      </div>
+    ) : (
+      /* ── Visitor view: No status shown ── */
+      null
+    )}
 
     {/* Worker Name */}
     <h2 className="font-clash tc-heading-xl tc-mb-md">{profile.name}</h2>
