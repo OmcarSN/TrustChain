@@ -37,6 +37,7 @@ During our bootcamp testing phase, workers and employers gave us clear feedback.
 - New `update_status(worker, status)` function so a worker can flip their availability directly on the ledger. It is guarded by `worker.require_auth()` (only the worker can change their own status), rejects invalid values, and blocks updates on revoked credentials.
 - New `get_status(worker)` reader. New credentials default to **Available**, and the status is preserved across credential updates and renewals.
 - Emits a `"status"` event so indexers and the UI can react in real time.
+- **Frontend integration:** UI toggle for workers to change their status from their profile page is planned for the next iteration.
 
 ### 2. 💬 Endorsement Reply Functionality
 **Feedback:** Workers wanted a "right of reply." If an employer left a rating, the worker had no way to add their side of the story — the review was one-sided.
@@ -45,6 +46,7 @@ During our bootcamp testing phase, workers and employers gave us clear feedback.
 - Added a `worker_reply` field to the `Endorsement` struct in the **reputation contract**.
 - New `reply_to_endorsement(worker, endorsement_index, reply)` function lets a worker attach a public reply to any endorsement they received. Guarded by `worker.require_auth()`, length-limited (`MAX_FEEDBACK_LEN`), and validates the endorsement index exists.
 - Emits a `"reply"` event. This makes reputation a **two-way conversation** instead of a one-way review.
+- **Frontend integration:** Reply UI on the worker's profile page is planned for the next iteration.
 
 ### 3. 🔐 Critical Authentication Security Fixes
 **Feedback:** Security review during testing found that verification upgrades were not properly authenticated.
@@ -412,19 +414,37 @@ Verifier searches → Indexer queries Horizon → Parses ManageData → Displays
 
 ## 📜 Smart Contracts
 
+### Hybrid Architecture: Stellar Native + Soroban
+
+TrustChain uses a **dual-layer architecture** optimized for the informal economy:
+
+| Layer | Purpose | Technology |
+|---|---|---|
+| **Layer 1 — Stellar Native** | Core credential minting & endorsement storage | `ManageData` operations via Horizon API |
+| **Layer 2 — Soroban Smart Contracts** | Advanced logic: verification tiers, reputation scoring, availability status, endorsement replies, governance | Rust contracts on Soroban VM |
+
+**Why this design?** Informal economy workers need the lowest possible transaction costs. Stellar native `ManageData` operations cost ~0.00001 XLM per transaction (near zero), while Soroban contract invocations have higher fees due to compute and storage costs. By keeping the high-frequency operations (minting, endorsing) on Layer 1 and the advanced logic on Layer 2, we achieve both **low cost** and **smart contract security**.
+
+The Soroban contracts provide the trust infrastructure — credential verification tiers, time-decay reputation scoring, dispute resolution, and emergency circuit breakers — while the native layer handles the gasless, high-throughput user operations.
+
 ### Credential Contract
-- Manages worker credential operations
-- Stores credential metadata on-chain
+- Manages worker credential operations, verification tiers, availability status, credential expiry & renewal
 - Soulbound — non-transferable by design
+- 20 unit tests passing
 - Address: `CCFRAOH3L2Q7N4OWXG2GGUHL7NH4RD4XX57VZLCJ37P4YTAMNDAK5T63`
 - [View on Stellar Expert](https://stellar.expert/explorer/public/contract/CCFRAOH3L2Q7N4OWXG2GGUHL7NH4RD4XX57VZLCJ37P4YTAMNDAK5T63)
 
 ### Reputation Contract
-- Handles reputation score computation
-- Aggregates endorsement data
-- Produces queryable scores
+- Handles reputation score computation with time-decay weighting
+- Endorsement replies (right of reply), dispute resolution, trust tiers
+- 18 unit tests passing
 - Address: `CBEIPVBJDHGCGTIPLR6XEVK6LQZVMTCC6PKUP5Y5KKVUZRL5OE7L7QDW`
 - [View on Stellar Expert](https://stellar.expert/explorer/public/contract/CBEIPVBJDHGCGTIPLR6XEVK6LQZVMTCC6PKUP5Y5KKVUZRL5OE7L7QDW)
+
+### Governance Contract
+- DAO governance for council voting, admin transfers, and emergency pauses
+- Frontend dashboard built at `/governance` (contract deployment to Mainnet pending)
+- Source: [`contracts/governance/src/lib.rs`](./contracts/governance/src/lib.rs)
 
 ---
 
@@ -1086,7 +1106,7 @@ npm run build
 | Security Hardening | Rate limiting, CORS, input sanitization, 131 automated tests | [SECURITY.md](./SECURITY.md) |
 | CI/CD Pipeline | 8-stage automated GitHub Actions workflow | [ci.yml](./.github/workflows/ci.yml) |
 | Multi-Language Support | English + Hindi localization | `src/locales/` |
-| DAO Governance UI | Full governance dashboard (frontend built) | `src/pages/Governance.jsx` |
+| DAO Governance UI | Full governance dashboard (frontend built, contract not yet deployed on Mainnet) | `src/pages/Governance.jsx` |
 | Community Contribution | Official TrustChain X Profile | [View Post](https://x.com/TrustChainXLM) |
 
 ### 🔜 Next Milestones (Level 7 — Startup Track)
