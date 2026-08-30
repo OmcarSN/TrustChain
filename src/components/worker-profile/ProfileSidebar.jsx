@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import {
   User, Briefcase, MapPin, Calendar, Award,
-  Copy, Check, ExternalLink, Share2, ShieldCheck, Phone, Circle, Activity
+  Copy, Check, ExternalLink, Share2, ShieldCheck, Phone
 } from 'lucide-react';
 import { getWorkerStatus, updateWorkerStatus } from '../../lib/credentialContract';
 
@@ -65,16 +65,6 @@ const ProfileSidebar = ({
     }
   };
 
-  const getStatusColor = (statusNum) => {
-    switch (statusNum) {
-      case 0: return { bg: 'rgba(34,197,94,0.1)', border: 'rgba(34,197,94,0.3)', color: '#22c55e', text: 'Available' };
-      case 1: return { bg: 'rgba(245,158,11,0.1)', border: 'rgba(245,158,11,0.3)', color: '#f59e0b', text: 'Busy' };
-      case 2: return { bg: 'rgba(255,255,255,0.05)', border: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.5)', text: 'Inactive' };
-      default: return { bg: 'rgba(34,197,94,0.1)', border: 'rgba(34,197,94,0.3)', color: '#22c55e', text: 'Available' };
-    }
-  };
-
-  const currentStyle = getStatusColor(currentStatus);
 
   const hasPhone = profile.phone && profile.phone.length > 0;
   const whatsappLink = hasPhone ? `https://wa.me/${profile.phone.replace(/[^0-9]/g, '')}` : null;
@@ -98,50 +88,90 @@ const ProfileSidebar = ({
       </div>
     )}
 
-    {/* Worker Status Toggle / Badge */}
-    <div className="tc-mb-md" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    {/* Worker Availability Status */}
+    <div className="tc-mb-md" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
       {viewerAddress && viewerAddress === address ? (
-        <div style={{ display: 'flex', gap: '8px', background: 'rgba(0,0,0,0.2)', padding: '6px', borderRadius: '100px', border: '1px solid rgba(255,255,255,0.05)' }}>
-          {[
-            { s: 0, c: '#22c55e', l: 'Available' },
-            { s: 1, c: '#f59e0b', l: 'Busy' },
-            { s: 2, c: 'rgba(255,255,255,0.5)', l: 'Inactive' }
-          ].map((opt) => (
-            <button
-              key={opt.s}
-              onClick={() => handleStatusChange(opt.s)}
-              disabled={statusLoading}
-              className="font-inter"
-              style={{
-                display: 'flex', alignItems: 'center', gap: '6px',
-                padding: '4px 12px', borderRadius: '100px',
-                fontSize: '11px', fontWeight: '600',
-                background: currentStatus === opt.s ? `rgba(${opt.s===0?'34,197,94':opt.s===1?'245,158,11':'255,255,255'},0.1)` : 'transparent',
-                border: `1px solid ${currentStatus === opt.s ? opt.c : 'transparent'}`,
-                color: currentStatus === opt.s ? opt.c : 'rgba(255,255,255,0.4)',
-                cursor: statusLoading ? 'not-allowed' : 'pointer',
-                transition: 'all 0.2s ease',
-                opacity: statusLoading && currentStatus !== opt.s ? 0.5 : 1
-              }}
-            >
-              <Circle style={{ width: '8px', height: '8px', fill: currentStatus === opt.s ? opt.c : 'transparent', color: currentStatus === opt.s ? opt.c : 'rgba(255,255,255,0.4)' }} />
-              {opt.l}
-            </button>
-          ))}
-        </div>
+        /* ── Worker's own profile: Toggle switch ── */
+        <button
+          onClick={() => handleStatusChange(currentStatus === 0 ? 2 : 0)}
+          disabled={statusLoading}
+          className="font-inter"
+          style={{
+            width: '100%',
+            padding: '12px 16px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            background: currentStatus === 0 ? 'rgba(34,197,94,0.08)' : 'rgba(255,255,255,0.03)',
+            border: `1px solid ${currentStatus === 0 ? 'rgba(34,197,94,0.25)' : 'rgba(255,255,255,0.08)'}`,
+            borderRadius: '10px',
+            cursor: statusLoading ? 'not-allowed' : 'pointer',
+            transition: 'all 0.3s ease',
+            opacity: statusLoading ? 0.6 : 1,
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{
+              width: '10px', height: '10px', borderRadius: '50%',
+              background: currentStatus === 0 ? '#22c55e' : 'rgba(255,255,255,0.2)',
+              boxShadow: currentStatus === 0 ? '0 0 8px rgba(34,197,94,0.5)' : 'none',
+              transition: 'all 0.3s ease',
+            }} />
+            <span style={{
+              fontSize: '12px', fontWeight: '700', letterSpacing: '1px', textTransform: 'uppercase',
+              color: currentStatus === 0 ? '#22c55e' : 'rgba(255,255,255,0.4)',
+              transition: 'color 0.3s ease',
+            }}>
+              {statusLoading ? 'Updating...' : currentStatus === 0 ? 'Available for Work' : 'Unavailable'}
+            </span>
+          </div>
+          {/* Toggle track */}
+          <div style={{
+            width: '36px', height: '20px', borderRadius: '10px',
+            background: currentStatus === 0 ? 'rgba(34,197,94,0.3)' : 'rgba(255,255,255,0.1)',
+            position: 'relative', transition: 'background 0.3s ease',
+            flexShrink: 0,
+          }}>
+            <div style={{
+              width: '16px', height: '16px', borderRadius: '50%',
+              background: currentStatus === 0 ? '#22c55e' : 'rgba(255,255,255,0.3)',
+              position: 'absolute', top: '2px',
+              left: currentStatus === 0 ? '18px' : '2px',
+              transition: 'all 0.3s ease',
+              boxShadow: currentStatus === 0 ? '0 0 6px rgba(34,197,94,0.4)' : 'none',
+            }} />
+          </div>
+        </button>
       ) : (
-        <div className="font-inter" style={{
-          display: 'inline-flex', alignItems: 'center', gap: '6px',
-          padding: '6px 14px', borderRadius: '100px',
-          background: currentStyle.bg, border: `1px solid ${currentStyle.border}`,
-          color: currentStyle.color, fontSize: '11px', fontWeight: '600',
-          letterSpacing: '0.5px', textTransform: 'uppercase'
-        }}>
-          <Circle style={{ width: '8px', height: '8px', fill: currentStyle.color, color: currentStyle.color }} />
-          {currentStyle.text}
-        </div>
+        /* ── Visitor view: Static status badge ── */
+        currentStatus === 0 ? (
+          <div className="font-inter" style={{
+            display: 'inline-flex', alignItems: 'center', gap: '8px',
+            padding: '6px 16px', borderRadius: '100px',
+            background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.25)',
+            color: '#22c55e', fontSize: '11px', fontWeight: '700',
+            letterSpacing: '1px', textTransform: 'uppercase',
+          }}>
+            <div style={{
+              width: '8px', height: '8px', borderRadius: '50%',
+              background: '#22c55e', boxShadow: '0 0 6px rgba(34,197,94,0.5)',
+            }} />
+            Available for Hire
+          </div>
+        ) : (
+          <div className="font-inter" style={{
+            display: 'inline-flex', alignItems: 'center', gap: '8px',
+            padding: '6px 16px', borderRadius: '100px',
+            background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)',
+            color: 'rgba(255,255,255,0.35)', fontSize: '11px', fontWeight: '700',
+            letterSpacing: '1px', textTransform: 'uppercase',
+          }}>
+            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'rgba(255,255,255,0.2)' }} />
+            Currently Unavailable
+          </div>
+        )
       )}
-      {statusError && <p className="font-inter" style={{ color: '#ef4444', fontSize: '10px', marginTop: '8px' }}>{statusError}</p>}
+      {statusError && <p className="font-inter" style={{ color: '#ef4444', fontSize: '10px', marginTop: '4px' }}>{statusError}</p>}
     </div>
 
     {/* Worker Name */}
