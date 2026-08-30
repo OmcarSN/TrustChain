@@ -37,7 +37,7 @@ During our bootcamp testing phase, workers and employers gave us clear feedback.
 - New `update_status(worker, status)` function so a worker can flip their availability directly on the ledger. It is guarded by `worker.require_auth()` (only the worker can change their own status), rejects invalid values, and blocks updates on revoked credentials.
 - New `get_status(worker)` reader. New credentials default to **Available**, and the status is preserved across credential updates and renewals.
 - Emits a `"status"` event so indexers and the UI can react in real time.
-- **Frontend integration:** UI toggle for workers to change their status from their profile page is planned for the next iteration.
+- **Frontend integration:** Workers can toggle their status directly from their profile page using interactive buttons (Available / Busy / Inactive). Status is written on-chain via Soroban `InvokeHostFunction`.
 
 ### 2. 💬 Endorsement Reply Functionality
 **Feedback:** Workers wanted a "right of reply." If an employer left a rating, the worker had no way to add their side of the story — the review was one-sided.
@@ -46,7 +46,7 @@ During our bootcamp testing phase, workers and employers gave us clear feedback.
 - Added a `worker_reply` field to the `Endorsement` struct in the **reputation contract**.
 - New `reply_to_endorsement(worker, endorsement_index, reply)` function lets a worker attach a public reply to any endorsement they received. Guarded by `worker.require_auth()`, length-limited (`MAX_FEEDBACK_LEN`), and validates the endorsement index exists.
 - Emits a `"reply"` event. This makes reputation a **two-way conversation** instead of a one-way review.
-- **Frontend integration:** Reply UI on the worker's profile page is planned for the next iteration.
+- **Frontend integration:** Workers can reply to any endorsement directly from their profile page. Reply is submitted on-chain via Soroban `InvokeHostFunction`.
 
 ### 3. 🔐 Critical Authentication Security Fixes
 **Feedback:** Security review during testing found that verification upgrades were not properly authenticated.
