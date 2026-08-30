@@ -2,6 +2,7 @@
 ### *Your Work. Your Reputation. On-Chain Forever.*
 
 [![Level](https://img.shields.io/badge/Level-7_Master_Belt_🏆-gold?style=for-the-badge)](#-level-7--startup-track)
+[![CI/CD Pipeline](https://github.com/OmcarSN/TrustChain/actions/workflows/ci.yml/badge.svg)](https://github.com/OmcarSN/TrustChain/actions/workflows/ci.yml)
 [![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-trust--chain--mocha.vercel.app-7c3aed?style=for-the-badge)](https://trust-chain-mocha.vercel.app/)
 [![Demo Video](https://img.shields.io/badge/🎥_Demo_Video-YouTube-red?style=for-the-badge&logo=youtube)](https://youtu.be/3d4YxGwsK0U?si=grqwJ_fMEf4PFf07)
 [![Stellar](https://img.shields.io/badge/Built_on-Stellar_Mainnet-blue?style=for-the-badge&logo=stellar)](https://stellar.org)
@@ -78,9 +79,11 @@ During our bootcamp testing phase, workers and employers gave us clear feedback.
 - Check 2: Queries endorsements **given by** the reviewer's wallet (safety net).
 - The Submit button is greyed out and the user sees an "Already Endorsed" error immediately.
 
-### ✅ Verification
-- **Credential contract:** 20/20 unit tests pass.
-- **Reputation contract:** 18/18 unit tests pass.
+### ✅ Verification & Automated CI/CD
+- **Credential contract:** 20/20 unit tests pass (`cargo test -p credential-contract`).
+- **Reputation contract:** 18/18 unit tests pass (`cargo test -p reputation-contract`).
+- **Total Test Suite:** 131 automated tests passing across smart contracts (38 tests) and frontend (93 tests).
+- **GitHub Actions Pipeline:** Full 8-stage automated CI/CD pipeline (`.github/workflows/ci.yml`) passing on push and PR.
 - Both contracts rebuilt to WebAssembly (`cargo build --target wasm32-unknown-unknown --release`); the compiled `.wasm` artifacts are committed at [`contracts/credential/wasm/`](./contracts/credential/wasm/) and [`contracts/reputation/wasm/`](./contracts/reputation/wasm/).
 
 ---
@@ -89,12 +92,13 @@ During our bootcamp testing phase, workers and employers gave us clear feedback.
 - [Problem Statement](#-problem-statement)
 - [Solution](#-solution)
 - [Key Features](#-key-features)
+- [🆕 Level 7 Updates (Iterated from User Feedback)](#-level-7-updates-iterated-from-user-feedback)
 - [🏆 Level 7 — Startup Track](#-level-7--startup-track)
 - [Live Demo & Links](#-live-demo--links)
 - [Architecture](#️-architecture)
 - [Tech Stack](#️-tech-stack)
 - [Smart Contracts](#-smart-contracts)
-- [⚫ Level 7 Master Belt — Production Upgrades](#-level-7-updates-iterated-from-user-feedback)
+- [⚫ Level 7 Master Belt — Production Upgrades](#-level-7-master-belt--production-upgrades)
 - [Advanced Feature: Fee Sponsorship](#-advanced-feature-fee-sponsorship-gasless-transactions)
 - [Data Indexing](#-data-indexing)
 - [Metrics Dashboard](#-metrics-dashboard)
@@ -235,8 +239,8 @@ TrustChain is applying to the **Stellar Startup Track (Level 7 — Master Belt)*
 | Mainnet deployment | ✅ 2 Soroban contracts deployed on Stellar Mainnet |
 | User validation | ✅ 30+ user feedback responses collected (4.8/5 avg rating) |
 | Mainnet users | ✅ 11 registered workers, 5 verified phones, 2 endorsements |
-| Security hardening | ✅ Rate limiting, CORS, phone verification, 93 automated tests |
-| CI/CD pipeline | ✅ 8-stage GitHub Actions workflow |
+| Security hardening | ✅ Rate limiting, CORS, phone verification, 131 automated tests |
+| CI/CD pipeline | ✅ [8-Stage GitHub Actions Pipeline](https://github.com/OmcarSN/TrustChain/actions) (Passing) |
 | Demo video | ✅ [YouTube](https://youtu.be/3d4YxGwsK0U?si=grqwJ_fMEf4PFf07) |
 
 ### 💼 Business Model
@@ -394,7 +398,7 @@ Verifier searches → Indexer queries Horizon → Parses ManageData → Displays
 | Charts | Recharts |
 | Routing | React Router v7 |
 | Type Safety | PropTypes (runtime) + JSDoc (IDE) |
-| Testing | Vitest + @testing-library/react (93 tests) |
+| Testing | Vitest (93 frontend tests) + Cargo test (38 contract tests) = 131 tests |
 | Blockchain | Stellar Mainnet + Horizon API |
 | Wallet | Freighter API v6 |
 | Smart Contracts | Soroban SDK + Rust |
@@ -433,8 +437,9 @@ TrustChain has been upgraded to **Level 7 Master Belt** with production-grade fe
 - **Reputation Contract:** Rewritten with robust duplicate endorsement prevention, time-decay weighted scores (newer reviews weigh more), and total trust tiers. Protected by 18 comprehensive unit tests.
 
 ### 🔄 Production CI/CD Pipeline
-- **Automated Workflow (`.github/workflows/ci.yml`)**: 8-stage professional pipeline triggering on push to main.
-- **Stages**: Frontend linting, Frontend unit/integration testing, Frontend bundling, `cargo clippy` linting, `cargo test` for smart contracts, WASM artifact builds, NPM security auditing, and automated Vercel preview/production deployments.
+- **Automated Workflow (`.github/workflows/ci.yml`)**: 8-stage professional pipeline triggering on push and PR to `master`, `main`, and `develop` branches.
+- **Status:** [![CI/CD Pipeline](https://github.com/OmcarSN/TrustChain/actions/workflows/ci.yml/badge.svg)](https://github.com/OmcarSN/TrustChain/actions/workflows/ci.yml) (Passing)
+- **Stages**: Frontend linting, Frontend unit/integration testing (93 tests), Frontend bundling, `cargo clippy` linting, `cargo test` for smart contracts (38 tests), WASM artifact builds, NPM security auditing, and automated deployment.
 
 ### ⚡ Gasless Transactions & Automated Onboarding
 - **Shared Logic:** `src/utils/feeBump.js` — `buildFeeBumpTransaction(innerTxXDR, sponsorKeypair, networkPassphrase)`
@@ -1010,7 +1015,7 @@ npm run build
 | 🎨 **UI/UX praised** | 15+ users | ✅ Continued premium design |
 | 🌐 **Multi-language support** | 4 users | ✅ Hindi added |
 | 📱 **QR code sharing** | 2 users | 🔜 Planned for next iteration |
-| 📞 **Contact details** | 2 users | 🔜 Under consideration |
+| 📞 **Contact details** | 2 users | ✅ Shipped (Contact Worker button with direct Call & WhatsApp) |
 | ⚡ **Easy to use** | 10+ users | ✅ Maintained simplicity |
 
 ---
@@ -1078,7 +1083,7 @@ npm run build
 | Gasless Onboarding | Sponsor wallet funds new accounts + pays all fees | `/api/build-mint.js` + `/api/fee-bump.js` |
 | Phone Verification | Twilio OTP-based Sybil resistance | `/api/send-otp.js` + `/api/verify-otp.js` |
 | User Validation | 30 real users tested, 4.8/5 avg rating | [user-feedback.xlsx](./user-feedback.xlsx) |
-| Security Hardening | Rate limiting, CORS, input sanitization, 93 automated tests | [SECURITY.md](./SECURITY.md) |
+| Security Hardening | Rate limiting, CORS, input sanitization, 131 automated tests | [SECURITY.md](./SECURITY.md) |
 | CI/CD Pipeline | 8-stage automated GitHub Actions workflow | [ci.yml](./.github/workflows/ci.yml) |
 | Multi-Language Support | English + Hindi localization | `src/locales/` |
 | DAO Governance UI | Full governance dashboard (frontend built) | `src/pages/Governance.jsx` |
@@ -1111,7 +1116,7 @@ npm run build
 | UI Polish | Thanchan, Khushi, Narayan: "Improve UI" | ✅ Shipped |
 | Multi-Language | Priyanka, Stallon, Sudam, Gauri: "Add languages" | ✅ Hindi shipped |
 | QR Code Sharing | Manisha, Gauri: "Add QR code" | 🔜 Planned |
-| Worker Contact Details | Sudam, Gauri: "Add contact numbers" | 🔜 Planned |
+| Worker Contact Details | Sudam, Gauri: "Add contact numbers" | ✅ Shipped (Direct Call & WhatsApp on Worker Profile) |
 
 ---
 
