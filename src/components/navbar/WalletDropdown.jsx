@@ -90,7 +90,7 @@ const WalletDropdown = ({
               className="tc-dropdown"
             >
               <div className="tc-dropdown-header">
-                <span className="tc-dropdown-dot" aria-hidden="true">●</span>
+                <span className="tc-dropdown-dot" aria-hidden="true" />
                 {truncate(walletAddress)}
               </div>
               <Link ref={setItemRef(0)} to="/dashboard" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter" role="menuitem" tabIndex={0}><LayoutDashboard style={{ width: 14, height: 14, opacity: 0.5 }} />{t('nav_dashboard', 'Dashboard')}</Link>

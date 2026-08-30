@@ -100,8 +100,8 @@ const Navbar = () => {
             pointer-events: none; z-index: 0;
           }
           @keyframes verifiedPulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(79,107,237,0.4); }
-            50%       { box-shadow: 0 0 0 6px rgba(79,107,237,0); }
+            0%, 100% { box-shadow: 0 0 0 0 rgba(22,163,74,0.4); }
+            50%       { box-shadow: 0 0 0 6px rgba(22,163,74,0); }
           }
           @keyframes dropdownOpen {
             from { opacity: 0; transform: translateY(-8px) scale(0.98); }
