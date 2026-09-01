@@ -34,49 +34,191 @@ export const useToast = () => {
  */
 export const ToastProvider = ({ children }) => {
   const [toasts, setToasts] = useState([]);
-  // eslint-disable-next-line react-hooks/purity
-  const showToast = (message, type = 'success') => { const id = Date.now(); setToasts(p => [...p, { id, message, type }]); setTimeout(() => removeToast(id), 4000); };
+  
+  const parseMessage = (msg, type) => {
+    if (typeof msg !== 'string') return { title: type === 'error' ? 'Error' : 'Success', sub: '' };
+    if (msg.includes('!')) {
+      const parts = msg.split('!');
+      return { title: parts[0].trim() + '!', sub: parts.slice(1).join('!').trim() || (type === 'success' ? 'Transaction confirmed on Stellar' : '') };
+    }
+    if (msg.includes(':')) {
+      const parts = msg.split(':');
+      return { title: parts[0].trim(), sub: parts.slice(1).join(':').trim() };
+    }
+    return {
+      title: type === 'error' ? 'Action Failed' : type === 'info' ? 'Notice' : 'Success',
+      sub: msg
+    };
+  };
+
+  const showToast = (message, type = 'success') => {
+    const id = Date.now();
+    const { title, sub } = parseMessage(message, type);
+    setToasts(p => [...p, { id, title, sub, type }]);
+    setTimeout(() => removeToast(id), 4500);
+  };
+  
   const removeToast = (id) => setToasts(p => p.filter(t => t.id !== id));
   const success = (msg) => showToast(msg, 'success');
   const showError = (msg) => showToast(msg, 'error');
   const info = (msg) => showToast(msg, 'info');
   const toastRef = useRef({ success, error: showError, info });
-  useEffect(() => {
-    toastRef.current = { success, error: showError, info };
-  });
+  toastRef.current = { success, error: showError, info };
+
   useEffect(() => {
     registerToastInstance({
       success: (msg) => toastRef.current.success(msg),
       error: (msg) => toastRef.current.error(msg),
-      info: (msg) => toastRef.current.info(msg),
+      info: (msg) => toastRef.current.info(msg)
     });
   }, []);
 
   return (
     <ToastContext.Provider value={{ success, error: showError, info }}>
       {children}
-      <div className="fixed top-8 right-8 z-[9999] flex flex-col gap-3 max-w-sm w-full pointer-events-none" role="alert" aria-live="assertive" aria-atomic="true">
+      <div className="fixed top-6 right-6 z-[9999] flex flex-col gap-3 max-w-[360px] w-full pointer-events-none" role="alert" aria-live="assertive" aria-atomic="true">
         <AnimatePresence>
-          {toasts.map((toast) => (
-            <motion.div key={toast.id} initial={{ opacity: 0, x: 20, scale: 0.95 }} animate={{ opacity: 1, x: 0, scale: 1 }} exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.2 } }}
-              className={`p-4 rounded-[2px] border flex items-center gap-3.5 shadow-2xl pointer-events-auto relative overflow-hidden ${
-                toast.type === 'success' ? 'bg-[#0a0a0a] border-green-400/20 text-green-100'
-                : toast.type === 'error' ? 'bg-[#0a0a0a] border-red-400/25 text-red-100'
-                : 'bg-[#0a0a0a] border-white/15 text-white'
-              }`}>
-              <div className={`relative z-10 w-9 h-9 rounded-[2px] flex items-center justify-center shrink-0 ${
-                toast.type === 'success' ? 'bg-green-400/10 border border-green-400/20'
-                : toast.type === 'error' ? 'bg-red-400/10 border border-red-400/20'
-                : 'bg-white/5 border border-white/10'
-              }`}>
-                {toast.type === 'success' && <CheckCircle2 className="w-4.5 h-4.5 text-green-400" />}
-                {toast.type === 'error' && <AlertCircle className="w-4.5 h-4.5 text-red-400" />}
-                {toast.type === 'info' && <ShieldCheck className="w-4.5 h-4.5 text-white/50" />}
-              </div>
-              <div className="flex-1 relative z-10"><p className="text-[12px] font-bold leading-tight tracking-wide font-inter">{toast.message}</p></div>
-              <button onClick={() => removeToast(toast.id)} className="relative z-10 p-1.5 hover:bg-white/10 rounded-[2px] transition-colors text-white/30 hover:text-white"><X className="w-4 h-4" /></button>
-            </motion.div>
-          ))}
+          {toasts.map((toast) => {
+            const isSuccess = toast.type === 'success';
+            const isError = toast.type === 'error';
+            const waveColor = isSuccess ? 'rgba(34,197,94,0.22)' : isError ? 'rgba(239,68,68,0.22)' : 'rgba(79,107,237,0.22)';
+            const iconBg = isSuccess ? 'rgba(34,197,94,0.18)' : isError ? 'rgba(239,68,68,0.18)' : 'rgba(79,107,237,0.18)';
+            const iconColor = isSuccess ? '#22c55e' : isError ? '#ef4444' : '#7C93F2';
+            const titleColor = isSuccess ? '#22c55e' : isError ? '#ef4444' : '#7C93F2';
+            const borderColor = isSuccess ? 'rgba(34,197,94,0.3)' : isError ? 'rgba(239,68,68,0.3)' : 'rgba(79,107,237,0.3)';
+
+            return (
+              <motion.div
+                key={toast.id}
+                initial={{ opacity: 0, x: 30, scale: 0.95 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
+                className="pointer-events-auto relative overflow-hidden font-inter"
+                style={{
+                  width: '100%',
+                  minHeight: '74px',
+                  borderRadius: '12px',
+                  boxSizing: 'border-box',
+                  padding: '12px 16px',
+                  backgroundColor: '#0c0f17',
+                  border: `1px solid ${borderColor}`,
+                  boxShadow: '0 16px 40px rgba(0,0,0,0.7), 0 0 20px rgba(0,0,0,0.5)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '14px',
+                }}
+              >
+                {/* Wave decorative background */}
+                <svg
+                  viewBox="0 0 1440 320"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{
+                    position: 'absolute',
+                    transform: 'rotate(90deg)',
+                    left: '-32px',
+                    top: '28px',
+                    width: '90px',
+                    fill: waveColor,
+                    pointerEvents: 'none',
+                    zIndex: 0,
+                  }}
+                >
+                  <path
+                    d="M0,256L11.4,240C22.9,224,46,192,69,192C91.4,192,114,224,137,234.7C160,245,183,235,206,213.3C228.6,192,251,160,274,149.3C297.1,139,320,149,343,181.3C365.7,213,389,267,411,282.7C434.3,299,457,277,480,250.7C502.9,224,526,192,549,181.3C571.4,171,594,181,617,208C640,235,663,277,686,256C708.6,235,731,149,754,122.7C777.1,96,800,128,823,165.3C845.7,203,869,245,891,224C914.3,203,937,117,960,112C982.9,107,1006,181,1029,197.3C1051.4,213,1074,171,1097,144C1120,117,1143,107,1166,133.3C1188.6,160,1211,224,1234,218.7C1257.1,213,1280,139,1303,133.3C1325.7,128,1349,192,1371,192C1394.3,192,1417,128,1429,96L1440,64L1440,320L1428.6,320C1417.1,320,1394,320,1371,320C1348.6,320,1326,320,1303,320C1280,320,1257,320,1234,320C1211.4,320,1189,320,1166,320C1142.9,320,1120,320,1097,320C1074.3,320,1051,320,1029,320C1005.7,320,983,320,960,320C937.1,320,914,320,891,320C868.6,320,846,320,823,320C800,320,777,320,754,320C731.4,320,709,320,686,320C662.9,320,640,320,617,320C594.3,320,571,320,549,320C525.7,320,503,320,480,320C457.1,320,434,320,411,320C388.6,320,366,320,343,320C320,320,297,320,274,320C251.4,320,229,320,206,320C182.9,320,160,320,137,320C114.3,320,91,320,69,320C45.7,320,23,320,11,320L0,320Z"
+                    fillOpacity="1"
+                  />
+                </svg>
+
+                {/* Circular Icon Container */}
+                <div
+                  style={{
+                    width: '36px',
+                    height: '36px',
+                    borderRadius: '50%',
+                    backgroundColor: iconBg,
+                    border: `1px solid ${borderColor}`,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    flexShrink: 0,
+                    position: 'relative',
+                    zIndex: 1,
+                  }}
+                >
+                  {isSuccess && (
+                    <svg viewBox="0 0 512 512" style={{ width: '18px', height: '18px', fill: iconColor }}>
+                      <path d="M256 48a208 208 0 1 1 0 416 208 208 0 1 1 0-416zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-111 111-47-47c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l64 64c9.4 9.4 24.6 9.4 33.9 0L369 209z" />
+                    </svg>
+                  )}
+                  {isError && <AlertCircle style={{ width: '18px', height: '18px', color: iconColor }} />}
+                  {!isSuccess && !isError && <ShieldCheck style={{ width: '18px', height: '18px', color: iconColor }} />}
+                </div>
+
+                {/* Message Text Container */}
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'flex-start',
+                    flexGrow: 1,
+                    minWidth: 0,
+                    position: 'relative',
+                    zIndex: 1,
+                  }}
+                >
+                  <p
+                    style={{
+                      margin: 0,
+                      color: titleColor,
+                      fontSize: '13px',
+                      fontWeight: 700,
+                      letterSpacing: '0.3px',
+                      lineHeight: '1.3',
+                    }}
+                  >
+                    {toast.title}
+                  </p>
+                  {toast.sub && (
+                    <p
+                      style={{
+                        margin: '2px 0 0 0',
+                        fontSize: '11px',
+                        color: 'rgba(255, 255, 255, 0.65)',
+                        lineHeight: '1.35',
+                        wordBreak: 'break-word',
+                      }}
+                    >
+                      {toast.sub}
+                    </p>
+                  )}
+                </div>
+
+                {/* Close Cross Button */}
+                <button
+                  onClick={() => removeToast(toast.id)}
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    cursor: 'pointer',
+                    padding: '4px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'rgba(255, 255, 255, 0.4)',
+                    transition: 'color 0.2s ease',
+                    position: 'relative',
+                    zIndex: 1,
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = '#ffffff'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255, 255, 255, 0.4)'; }}
+                  aria-label="Close notification"
+                >
+                  <X style={{ width: '16px', height: '16px' }} />
+                </button>
+              </motion.div>
+            );
+          })}
         </AnimatePresence>
       </div>
     </ToastContext.Provider>
