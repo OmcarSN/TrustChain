@@ -24,7 +24,7 @@ const Analytics = () => {
   const { t } = useTranslation();
   const [metrics, setMetrics] = useState({ totalCredentials: 0, activeWallets: 0, todayTx: 0, recentActivity: [], trendData: [], loading: true, error: null });
   const [chartType, setChartType] = useState('area');
-  const [lastIndexed, setLastIndexed] = useState(Date.now());
+  const [lastIndexed, setLastIndexed] = useState(() => Date.now());
   const [timeSinceIndex, setTimeSinceIndex] = useState('Just now');
   const [isRefreshing, setIsRefreshing] = useState(false);
 

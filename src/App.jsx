@@ -55,6 +55,7 @@ const PageWrapper = ({ children }) => (
     animate={{ opacity: 1, y: 0 }}
     exit={{ opacity: 0, y: -10 }}
     transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+    className="w-full"
   >
     {children}
   </motion.div>
@@ -64,14 +65,14 @@ const App = () => {
   const location = useLocation();
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#050505]">
+    <div className="flex flex-col min-h-screen w-full bg-[#050505]">
       <SkipToContent />
       <ScrollToTop />
       {/* Global Animated Background */}
       <GlobalBackground />
 
       <Navbar />
-      <main id="main-content" className="flex-grow">
+      <main id="main-content" className="flex-grow w-full">
         <ErrorBoundary>
         <Suspense fallback={<PageLoader />}>
           <AnimatePresence mode="wait">

@@ -52,7 +52,7 @@ const Footer = () => {
       `}</style>
 
       {/* Top Section: 4 Columns */}
-      <div style={{ maxWidth: '1200px', margin: '0 auto', gap: '48px', padding: '64px 24px 48px' }} className="font-inter grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
+      <div className="font-inter grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 max-w-7xl mx-auto px-6 sm:px-10 lg:px-16" style={{ gap: '48px', paddingBottom: '48px', paddingTop: '64px' }}>
         
         {/* Col 1: Brand */}
         <div>
@@ -113,10 +113,10 @@ const Footer = () => {
       {/* Bottom Bar */}
       <div style={{
         borderTop: '1px solid rgba(255,255,255,0.06)',
-        padding: '20px 24px',
+        paddingTop: '20px',
+        paddingBottom: '20px',
         display: 'flex', flexDirection: 'column', gap: '16px',
-        maxWidth: '1200px', margin: '0 auto',
-      }} className="sm:flex-row sm:items-center sm:justify-between">
+      }} className="sm:flex-row sm:items-center sm:justify-between max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
         <span className="font-inter" style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.1em' }}>
           © 2026 TRUSTCHAIN PROTOCOL · BUILT ON STELLAR
         </span>

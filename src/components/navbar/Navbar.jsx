@@ -67,10 +67,7 @@ const Navbar = () => {
   const truncate = (addr) =>
     addr ? `${addr.slice(0, 6)}...${addr.slice(-4)}` : "";
 
-  const navLinks = isConnected ? [
-    { name: t('nav.home', 'Home'), path: '/' },
-    { name: t('nav.discover', 'Find Workers'), path: '/discover' }
-  ] : [
+  const navLinks = [
     { name: t('nav.home', 'Home'), path: '/' },
     { name: t('nav.discover', 'Find Workers'), path: '/discover' },
     { name: t('nav.howItWorks', 'How It Works'), path: '/how-it-works' }
@@ -133,46 +130,39 @@ const Navbar = () => {
         `}</style>
         <div className="navbar-border-bottom" aria-hidden="true" />
         <div
-          className="h-[80px]"
+          className="h-[76px] max-w-7xl mx-auto px-6 sm:px-8 md:px-12 lg:px-16 flex justify-between items-center w-full"
           style={{
-            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-            width: '100%', boxSizing: 'border-box', maxWidth: '1400px',
-            margin: '0 auto', paddingLeft: '3vw', paddingRight: '3vw'
+            paddingLeft: 'clamp(1.5rem, 5vw, 4rem)',
+            paddingRight: 'clamp(1.5rem, 5vw, 4rem)',
           }}
         >
           {/* Logo + Brand */}
-          <Link to="/" className="flex items-center gap-3 group" aria-label="TrustChain home">
-            <div className="transition-transform duration-500 cubic-bezier(0.16, 1, 0.3, 1) group-hover:scale-110 group-hover:rotate-6">
-              <TrustChainLogo size={36} />
+          <Link to="/" className="flex items-center gap-3 group select-none flex-shrink-0" aria-label="TrustChain home">
+            <div className="transition-transform duration-300 group-hover:scale-105">
+              <TrustChainLogo size={32} />
             </div>
-            <div className="flex flex-col leading-none transition-all duration-300 group-hover:opacity-80 group-hover:translate-x-1">
-              <span className="font-clash font-bold text-lg tracking-widest uppercase" style={{ background: 'linear-gradient(135deg, #ffffff 0%, rgba(255,255,255,0.7) 50%, #4F6BED 100%)', backgroundSize: '200% auto', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>TRUSTCHAIN</span>
-              <span className="text-[9px] uppercase tracking-[0.25em] text-white/30 font-inter mt-0.5 group-hover:text-[#7C93F2] transition-colors duration-300">
-                {t('nav.verifiedEconomy', 'Verified Economy')}
+            <div className="flex flex-col leading-none">
+              <span className="font-bold text-base tracking-widest text-white uppercase">TRUSTCHAIN</span>
+              <span className="text-[9px] uppercase tracking-[0.2em] text-gray-400 font-medium mt-0.5">
+                {t('nav.verifiedEconomy', 'VERIFIED ECONOMY')}
               </span>
             </div>
           </Link>
 
-          {/* Center Nav Links (Desktop) */}
+          {/* Center Nav Links (Desktop) in rounded pill container with gray-700 border */}
           <DesktopNavLinks navLinks={navLinks} location={location} />
 
           {/* Right: Actions */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }} className="relative h-full">
-            {/* Language toggle */}
+          <div className="flex items-center gap-4 sm:gap-5 relative h-full flex-shrink-0">
+            {/* Language toggle (EN dropdown) */}
             <button
               onClick={toggleLanguage}
               title="Toggle Language"
               aria-label={`Switch language to ${i18n.language === 'en' ? 'Hindi' : 'English'}`}
-              className="lang-btn font-inter uppercase"
-              style={{
-                height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                padding: '7px 14px', background: 'rgba(255,255,255,0.03)',
-                border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.7)',
-                fontSize: '11px', fontWeight: '600', letterSpacing: '1.5px',
-                cursor: 'pointer', borderRadius: '8px',
-              }}
+              className="flex items-center justify-center gap-1 text-white/80 hover:text-white text-xs font-semibold uppercase tracking-wider transition-colors py-1 cursor-pointer"
             >
-              {i18n.language === 'en' ? 'EN ▾' : 'HI ▾'}
+              <span>{i18n.language === 'en' ? 'EN' : 'HI'}</span>
+              <span className="text-[10px] text-white/50">▾</span>
             </button>
 
             {/* Desktop wallet button */}
@@ -188,10 +178,10 @@ const Navbar = () => {
               t={t}
             />
 
-            {/* Hamburger menu button */}
+            {/* Hamburger menu button (on screens smaller than lg) */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2.5 border border-white/10 rounded-[2px] hover:border-white/30 transition-all text-white relative z-[60]"
+              className="lg:hidden p-1.5 text-white/80 hover:text-white transition-colors relative z-[60] cursor-pointer"
               aria-expanded={isMobileMenuOpen}
               aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
             >

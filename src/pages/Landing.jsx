@@ -6,6 +6,7 @@ import HeroSection from '../components/landing/HeroSection';
 import StatsBar from '../components/landing/StatsBar';
 import HowItWorks from '../components/landing/HowItWorks';
 import TechStack from '../components/landing/TechStack';
+import CtaSection from '../components/landing/CtaSection';
 
 /**
  * Landing — Public marketing homepage.
@@ -57,7 +58,7 @@ const Landing = () => {
   ];
 
   return (
-    <div className="relative bg-[#05060A] overflow-hidden text-white">
+    <div className="relative w-full bg-[#05060A] overflow-hidden text-white">
       <style>{`
         @keyframes heroLineIn { from { opacity: 0; transform: translateY(40px); filter: blur(4px); } to { opacity: 1; transform: translateY(0); filter: blur(0px); } }
         @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
@@ -96,41 +97,20 @@ const Landing = () => {
       </div>
 
       {/* ═══ STATS BAR ═══ */}
-      <div ref={statsRef}>
+      <div ref={statsRef} className="w-full">
         <StatsBar stats={stats} visible={statsVisible} />
       </div>
 
       {/* ═══ HOW IT WORKS ═══ */}
-      <div ref={howRef}>
+      <div ref={howRef} className="w-full">
         <HowItWorks features={features} visible={howVisible} t={t} />
       </div>
 
       {/* ═══ CTA BANNER ═══ */}
-      <section style={{
-        margin: '60px 24px 0', padding: '56px 32px',
-        position: 'relative', overflow: 'hidden', borderRadius: '24px',
-        background: 'linear-gradient(135deg, rgba(79,107,237,0.08), rgba(0,0,0,0.2))',
-        backdropFilter: 'blur(10px)',
-        border: '1px solid rgba(79,107,237,0.18)',
-        opacity: 0, animation: 'ctaFadeUp 0.6s ease forwards', animationDelay: '0.4s',
-      }}>
-        <div className="animated-cta-border" style={{ borderRadius: '24px' }} />
-        <div style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
-          <h2 className="font-clash text-2xl sm:text-3xl md:text-4xl font-black text-center" style={{ color: '#fff', marginBottom: '16px' }}>{t('landing.ctaTitle')}</h2>
-          <p className="font-inter" style={{ fontSize: '15px', color: 'rgba(255,255,255,0.6)', marginBottom: '40px', maxWidth: '600px', marginInline: 'auto' }}>{t('landing.ctaSubtitle', { count: workerCount })}</p>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
-            <Link to="/worker" className="btn-glow font-inter" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-              {t('landing.btnWorker', "Register Now")} <span>→</span>
-            </Link>
-            <Link to="/discover" className="btn-outline-glow font-inter" style={{ textDecoration: 'none' }}>
-              {t('landing.ctaButton')}
-            </Link>
-          </div>
-        </div>
-      </section>
+      <CtaSection t={t} workerCount={workerCount} />
 
       {/* ═══ TECH STACK ═══ */}
-      <div ref={techRef}>
+      <div ref={techRef} className="w-full">
         <TechStack visible={techVisible} t={t} />
       </div>
     </div>

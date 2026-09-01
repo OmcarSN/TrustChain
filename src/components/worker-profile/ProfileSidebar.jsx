@@ -50,10 +50,10 @@ const ProfileSidebar = ({
       .then(({ status }) => {
         if (mounted) {
           setCurrentStatus(status);
-          try { localStorage.setItem(storageKey, String(status)); } catch {}
+          try { localStorage.setItem(storageKey, String(status)); } catch { /* ignore */ }
         }
       })
-      .catch(() => {}); // silently fallback to localStorage value
+      .catch(() => { /* silently fallback to localStorage value */ });
     return () => { mounted = false; };
   }, [address, storageKey]);
 
@@ -61,7 +61,7 @@ const ProfileSidebar = ({
     if (newStatus === currentStatus || statusLoading) return;
     // Optimistic update — instant UI change
     setCurrentStatus(newStatus);
-    try { localStorage.setItem(storageKey, String(newStatus)); } catch {}
+    try { localStorage.setItem(storageKey, String(newStatus)); } catch { /* ignore */ }
 
     // Fire-and-forget Soroban call in background
     setStatusLoading(true);

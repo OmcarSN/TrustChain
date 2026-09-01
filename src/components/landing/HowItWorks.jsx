@@ -17,12 +17,21 @@ const HowItWorks = ({ features, visible, t }) => {
   const stepIcons = ['🛡️', '⭐', '🔍'];
 
   return (
-    <section id="how-it-works" style={{ padding: '80px 24px 0', maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{
+    <section
+      id="how-it-works"
+      className="w-full max-w-7xl mx-auto px-6 sm:px-8 md:px-12 lg:px-16"
+      style={{
+        paddingBottom: '80px',
+        paddingTop: '80px',
+        paddingLeft: 'clamp(1.5rem, 5vw, 4rem)',
+        paddingRight: 'clamp(1.5rem, 5vw, 4rem)',
+        boxSizing: 'border-box',
+      }}
+    >
+      <div className="w-full flex justify-between items-end flex-wrap gap-6" style={{
         marginBottom: '48px',
         opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(24px)',
         transition: 'opacity 0.6s ease, transform 0.6s cubic-bezier(0.22,1,0.36,1)',
-        display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '24px'
       }}>
         <div>
           <p className="font-inter" style={{

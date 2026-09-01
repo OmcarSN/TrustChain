@@ -1,0 +1,8 @@
+{
+  "name": "TrustChain",
+  "description": "A decentralized soulbound credential and reputation system on Stellar.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

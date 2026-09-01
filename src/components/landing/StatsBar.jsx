@@ -17,8 +17,16 @@ const StatsBar = ({ stats, visible }) => {
   const Icons = [Users, Star, MessageSquare, Zap];
 
   return (
-    <section style={{ padding: '0 24px', marginTop: '80px' }}>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+    <section
+      className="w-full max-w-7xl mx-auto px-6 sm:px-8 md:px-12 lg:px-16"
+      style={{
+        marginTop: '80px',
+        paddingLeft: 'clamp(1.5rem, 5vw, 4rem)',
+        paddingRight: 'clamp(1.5rem, 5vw, 4rem)',
+        boxSizing: 'border-box',
+      }}
+    >
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
         {stats.map((stat, i) => {
           const Icon = Icons[i];
           return (

@@ -41,8 +41,16 @@ export const ToastProvider = ({ children }) => {
   const showError = (msg) => showToast(msg, 'error');
   const info = (msg) => showToast(msg, 'info');
   const toastRef = useRef({ success, error: showError, info });
-  toastRef.current = { success, error: showError, info };
-  useEffect(() => { registerToastInstance({ success: (msg) => toastRef.current.success(msg), error: (msg) => toastRef.current.error(msg), info: (msg) => toastRef.current.info(msg) }); }, []);
+  useEffect(() => {
+    toastRef.current = { success, error: showError, info };
+  });
+  useEffect(() => {
+    registerToastInstance({
+      success: (msg) => toastRef.current.success(msg),
+      error: (msg) => toastRef.current.error(msg),
+      info: (msg) => toastRef.current.info(msg),
+    });
+  }, []);
 
   return (
     <ToastContext.Provider value={{ success, error: showError, info }}>

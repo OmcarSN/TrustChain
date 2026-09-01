@@ -20,7 +20,17 @@ const TechStack = ({ visible, t }) => {
   ];
 
   return (
-    <section style={{ padding: '80px 24px', maxWidth: '1200px', margin: '0 auto', position: 'relative' }}>
+    <section
+      className="w-full max-w-7xl mx-auto px-6 sm:px-8 md:px-12 lg:px-16"
+      style={{
+        paddingBottom: '80px',
+        paddingTop: '80px',
+        paddingLeft: 'clamp(1.5rem, 5vw, 4rem)',
+        paddingRight: 'clamp(1.5rem, 5vw, 4rem)',
+        boxSizing: 'border-box',
+        position: 'relative',
+      }}
+    >
       {/* Section Divider */}
       <div className="section-divider" style={{ marginBottom: '60px' }} />
 

@@ -1,55 +1,53 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import logoSrc from '../assets/blue-logo-hd.png';
 
 /**
- * TrustChainLogo — Official TrustChain brand logo component.
- * Renders the brand PNG at a configurable size with icon/full variants.
+ * TrustChainLogo — Enhanced high-definition TrustChain brand logo
+ * Displays the authentic blue radial geometric starburst emblem
+ * in pixel-perfect ultra-high resolution.
  *
  * @param {Object} props
- * @param {number} [props.size=40] - Logo width and height in px.
+ * @param {number} [props.size=34] - Dimensions in pixels.
  * @param {string} [props.className=''] - Additional CSS classes.
- * @param {'full'|'icon'} [props.variant='full'] - Logo variant.
  * @param {Object} [props.style={}] - Additional inline styles.
  * @returns {React.ReactElement} The TrustChainLogo component.
  */
-const TrustChainLogo = ({ size = 40, className = '', variant = 'full', style = {} }) => {
+const TrustChainLogo = ({ size = 34, className = '', style = {}, animated = true }) => {
   return (
     <img
-      src={logoSrc}
+      src="/blue-logo.png"
       alt="TrustChain Logo"
       width={size}
       height={size}
-      className={className}
+      loading="eager"
+      decoding="async"
+      className={`object-contain flex-shrink-0 select-none drop-shadow-sm ${animated ? 'tc-logo-spin' : ''} ${className}`}
       style={{
-        width: size,
-        height: size,
-        objectFit: 'contain',
-        display: 'block',
-        borderRadius: variant === 'icon' ? '8px' : '0',
-        ...style
+        width: `${size}px`,
+        height: `${size}px`,
+        imageRendering: 'auto',
+        ...style,
       }}
-      draggable={false}
     />
   );
 };
 
 TrustChainLogo.propTypes = {
-  /** Logo width and height in px. */
+  /** Logo width and height in pixels. */
   size: PropTypes.number,
-  /** Additional CSS classes. */
+  /** Additional CSS class names. */
   className: PropTypes.string,
-  /** Logo variant: 'full' or 'icon'. */
-  variant: PropTypes.oneOf(['full', 'icon']),
-  /** Additional inline styles. */
+  /** Inline style overrides. */
   style: PropTypes.object,
+  /** Whether to enable continuous slow rotation animation. */
+  animated: PropTypes.bool,
 };
 
 TrustChainLogo.defaultProps = {
-  size: 40,
+  size: 34,
   className: '',
-  variant: 'full',
   style: {},
+  animated: true,
 };
 
 export default TrustChainLogo;

@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Wallet, LogOut, LayoutDashboard, Briefcase, HelpCircle, BarChart3, Search } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
@@ -28,8 +28,6 @@ const WalletDropdown = ({
   isConnected, isDropdownOpen, setIsDropdownOpen,
   walletAddress, connect, disconnect, dropdownRef, truncate, t
 }) => {
-  const menuItemsRef = useRef([]);
-
   const handleKeyDown = useCallback((e) => {
     if (!isDropdownOpen) return;
 
@@ -41,7 +39,7 @@ const WalletDropdown = ({
       return;
     }
 
-    const items = menuItemsRef.current.filter(Boolean);
+    const items = Array.from(dropdownRef.current?.querySelectorAll('[role="menuitem"]') || []);
     const currentIndex = items.indexOf(document.activeElement);
 
     if (e.key === 'ArrowDown') {
@@ -63,22 +61,18 @@ const WalletDropdown = ({
     }
   }, [isDropdownOpen, setIsDropdownOpen, dropdownRef]);
 
-  const setItemRef = (index) => (el) => {
-    menuItemsRef.current[index] = el;
-  };
-
   if (isConnected) {
     return (
       <div className="relative flex items-center h-full" ref={dropdownRef} onKeyDown={handleKeyDown}>
         <button
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-          className={`hidden sm:flex tc-wallet-btn ${isDropdownOpen ? 'tc-wallet-btn-open' : ''}`}
+          className={`hidden sm:flex items-center gap-2 text-white/90 hover:text-white text-sm font-medium transition-colors cursor-pointer ${isDropdownOpen ? 'text-white' : ''}`}
           aria-expanded={isDropdownOpen}
           aria-haspopup="true"
           aria-label={t('nav.walletMenuLabel', `Wallet menu for ${truncate(walletAddress)}`)}
         >
           <span className="tc-dot-pulse" aria-hidden="true" />
-          {truncate(walletAddress)}
+          <span>{truncate(walletAddress)}</span>
           <span style={{ fontSize: '10px', marginLeft: '2px', transform: isDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s cubic-bezier(0.16,1,0.3,1)', display: 'inline-block', opacity: 0.6 }} aria-hidden="true">▾</span>
         </button>
 
@@ -93,13 +87,12 @@ const WalletDropdown = ({
                 <span className="tc-dropdown-dot" aria-hidden="true" />
                 {truncate(walletAddress)}
               </div>
-              <Link ref={setItemRef(0)} to="/dashboard" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter" role="menuitem" tabIndex={0}><LayoutDashboard style={{ width: 14, height: 14, opacity: 0.5 }} />{t('nav_dashboard', 'Dashboard')}</Link>
-              <Link ref={setItemRef(1)} to="/worker" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter" role="menuitem" tabIndex={0}><Briefcase style={{ width: 14, height: 14, opacity: 0.5 }} />{t('nav_worker_portal', 'Worker Portal')}</Link>
-              <Link ref={setItemRef(2)} to="/how-it-works" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter" role="menuitem" tabIndex={0}><HelpCircle style={{ width: 14, height: 14, opacity: 0.5 }} />{t('nav.howItWorks', 'How It Works')}</Link>
-              <Link ref={setItemRef(3)} to="/analytics" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter" role="menuitem" tabIndex={0}><BarChart3 style={{ width: 14, height: 14, opacity: 0.5 }} />{t('nav_analytics', 'Analytics')}</Link>
-              <Link ref={setItemRef(4)} to="/explorer" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter" role="menuitem" tabIndex={0}><Search style={{ width: 14, height: 14, opacity: 0.5 }} />{t('nav_explorer', 'Explorer')}</Link>
+              <Link to="/dashboard" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter" role="menuitem" tabIndex={0}><LayoutDashboard style={{ width: 14, height: 14, opacity: 0.5 }} />{t('nav_dashboard', 'Dashboard')}</Link>
+              <Link to="/worker" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter" role="menuitem" tabIndex={0}><Briefcase style={{ width: 14, height: 14, opacity: 0.5 }} />{t('nav_worker_portal', 'Worker Portal')}</Link>
+              <Link to="/how-it-works" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter" role="menuitem" tabIndex={0}><HelpCircle style={{ width: 14, height: 14, opacity: 0.5 }} />{t('nav.howItWorks', 'How It Works')}</Link>
+              <Link to="/analytics" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter" role="menuitem" tabIndex={0}><BarChart3 style={{ width: 14, height: 14, opacity: 0.5 }} />{t('nav_analytics', 'Analytics')}</Link>
+              <Link to="/explorer" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter" role="menuitem" tabIndex={0}><Search style={{ width: 14, height: 14, opacity: 0.5 }} />{t('nav_explorer', 'Explorer')}</Link>
               <button
-                ref={setItemRef(5)}
                 onClick={() => { disconnect(); setIsDropdownOpen(false); }}
                 className="dropdown-item dropdown-disconnect font-inter w-full text-left"
                 role="menuitem"
@@ -118,11 +111,11 @@ const WalletDropdown = ({
   return (
     <button
       onClick={connect}
-      className="hidden sm:flex items-center justify-center gap-2 tc-connect-btn"
+      className="hidden sm:flex items-center justify-center gap-2 text-white/80 hover:text-white text-sm font-medium transition-colors flex-shrink-0 cursor-pointer"
       aria-label={t('nav.connectWalletLabel', 'Connect Freighter wallet')}
     >
-      <Wallet style={{ width: '14px', height: '14px' }} aria-hidden="true" />
-      {t('nav.connectWallet', 'Connect Wallet')}
+      <Wallet className="w-4 h-4 text-white/70 group-hover:text-white transition-colors" aria-hidden="true" />
+      <span className="whitespace-nowrap">{t('nav.connectWallet', 'Connect Wallet')}</span>
     </button>
   );
 };
