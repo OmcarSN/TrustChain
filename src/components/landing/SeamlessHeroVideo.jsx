@@ -19,7 +19,14 @@ const SeamlessHeroVideo = ({ src }) => {
 
     // Ensure initial playback
     const startInitial = () => {
-      vidA.play().catch(() => {});
+      try {
+        const playPromise = vidA.play();
+        if (playPromise !== undefined && typeof playPromise?.catch === 'function') {
+          playPromise.catch(() => {});
+        }
+      } catch {
+        // Fallback for browsers or test environments where play() throws synchronously
+      }
     };
     startInitial();
 

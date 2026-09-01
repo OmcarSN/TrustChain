@@ -48,8 +48,35 @@ const Verify = () => {
 
    
   useEffect(() => {
-    if (searchParams.get('address')) performSearch(searchParams.get('address'));
-  }, [searchParams, performSearch]);
+    let isMounted = true;
+    if (searchParams.get('address')) {
+      const address = searchParams.get('address');
+      setIsSearching(true);
+      setError(null);
+      Promise.all([
+        fetchWorkerCredential(address),
+        getEndorsements(address)
+      ])
+        .then(([credential, endorsements]) => {
+          if (!isMounted) return;
+          const reputation = calculateScore(endorsements);
+          setProfile({ ...credential, address, reputation, endorsements });
+          toast.success(t('verify.verifiedResult'));
+        })
+        .catch((err) => {
+          if (!isMounted) return;
+          setError(err.message || 'Worker not found on-chain');
+          toast.error(t('verify.failedResult'));
+          setProfile(null);
+        })
+        .finally(() => {
+          if (isMounted) setIsSearching(false);
+        });
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, [searchParams, t, toast]);
 
   const handleSearchSubmit = (e) => { e.preventDefault(); performSearch(workerSearch); };
   const handleShare = () => {

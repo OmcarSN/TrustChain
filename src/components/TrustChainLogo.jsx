@@ -7,12 +7,12 @@ import PropTypes from 'prop-types';
  * in pixel-perfect ultra-high resolution.
  *
  * @param {Object} props
- * @param {number} [props.size=34] - Dimensions in pixels.
+ * @param {number} [props.size=40] - Dimensions in pixels.
  * @param {string} [props.className=''] - Additional CSS classes.
  * @param {Object} [props.style={}] - Additional inline styles.
  * @returns {React.ReactElement} The TrustChainLogo component.
  */
-const TrustChainLogo = ({ size = 34, className = '', style = {}, animated = true }) => {
+const TrustChainLogo = ({ size = 40, className = '', style = {}, animated = true }) => {
   return (
     <img
       src="/blue-logo.png"
@@ -44,7 +44,7 @@ TrustChainLogo.propTypes = {
 };
 
 TrustChainLogo.defaultProps = {
-  size: 34,
+  size: 40,
   className: '',
   style: {},
   animated: true,
