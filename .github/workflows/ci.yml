@@ -358,16 +358,26 @@ jobs:
           cache: 'npm'
 
       - name: 📦 Install Vercel CLI
+        if: env.VERCEL_TOKEN != ''
         run: npm install -g vercel@latest
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
 
       - name: 🔗 Pull Vercel environment
+        if: env.VERCEL_TOKEN != ''
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
 
       - name: 🏗️ Build with Vercel
+        if: env.VERCEL_TOKEN != ''
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
 
       - name: 🚀 Deploy to production
         id: deploy
+        if: env.VERCEL_TOKEN != ''
         run: |
           URL=$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})
           echo "deploy_url=$URL" >> $GITHUB_OUTPUT
@@ -376,6 +386,17 @@ jobs:
           echo "✅ Successfully deployed to production!" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "🔗 **URL:** $URL" >> $GITHUB_STEP_SUMMARY
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+
+      - name: ℹ️ Vercel Token Not Configured
+        if: env.VERCEL_TOKEN == ''
+        run: |
+          echo "## ℹ️ Deployment Skipped" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "VERCEL_TOKEN secret is not set in GitHub repository settings. Set VERCEL_TOKEN in Settings > Secrets to enable automated CD." >> $GITHUB_STEP_SUMMARY
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
 
       - name: 📊 Pipeline Summary
         if: always()
