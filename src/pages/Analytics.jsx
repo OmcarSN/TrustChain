@@ -140,7 +140,7 @@ const Analytics = () => {
                     <Icon className="tc-icon-sm" style={{ color: 'rgba(255,255,255,0.25)' }} />
                   </div>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '2px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '2px' }}>
                   <h2 className="font-clash tc-stat-hero counter-glow" style={{ color: card.isGreen ? '#7C93F2' : '#ffffff', whiteSpace: 'nowrap' }}>
                     {isStr ? card.value : card.value.toLocaleString()}
                   </h2>
