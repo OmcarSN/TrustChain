@@ -1,27 +1,31 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Sparkles, Briefcase, ShieldCheck } from 'lucide-react';
+import { Home, Briefcase, ShieldCheck, Search } from 'lucide-react';
 
 /**
  * Maps nav item paths/names to the requested lucide-react icons:
- * - Home -> Sparkles
+ * - Home -> Home
  * - Find Workers -> Briefcase
  * - How It Works -> ShieldCheck
+ * - Explorer -> Search
  */
 const getNavIcon = (link) => {
   const path = link.path || '';
   const name = (link.name || '').toLowerCase();
   if (path === '/' || name.includes('home')) {
-    return Sparkles;
+    return Home;
   }
   if (path.includes('discover') || name.includes('worker') || name.includes('find')) {
     return Briefcase;
   }
-  if (path.includes('how') || name.includes('how') || name.includes('work')) {
+  if (path.includes('how') || name.includes('how')) {
     return ShieldCheck;
   }
-  return Sparkles;
+  if (path.includes('explorer') || name.includes('explorer')) {
+    return Search;
+  }
+  return Home;
 };
 
 /**
