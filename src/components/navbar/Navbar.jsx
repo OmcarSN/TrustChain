@@ -70,7 +70,8 @@ const Navbar = () => {
   const navLinks = [
     { name: t('nav.home', 'Home'), path: '/' },
     { name: t('nav.discover', 'Find Workers'), path: '/discover' },
-    { name: t('nav.howItWorks', 'How It Works'), path: '/how-it-works' }
+    { name: t('nav.howItWorks', 'How It Works'), path: '/how-it-works' },
+    { name: t('nav_explorer', 'Explorer'), path: '/explorer' }
   ];
 
   return (

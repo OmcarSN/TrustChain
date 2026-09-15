@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { Wallet, LogOut, LayoutDashboard, Briefcase, HelpCircle, BarChart3, Search } from 'lucide-react';
+import { Wallet, LogOut, LayoutDashboard, Briefcase, HelpCircle, BarChart3 } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
 
 import PropTypes from 'prop-types';
@@ -91,7 +91,6 @@ const WalletDropdown = ({
               <Link to="/worker" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter" role="menuitem" tabIndex={0}><Briefcase style={{ width: 14, height: 14, opacity: 0.5 }} />{t('nav_worker_portal', 'Worker Portal')}</Link>
               <Link to="/how-it-works" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter" role="menuitem" tabIndex={0}><HelpCircle style={{ width: 14, height: 14, opacity: 0.5 }} />{t('nav.howItWorks', 'How It Works')}</Link>
               <Link to="/analytics" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter" role="menuitem" tabIndex={0}><BarChart3 style={{ width: 14, height: 14, opacity: 0.5 }} />{t('nav_analytics', 'Analytics')}</Link>
-              <Link to="/explorer" onClick={() => setIsDropdownOpen(false)} className="dropdown-item font-inter" role="menuitem" tabIndex={0}><Search style={{ width: 14, height: 14, opacity: 0.5 }} />{t('nav_explorer', 'Explorer')}</Link>
               <button
                 onClick={() => { disconnect(); setIsDropdownOpen(false); }}
                 className="dropdown-item dropdown-disconnect font-inter w-full text-left"
