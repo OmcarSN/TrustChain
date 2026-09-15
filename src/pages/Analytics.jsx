@@ -140,21 +140,21 @@ const Analytics = () => {
                     <Icon className="tc-icon-sm" style={{ color: 'rgba(255,255,255,0.25)' }} />
                   </div>
                 </div>
-                <div className="tc-flex tc-flex-gap-sm tc-mb-xs" style={{ alignItems: 'baseline' }}>
-                  <h2 className="font-clash tc-stat-hero counter-glow" style={{ color: card.isGreen ? '#7C93F2' : '#ffffff' }}>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '2px' }}>
+                  <h2 className="font-clash tc-stat-hero counter-glow" style={{ color: card.isGreen ? '#7C93F2' : '#ffffff', whiteSpace: 'nowrap' }}>
                     {isStr ? card.value : card.value.toLocaleString()}
                   </h2>
                   {card.trend > 0 && (
-                    <span className="tc-verified-badge tc-text-sm" style={{ padding: '2px 8px' }}>
+                    <span className="tc-verified-badge tc-text-sm" style={{ padding: '2px 8px', whiteSpace: 'nowrap' }}>
                       <TrendingUp className="tc-icon-sm" />{card.trend}%
                     </span>
                   )}
                 </div>
-                <p className="font-inter tc-text-dimmer tc-text-sm" style={{ letterSpacing: '1px', marginTop: '4px' }}>
+                <p className="font-inter tc-text-dimmer tc-text-sm" style={{ letterSpacing: '1px', whiteSpace: 'nowrap', lineHeight: '1.4' }}>
                   {card.subtitle}
                 </p>
                 {card.isGreen && (
-                  <span className="tc-verified-badge tc-text-xs" style={{ display: 'inline-block', marginTop: '8px', padding: '3px 8px', letterSpacing: '1.5px' }}>
+                  <span className="tc-verified-badge tc-text-xs" style={{ display: 'inline-block', marginTop: '8px', padding: '3px 8px', letterSpacing: '1.5px', whiteSpace: 'nowrap' }}>
                     Stellar {NETWORK.charAt(0).toUpperCase() + NETWORK.slice(1)} Operational
                   </span>
                 )}
